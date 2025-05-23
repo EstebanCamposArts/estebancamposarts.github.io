@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esteban Campos - 3D Character Artist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <header>
+    <div class="logo">ESTEBAN CAMPOS</div>
+    <nav>
+      <a href="#about">ABOUT</a>
+      <a href="#portfolio">PORTFOLIO</a>
+      <a href="#contact">CONTACT</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>ESTEBAN CAMPOS</h1>
+      <h2>3D CHARACTER ARTIST</h2>
+      <button class="btn-primary">VIEW PORTFOLIO</button>
+    </div>
+    <div class="hero-img">
+      <img src="/images/viking-character.png" alt="3D Viking Character">
+    </div>
+  </section>
+
+  <section class="about-portfolio">
+    <div class="about" id="about">
+      <h3>ABOUT</h3>
+      <p>A professional 3D character artist. Esteban as a professional 3D character artist.</p>
+      <button class="btn-primary">DOWNLOAD RESUME</button>
+    </div>
+    <div class="portfolio" id="portfolio">
+      <h3>PORTFOLIO</h3>
+      <div class="portfolio-grid">
+        <img src="/images/model1.jpg" alt="Model 1">
+        <img src="/images/model2.jpg" alt="Model 2">
+        <img src="/images/model3.jpg" alt="Model 3">
+        <img src="/images/model4.jpg" alt="Model 4">
+        <img src="/images/model5.jpg" alt="Model 5">
+        <img src="/images/model6.jpg" alt="Model 6">
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="footer-col">
+      <h4>CONTACT</h4>
+      <p>Email</p>
+      <a href="mailto:esteban.campos@example.com">esteban.campos@example.com</a>
+    </div>
+    <div class="footer-col">
+      <h4>EMAIL</h4>
+      <p>esteban.campos@example.com</p>
+      <div class="social-icons">
+        <img src="/icons/linkedin.svg" alt="LinkedIn">
+        <img src="/icons/artstation.svg" alt="ArtStation">
+        <img src="/icons/behance.svg" alt="Behance">
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

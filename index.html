@@ -1,66 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Esteban Campos | 3D Character Artist</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esteban Campos - 3D Character Artist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f0f0f;
+      color: #ffffff;
+      line-height: 1.6;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 4rem;
+      background-color: #0f0f0f;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    nav a {
+      color: #ffffff;
+      text-decoration: none;
+      margin-left: 2rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4rem;
+    }
+
+    .hero-text {
+      max-width: 500px;
+    }
+
+    .hero-text h1 {
+      font-size: 3rem;
+      font-weight: 800;
+    }
+
+    .hero-text h2 {
+      font-size: 1.2rem;
+      color: #f59e0b;
+      margin: 1rem 0;
+    }
+
+    .btn-primary {
+      background-color: #f59e0b;
+      color: #0f0f0f;
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
+    .hero-img img {
+      max-width: 300px;
+      height: auto;
+    }
+
+    .about-portfolio {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 4rem;
+      gap: 4rem;
+    }
+
+    .about, .portfolio {
+      flex: 1 1 300px;
+    }
+
+    .about h3, .portfolio h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .about p {
+      max-width: 400px;
+      margin-bottom: 1.5rem;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      gap: 1rem;
+    }
+
+    .portfolio-grid img {
+      width: 100px;
+      height: 100px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    footer {
+      background-color: #0f0f0f;
+      padding: 3rem 4rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .footer-col {
+      flex: 1 1 200px;
+    }
+
+    .footer-col h4 {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .footer-col p, .footer-col a {
+      font-size: 0.9rem;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .social-icons {
+      margin-top: 1rem;
+    }
+
+    .social-icons img {
+      width: 24px;
+      height: 24px;
+      margin-right: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero, .about-portfolio, footer {
+        padding: 2rem;
+      }
+
+      .hero {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero-img img {
+        margin-top: 2rem;
+      }
+
+      .portfolio-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
 </head>
+
 <body>
   <header>
-    <div class="nav-container">
-      <div class="logo">ESTEBAN CAMPOS</div>
-      <nav>
-        <a href="#about">About</a>
-        <a href="#portfolio">Portfolio</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </div>
+    <div class="logo">ESTEBAN CAMPOS</div>
+    <nav>
+      <a href="#about">ABOUT</a>
+      <a href="#portfolio">PORTFOLIO</a>
+      <a href="#contact">CONTACT</a>
+    </nav>
   </header>
 
   <section class="hero">
     <div class="hero-text">
       <h1>ESTEBAN CAMPOS</h1>
       <h2>3D CHARACTER ARTIST</h2>
-      <a class="btn" href="#portfolio">VIEW PORTFOLIO</a>
+      <button class="btn-primary">VIEW PORTFOLIO</button>
     </div>
-    <div class="hero-image">
-      <img src="assets/images/character_main.jpg" alt="Main character render"/>
+    <div class="hero-img">
+      <img src="/images/viking-character.png" alt="3D Viking Character">
     </div>
   </section>
 
-  <section id="about" class="about">
-    <div>
-      <h2>ABOUT</h2>
+  <section class="about-portfolio">
+    <div class="about" id="about">
+      <h3>ABOUT</h3>
       <p>A professional 3D character artist. Esteban as a professional 3D character artist.</p>
-      <a class="btn" href="assets/resume.pdf" target="_blank">DOWNLOAD RESUME</a>
+      <button class="btn-primary">DOWNLOAD RESUME</button>
+    </div>
+    <div class="portfolio" id="portfolio">
+      <h3>PORTFOLIO</h3>
+      <div class="portfolio-grid">
+        <img src="/images/model1.jpg" alt="Model 1">
+        <img src="/images/model2.jpg" alt="Model 2">
+        <img src="/images/model3.jpg" alt="Model 3">
+        <img src="/images/model4.jpg" alt="Model 4">
+        <img src="/images/model5.jpg" alt="Model 5">
+        <img src="/images/model6.jpg" alt="Model 6">
+      </div>
     </div>
   </section>
 
-  <section id="portfolio" class="portfolio">
-    <h2>PORTFOLIO</h2>
-    <div class="portfolio-grid">
-      <img src="assets/images/character1.jpg" alt="Character 1" />
-      <img src="assets/images/character2.jpg" alt="Character 2" />
-      <img src="assets/images/character3.jpg" alt="Character 3" />
-      <img src="assets/images/character4.jpg" alt="Character 4" />
-      <img src="assets/images/character5.jpg" alt="Character 5" />
-      <img src="assets/images/character6.jpg" alt="Character 6" />
+  <footer id="contact">
+    <div class="footer-col">
+      <h4>CONTACT</h4>
+      <p>Email</p>
+      <a href="mailto:esteban.campos@example.com">esteban.campos@example.com</a>
     </div>
-  </section>
-
-  <section id="contact" class="contact">
-    <h2>CONTACT</h2>
-    <p>Email: <a href="mailto:esteban.campos@example.com">esteban.campos@example.com</a></p>
-    <div class="socials">
-      <a href="#"><img src="assets/icons/linkedin.svg" alt="LinkedIn"/></a>
-      <a href="#"><img src="assets/icons/artstation.svg" alt="Artstation"/></a>
-      <a href="#"><img src="assets/icons/behance.svg" alt="Behance"/></a>
+    <div class="footer-col">
+      <h4>EMAIL</h4>
+      <p>esteban.campos@example.com</p>
+      <div class="social-icons">
+        <img src="/icons/linkedin.svg" alt="LinkedIn">
+        <img src="/icons/artstation.svg" alt="ArtStation">
+        <img src="/icons/behance.svg" alt="Behance">
+      </div>
     </div>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 Esteban Campos</p>
   </footer>
 </body>
+
 </html>
