@@ -1,70 +1,239 @@
-<!DOCTYPE html>
-<html lang="en">
+/* styles.css */
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Esteban Campos - 3D Character Artist</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-</head>
+/* ========== BASE ========== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-<body>
-  <header>
-    <div class="logo">ESTEBAN CAMPOS</div>
-    <nav>
-      <a href="#about">ABOUT</a>
-      <a href="#portfolio">PORTFOLIO</a>
-      <a href="#contact">CONTACT</a>
-    </nav>
-  </header>
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #0e0e0e;
+  color: #fff;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
 
-  <section class="hero">
-    <div class="hero-text">
-      <h1>ESTEBAN CAMPOS</h1>
-      <h2>3D CHARACTER ARTIST</h2>
-      <button class="btn-primary">VIEW PORTFOLIO</button>
-    </div>
-    <div class="hero-img">
-      <img src="/images/viking-character.png" alt="3D Viking Character">
-    </div>
-  </section>
+img {
+  max-width: 100%;
+  display: block;
+  border-radius: 20px;
+}
 
-  <section class="about-portfolio">
-    <div class="about" id="about">
-      <h3>ABOUT</h3>
-      <p>A professional 3D character artist. Esteban as a professional 3D character artist.</p>
-      <button class="btn-primary">DOWNLOAD RESUME</button>
-    </div>
-    <div class="portfolio" id="portfolio">
-      <h3>PORTFOLIO</h3>
-      <div class="portfolio-grid">
-        <img src="/images/model1.jpg" alt="Model 1">
-        <img src="/images/model2.jpg" alt="Model 2">
-        <img src="/images/model3.jpg" alt="Model 3">
-        <img src="/images/model4.jpg" alt="Model 4">
-        <img src="/images/model5.jpg" alt="Model 5">
-        <img src="/images/model6.jpg" alt="Model 6">
-      </div>
-    </div>
-  </section>
+h1, h2, h3, h4 {
+  color: #fff;
+}
 
-  <footer id="contact">
-    <div class="footer-col">
-      <h4>CONTACT</h4>
-      <p>Email</p>
-      <a href="mailto:esteban.campos@example.com">esteban.campos@example.com</a>
-    </div>
-    <div class="footer-col">
-      <h4>EMAIL</h4>
-      <p>esteban.campos@example.com</p>
-      <div class="social-icons">
-        <img src="/icons/linkedin.svg" alt="LinkedIn">
-        <img src="/icons/artstation.svg" alt="ArtStation">
-        <img src="/icons/behance.svg" alt="Behance">
-      </div>
-    </div>
-  </footer>
-</body>
+/* ========== HEADER ========== */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background: #101010;
+}
 
-</html>
+.logo {
+  font-size: 32px;
+  font-weight: 800;
+  color: #e2e2e2;
+}
+
+.logo span {
+  font-weight: 700;
+  color: #999;
+}
+
+nav a {
+  color: #ddd;
+  margin-left: 20px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #f90;
+}
+
+/* ========== HERO ========== */
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px;
+  background: #0e0e0e;
+}
+
+.hero-left h1 {
+  font-size: 48px;
+  font-weight: 800;
+}
+
+.hero-left h1 span {
+  color: #999;
+}
+
+.hero-left h2 {
+  font-size: 24px;
+  font-weight: 400;
+  color: orange;
+  margin: 20px 0;
+}
+
+.btn-primary {
+  padding: 15px 30px;
+  background-color: orange;
+  border: none;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #cc7a00;
+}
+
+.hero-right img {
+  width: 300px;
+  border-radius: 40px;
+}
+
+/* ========== ABOUT ========== */
+.about {
+  padding: 40px;
+  background: #121212;
+}
+
+.about h3 {
+  font-size: 28px;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.about p {
+  max-width: 600px;
+  background: black;
+  padding: 15px;
+  font-size: 15px;
+  border-radius: 5px;
+}
+
+/* ========== PORTFOLIO ========== */
+.portfolio {
+  padding: 40px;
+  background: #0e0e0e;
+}
+
+.portfolio h3 {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.portfolio-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.category h4 {
+  font-size: 20px;
+  color: orange;
+  margin-bottom: 10px;
+}
+
+.category p {
+  font-size: 14px;
+  color: orange;
+  margin-top: 10px;
+}
+
+/* ========== FOOTER ========== */
+footer {
+  background: #101010;
+  padding: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.footer-contact h4,
+.footer-social h4 {
+  font-size: 20px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.footer-contact a {
+  color: orange;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.social-icons img {
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  border-radius: 50%;
+  padding: 4px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-right img {
+    margin-top: 30px;
+  }
+
+  footer {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  nav a {
+    margin: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-left h1 {
+    font-size: 36px;
+  }
+
+  .hero-left h2 {
+    font-size: 18px;
+  }
+
+  .btn-primary {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .category h4 {
+    font-size: 16px;
+  }
+
+  .portfolio h3,
+  .about h3 {
+    font-size: 22px;
+  }
+}
