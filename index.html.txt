@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Esteban Campos | 3D Character Artist</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <div class="logo">ESTEBAN CAMPOS</div>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>ESTEBAN CAMPOS</h1>
+      <h2>3D CHARACTER ARTIST</h2>
+      <a class="btn" href="#portfolio">VIEW PORTFOLIO</a>
+    </div>
+    <div class="hero-image">
+      <img src="assets/images/character_main.jpg" alt="Main character render"/>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <div>
+      <h2>ABOUT</h2>
+      <p>A professional 3D character artist. Esteban as a professional 3D character artist.</p>
+      <a class="btn" href="assets/resume.pdf" target="_blank">DOWNLOAD RESUME</a>
+    </div>
+  </section>
+
+  <section id="portfolio" class="portfolio">
+    <h2>PORTFOLIO</h2>
+    <div class="portfolio-grid">
+      <img src="assets/images/character1.jpg" alt="Character 1" />
+      <img src="assets/images/character2.jpg" alt="Character 2" />
+      <img src="assets/images/character3.jpg" alt="Character 3" />
+      <img src="assets/images/character4.jpg" alt="Character 4" />
+      <img src="assets/images/character5.jpg" alt="Character 5" />
+      <img src="assets/images/character6.jpg" alt="Character 6" />
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <h2>CONTACT</h2>
+    <p>Email: <a href="mailto:esteban.campos@example.com">esteban.campos@example.com</a></p>
+    <div class="socials">
+      <a href="#"><img src="assets/icons/linkedin.svg" alt="LinkedIn"/></a>
+      <a href="#"><img src="assets/icons/artstation.svg" alt="Artstation"/></a>
+      <a href="#"><img src="assets/icons/behance.svg" alt="Behance"/></a>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Esteban Campos</p>
+  </footer>
+</body>
+</html>
