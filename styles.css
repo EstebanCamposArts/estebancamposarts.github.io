@@ -4,8 +4,20 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #fff;
-  color: #333;
+  background-color: #0f0f0f;
+  color: #f0f0f0;
+  position: relative;
+  overflow-x: hidden;
+}
+
+#particles-js {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background: #0f0f0f;
 }
 
 .container {
@@ -23,14 +35,20 @@ header {
 
 .logo {
   font-weight: 800;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  color: #ffffff;
 }
 
 nav a {
   margin-left: 1.5rem;
   text-decoration: none;
   font-weight: 700;
-  color: #333;
+  color: #ffffff;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #00adb5;
 }
 
 .hero {
@@ -40,10 +58,26 @@ nav a {
   justify-content: center;
   gap: 2rem;
   padding: 4rem 0;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-left {
   flex: 1 1 300px;
+}
+
+.hero-left h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0;
+  color: #ffffff;
+}
+
+.hero-left h2 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-top: 1rem;
+  color: #cccccc;
 }
 
 .hero-right img {
@@ -56,21 +90,30 @@ nav a {
   display: inline-block;
   margin-top: 1.5rem;
   padding: 0.75rem 1.5rem;
-  background-color: #333;
+  background-color: #00adb5;
   color: white;
   text-decoration: none;
   font-weight: 700;
   border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #019ca4;
 }
 
 .about {
   padding: 4rem 0;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .portfolio {
   padding: 4rem 0;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .portfolio-categories {
@@ -84,6 +127,9 @@ nav a {
 .category {
   max-width: 250px;
   flex: 1 1 250px;
+  background: #1f1f1f;
+  border-radius: 8px;
+  padding: 1rem;
 }
 
 .category img {
@@ -91,10 +137,11 @@ nav a {
   height: auto;
   display: block;
   margin-bottom: 1rem;
+  border-radius: 4px;
 }
 
 footer {
-  background-color: #f4f4f4;
+  background-color: #121212;
   padding: 2rem 0;
   display: flex;
   flex-wrap: wrap;
@@ -102,6 +149,9 @@ footer {
   align-items: center;
   gap: 2rem;
   text-align: center;
+  color: #f0f0f0;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-contact, .footer-social {
@@ -112,6 +162,7 @@ footer {
   width: 30px;
   margin: 0 0.5rem;
   vertical-align: middle;
+  filter: invert(1);
 }
 
 @media (max-width: 768px) {
