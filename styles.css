@@ -277,13 +277,13 @@ footer {
 
 .welcome-message h2 {
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 1000;
   margin-bottom: 1rem;
   color: #ffffff;
 }
 
 .welcome-message p {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto 1.5rem;
 }
 
