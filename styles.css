@@ -124,13 +124,13 @@ nav a:hover {
 .about h3 {
   font-size: 2rem;
   margin-bottom: 1rem;
-  font-weight: 300;
+  font-weight: 800;
   color: #ffffff;
 }
 
 .about p {
   font-size: 1rem;
-  max-width: 300px;
+  max-width: 800px;
   margin: 0 auto;
   color: #cccccc;
   line-height: 1.6;
