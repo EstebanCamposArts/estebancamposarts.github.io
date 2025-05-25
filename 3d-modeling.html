@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Modeling - Esteban Campos Polo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div id="particles-js"></div>
+
+  <header class="container">
+    <div class="logo"><a href="index.html" style="text-decoration: none; color: white;">PORTFOLIO</a></div>
+    <nav>
+      <a href="index.html#about">ABOUT</a>
+      <a href="index.html#portfolio">PORTFOLIO</a>
+      <a href="index.html#contact">CONTACT</a>
+    </nav>
+  </header>
+
+  <section class="container" style="padding: 4rem 0; text-align: center;">
+    <h1>3D Modeling</h1>
+    <p>Explore a selection of my 3D modeling projects, crafted with precision and artistic vision.</p>
+
+    <div class="gallery-grid">
+      <img src="assets/images/3d1.jpg" alt="3D Project 1" />
+      <img src="assets/images/3d2.jpg" alt="3D Project 2" />
+      <img src="assets/images/3d3.jpg" alt="3D Project 3" />
+    </div>
+  </section>
+
+  <footer class="container" id="contact">
+    <div class="footer-contact">
+      <h4>CONTACT</h4>
+      <p>Email</p>
+      <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
+    </div>
+    <div class="footer-social">
+      <h4>RRSS</h4>
+      <div class="social-icons">
+        <a href="#"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
+        <a href="#"><img src="assets/icons/artstation.svg" alt="ArtStation" /></a>
+        <a href="#"><img src="assets/icons/behance.svg" alt="Behance" /></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 60 },
+        color: { value: "#ffffff" },
+        shape: { type: "circle" },
+        opacity: { value: 0.3 },
+        size: { value: 3 },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#ffffff",
+          opacity: 0.2,
+          width: 1
+        },
+        move: { enable: true, speed: 2 }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: true, mode: "push" }
+        },
+        modes: {
+          repulse: { distance: 100 },
+          push: { particles_nb: 4 }
+        }
+      },
+      retina_detect: true
+    });
+  </script>
+</body>
+</html>
