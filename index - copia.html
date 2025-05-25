@@ -7,7 +7,136 @@
   <title>Esteban Campos Polo - Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+</head><!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esteban Campos Polo - Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
+
+<body>
+  <!-- Fondo particles.js -->
+  <div id="particles-js"></div>
+
+  <header class="container">
+    <div class="logo">PORTFOLIO</span></div>
+    <nav>
+      <a href="#about">ABOUT</a>
+      <a href="#portfolio">PORTFOLIO</a>
+      <a href="#contact">CONTACT</a>
+    </nav>
+  </header>
+
+  <section class="hero container">
+    <div class="hero-left">
+      <h1>Esteban <span>Campos Polo</span></h1>
+      <h2>3D Character Artist<br />Graphic Designer</h2>
+      <a href="assets/documents/Esteban_Campos_Polo_CV.pdf" download="Esteban_Campos_Polo_CV.pdf" class="btn-primary">DOWNLOAD RESUME</a>
+    </div>
+    <div class="hero-right">
+      <img src="assets/images/character_main.png" alt="Golem Character" />
+    </div>
+  </section>
+
+  <section class="about container" id="about">
+    <h3>ABOUT ME</h3>
+    <p>
+      I am Esteban Campos, a graphic designer with over 20 years of experience in graphic design, branding, digital advertising, and commercial photography. My background has allowed me to develop projects for sectors as diverse as fashion, product design, and social media content creation, always focusing on quality and innovation. For six months, I gained experience in 3D modeling after training at Animum School, specializing in character creation for video games and film, using tools such as ZBrush, Maya, and Substance Painter.
+During my training, I participated in and was a finalist in The Rookies 2023 Draft, a distinction that reaffirms my ability to deliver high-quality work. I am committed to continuous improvement and high-quality projects.
+    </p>
+  </section>
+
+  <section class="portfolio container" id="portfolio">
+    <h3>PORTFOLIO</h3>
+    <div class="portfolio-categories">
+      <div class="category">
+        <h4>3D Modeling</h4>
+        <img src="assets/images/modeling.png" alt="3D Modeling" />
+        <p><a href="3d-modeling.html">See more about...</a></p>
+      </div>
+      <div class="category">
+        <h4>Photography</h4>
+        <img src="assets/images/photography.png" alt="Photography" />
+        <p><a href="photography.html">See more about...</a></p>
+      </div>
+      <div class="category">
+        <h4>Graphic Design</h4>
+        <img src="assets/images/graphic_design.png" alt="Graphic Design" />
+        <p><a href="graphic-design.html">See more about...</a></p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="container" id="contact">
+    <div class="footer-contact">
+      <h4>CONTACT</h4>
+      <p>Email</p>
+      <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
+    </div>
+    <div class="footer-social">
+      <h4>SOCIAL NETWORKS</h4>
+      <div class="social-icons">
+        <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
+        </a>
+        <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/artstation.svg" alt="ArtStation" />
+        </a>
+        <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/instagram.svg" alt="Instagram" />
+        </a>
+	<a href="https://vimeo.com/827034828" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/vimeo.svg" alt="Vimeo" />
+        </a>
+	<a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/behance.svg" alt="Behance" />
+        </a>
+	<a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/x.svg" alt="X" />
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 80 },
+        color: { value: "#ffffff" },
+        shape: { type: "circle" },
+        opacity: { value: 0.3 },
+        size: { value: 3 },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#ffffff",
+          opacity: 0.2,
+          width: 1
+        },
+        move: { enable: true, speed: 2 }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: true, mode: "push" }
+        },
+        modes: {
+          repulse: { distance: 100 },
+          push: { particles_nb: 4 }
+        }
+      },
+      retina_detect: true
+    });
+  </script>
+</body>
+</html>
+
 
 <body>
   <header>
