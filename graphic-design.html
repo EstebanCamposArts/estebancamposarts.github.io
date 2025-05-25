@@ -3,55 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Graphic Design - Esteban Campos Polo</title>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap" rel="stylesheet" />
+  <title>Graphic Design</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
-  <div id="particles-js"></div>
-
   <header class="container">
-    <div class="logo"><a href="index.html" style="text-decoration: none; color: white;">PORTFOLIO</a></div>
+    <div class="logo">PORTFOLIO</div>
     <nav>
-      <a href="index.html#about">ABOUT</a>
-      <a href="index.html#portfolio">PORTFOLIO</a>
-      <a href="index.html#contact">CONTACT</a>
+      <a href="index.html">Home</a>
+      <a href="3d-modeling.html">3D Modeling</a>
+      <a href="photography.html">Photography</a>
     </nav>
   </header>
 
-  <section class="container" style="padding: 4rem 0; text-align: center;">
+  <main class="container">
     <h1>Graphic Design</h1>
-    <p>Explore a selection of my Graphic Design projects, crafted with precision and artistic vision.</p>
+    <section class="gallery-grid">
+      <img src="ruta/imagen1.jpg" alt="Modelo 1" />
+      <img src="ruta/imagen2.jpg" alt="Modelo 2" />
+      <img src="ruta/imagen3.jpg" alt="Modelo 3" />
+      <img src="ruta/imagen1.jpg" alt="Modelo 4" />
+      <img src="ruta/imagen2.jpg" alt="Modelo 5" />
+      <img src="ruta/imagen3.jpg" alt="Modelo 6" />
+      <!-- Agrega más imágenes según necesites -->
+    </section>
+  </main>
 
-    <div class="gallery-grid">
-      <img src="assets/images/3d1.jpg" alt="3D Project 1" />
-      <img src="assets/images/3d2.jpg" alt="3D Project 2" />
-      <img src="assets/images/3d3.jpg" alt="3D Project 3" />
-    </div>
-  </section>
-
-  <footer class="container" id="contact">
+  <footer>
     <div class="footer-contact">
-      <h4>CONTACT</h4>
-      <p>Email</p>
-      <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
+      <h4>Contacto</h4>
+       <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
     </div>
     <div class="footer-social">
-      <h4>RRSS</h4>
+      <h4>Sígueme</h4>
       <div class="social-icons">
-        <a href="#"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
-        <a href="#"><img src="assets/icons/artstation.svg" alt="ArtStation" /></a>
-        <a href="#"><img src="assets/icons/behance.svg" alt="Behance" /></a>
+	<a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
+        </a>
+        <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/artstation.svg" alt="ArtStation" />
+        </a>
+        <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/instagram.svg" alt="Instagram" />
+        </a>
+	<a href="https://vimeo.com/827034828" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/vimeo.svg" alt="Vimeo" />
+        </a>
+	<a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/behance.svg" alt="Behance" />
+        </a>
+	<a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/x.svg" alt="X" />
+        </a>
       </div>
     </div>
   </footer>
 
-  <script src="particles.min.js"></script>
+<!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
       particles: {
-        number: { value: 60 },
+        number: { value: 80 },
         color: { value: "#ffffff" },
         shape: { type: "circle" },
         opacity: { value: 0.3 },
