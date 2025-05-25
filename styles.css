@@ -1,239 +1,129 @@
-/* styles.css */
-
-/* ========== BASE ========== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
+/* General styles */
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #0e0e0e;
-  color: #fff;
-  line-height: 1.6;
-  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #fff;
+  color: #333;
 }
 
-img {
-  max-width: 100%;
-  display: block;
-  border-radius: 20px;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
-h1, h2, h3, h4 {
-  color: #fff;
-}
-
-/* ========== HEADER ========== */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 40px;
-  background: #101010;
+  padding: 2rem 0;
 }
 
 .logo {
-  font-size: 32px;
   font-weight: 800;
-  color: #e2e2e2;
-}
-
-.logo span {
-  font-weight: 700;
-  color: #999;
+  font-size: 1.5rem;
 }
 
 nav a {
-  color: #ddd;
-  margin-left: 20px;
+  margin-left: 1.5rem;
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s;
+  font-weight: 700;
+  color: #333;
 }
 
-nav a:hover {
-  color: #f90;
-}
-
-/* ========== HERO ========== */
 .hero {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  padding: 40px;
-  background: #0e0e0e;
+  justify-content: center;
+  gap: 2rem;
+  padding: 4rem 0;
 }
 
-.hero-left h1 {
-  font-size: 48px;
-  font-weight: 800;
-}
-
-.hero-left h1 span {
-  color: #999;
-}
-
-.hero-left h2 {
-  font-size: 24px;
-  font-weight: 400;
-  color: orange;
-  margin: 20px 0;
-}
-
-.btn-primary {
-  padding: 15px 30px;
-  background-color: orange;
-  border: none;
-  border-radius: 30px;
-  font-weight: 700;
-  cursor: pointer;
-  color: #fff;
-  transition: background 0.3s;
-}
-
-.btn-primary:hover {
-  background-color: #cc7a00;
+.hero-left {
+  flex: 1 1 300px;
 }
 
 .hero-right img {
-  width: 300px;
-  border-radius: 40px;
+  max-width: 300px;
+  width: 100%;
+  height: auto;
 }
 
-/* ========== ABOUT ========== */
-.about {
-  padding: 40px;
-  background: #121212;
-}
-
-.about h3 {
-  font-size: 28px;
-  margin-bottom: 15px;
+.btn-primary {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #333;
+  color: white;
+  text-decoration: none;
   font-weight: 700;
+  border-radius: 4px;
 }
 
-.about p {
-  max-width: 600px;
-  background: black;
-  padding: 15px;
-  font-size: 15px;
-  border-radius: 5px;
+.about {
+  padding: 4rem 0;
+  text-align: center;
 }
 
-/* ========== PORTFOLIO ========== */
 .portfolio {
-  padding: 40px;
-  background: #0e0e0e;
-}
-
-.portfolio h3 {
-  font-size: 28px;
-  margin-bottom: 30px;
+  padding: 4rem 0;
+  text-align: center;
 }
 
 .portfolio-categories {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
-.category h4 {
-  font-size: 20px;
-  color: orange;
-  margin-bottom: 10px;
+.category {
+  max-width: 250px;
+  flex: 1 1 250px;
 }
 
-.category p {
-  font-size: 14px;
-  color: orange;
-  margin-top: 10px;
+.category img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 1rem;
 }
 
-/* ========== FOOTER ========== */
 footer {
-  background: #101010;
-  padding: 40px;
+  background-color: #f4f4f4;
+  padding: 2rem 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-}
-
-.footer-contact h4,
-.footer-social h4 {
-  font-size: 20px;
-  color: #fff;
-  margin-bottom: 10px;
-}
-
-.footer-contact a {
-  color: orange;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.social-icons {
-  display: flex;
-  gap: 15px;
   align-items: center;
+  gap: 2rem;
+  text-align: center;
+}
+
+.footer-contact, .footer-social {
+  flex: 1 1 300px;
 }
 
 .social-icons img {
-  width: 32px;
-  height: 32px;
-  background: #fff;
-  border-radius: 50%;
-  padding: 4px;
+  width: 30px;
+  margin: 0 0.5rem;
+  vertical-align: middle;
 }
 
-/* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .hero {
     flex-direction: column;
-    text-align: center;
-  }
-
-  .hero-right img {
-    margin-top: 30px;
   }
 
   footer {
     flex-direction: column;
-    gap: 30px;
-  }
-
-  header {
-    flex-direction: column;
-    gap: 15px;
   }
 
   nav a {
-    margin: 0 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-left h1 {
-    font-size: 36px;
-  }
-
-  .hero-left h2 {
-    font-size: 18px;
-  }
-
-  .btn-primary {
-    padding: 10px 20px;
-    font-size: 14px;
-  }
-
-  .category h4 {
-    font-size: 16px;
-  }
-
-  .portfolio h3,
-  .about h3 {
-    font-size: 22px;
+    margin-left: 0.75rem;
   }
 }
