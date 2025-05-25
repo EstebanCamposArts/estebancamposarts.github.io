@@ -265,3 +265,25 @@ footer {
     margin-left: 0.75rem;
   }
 }
+.welcome-message {
+  padding: 3rem 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #cccccc;
+  line-height: 1.6;
+  text-align: center;
+  background-color: #0f0f0f;
+}
+
+.welcome-message h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.welcome-message p {
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
+}
+
