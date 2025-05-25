@@ -1,11 +1,13 @@
-SI , Actualizalo. te adjunto el que tengo actualmene. /* General styles */
+/* General styles */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap');
+
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Manrope', sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   background-color: #0f0f0f;
-  color: #f0f0f0;
+  color: #ffffff;
   position: relative;
   overflow-x: hidden;
 }
@@ -23,7 +25,7 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
 }
 
 header {
@@ -31,6 +33,7 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 2rem 0;
+  background: rgba(15, 15, 15, 0.95);
 }
 
 .logo {
@@ -43,12 +46,12 @@ nav a {
   margin-left: 1.5rem;
   text-decoration: none;
   font-weight: 700;
-  color: #ffffff;
+  color: #00adb5;
   transition: color 0.3s;
 }
 
 nav a:hover {
-  color: #00adb5;
+  color: #ffffff;
 }
 
 .hero {
@@ -57,7 +60,7 @@ nav a:hover {
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  padding: 4rem 0;
+  padding: 6rem 0;
   position: relative;
   z-index: 1;
 }
@@ -67,10 +70,14 @@ nav a:hover {
 }
 
 .hero-left h1 {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 800;
   margin: 0;
   color: #ffffff;
+}
+
+.hero-left h1 span {
+  color: #00adb5;
 }
 
 .hero-left h2 {
@@ -81,9 +88,11 @@ nav a:hover {
 }
 
 .hero-right img {
-  max-width: 250px;
+  max-width: 300px;
   width: 100%;
   height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 .btn-primary {
@@ -107,6 +116,24 @@ nav a:hover {
   text-align: center;
   position: relative;
   z-index: 1;
+  background-color: #111;
+  border-top: 1px solid #1e1e1e;
+  border-bottom: 1px solid #1e1e1e;
+}
+
+.about h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.about p {
+  font-size: 1rem;
+  max-width: 700px;
+  margin: 0 auto;
+  color: #cccccc;
+  line-height: 1.6;
 }
 
 .portfolio {
@@ -114,6 +141,14 @@ nav a:hover {
   text-align: center;
   position: relative;
   z-index: 1;
+  background-color: #0f0f0f;
+}
+
+.portfolio h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 2rem;
 }
 
 .portfolio-categories {
@@ -121,7 +156,6 @@ nav a:hover {
   flex-wrap: wrap;
   justify-content: center;
   gap: 2rem;
-  margin-top: 2rem;
 }
 
 .category {
@@ -130,6 +164,12 @@ nav a:hover {
   background: #1f1f1f;
   border-radius: 8px;
   padding: 1rem;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.category:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .category img {
@@ -138,6 +178,18 @@ nav a:hover {
   display: block;
   margin-bottom: 1rem;
   border-radius: 4px;
+}
+
+.category h4 {
+  font-size: 1.2rem;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.category p a {
+  color: #00adb5;
+  text-decoration: none;
+  font-weight: 700;
 }
 
 footer {
@@ -149,7 +201,7 @@ footer {
   align-items: center;
   gap: 2rem;
   text-align: center;
-  color: #f0f0f0;
+  color: #ffffff;
   position: relative;
   z-index: 1;
 }
@@ -158,11 +210,27 @@ footer {
   flex: 1 1 300px;
 }
 
+.footer-contact h4, .footer-social h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.footer-contact a {
+  color: #00adb5;
+  text-decoration: none;
+}
+
 .social-icons img {
   width: 30px;
   margin: 0 0.5rem;
   vertical-align: middle;
   filter: invert(1);
+  transition: transform 0.3s;
+}
+
+.social-icons img:hover {
+  transform: scale(1.2);
 }
 
 @media (max-width: 768px) {
