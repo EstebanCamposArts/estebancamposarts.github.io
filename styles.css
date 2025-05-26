@@ -306,12 +306,12 @@ footer {
 .marquee-content {
   display: flex;
   animation: scrollMarquee 20s linear infinite;
-  height: 50%;
+  height: 100%;
 }
 
 .marquee-content img {
   width: 100%;
-  height: 100%;
+  height: 50%;
   object-fit: cover;
   flex-shrink: 0;
 }
