@@ -332,3 +332,25 @@ footer {
     transform: translateX(-50%);
   }
 }
+
+footer {
+  background-color: #121212;
+  padding: 2rem 0;
+  color: #ffffff;
+}
+
+footer .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  text-align: center;
+}
+
+.footer-copy {
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 1rem;
+  max-width: 800px;
+}
+
