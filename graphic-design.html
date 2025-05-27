@@ -5,9 +5,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Graphic Design</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .grid-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .grid-gallery img {
+      width: 100%;
+      border-radius: 12px;
+      filter: grayscale(100%) brightness(80%);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .grid-gallery img:hover {
+      filter: grayscale(0%) brightness(100%);
+      transform: scale(1.05);
+    }
+
+    /* Slideshow Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 12px;
+    }
+
+    .modal .close, .modal .prev, .modal .next {
+      position: absolute;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .modal .close {
+      top: 20px;
+      right: 30px;
+    }
+
+    .modal .prev {
+      left: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .modal .next {
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  </style>
 </head>
 <body>
-  <!-- Fondo particles.js -->
   <div id="particles-js"></div>
   <header class="container">
     <div class="logo">PORTFOLIO</div>
@@ -24,19 +92,19 @@
     <h3 class="section-title">GRAPHIC DESIGN</h3>
     <h3 class="section-title">Branding</h3>
     <div class="grid-gallery">
-      <figure><img src="assets/images/logotipos/camocream.jpg" alt="Camocream"><figcaption>Camocream</figcaption></figure>
-      <figure><img src="assets/images/logotipos/merlot.jpg" alt="Merlot"><figcaption>Merlot</figcaption></figure>
-      <figure><img src="assets/images/logotipos/silverfish.jpg" alt="Silverfish"><figcaption>Silverfish</figcaption></figure>
-      <figure><img src="assets/images/logotipos/canephora.jpg" alt="Canephora"><figcaption>Canephora</figcaption></figure>
-      <figure><img src="assets/images/logotipos/pleurotus.jpg" alt="Pleurotus"><figcaption>Pleurotus</figcaption></figure>
-      <figure><img src="assets/images/logotipos/agri-cultura.jpg" alt="Agri Cultura"><figcaption>Agri Cultura</figcaption></figure>
-      <figure><img src="assets/images/logotipos/mermelaida.jpg" alt="Mermelaida"><figcaption>Mermelaida</figcaption></figure>
-      <figure><img src="assets/images/logotipos/cascosymasoutlet.jpg" alt="Cascos y Más Outlet"><figcaption>Cascos y Más</figcaption></figure>
-      <figure><img src="assets/images/logotipos/goalkeeper.jpg" alt="Goalkeeper"><figcaption>Goalkeeper</figcaption></figure>
-      <figure><img src="assets/images/logotipos/24futsal.jpg" alt="24 Futsal"><figcaption>24 Futsal</figcaption></figure>
-      <figure><img src="assets/images/logotipos/creamania.jpg" alt="Creamania"><figcaption>Creamania</figcaption></figure>
-      <figure><img src="assets/images/logotipos/cafeparis.jpg" alt="Café París"><figcaption>Café París</figcaption></figure>
-      <figure><img src="assets/images/logotipos/airforguns.jpg" alt="Air for Guns"><figcaption>Air for Guns</figcaption></figure>
+      <figure><img src="assets/images/logotipos/camocream.jpg" alt="Camocream" onclick="openModal(0)"><figcaption>Camocream</figcaption></figure>
+      <figure><img src="assets/images/logotipos/merlot.jpg" alt="Merlot" onclick="openModal(1)"><figcaption>Merlot</figcaption></figure>
+      <figure><img src="assets/images/logotipos/silverfish.jpg" alt="Silverfish" onclick="openModal(2)"><figcaption>Silverfish</figcaption></figure>
+      <figure><img src="assets/images/logotipos/canephora.jpg" alt="Canephora" onclick="openModal(3)"><figcaption>Canephora</figcaption></figure>
+      <figure><img src="assets/images/logotipos/pleurotus.jpg" alt="Pleurotus" onclick="openModal(4)"><figcaption>Pleurotus</figcaption></figure>
+      <figure><img src="assets/images/logotipos/agri-cultura.jpg" alt="Agri Cultura" onclick="openModal(5)"><figcaption>Agri Cultura</figcaption></figure>
+      <figure><img src="assets/images/logotipos/mermelaida.jpg" alt="Mermelaida" onclick="openModal(6)"><figcaption>Mermelaida</figcaption></figure>
+      <figure><img src="assets/images/logotipos/cascosymasoutlet.jpg" alt="Cascos y Más" onclick="openModal(7)"><figcaption>Cascos y Más</figcaption></figure>
+      <figure><img src="assets/images/logotipos/goalkeeper.jpg" alt="Goalkeeper" onclick="openModal(8)"><figcaption>Goalkeeper</figcaption></figure>
+      <figure><img src="assets/images/logotipos/24futsal.jpg" alt="24 Futsal" onclick="openModal(9)"><figcaption>24 Futsal</figcaption></figure>
+      <figure><img src="assets/images/logotipos/creamania.jpg" alt="Creamania" onclick="openModal(10)"><figcaption>Creamania</figcaption></figure>
+      <figure><img src="assets/images/logotipos/cafeparis.jpg" alt="Café París" onclick="openModal(11)"><figcaption>Café París</figcaption></figure>
+      <figure><img src="assets/images/logotipos/airforguns.jpg" alt="Air for Guns" onclick="openModal(12)"><figcaption>Air for Guns</figcaption></figure>
     </div>
   </div>
 </section>
@@ -50,12 +118,7 @@
   <div class="footer-social">
     <h4>Follow me</h4>
     <div class="social-icons">
-      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
-      <a href="https://estebancampos1.artstation.com/"><img src="assets/icons/artstation.svg" alt="ArtStation" /></a>
-      <a href="https://www.instagram.com/estcampo/"><img src="assets/icons/instagram.svg" alt="Instagram" /></a>
-      <a href="https://vimeo.com/827034828"><img src="assets/icons/vimeo.svg" alt="Vimeo" /></a>
-      <a href="https://www.behance.net/EstebanDesign3D/projects"><img src="assets/icons/behance.svg" alt="Behance" /></a>
-      <a href="https://x.com/EstebanCampos3D"><img src="assets/icons/x.svg" alt="X" /></a>
+      <!-- íconos sociales -->
     </div>
   </div>
   <p class="copyright">
@@ -64,39 +127,74 @@
  </div>
 </footer>
 
+<!-- Modal Slideshow -->
+<div class="modal" id="slideshowModal">
+  <button class="close" onclick="closeModal()">×</button>
+  <button class="prev" onclick="prevImage()">❮</button>
+  <img id="modalImage" src="" alt="Imagen ampliada" />
+  <button class="next" onclick="nextImage()">❯</button>
+</div>
 
-  <!-- Particles.js -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 80 },
-        color: { value: "#ffffff" },
-        shape: { type: "circle" },
-        opacity: { value: 0.3 },
-        size: { value: 3 },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: "#ffffff",
-          opacity: 0.2,
-          width: 1
-        },
-        move: { enable: true, speed: 2 }
+<!-- Particles -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 80 },
+      color: { value: "#ffffff" },
+      shape: { type: "circle" },
+      opacity: { value: 0.3 },
+      size: { value: 3 },
+      line_linked: {
+        enable: true,
+        distance: 150,
+        color: "#ffffff",
+        opacity: 0.2,
+        width: 1
       },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "repulse" },
-          onclick: { enable: true, mode: "push" }
-        },
-        modes: {
-          repulse: { distance: 100 },
-          push: { particles_nb: 4 }
-        }
+      move: { enable: true, speed: 2 }
+    },
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: true, mode: "repulse" },
+        onclick: { enable: true, mode: "push" }
       },
-      retina_detect: true
-    });
-  </script>
+      modes: {
+        repulse: { distance: 100 },
+        push: { particles_nb: 4 }
+      }
+    },
+    retina_detect: true
+  });
+</script>
+
+<!-- Slideshow JS -->
+<script>
+  const modal = document.getElementById("slideshowModal");
+  const modalImage = document.getElementById("modalImage");
+  const images = Array.from(document.querySelectorAll(".grid-gallery img"));
+  let currentIndex = 0;
+
+  function openModal(index) {
+    currentIndex = index;
+    modalImage.src = images[currentIndex].src;
+    modal.style.display = "flex";
+  }
+
+  function closeModal() {
+    modal.style.display = "none";
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    modalImage.src = images[currentIndex].src;
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    modalImage.src = images[currentIndex].src;
+  }
+</script>
 </body>
 </html>

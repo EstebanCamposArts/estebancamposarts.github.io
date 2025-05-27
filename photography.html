@@ -5,10 +5,87 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Photography</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #00adb5;
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      border-radius: 12px;
+      filter: grayscale(100%) brightness(80%);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .gallery-grid img:hover {
+      filter: grayscale(0%) brightness(100%);
+      transform: scale(1.05);
+    }
+
+    /* Slideshow Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 12px;
+    }
+
+    .modal .close, .modal .prev, .modal .next {
+      position: absolute;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .modal .close {
+      top: 20px;
+      right: 30px;
+    }
+
+    .modal .prev {
+      left: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .modal .next {
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  </style>
 </head>
 <body>
-  <!-- Fondo particles.js -->
   <div id="particles-js"></div>
+
   <header class="container">
     <div class="logo">PORTFOLIO</div>
     <nav>
@@ -20,58 +97,42 @@
   </header>
 
   <main class="container">
-    <h1>Photography</h1>
+    <h1 class="section-title">Photography</h1>
     <section class="gallery-grid">
-      <img src="ruta/imagen1.jpg" alt="Modelo 1" />
-      <img src="ruta/imagen2.jpg" alt="Modelo 2" />
-      <img src="ruta/imagen3.jpg" alt="Modelo 3" />
-      <img src="ruta/imagen1.jpg" alt="Modelo 4" />
-      <img src="ruta/imagen2.jpg" alt="Modelo 5" />
-      <img src="ruta/imagen3.jpg" alt="Modelo 6" />
-      <!-- Agrega más imágenes según necesites -->
+      <img src="ruta/imagen1.jpg" alt="Modelo 1" onclick="openModal(0)" />
+      <img src="ruta/imagen2.jpg" alt="Modelo 2" onclick="openModal(1)" />
+      <img src="ruta/imagen3.jpg" alt="Modelo 3" onclick="openModal(2)" />
+      <!-- Añade más imágenes como sea necesario -->
     </section>
   </main>
 
-<footer>
-  <div class="container">
-    <div class="footer-contact">
-      <h4>Contact</h4>
-      <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
-    </div>
-
-    <div class="footer-social">
-      <h4>Follow me</h4>
-      <div class="social-icons">
-        <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener noreferrer">
-          <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
-        </a>
-        <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener noreferrer">
-          <img src="assets/icons/artstation.svg" alt="ArtStation" />
-        </a>
-        <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener noreferrer">
-          <img src="assets/icons/instagram.svg" alt="Instagram" />
-        </a>
-        <a href="https://vimeo.com/827034828" target="_blank" rel="noopener noreferrer">
-          <img src="assets/icons/vimeo.svg" alt="Vimeo" />
-        </a>
-        <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener noreferrer">
-          <img src="assets/icons/behance.svg" alt="Behance" />
-        </a>
-        <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener noreferrer">
-          <img src="assets/icons/x.svg" alt="X" />
-        </a>
+  <footer>
+    <div class="container">
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
+      </div>
+      <div class="footer-social">
+        <h4>Follow me</h4>
+        <div class="social-icons">
+          <!-- Tus iconos sociales -->
+        </div>
+      </div>
+      <div class="footer-copy">
+        © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
       </div>
     </div>
+  </footer>
 
-    <!-- Aviso de derechos al final -->
-    <div class="footer-copy">
-      © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
-    </div>
+  <!-- Slideshow Modal -->
+  <div class="modal" id="slideshowModal">
+    <button class="close" onclick="closeModal()">×</button>
+    <button class="prev" onclick="prevImage()">❮</button>
+    <img id="modalImage" src="" alt="Foto grande" />
+    <button class="next" onclick="nextImage()">❯</button>
   </div>
-</footer>
 
-
-  <!-- Particles.js -->
+  <!-- Particles -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
@@ -103,6 +164,34 @@
       },
       retina_detect: true
     });
+  </script>
+
+  <!-- Slideshow Script -->
+  <script>
+    const modal = document.getElementById("slideshowModal");
+    const modalImage = document.getElementById("modalImage");
+    const images = Array.from(document.querySelectorAll(".gallery-grid img"));
+    let currentIndex = 0;
+
+    function openModal(index) {
+      currentIndex = index;
+      modal.style.display = "flex";
+      modalImage.src = images[currentIndex].src;
+    }
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      modalImage.src = images[currentIndex].src;
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      modalImage.src = images[currentIndex].src;
+    }
   </script>
 </body>
 </html>
