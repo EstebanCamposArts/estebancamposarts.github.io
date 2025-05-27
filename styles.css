@@ -306,7 +306,7 @@ footer {
 
 .marquee-track {
   width: 1200px; /* ancho fijo igual que .container */
-  height: 200px;
+  height: 120px;
   overflow: hidden;
   position: relative;
 }
