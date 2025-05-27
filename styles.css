@@ -515,3 +515,41 @@ footer p {
   }
 }
 
+footer {
+  background-color: #121212;
+  padding: 2rem 0;
+  color: #ffffff;
+}
+
+.footer-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.footer-contact, .footer-social {
+  flex: 1 1 300px;
+}
+
+footer p {
+  width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 1rem;
+}
+
+/* Color azul fuerte para los títulos (incluido Graphic Design Gallery) */
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #00adb5 !important;
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
