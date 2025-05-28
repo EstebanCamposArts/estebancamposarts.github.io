@@ -16,7 +16,7 @@
 
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 1.5rem;
       max-width: 1200px;
       margin: 0 auto;
@@ -25,6 +25,8 @@
 
     .gallery-grid img {
       width: 100%;
+      height: 150px;
+      object-fit: cover;
       border-radius: 12px;
       filter: grayscale(100%) brightness(80%);
       transition: all 0.3s ease;
@@ -36,7 +38,6 @@
       transform: scale(1.05);
     }
 
-    /* Slideshow Modal */
     .modal {
       display: none;
       position: fixed;
@@ -81,6 +82,36 @@
       top: 50%;
       transform: translateY(-50%);
     }
+
+    footer {
+      background-color: #222;
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+    }
+
+    .footer-contact, .footer-social {
+      margin-bottom: 1rem;
+    }
+
+    .footer-social .social-icons a {
+      margin: 0 10px;
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+    }
+
+    .footer-social .social-icons img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .footer-copy {
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -99,19 +130,17 @@
   <main class="container">
     <h1 class="section-title">Photography</h1>
     <section class="gallery-grid">
-      <img src="assets/images/fotografia/fest2025(4).jpg" alt="fest2025(4)" onclick="openModal(4)" />
+      <!-- Images -->
+      <img src="assets/images/fotografia/fest2025(4).jpg" alt="fest2025(4)" onclick="openModal(0)" />
       <img src="assets/images/fotografia/fest2025(1).jpg" alt="fest2025(1)" onclick="openModal(1)" />
       <img src="assets/images/fotografia/fest2025(2).jpg" alt="fest2025(2)" onclick="openModal(2)" />
       <img src="assets/images/fotografia/fest2025(3).jpg" alt="fest2025(3)" onclick="openModal(3)" />
-      <img src="assets/images/fotografia/fest2025(5).jpg" alt="fest2025(5)" onclick="openModal(5)" />
-      <img src="assets/images/fotografia/fest2025(6).jpg" alt="fest2025(6)" onclick="openModal(6)" />
-      <img src="assets/images/fotografia/fest2025(7).jpg" alt="fest2025(7)" onclick="openModal(7)" />
-      <img src="assets/images/fotografia/fest2025(8).jpg" alt="fest2025(8)" onclick="openModal(8)" />
-      <img src="assets/images/fotografia/fest2025(9).jpg" alt="fest2025(9)" onclick="openModal(9)" />
-      <img src="assets/images/fotografia/fest2025(10).jpg" alt="fest2025(10)" onclick="openModal(10)" />
-
-
-      <!-- Añade más imágenes como sea necesario -->
+      <img src="assets/images/fotografia/fest2025(5).jpg" alt="fest2025(5)" onclick="openModal(4)" />
+      <img src="assets/images/fotografia/fest2025(6).jpg" alt="fest2025(6)" onclick="openModal(5)" />
+      <img src="assets/images/fotografia/fest2025(7).jpg" alt="fest2025(7)" onclick="openModal(6)" />
+      <img src="assets/images/fotografia/fest2025(8).jpg" alt="fest2025(8)" onclick="openModal(7)" />
+      <img src="assets/images/fotografia/fest2025(9).jpg" alt="fest2025(9)" onclick="openModal(8)" />
+      <img src="assets/images/fotografia/fest2025(10).jpg" alt="fest2025(10)" onclick="openModal(9)" />
     </section>
   </main>
 
@@ -124,7 +153,9 @@
       <div class="footer-social">
         <h4>Follow me</h4>
         <div class="social-icons">
-          <!-- Tus iconos sociales -->
+          <a href="https://www.instagram.com" target="_blank"><img src="assets/icons/instagram.svg" alt="Instagram" /></a>
+          <a href="https://www.linkedin.com" target="_blank"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
+          <a href="https://www.twitter.com" target="_blank"><img src="assets/icons/twitter.svg" alt="Twitter" /></a>
         </div>
       </div>
       <div class="footer-copy">
@@ -133,7 +164,6 @@
     </div>
   </footer>
 
-  <!-- Slideshow Modal -->
   <div class="modal" id="slideshowModal">
     <button class="close" onclick="closeModal()">×</button>
     <button class="prev" onclick="prevImage()">❮</button>
@@ -141,7 +171,6 @@
     <button class="next" onclick="nextImage()">❯</button>
   </div>
 
-  <!-- Particles -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
@@ -175,7 +204,6 @@
     });
   </script>
 
-  <!-- Slideshow Script -->
   <script>
     const modal = document.getElementById("slideshowModal");
     const modalImage = document.getElementById("modalImage");
