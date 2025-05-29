@@ -23,7 +23,7 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
@@ -599,4 +599,5 @@ footer p {
   font-weight: normal;   /* igual que resto de la página, o elimina esta línea si quieres */
   font-family: inherit;  /* hereda la fuente global */
 }
+
 
