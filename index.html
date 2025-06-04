@@ -1,50 +1,78 @@
-<section class="nes-hero">
-  <div class="video-overlay">
-    <video autoplay loop muted playsinline class="background-video">
-      <source src="assets/video/intro_nes_vhs.mp4" type="video/mp4" />
-      Tu navegador no soporta video HTML5.
-    </video>
-    <div class="scanlines"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ESTEBAN CAMPOS POLO - Portfolio</title>
+  <meta name="viewport" content="width=800, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="screen">
+
+    <!-- Top Navigation -->
+    <div class="top-bar">
+      <div class="nav-left">
+        <span class="nav-title">PORTFOLIO</span>
+        <a href="about.html">ABOUT</a>
+        <a href="#contact">CONTACT</a>
+      </div>
+      <div class="nav-right">
+        <span id="timer">00:00</span>
+        <a href="assets/documents/Esteban_Campos_Polo_CV.pdf" download class="btn-resume">DOWNLOAD RESUME</a>
+      </div>
+    </div>
+
+    <!-- Center Content -->
+    <div class="main-content">
+
+      <!-- NES Menu Lines -->
+      <div class="nes-box">
+        <div class="blinker-line"></div>
+        <div class="blinker-line"></div>
+        <div class="blinker-line"></div>
+      </div>
+
+      <!-- Sprite Character -->
+      <div class="sprite">
+        <img src="assets/images/character_main.webp" alt="Esteban Sprite" />
+      </div>
+
+      <!-- Right Links -->
+      <div class="right-links">
+        <a href="3d-modeling.html">3D MODELING</a>
+        <a href="graphic-design.html">GRAPHIC DESIGN</a>
+        <a href="photography.html">PHOTOGRAPHY</a>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact">
+      <p>Email: <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a></p>
+      <div class="social-icons">
+        <a href="https://linkedin.com/in/esteban-campos-polo-09852771" target="_blank">LinkedIn</a>
+        <a href="https://estebancampos1.artstation.com" target="_blank">ArtStation</a>
+        <a href="https://instagram.com/estcampo" target="_blank">Instagram</a>
+        <a href="https://vimeo.com/827034828" target="_blank">Vimeo</a>
+        <a href="https://behance.net/EstebanDesign3D" target="_blank">Behance</a>
+        <a href="https://x.com/EstebanCampos3D" target="_blank">X</a>
+      </div>
+    </footer>
+
   </div>
 
-  <header class="nes-header">
-    <nav class="nes-nav">
-      <a href="#portfolio">PORTFOLIO</a>
-      <a href="about.html">ABOUT</a>
-      <a href="#contact">CONTACT</a>
-    </nav>
-    <div class="timer" id="timer">00:00:00</div>
-  </header>
+<script>
+  // Simple timer script
+  let seconds = 0;
+  setInterval(() => {
+    seconds++;
+    const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const secs = String(seconds % 60).padStart(2, '0');
+    document.getElementById('timer').textContent = `${mins}:${secs}`;
+  }, 1000);
+</script>
 
-  <main class="nes-main-content">
-    <div class="character">
-      <img src="assets/images/character_pixel.gif" alt="Hero Pixel Estilo NES" />
-    </div>
-
-    <div class="menu">
-      <a href="assets/documents/Esteban_Campos_Polo_CV.pdf" download class="download-button">DOWNLOAD RESUME</a>
-      <ul>
-        <li><a href="3d-modeling.html">3D MODELING</a></li>
-        <li><a href="graphic-design.html">GRAPHIC DESIGN</a></li>
-        <li><a href="photography.html">PHOTOGRAPHY</a></li>
-      </ul>
-    </div>
-
-    <h1 class="blinking-title">ESTEBAN CAMPOS POLO</h1>
-    <h2 class="start-button">START</h2>
-
-    <marquee behavior="scroll" direction="left" class="marquee-text">
-      GRACIAS POR VISITAR MI PORTFOLIO. VISITA MIS REDES SOCIALES
-    </marquee>
-  </main>
-
-  <footer class="nes-footer">
-    <div>
-      <h4>CONTACT</h4>
-      <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
-    </div>
-    <div class="social-icons">
-      <!-- Íconos como en el footer actual -->
-    </div>
-  </footer>
-</section>
+</body>
+</html>
