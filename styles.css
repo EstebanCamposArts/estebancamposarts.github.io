@@ -431,3 +431,117 @@ footer p {
     grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   }
 }
+
+
+.nes-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+  background: black;
+}
+
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.1) brightness(0.9) saturate(1.2);
+  z-index: 0;
+}
+
+.scanlines::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  z-index: 1;
+}
+
+.nes-header,
+.nes-main-content,
+.nes-footer {
+  position: relative;
+  z-index: 2;
+}
+
+.nes-nav {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem;
+  font-size: 0.9rem;
+}
+
+.timer {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.character img {
+  width: 180px;
+  margin: 1rem auto;
+  display: block;
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.menu ul li a {
+  display: block;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  color: #ccc;
+  text-decoration: none;
+}
+
+.blinking-title {
+  color: yellow;
+  font-size: 1.1rem;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.start-button {
+  font-size: 1rem;
+  color: white;
+  margin: 0.5rem 0;
+}
+
+.marquee-text {
+  color: #aaa;
+  font-size: 0.7rem;
+  margin-top: 1rem;
+}
+
+.download-button {
+  background: #222;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-size: 0.8rem;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
