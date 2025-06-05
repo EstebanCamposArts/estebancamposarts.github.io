@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mini-Juego - Esteban Portfolio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    .game-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      background: repeating-linear-gradient(to right, #111 0px, #111 1px, transparent 1px, transparent 5px);
+    }
+
+    .character {
+      position: absolute;
+      bottom: 60px;
+      left: 40%;
+      width: 40px;
+      height: 60px;
+      background: linear-gradient(to bottom, #444, #222);
+      border-left: 4px solid #000;
+      border-right: 4px solid #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.1s;
+    }
+
+    .character-head {
+      width: 30px;
+      height: 30px;
+      background: #999;
+      margin-top: -30px;
+      border: 2px solid #000;
+      position: relative;
+    }
+
+    .eye {
+      width: 4px;
+      height: 4px;
+      background: #000;
+      position: absolute;
+      top: 8px;
+    }
+
+    .eye.left { left: 6px; }
+    .eye.right { right: 6px; }
+
+    .obstacle.stone {
+      width: 40px;
+      height: 40px;
+      background: radial-gradient(circle at 10px 10px, #bbb, #666);
+      border: 2px solid #444;
+      position: absolute;
+      bottom: 60px;
+    }
+
+    .obstacle.monster {
+      width: 40px;
+      height: 40px;
+      background: red;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .monster-eye {
+      width: 8px;
+      height: 8px;
+      background: black;
+      border-radius: 50%;
+    }
+
+    .destroyed {
+      animation: destroy 0.5s forwards;
+    }
+
+    @keyframes destroy {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(0.2); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="game-container" id="gameContainer">
+  <!-- Personaje -->
+  <div class="character" id="character">
+    <div class="character-head">
+      <div class="eye left"></div>
+      <div class="eye right"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const character = document.getElementById('character');
+  const container = document.getElementById('gameContainer');
+
+  let isJumping = false;
+
+  function jump() {
+    if (isJumping) return;
+    isJumping = true;
+
+    let upInterval = setInterval(() => {
+      let currentBottom = parseInt(getComputedStyle(character).bottom);
+      if (currentBottom >= 200) {
+        clearInterval(upInterval);
+        let downInterval = setInterval(() => {
+          if (parseInt(getComputedStyle(character).bottom) <= 60) {
+            clearInterval(downInterval);
+            isJumping = false;
+          } else {
+            character.style.bottom = `${currentBottom - 10}px`;
+          }
+        }, 20);
+      } else {
+        character.style.bottom = `${currentBottom + 10}px`;
+      }
+    }, 20);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') jump();
+  });
+
+  function createObstacle(type) {
+    const obstacle = document.createElement('div');
+    obstacle.classList.add('obstacle', type);
+    obstacle.style.left = `${Math.random() * 90 + 5}%`;
+    container.appendChild(obstacle);
+
+    const moveInterval = setInterval(() => {
+      const currentLeft = parseInt(obstacle.style.left);
+      if (currentLeft <= -40) {
+        container.removeChild(obstacle);
+        clearInterval(moveInterval);
+      } else {
+        obstacle.style.left = `${currentLeft - 5}px`;
+
+        const charRect = character.getBoundingClientRect();
+        const obsRect = obstacle.getBoundingClientRect();
+
+        const collision =
+          charRect.left < obsRect.right &&
+          charRect.right > obsRect.left &&
+          charRect.bottom > obsRect.top;
+
+        if (collision && !obstacle.classList.contains('destroyed')) {
+          obstacle.classList.add('destroyed');
+          setTimeout(() => {
+            if (obstacle.parentNode) container.removeChild(obstacle);
+          }, 500);
+        }
+      }
+    }, 20);
+  }
+
+  setInterval(() => {
+    const types = ['stone', 'monster'];
+    const type = types[Math.floor(Math.random() * types.length)];
+    createObstacle(type);
+  }, 1500);
+</script>
+
+</body>
+</html>
