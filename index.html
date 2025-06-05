@@ -1,70 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>ESTEBAN CAMPOS POLO - Portfolio</title>
-  <meta name="viewport" content="width=800, user-scalable=no">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=800">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="screen">
+<div class="screen">
 
-    <!-- Top Navigation -->
-    <div class="top-bar">
-      <div class="nav-left">
-        <span class="nav-title">PORTFOLIO</span>
-        <a href="about.html">ABOUT</a>
-        <a href="#contact">CONTACT</a>
-      </div>
-      <div class="nav-right">
-        <span id="timer">00:00</span>
-        <a href="assets/documents/Esteban_Campos_Polo_CV.pdf" download class="btn-resume">DOWNLOAD RESUME</a>
-      </div>
+  <!-- TOP NAVIGATION -->
+  <div class="top-bar">
+    <div class="nav-left">
+      <span class="nav-title">PORTFOLIO</span>
+      <a href="about.html">ABOUT</a>
+      <a href="contact.html">CONTACT</a>
     </div>
-
-    <!-- Center Content -->
-    <div class="main-content">
-
-      <!-- NES Menu Lines -->
-      <div class="nes-box">
-        <div class="blinker-line"></div>
-        <div class="blinker-line"></div>
-        <div class="blinker-line"></div>
-      </div>
-
-      <!-- Sprite Character -->
-      <div class="sprite">
-        <img src="assets/images/character_main.webp" alt="Esteban Sprite" />
-      </div>
-
-      <!-- Right Links -->
-      <div class="right-links">
-        <a href="3d-modeling.html">3D MODELING</a>
-        <a href="graphic-design.html">GRAPHIC DESIGN</a>
-        <a href="photography.html">PHOTOGRAPHY</a>
-      </div>
-
+    <div class="nav-right">
+      <span id="timer">00:00</span>
+      <a class="btn-resume" href="assets/Resume.pdf" download>DOWNLOAD RESUME</a>
     </div>
-
-    <!-- Footer -->
-    <footer id="contact">
-      <p>Email: <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a></p>
-      <div class="social-icons">
-        <a href="https://linkedin.com/in/esteban-campos-polo-09852771" target="_blank">LinkedIn</a>
-        <a href="https://estebancampos1.artstation.com" target="_blank">ArtStation</a>
-        <a href="https://instagram.com/estcampo" target="_blank">Instagram</a>
-        <a href="https://vimeo.com/827034828" target="_blank">Vimeo</a>
-        <a href="https://behance.net/EstebanDesign3D" target="_blank">Behance</a>
-        <a href="https://x.com/EstebanCampos3D" target="_blank">X</a>
-      </div>
-    </footer>
-
   </div>
 
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <!-- NES MENU EFFECT -->
+    <div class="nes-box">
+      <div class="line blink"></div>
+      <div class="line blink delay"></div>
+      <div class="line blink delay2"></div>
+    </div>
+
+    <!-- SPRITE -->
+ <div class="sprite">
+  <img src="assets/images/character_main.png" alt="Main Character Sprite" />
+</div>
+
+
+    <!-- RIGHT LINKS -->
+    <div class="right-links">
+      <a href="3dmodeling/">3D MODELING</a>
+      <a href="graphicdesign/">GRAPHIC DESIGN</a>
+      <a href="fotografia/">PHOTOGRAPHY</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Email: <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a></p>
+    <div class="social-icons">
+      <a href="https://linkedin.com/in/esteban-campos-polo-09852771" target="_blank">
+        <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
+      </a>
+      <a href="https://estebancampos1.artstation.com" target="_blank">
+        <img src="assets/icons/artstation.svg" alt="ArtStation" />
+      </a>
+      <a href="https://instagram.com/estcampo" target="_blank">
+        <img src="assets/icons/instagram.svg" alt="Instagram" />
+      </a>
+      <a href="https://vimeo.com/827034828" target="_blank">
+        <img src="assets/icons/vimeo.svg" alt="Vimeo" />
+      </a>
+      <a href="https://behance.net/EstebanDesign3D" target="_blank">
+        <img src="assets/icons/behance.svg" alt="Behance" />
+      </a>
+      <a href="https://x.com/EstebanCampos3D" target="_blank">
+        <img src="assets/icons/x.svg" alt="X" />
+      </a>
+    </div>
+  </footer>
+
+</div>
+
 <script>
-  // Simple timer script
   let seconds = 0;
   setInterval(() => {
     seconds++;
