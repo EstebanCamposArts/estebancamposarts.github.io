@@ -1,88 +1,195 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>ESTEBAN CAMPOS POLO - Portfolio</title>
-  <meta name="viewport" content="width=800">
-  <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-</head>
-<body>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esteban Campos Polo - Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 
-<div class="screen">
+<script async defer data-domain="estebancamposarts.github.io" src="https://plausible.io/js/plausible.js"></script>
 
-  <!-- TOP NAVIGATION -->
-  <div class="top-bar">
-    <div class="nav-left">
-      <span class="nav-title">PORTFOLIO</span>
-      <a href="about.html">ABOUT</a>
-      <a href="contact.html">CONTACT</a>
-    </div>
-    <div class="nav-right">
-      <span id="timer">00:00</span>
-      <a class="btn-resume" href="assets/Resume.pdf" download>DOWNLOAD RESUME</a>
-    </div>
-  </div>
-
-  <!-- MAIN CONTENT -->
-  <div class="main-content">
-    <!-- NES MENU EFFECT -->
-    <div class="nes-box">
-      <div class="line blink"></div>
-      <div class="line blink delay"></div>
-      <div class="line blink delay2"></div>
-    </div>
-
-    <!-- SPRITE -->
- <div class="sprite">
-  <img src="assets/images/character_main.png" alt="Main Character Sprite" />
-</div>
-
-
-    <!-- RIGHT LINKS -->
-    <div class="right-links">
-      <a href="3dmodeling/">3D MODELING</a>
-      <a href="graphicdesign/">GRAPHIC DESIGN</a>
-      <a href="fotografia/">PHOTOGRAPHY</a>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>Email: <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a></p>
-    <div class="social-icons">
-      <a href="https://linkedin.com/in/esteban-campos-polo-09852771" target="_blank">
-        <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
-      </a>
-      <a href="https://estebancampos1.artstation.com" target="_blank">
-        <img src="assets/icons/artstation.svg" alt="ArtStation" />
-      </a>
-      <a href="https://instagram.com/estcampo" target="_blank">
-        <img src="assets/icons/instagram.svg" alt="Instagram" />
-      </a>
-      <a href="https://vimeo.com/827034828" target="_blank">
-        <img src="assets/icons/vimeo.svg" alt="Vimeo" />
-      </a>
-      <a href="https://behance.net/EstebanDesign3D" target="_blank">
-        <img src="assets/icons/behance.svg" alt="Behance" />
-      </a>
-      <a href="https://x.com/EstebanCampos3D" target="_blank">
-        <img src="assets/icons/x.svg" alt="X" />
-      </a>
-    </div>
-  </footer>
-
-</div>
-
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
 <script>
-  let seconds = 0;
-  setInterval(() => {
-    seconds++;
-    const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
-    const secs = String(seconds % 60).padStart(2, '0');
-    document.getElementById('timer').textContent = `${mins}:${secs}`;
-  }, 1000);
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-MF62GH7N9W');
 </script>
 
+<!-- Cookie Consent by Osano -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+<script>
+  window.addEventListener("load", function(){
+    window.cookieconsent.initialise({
+      palette: {
+        popup: { background: "#000" },
+        button: { background: "#f1d600", text: "#000" }
+      },
+      theme: "classic",
+      position: "bottom-right",
+      type: "opt-in",
+      content: {
+        message: "Este sitio web usa cookies para analizar el tráfico con Google Analytics.",
+        dismiss: "Aceptar",
+        allow: "Permitir cookies",
+        deny: "Rechazar",
+        link: "Más información",
+        href: "https://policies.google.com/technologies/cookies"
+      },
+      onInitialise: function (status) {
+        var type = this.options.type;
+        var didConsent = this.hasConsented();
+        if (type === 'opt-in' && didConsent) {
+          loadGA(); // Si consiente, cargamos GA
+        }
+      },
+      onStatusChange: function(status) {
+        var didConsent = this.hasConsented();
+        if (didConsent) {
+          loadGA();
+        }
+      }
+    });
+  });
+
+  function loadGA() {
+    var gtagScript = document.createElement("script");
+    gtagScript.setAttribute("async", "");
+    gtagScript.setAttribute("src", "https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX");
+    document.head.appendChild(gtagScript);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8VMES8F4MN');
+  }
+</script>
+</head>
+<body>
+  <!-- Fondo particles.js -->
+  <div id="particles-js"></div>
+
+    <header class="container">
+    <div class="logo">PORTFOLIO</div>
+    <nav>
+      <a href="about.html">About me</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#contact">Contact</a>
+    </nav>
+</header>
+
+
+
+  <section class="hero container">
+    <div class="hero-left">
+      <h1>Esteban <span>Campos Polo</span></h1>
+      <h2>3D Character Artist<br />Graphic Designer</h2>
+      <a href="assets/documents/Esteban_Campos_Polo_CV.pdf" download="Esteban_Campos_Polo_CV.pdf" class="btn-primary">DOWNLOAD RESUME</a>
+    </div>
+    <div class="hero-right">
+      <img src="assets/images/character_main.webp" alt="Golem Character" />
+    </div>
+  </section>
+
+
+
+  <section class="portfolio container" id="portfolio">
+    <h3>PORTFOLIO</h3>
+    <div class="portfolio-categories">
+      <div class="category">
+        <h4>3D Modeling</h4>
+        <img src="assets/images/modeling.webp" alt="3D Modeling" />
+        <p><a href="3d-modeling.html">See more about...</a></p>
+      </div>
+      <div class="category">
+        <h4>Photography</h4>
+        <img src="assets/images/photography.webp" alt="Photography" />
+        <p><a href="photography.html">See more about...</a></p>
+      </div>
+      <div class="category">
+        <h4>Graphic Design</h4>
+        <img src="assets/images/graphic_design.webp" alt="Graphic Design" />
+        <p><a href="graphic-design.html">See more about...</a></p>
+      </div>
+    </div>
+  </section>
+
+<section class="welcome-message container">
+  <h2>Welcome to my Portfolio</h2>
+  <p>
+    Hello! I'm Esteban Campos Polo, a graphic designer and 3D artist. This is a space where I share a selection of my most representative work in 3D modeling, graphic design, and photography.If you're interested in hiring my services, collaborating on a project, or simply learning more about my work, feel free to get in touch. I'm always open to new opportunities.Thank you for visiting. I hope you enjoy exploring my work as much as I enjoy creating it.
+  </p>
+</section>
+
+  <footer class="container" id="contact">
+    <div class="footer-contact">
+      <h4>CONTACT</h4>
+      <p>Email</p>
+      <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
+    </div>
+    <div class="footer-social">
+      <h4>SOCIAL NETWORKS</h4>
+      <div class="social-icons">
+        <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
+        </a>
+        <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/artstation.svg" alt="ArtStation" />
+        </a>
+        <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/instagram.svg" alt="Instagram" />
+        </a>
+	<a href="https://vimeo.com/827034828" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/vimeo.svg" alt="Vimeo" />
+        </a>
+	<a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/behance.svg" alt="Behance" />
+        </a>
+	<a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener noreferrer">
+          <img src="assets/icons/x.svg" alt="X" />
+        </a>
+      </div>
+    </div>
+  <p style="font-size: 0.9rem; color: #888;">
+    © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
+  </p>
+  </footer>
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 80 },
+        color: { value: "#ffffff" },
+        shape: { type: "circle" },
+        opacity: { value: 0.3 },
+        size: { value: 3 },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#ffffff",
+          opacity: 0.2,
+          width: 1
+        },
+        move: { enable: true, speed: 2 }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: true, mode: "push" }
+        },
+        modes: {
+          repulse: { distance: 100 },
+          push: { particles_nb: 4 }
+        }
+      },
+      retina_detect: true
+    });
+  </script>
 </body>
 </html>
