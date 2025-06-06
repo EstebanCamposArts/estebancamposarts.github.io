@@ -45,16 +45,24 @@ function showMedia(index) {
     img.src = mediaUrl;
     img.alt = "Imagen ampliada";
     img.classList.add("modal-image");
+    img.loading = "lazy";
     container.appendChild(img);
   } else if (isVideo(mediaUrl)) {
     const video = document.createElement("video");
     video.src = mediaUrl;
-    video.controls = true; // Mostrar controles
+    video.controls = true;
     video.autoplay = true;
-    video.loop = false;
-    video.muted = true;
+    video.muted = true; // Añadido para mejorar compatibilidad autoplay
     video.playsInline = true;
     video.classList.add("modal-video");
+
+    // Reiniciar reproducción desde el principio
+    video.onloadedmetadata = () => video.play();
+
+    video.onerror = () => {
+      container.innerHTML = "<p>Hubo un error cargando el video.</p>";
+    };
+
     container.appendChild(video);
   }
 }
@@ -68,11 +76,13 @@ function isVideo(url) {
 }
 
 function nextImage() {
-  showMedia((currentIndex + 1) % currentGallery.length);
+  currentIndex = (currentIndex + 1) % currentGallery.length;
+  showMedia(currentIndex);
 }
 
 function prevImage() {
-  showMedia((currentIndex - 1 + currentGallery.length) % currentGallery.length);
+  currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+  showMedia(currentIndex);
 }
 
 function closeModal() {

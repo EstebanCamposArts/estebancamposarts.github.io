@@ -8,12 +8,21 @@
 </head>
 <body>
 
-  <!-- Modal -->
+  <!-- Modal de Imagen -->
   <div id="image-modal" class="modal">
     <span class="modal-close" id="modal-close">&times;</span>
     <span class="modal-prev" id="modal-prev">&#10094;</span>
     <img class="modal-image" id="modal-img" alt="imagen ampliada" />
     <span class="modal-next" id="modal-next">&#10095;</span>
+  </div>
+
+  <!-- Modal de Video -->
+  <div id="video-modal" class="modal">
+    <span class="modal-close" id="video-modal-close">&times;</span>
+    <video id="modal-video" controls autoplay>
+      <source src="" type="video/mp4">
+      Tu navegador no soporta el elemento de video.
+    </video>
   </div>
 
   <!-- Fondo particles.js -->
@@ -30,8 +39,11 @@
   </header>
 
   <section class="modeler-grid">
+    <!-- Ejemplo con video -->
     <img src="assets/images/3dmodeling/golem/golem.jpg" alt="golem"
-         data-hd="assets/images/3dmodeling/golem/golem.jpg" loading="lazy" />
+         data-hd="assets/images/3dmodeling/golem/golem.jpg"
+         data-video="assets/videos/golem.mp4" loading="lazy" />
+
     <img src="assets/images/3dmodeling/ashora/ashora.jpg" alt="ashora"
          data-hd="assets/images/3dmodeling/ashora/ashora.jpg" />
     <img src="assets/images/3dmodeling/ayara/ayara.jpg" alt="ayara"
@@ -69,22 +81,22 @@
       <div class="footer-social">
         <h4>Follow me</h4>
         <div class="social-icons">
-          <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771"> 
+          <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771">    
             <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
           </a>
-          <a href="https://estebancampos1.artstation.com/"> 
+          <a href="https://estebancampos1.artstation.com/">    
             <img src="assets/icons/artstation.svg" alt="ArtStation" />
           </a>
-          <a href="https://www.instagram.com/estcampo/"> 
+          <a href="https://www.instagram.com/estcampo/">    
             <img src="assets/icons/instagram.svg" alt="Instagram" />
           </a>
-          <a href="https://vimeo.com/827034828"> 
+          <a href="https://vimeo.com/827034828">    
             <img src="assets/icons/vimeo.svg" alt="Vimeo" />
           </a>
-          <a href="https://www.behance.net/EstebanDesign3D/projects"> 
+          <a href="https://www.behance.net/EstebanDesign3D/projects">    
             <img src="assets/icons/behance.svg" alt="Behance" />
           </a>
-          <a href="https://x.com/EstebanCampos3D"> 
+          <a href="https://x.com/EstebanCampos3D">    
             <img src="assets/icons/x.svg" alt="X" />
           </a>
         </div>
@@ -97,7 +109,7 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script> 
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>    
   <script src="js/main.js"></script>
   <script>
     // Inicializa particles.js
@@ -129,6 +141,61 @@
         }
       },
       retina_detect: true
+    });
+
+    // Lógica para modales (imágenes y videos)
+    document.addEventListener("DOMContentLoaded", function () {
+      const imageModal = document.getElementById("image-modal");
+      const videoModal = document.getElementById("video-modal");
+      const modalImg = document.getElementById("modal-img");
+      const modalVideo = document.getElementById("modal-video");
+      const modalVideoSource = modalVideo.querySelector("source");
+
+      const modalCloseButtons = document.querySelectorAll(".modal-close");
+      const modalPrev = document.getElementById("modal-prev");
+      const modalNext = document.getElementById("modal-next");
+
+      let currentIndex = 0;
+      const items = Array.from(document.querySelectorAll(".modeler-grid img"));
+
+      // Abrir modal según tipo de contenido
+      items.forEach((item, index) => {
+        item.addEventListener("click", function () {
+          if (this.dataset.video) {
+            // Es un video
+            modalVideoSource.src = this.dataset.video;
+            modalVideo.load();
+            modalVideo.play();
+            videoModal.style.display = "block";
+          } else {
+            // Es una imagen
+            currentIndex = index;
+            modalImg.src = this.dataset.hd || this.src;
+            imageModal.style.display = "block";
+          }
+        });
+      });
+
+      // Cerrar modales
+      modalCloseButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          imageModal.style.display = "none";
+          videoModal.style.display = "none";
+          modalVideo.pause();
+          modalVideo.currentTime = 0;
+        });
+      });
+
+      // Navegar entre imágenes
+      modalPrev.addEventListener("click", () => {
+        currentIndex = (currentIndex - 1 + items.length) % items.length;
+        modalImg.src = items[currentIndex].dataset.hd;
+      });
+
+      modalNext.addEventListener("click", () => {
+        currentIndex = (currentIndex + 1) % items.length;
+        modalImg.src = items[currentIndex].dataset.hd;
+      });
     });
   </script>
 
