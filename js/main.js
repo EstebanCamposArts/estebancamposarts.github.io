@@ -2,24 +2,29 @@
 let currentGallery = [];
 let currentIndex = 0;
 
-// === Elementos del DOM ===
-const modal = document.getElementById("image-modal");
-const container = document.getElementById("modal-content-container");
-const modalClose = document.getElementById("modal-close");
-const modalPrev = document.getElementById("modal-prev");
-const modalNext = document.getElementById("modal-next");
+// === Elementos del DOM (se cargan después del DOM) ===
+let modal, container, modalClose, modalPrev, modalNext;
 
-// === Event Listeners ===
-document.querySelectorAll(".modeler-grid img").forEach(img => {
-  img.addEventListener("click", () => openModal(img));
-});
+document.addEventListener("DOMContentLoaded", () => {
+  // Asignar elementos del DOM solo cuando estén listos
+  modal = document.getElementById("image-modal");
+  container = document.getElementById("modal-content-container");
+  modalClose = document.getElementById("modal-close");
+  modalPrev = document.getElementById("modal-prev");
+  modalNext = document.getElementById("modal-next");
 
-modalClose.addEventListener("click", closeModal);
-modalPrev.addEventListener("click", prevImage);
-modalNext.addEventListener("click", nextImage);
+  // Eventos
+  document.querySelectorAll(".modeler-grid img").forEach(img => {
+    img.addEventListener("click", () => openModal(img));
+  });
 
-window.addEventListener("click", (event) => {
-  if (event.target === modal) closeModal();
+  modalClose.addEventListener("click", closeModal);
+  modalPrev.addEventListener("click", prevImage);
+  modalNext.addEventListener("click", nextImage);
+
+  window.addEventListener("click", (event) => {
+    if (event.target === modal) closeModal();
+  });
 });
 
 // === Funciones principales ===
@@ -38,13 +43,18 @@ function openModal(img) {
 
 function showMedia(index) {
   const mediaUrl = currentGallery[index];
+  if (!container) {
+    console.error("No se encontró #modal-content-container");
+    return;
+  }
+
   container.innerHTML = ""; // Limpiar contenido anterior
 
   if (isImage(mediaUrl)) {
     const img = document.createElement("img");
     img.src = mediaUrl;
     img.alt = "Imagen ampliada";
-    img.classList.add("modal-image");
+    img.className = "modal-image";
     img.loading = "lazy";
     container.appendChild(img);
   } else if (isVideo(mediaUrl)) {
@@ -52,13 +62,11 @@ function showMedia(index) {
     video.src = mediaUrl;
     video.controls = true;
     video.autoplay = true;
-    video.muted = true; // Añadido para mejorar compatibilidad autoplay
+    video.muted = true;
     video.playsInline = true;
-    video.classList.add("modal-video");
+    video.className = "modal-video";
 
-    // Reiniciar reproducción desde el principio
     video.onloadedmetadata = () => video.play();
-
     video.onerror = () => {
       container.innerHTML = "<p>Hubo un error cargando el video.</p>";
     };
@@ -87,7 +95,7 @@ function prevImage() {
 
 function closeModal() {
   modal.style.display = "none";
-  container.innerHTML = ""; // Detener video si hay uno
+  if (container) container.innerHTML = ""; // Detener video si hay uno
 }
 
 // === Galerías por carpeta ===
@@ -154,3 +162,6 @@ const galleries = {
     "assets/images/3dmodeling/machine_1.jpg"
   ]
 };
+
+
+
