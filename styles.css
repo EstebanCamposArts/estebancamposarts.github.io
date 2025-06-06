@@ -549,3 +549,11 @@ footer p {
   padding: 0 1rem;
   line-height: 1.4;
 }
+
+.modal-image,
+.modal-video {
+  max-width: 90%;
+  max-height: 85vh;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
