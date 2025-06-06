@@ -12,7 +12,7 @@
   --border-color: #1e1e1e;
 }
 
-/* General styles */
+/* === General styles === */
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap');
 
 body {
@@ -26,7 +26,7 @@ body {
   overflow-x: hidden;
 }
 
-#particles-js {
+#particles-js { 
   position: fixed;
   width: 100%;
   height: 100%;
@@ -73,6 +73,7 @@ nav a:focus-visible {
   outline-offset: 4px;
 }
 
+/* === Hero Section === */
 .hero {
   display: flex;
   flex-wrap: wrap;
@@ -130,6 +131,7 @@ nav a:focus-visible {
   background-color: var(--accent-hover);
 }
 
+/* === About Section === */
 .about {
   padding: 3rem 0;
   text-align: center;
@@ -155,6 +157,7 @@ nav a:focus-visible {
   line-height: 1.6;
 }
 
+/* === Portfolio Section === */
 .portfolio {
   padding: 3rem 0;
   text-align: center;
@@ -209,6 +212,7 @@ nav a:focus-visible {
   font-weight: 700;
 }
 
+/* === Footer Section === */
 footer {
   background-color: var(--bg-footer);
   padding: 2rem 0;
@@ -227,11 +231,13 @@ footer {
   gap: 2rem;
 }
 
-.footer-contact, .footer-social {
+.footer-contact,
+.footer-social {
   flex: 1 1 300px;
 }
 
-.footer-contact h4, .footer-social h4 {
+.footer-contact h4,
+.footer-social h4 {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
   font-weight: 700;
@@ -264,6 +270,7 @@ footer p {
   margin-top: 1rem;
 }
 
+/* === Welcome Message === */
 .welcome-message {
   padding: 2rem 0;
   font-size: 0.9rem;
@@ -286,6 +293,7 @@ footer p {
   margin: 0 auto 1.5rem;
 }
 
+/* === Marquee Banner === */
 .about-banner {
   width: 100%;
   overflow: hidden;
@@ -325,6 +333,7 @@ footer p {
   }
 }
 
+/* === Design Gallery === */
 .design-gallery {
   padding: 3rem 1rem;
   text-align: center;
@@ -379,6 +388,7 @@ footer p {
   letter-spacing: 0.4px;
 }
 
+/* === Photo Sections Navigation === */
 .photo-sections-nav {
   max-width: 1200px;
   margin: 1rem auto 3rem auto;
@@ -417,105 +427,7 @@ footer p {
   font-family: inherit;
 }
 
-.modeler-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1.5rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.modeler-grid img {
-  width: 100%;
-  height: auto;
-  max-width: 100%;
-  object-fit: contain;
-  border-radius: 8px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.5s ease;
-  filter: grayscale(100%) brightness(80%);
-  cursor: pointer;
-}
-
-.modeler-grid img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-  filter: grayscale(0%) brightness(100%);
-}
-
-/* Modal para imagen ampliada */
-#image-modal {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.8);
-  justify-content: center;
-  align-items: center;
-}
-
-#image-modal img {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-}
-
-#image-modal.close-area {
-  cursor: zoom-out;
-}
-
-
-@media (max-width: 768px) {
-  .hero,
-  footer {
-    flex-direction: column;
-  }
-
-  nav a {
-    margin-left: 0.75rem;
-  }
-
-  .grid-gallery {
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  }
-}
-
-.video-section {
-  margin-top: 5px;
-  text-align: center;
-}
-
-.video-container {
-  display: inline-block;
-  width: 100%;
-  max-width: 1200px;
-  aspect-ratio: 16 / 9;
-  background-color: #000;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.video-container video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.copyright {
-  font-size: 0.85rem;
-  color: #aaa;
-  text-align: center;
-  max-width: 1200px;
-  margin: 1rem auto 1rem;
-  padding: 0 1rem;
-
-  /* Control de espacio entre líneas */
-  line-height: 0.7; /* Puedes ajustar a 1.4, 1.8, 2, etc. según lo que necesites */
-}
-
+/* === Modeler Grid (Galería principal) === */
 .modeler-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -541,15 +453,16 @@ footer p {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
 
-/* Modal */
+/* === Modal para imagen ampliada === */
 .modal {
   display: none;
   position: fixed;
-  z-index: 999;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.9);
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.95);
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -557,8 +470,9 @@ footer p {
 
 .modal img {
   max-width: 90%;
-  max-height: 80vh;
+  max-height: 85vh;
   border-radius: 10px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
 }
 
 .modal-close {
@@ -571,53 +485,71 @@ footer p {
   z-index: 1001;
 }
 
-.modal-prev, .modal-next {
-  position: absolute;
-
-
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  left: 0; top: 0; width: 100%; height: 100%;
-  background-color: rgba(0, 0, 0, 0.95);
-  flex-direction: column;
-}
-
-.modal-content {
-  max-width: 90%;
-  max-height: 80%;
-  border-radius: 8px;
-}
-
-.modal-caption {
-  margin-top: 1rem;
-  color: #ccc;
-  text-align: center;
-}
-
-.modal-close {
-  position: absolute;
-  top: 1rem; right: 1.5rem;
-  color: white;
-  font-size: 2rem;
-  cursor: pointer;
-}
-
-.modal-nav {
+.modal-prev,
+.modal-next {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   color: white;
   font-size: 2.5rem;
   cursor: pointer;
-  padding: 1rem;
   user-select: none;
+  z-index: 1000;
 }
 
-.modal-prev { left: 10px; }
-.modal-next { right: 10px; }
+.modal-prev {
+  left: 20px;
+}
 
+.modal-next {
+  right: 20px;
+}
+
+/* === Media Queries === */
+@media (max-width: 768px) {
+  .hero,
+  footer {
+    flex-direction: column;
+  }
+
+  nav a {
+    margin-left: 0.75rem;
+  }
+
+  .grid-gallery {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  }
+}
+
+/* === Video Section === */
+.video-section {
+  margin-top: 5px;
+  text-align: center;
+}
+
+.video-container {
+  display: inline-block;
+  width: 100%;
+  max-width: 1200px;
+  aspect-ratio: 16 / 9;
+  background-color: #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* === Copyright Footer === */
+.copyright {
+  font-size: 0.85rem;
+  color: #aaa;
+  text-align: center;
+  max-width: 1200px;
+  margin: 1rem auto;
+  padding: 0 1rem;
+  line-height: 1.4;
+}
