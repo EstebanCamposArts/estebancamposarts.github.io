@@ -4,7 +4,7 @@ let currentIndex = 0;
 
 // === Elementos del DOM ===
 const modal = document.getElementById("image-modal");
-const modalImg = document.getElementById("modal-img");
+const container = document.getElementById("modal-content-container");
 const modalClose = document.getElementById("modal-close");
 const modalPrev = document.getElementById("modal-prev");
 const modalNext = document.getElementById("modal-next");
@@ -22,7 +22,7 @@ window.addEventListener("click", (event) => {
   if (event.target === modal) closeModal();
 });
 
-// === Funciones del modal ===
+// === Funciones principales ===
 function openModal(img) {
   const src = img.dataset.hd || img.src;
   const parts = src.split("/");
@@ -32,28 +32,52 @@ function openModal(img) {
   currentIndex = currentGallery.indexOf(src);
   if (currentIndex === -1) currentIndex = 0;
 
+  showMedia(currentIndex);
   modal.style.display = "flex";
-  modalImg.src = currentGallery[currentIndex];
+}
+
+function showMedia(index) {
+  const mediaUrl = currentGallery[index];
+  container.innerHTML = ""; // Limpiar contenido anterior
+
+  if (isImage(mediaUrl)) {
+    const img = document.createElement("img");
+    img.src = mediaUrl;
+    img.alt = "Imagen ampliada";
+    img.classList.add("modal-image");
+    container.appendChild(img);
+  } else if (isVideo(mediaUrl)) {
+    const video = document.createElement("video");
+    video.src = mediaUrl;
+    video.controls = true; // Mostrar controles
+    video.autoplay = true;
+    video.loop = false;
+    video.muted = true;
+    video.playsInline = true;
+    video.classList.add("modal-video");
+    container.appendChild(video);
+  }
+}
+
+function isImage(url) {
+  return /\.(jpe?g|png|gif|webp)$/i.test(url);
+}
+
+function isVideo(url) {
+  return /\.(mp4|webm|ogg)$/i.test(url);
+}
+
+function nextImage() {
+  showMedia((currentIndex + 1) % currentGallery.length);
+}
+
+function prevImage() {
+  showMedia((currentIndex - 1 + currentGallery.length) % currentGallery.length);
 }
 
 function closeModal() {
   modal.style.display = "none";
-  modalImg.src = "";
-  currentGallery = [];
-  currentIndex = 0;
-}
-
-function showImage(index) {
-  currentIndex = (index + currentGallery.length) % currentGallery.length;
-  modalImg.src = currentGallery[currentIndex];
-}
-
-function nextImage() {
-  showImage(currentIndex + 1);
-}
-
-function prevImage() {
-  showImage(currentIndex - 1);
+  container.innerHTML = ""; // Detener video si hay uno
 }
 
 // === Galerías por carpeta ===
@@ -92,7 +116,6 @@ const galleries = {
     "assets/images/3dmodeling/jack/jack.jpg",
     "assets/images/3dmodeling/jack/jack_1.jpg",
     "assets/images/3dmodeling/jack/jack_2.jpg"
-
   ],
   ogi: [
     "assets/images/3dmodeling/ogi/ogi.jpg",
