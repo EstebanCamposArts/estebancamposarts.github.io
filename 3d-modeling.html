@@ -6,6 +6,14 @@
   <title>3D Modeling</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
+<!-- Modal -->
+<div id="image-modal" class="modal">
+  <span class="modal-close" onclick="closeModal()">&times;</span>
+  <span class="modal-prev" onclick="prevImage()">&#10094;</span>
+  <img class="modal-image" id="modal-image" />
+  <span class="modal-next" onclick="nextImage()">&#10095;</span>
+</div>
+
 <body>
   <!-- Fondo particles.js -->
   <div id="particles-js"></div>
@@ -20,49 +28,56 @@
     </nav>
   </header>
 
-  <main class="container">
-    <h1 class="section-title">3D MODELING</h1>
-
-    <section class="modeler-grid">
-      <img src="assets/images/3dmodeling/golem/golem.jpg" alt="golem" />
-      <img src="ruta/imagen2.jpg" alt="Modelo 2" />
-      <img src="ruta/imagen3.jpg" alt="Modelo 3" />
-      <img src="ruta/imagen1.jpg" alt="Modelo 4" />
-      <img src="ruta/imagen2.jpg" alt="Modelo 5" />
-      <img src="ruta/imagen3.jpg" alt="Modelo 6" />
-    </section>
-
-  <main class="container">
- <p style="max-width: 1280px; margin: 10 auto 2rem; font-size: 1rem; color: #00adb5; text-align: left; font-family: inherit;">
-Explore forms and create visual narratives that transcend the two-dimensional. Combine technical precision with artistic sensitivity, paying attention to every detail to achieve results that optimize the work of the person receiving the geometries and allow them to be manipulated according to their needs. I work from the initial reference research once I have the concept art to the final rendering, adapting to the project's objectives and the specific needs of each client. Blocking, sculpting, retopology, projection, fine detailing, baking and texturing with Substance, shading, lighting, and rendering with Maya.</p>
-  </header>
+<section class="modeler-grid">
+  <img src="assets/images/3dmodeling/golem/golem.jpg" alt="golem" data-hd="assets/images/3dmodeling/golem/golem.jpg" onclick="openModal(this)" loading="lazy" />
+  <img src="assets/images/3dmodeling/ashora/ashora.jpg" alt="ashora" data-hd="assets/images/3dmodeling/ashora/ashora.jpg" onclick="openModal(this)" />
+  <img src="assets/images/3dmodeling/ayara/ayara.jpg" alt="ayara" data-hd="assets/images/3dmodeling/ayara/ayara.jpg" onclick="openModal(this)" />
+  <img src="assets/images/3dmodeling/bust/bust.jpg" alt="bust" data-hd="assets/images/3dmodeling/bust/bust.jpg" onclick="openModal(this)" />
+  <img src="assets/images/3dmodeling/cleo/cleo.jpg" alt="cleo" data-hd="assets/images/3dmodeling/cleo/cleo.jpg" onclick="openModal(this)" />
+  <img src="assets/images/3dmodeling/jack/jack.jpg" alt="jack" data-hd="assets/images/3dmodeling/jack/jack.jpg" onclick="openModal(this)" />
+  <img src="assets/images/3dmodeling/ogi/ogi.jpg" alt="ogi" data-hd="assets/images/3dmodeling/ogi/ogi.jpg" onclick="openModal(this)" />
+  <img src="assets/images/3dmodeling/pichon/pichon.jpg" alt="pichon" data-hd="assets/images/3dmodeling/pichon/pichon.jpg" onclick="openModal(this)" />
+  <img src="assets/images/3dmodeling/rob/rob.jpg" alt="rob" data-hd="assets/images/3dmodeling/rob/rob.jpg" onclick="openModal(this)" />
+  <img src="assets/images/3dmodeling/tubos.jpg" alt="tubos" data-hd="assets/images/3dmodeling/tubos.jpg" onclick="openModal(this)" />
+  <img src="assets/images/3dmodeling/escalas.jpg" alt="escalas" data-hd="assets/images/3dmodeling/escalas.jpg" onclick="openModal(this)" />
+  <img src="assets/images/3dmodeling/machine.jpg" alt="machine" data-hd="assets/images/3dmodeling/machine.jpg" onclick="openModal(this)" />
+</section>
 
 
-<footer>
- <div class="footer-wrapper">
-  <div class="footer-contact">
-    <h4>Contact</h4>
-    <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
+  <p style="max-width: 1280px; margin: 2rem auto; font-size: 1rem; color: #00adb5; text-align: left; font-family: inherit; line-height: 1.6;">
+  Explore forms and create visual narratives that transcend the two-dimensional. Combine technical precision with artistic sensitivity, paying attention to every detail to achieve results that optimize the work of the person receiving the geometries and allow them to be manipulated according to their needs. I work from the initial reference research once I have the concept art to the final rendering, adapting to the project's objectives and the specific needs of each client. Blocking, sculpting, retopology, projection, fine detailing, baking and texturing with Substance, shading, lighting, and rendering with Maya.
+</p>
+
+  <!-- Modal -->
+  <div id="image-modal" class="close-area" onclick="closeModal()">
+    <img id="modal-img" src="" alt="imagen ampliada">
   </div>
-  <div class="footer-social">
-    <h4>Follow me</h4>
-    <div class="social-icons">
-      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
-      <a href="https://estebancampos1.artstation.com/"><img src="assets/icons/artstation.svg" alt="ArtStation" /></a>
-      <a href="https://www.instagram.com/estcampo/"><img src="assets/icons/instagram.svg" alt="Instagram" /></a>
-      <a href="https://vimeo.com/827034828"><img src="assets/icons/vimeo.svg" alt="Vimeo" /></a>
-      <a href="https://www.behance.net/EstebanDesign3D/projects"><img src="assets/icons/behance.svg" alt="Behance" /></a>
-      <a href="https://x.com/EstebanCampos3D"><img src="assets/icons/x.svg" alt="X" /></a>
+
+  <footer>
+    <div class="footer-wrapper">
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
+      </div>
+      <div class="footer-social">
+        <h4>Follow me</h4>
+        <div class="social-icons">
+          <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
+          <a href="https://estebancampos1.artstation.com/"><img src="assets/icons/artstation.svg" alt="ArtStation" /></a>
+          <a href="https://www.instagram.com/estcampo/"><img src="assets/icons/instagram.svg" alt="Instagram" /></a>
+          <a href="https://vimeo.com/827034828"><img src="assets/icons/vimeo.svg" alt="Vimeo" /></a>
+          <a href="https://www.behance.net/EstebanDesign3D/projects"><img src="assets/icons/behance.svg" alt="Behance" /></a>
+          <a href="https://x.com/EstebanCampos3D"><img src="assets/icons/x.svg" alt="X" /></a>
+        </div>
+      </div>
+     <p class="copyright">
+  <span lang="es">© 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.</span><br /><br />
+  <span lang="en">© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.</span>
+</p>
     </div>
-  </div>
-  <p class="copyright">
-    © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
-  </p>
- </div>
-</footer>
+  </footer>
 
-
-  <!-- Particles.js -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
@@ -94,6 +109,173 @@ Explore forms and create visual narratives that transcend the two-dimensional. C
       },
       retina_detect: true
     });
+
+    function openModal(img) {
+      const modal = document.getElementById("image-modal");
+      const modalImg = document.getElementById("modal-img");
+      modal.style.display = "flex";
+      modalImg.src = img.dataset.hd || img.src;
+    }
+
+    function closeModal() {
+      document.getElementById("image-modal").style.display = "none";
+    }
   </script>
+<script>
+  // Diccionario con imágenes por carpeta
+  const galleries = {
+    golem: [
+      "assets/images/3dmodeling/golem/golem.jpg",
+      "assets/images/3dmodeling/golem/golem_1.jpg",
+      "assets/images/3dmodeling/golem/golem_2.jpg"
+    ],
+    jack: [
+      "assets/images/3dmodeling/jack/jack.jpg",
+      "assets/images/3dmodeling/jack/jack_1.jpg"
+    ],
+    // Agrega más carpetas e imágenes aquí
+  };
+
+  let currentGallery = [];
+  let currentIndex = 0;
+
+  function openModal(img) {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImage");
+    const caption = document.getElementById("modalCaption");
+
+    const src = img.dataset.hd;
+    const parts = src.split('/');
+    const folder = parts[parts.length - 2]; // obtiene "golem" por ejemplo
+
+    currentGallery = galleries[folder] || [src];
+    currentIndex = currentGallery.indexOf(src);
+    if (currentIndex === -1) currentIndex = 0;
+
+    modal.style.display = "flex";
+    modalImg.src = currentGallery[currentIndex];
+    caption.textContent = img.alt;
+  }
+
+  function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+  }
+
+  function showImage(index) {
+    const modalImg = document.getElementById("modalImage");
+    currentIndex = (index + currentGallery.length) % currentGallery.length;
+    modalImg.src = currentGallery[currentIndex];
+  }
+
+  function nextImage() {
+    showImage(currentIndex + 1);
+  }
+
+  function prevImage() {
+    showImage(currentIndex - 1);
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById("imageModal");
+    if (event.target === modal) closeModal();
+  };
+</script>
+
+
+<script>
+  // 🔁 Galerías por carpeta: solo cambia los nombres de los archivos JPG aquí
+  const galleries = {
+    golem: [
+      "assets/images/3dmodeling/golem/golem.jpg",
+      "assets/images/3dmodeling/golem/golem_1.jpg",
+      "assets/images/3dmodeling/golem/golem_2.jpg"
+    ],
+    ashora: [
+      "assets/images/3dmodeling/ashora/ashora.jpg",
+      "assets/images/3dmodeling/ashora/ashora_1.jpg"
+    ],
+    ayara: [
+      "assets/images/3dmodeling/ayara/ayara.jpg",
+      "assets/images/3dmodeling/ayara/ayara_1.jpg"
+    ],
+    bust: [
+      "assets/images/3dmodeling/bust/bust.jpg"
+    ],
+    cleo: [
+      "assets/images/3dmodeling/cleo/cleo.jpg",
+      "assets/images/3dmodeling/cleo/cleo_detail.jpg"
+    ],
+    jack: [
+      "assets/images/3dmodeling/jack/jack.jpg",
+      "assets/images/3dmodeling/jack/jack_1.jpg"
+    ],
+    ogi: [
+      "assets/images/3dmodeling/ogi/ogi.jpg"
+    ],
+    pichon: [
+      "assets/images/3dmodeling/pichon/pichon.jpg"
+    ],
+    rob: [
+      "assets/images/3dmodeling/rob/rob.jpg"
+    ],
+    tubos: [
+      "assets/images/3dmodeling/tubos.jpg"
+    ],
+    escalas: [
+      "assets/images/3dmodeling/escalas.jpg"
+    ],
+    machine: [
+      "assets/images/3dmodeling/machine.jpg"
+    ]
+  };
+
+  // 🔧 Variables para el control del modal
+  let currentGallery = [];
+  let currentIndex = 0;
+
+  // 🔍 Abre el modal y carga la galería correspondiente
+  function openModal(img) {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImage");
+    const caption = document.getElementById("modalCaption");
+
+    const src = img.dataset.hd;
+    const parts = src.split('/');
+    const folder = parts[parts.length - 2]; // Carpeta como "golem", "jack", etc.
+
+    currentGallery = galleries[folder] || [src];
+    currentIndex = currentGallery.indexOf(src);
+    if (currentIndex === -1) currentIndex = 0;
+
+    modal.style.display = "flex";
+    modalImg.src = currentGallery[currentIndex];
+    caption.textContent = img.alt;
+  }
+
+  // ❌ Cerrar modal
+  function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+  }
+
+  // ⬅️➡️ Mostrar imagen previa o siguiente
+  function showImage(index) {
+    const modalImg = document.getElementById("modalImage");
+    currentIndex = (index + currentGallery.length) % currentGallery.length;
+    modalImg.src = currentGallery[currentIndex];
+  }
+
+  function nextImage() {
+    showImage(currentIndex + 1);
+  }
+
+  function prevImage() {
+    showImage(currentIndex - 1);
+  }
+
+  // ✖️ Cerrar modal si se hace clic fuera de la imagen
+  window.onclick = function (event) {
+    const modal = document.getElementById("imageModal");
+    if (event.t
+
 </body>
 </html>

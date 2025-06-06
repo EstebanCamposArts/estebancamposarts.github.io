@@ -62,3 +62,56 @@
   },
   "retina_detect": true
 }
+
+<script>
+  const imageElements = Array.from(document.querySelectorAll('.modeler-grid img'));
+  const modal = document.getElementById('image-modal');
+  const modalImg = document.getElementById('modal-image');
+  let currentIndex = 0;
+
+  // Abrir modal con la imagen HD
+  function openModal(imgElement) {
+    currentIndex = imageElements.indexOf(imgElement);
+    const hdSrc = imgElement.dataset.hd || imgElement.src;
+    modalImg.src = hdSrc;
+    modal.style.display = 'flex';
+  }
+
+  function closeModal() {
+    modal.style.display = 'none';
+  }
+
+  function showImage(index) {
+    const img = imageElements[index];
+    if (!img) return;
+    const hdSrc = img.dataset.hd || img.src;
+    modalImg.src = hdSrc;
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % imageElements.length;
+    showImage(currentIndex);
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + imageElements.length) % imageElements.length;
+    showImage(currentIndex);
+  }
+
+  // Cerrar modal al hacer clic fuera de la imagen
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  // Soporte de teclado (← → y ESC)
+  window.addEventListener('keydown', (e) => {
+    if (modal.style.display === 'flex') {
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
+      if (e.key === 'Escape') closeModal();
+    }
+  });
+</script>
+
