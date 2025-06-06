@@ -30,21 +30,37 @@ document.addEventListener("DOMContentLoaded", () => {
 // === Funciones principales ===
 function openModal(img) {
   const src = img.dataset.hd || img.src;
-  const parts = src.split("/");
-  const folder = parts[parts.length - 2]; // Carpeta actual
 
+  // Extraer carpeta usando regex para mayor seguridad
+  const match = src.match(/3dmodeling\/([^\/]+)/);
+  const folder = match ? match[1] : "";
+
+  // Obtener galería por carpeta o usar directamente esta imagen
   currentGallery = galleries[folder] || [src];
-  currentIndex = currentGallery.indexOf(src);
-  if (currentIndex === -1) currentIndex = 0;
 
+  // Validar índice
+  currentIndex = currentGallery.indexOf(src);
+  if (currentIndex === -1) {
+    console.warn("⚠️ Imagen no encontrada en la galería:", src);
+    currentGallery = [src];
+    currentIndex = 0;
+  }
+
+  // Mostrar contenido en modal
   showMedia(currentIndex);
   modal.style.display = "flex";
+
+  // Logs para depuración
+  console.log("Ruta completa:", src);
+  console.log("Carpeta detectada:", folder);
+  console.log("Galería disponible:", currentGallery);
+  console.log("Índice actual:", currentIndex);
 }
 
 function showMedia(index) {
   const mediaUrl = currentGallery[index];
   if (!container) {
-    console.error("No se encontró #modal-content-container");
+    console.error("❌ No se encontró #modal-content-container");
     return;
   }
 
@@ -56,6 +72,12 @@ function showMedia(index) {
     img.alt = "Imagen ampliada";
     img.className = "modal-image";
     img.loading = "lazy";
+
+    img.onerror = () => {
+      container.innerHTML = "<p>❌ Error al cargar la imagen.</p>";
+      console.error("❌ Imagen no encontrada:", mediaUrl);
+    };
+
     container.appendChild(img);
   } else if (isVideo(mediaUrl)) {
     const video = document.createElement("video");
@@ -72,6 +94,8 @@ function showMedia(index) {
     };
 
     container.appendChild(video);
+  } else {
+    container.innerHTML = "<p>Formato no compatible</p>";
   }
 }
 
@@ -98,7 +122,7 @@ function closeModal() {
   if (container) container.innerHTML = ""; // Detener video si hay uno
 }
 
-// === Galerías por carpeta ===
+// === Galerías generadas automáticamente ===
 const galleries = {
   golem: [
     "assets/images/3dmodeling/golem/golem.jpg",
@@ -115,10 +139,10 @@ const galleries = {
     "assets/images/3dmodeling/ayara/ayara.jpg",
     "assets/images/3dmodeling/ayara/ayara_1.jpg",
     "assets/images/3dmodeling/ayara/ayara_2.jpg",
-    "assets/images/3dmodeling/ayara/ayara_3.jpg",
-    "assets/images/3dmodeling/ayara/ayara_1.mp4"
+    "assets/images/3dmodeling/ayara/ayara_3.jpg"
   ],
   bust: [
+    "assets/images/3dmodeling/bust/bust.jpg",
     "assets/images/3dmodeling/bust/bust_1.jpg",
     "assets/images/3dmodeling/bust/bust_2.jpg"
   ],
@@ -137,8 +161,8 @@ const galleries = {
   ],
   ogi: [
     "assets/images/3dmodeling/ogi/ogi.jpg",
-    "assets/images/3dmodeling/ogi/ogi_2.jpg",
-    "assets/images/3dmodeling/ogi/ogi_1.jpg"
+    "assets/images/3dmodeling/ogi/ogi_1.jpg",
+    "assets/images/3dmodeling/ogi/ogi_2.jpg"
   ],
   pichon: [
     "assets/images/3dmodeling/pichon/pichon.jpg",
@@ -147,21 +171,6 @@ const galleries = {
   rob: [
     "assets/images/3dmodeling/rob/rob.jpg",
     "assets/images/3dmodeling/rob/rob_1.jpg",
-    "assets/images/3dmodeling/rob/rob_2.jpg",
-    "assets/images/3dmodeling/rob/rob_1.mp4",
-    "assets/images/3dmodeling/rob/rob_2.mp4"
+    "assets/images/3dmodeling/rob/rob_2.jpg"
   ],
-  tubos: [
-    "assets/images/3dmodeling/tubos.jpg"
-  ],
-  escalas: [
-    "assets/images/3dmodeling/escalas.jpg"
-  ],
-  machine: [
-    "assets/images/3dmodeling/machine.jpg",
-    "assets/images/3dmodeling/machine_1.jpg"
-  ]
 };
-
-
-
