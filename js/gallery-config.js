@@ -1,4 +1,5 @@
 // === Galerías generadas automáticamente ===
+
 const galleries = {
   "ashora": [
     "assets/images/3dmodeling/ashora/ashora.jpg",
@@ -50,3 +51,6 @@ const galleries = {
     "assets/images/3dmodeling/rob/rob_2.jpg"
   ],
 };
+
+
+

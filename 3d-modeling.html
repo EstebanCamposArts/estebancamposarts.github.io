@@ -7,7 +7,10 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<div id="modal-content-container"></div>
+
+  <!-- Fondo particles.js -->
+  <div id="particles-js"></div>
+
   <!-- Modal de Imagen -->
   <div id="image-modal" class="modal">
     <span class="modal-close" id="modal-close">&times;</span>
@@ -16,20 +19,10 @@
     <span class="modal-next" id="modal-next">&#10095;</span>
   </div>
 
-  <!-- Modal de Video -->
-  <div id="video-modal" class="modal">
-    <span class="modal-close" id="video-modal-close">&times;</span>
-    <video id="modal-video" controls autoplay>
-      <source src="" type="video/mp4">
-      Tu navegador no soporta el elemento de video.
-    </video>
-  </div>
-
-  <!-- Fondo particles.js -->
-  <div id="particles-js"></div>
-
   <header class="container">
-    <div class="logo">PORTFOLIO</div>
+    <div class="logo-container">
+      <div class="logo">PORTFOLIO</div>
+    </div>
     <nav>
       <a href="index.html">Home</a>
       <a href="about.html">About me</a>
@@ -38,80 +31,87 @@
     </nav>
   </header>
 
-  <section class="modeler-grid">
-    <!-- Ejemplo con video -->
-    <img src="assets/images/3dmodeling/golem/golem.jpg" alt="golem"
-         data-hd="assets/images/3dmodeling/golem/golem.jpg"
-         data-video="assets/videos/golem.mp4" loading="lazy" />
+  <main class="container">
+    <h1 class="section-title">3D Modeling</h1>
+  </main>
 
-    <img src="assets/images/3dmodeling/ashora/ashora.jpg" alt="ashora"
-         data-hd="assets/images/3dmodeling/ashora/ashora.jpg" />
-    <img src="assets/images/3dmodeling/ayara/ayara.jpg" alt="ayara"
-         data-hd="assets/images/3dmodeling/ayara/ayara.jpg" />
-    <img src="assets/images/3dmodeling/bust/bust.jpg" alt="bust"
-         data-hd="assets/images/3dmodeling/bust/bust.jpg" />
-    <img src="assets/images/3dmodeling/cleo/cleo.jpg" alt="cleo"
-         data-hd="assets/images/3dmodeling/cleo/cleo.jpg" />
-    <img src="assets/images/3dmodeling/jack/jack.jpg" alt="jack"
-         data-hd="assets/images/3dmodeling/jack/jack.jpg" />
-    <img src="assets/images/3dmodeling/ogi/ogi.jpg" alt="ogi"
-         data-hd="assets/images/3dmodeling/ogi/ogi.jpg" />
-    <img src="assets/images/3dmodeling/pichon/pichon.jpg" alt="pichon"
-         data-hd="assets/images/3dmodeling/pichon/pichon.jpg" />
-    <img src="assets/images/3dmodeling/rob/rob.jpg" alt="rob"
-         data-hd="assets/images/3dmodeling/rob/rob.jpg" />
-    <img src="assets/images/3dmodeling/tubos.jpg" alt="tubos"
-         data-hd="assets/images/3dmodeling/tubos.jpg" />
-    <img src="assets/images/3dmodeling/escalas.jpg" alt="escalas"
-         data-hd="assets/images/3dmodeling/escalas.jpg" />
-    <img src="assets/images/3dmodeling/machine.jpg" alt="machine"
-         data-hd="assets/images/3dmodeling/machine.jpg" />
+  <section class="modeler-grid container">
+    <img src="assets/images/3dmodeling/golem/golem.jpg" alt="golem" data-hd="assets/images/3dmodeling/golem/golem.jpg" />
+    <img src="assets/images/3dmodeling/ashora/ashora.jpg" alt="ashora" data-hd="assets/images/3dmodeling/ashora/ashora.jpg" />
+    <img src="assets/images/3dmodeling/ayara/ayara.jpg" alt="ayara" data-hd="assets/images/3dmodeling/ayara/ayara.jpg" />
+    <img src="assets/images/3dmodeling/bust/bust.jpg" alt="bust" data-hd="assets/images/3dmodeling/bust/bust.jpg" />
+    <img src="assets/images/3dmodeling/cleo/cleo.jpg" alt="cleo" data-hd="assets/images/3dmodeling/cleo/cleo.jpg" />
+    <img src="assets/images/3dmodeling/jack/jack.jpg" alt="jack" data-hd="assets/images/3dmodeling/jack/jack.jpg" />
+    <img src="assets/images/3dmodeling/ogi/ogi.jpg" alt="ogi" data-hd="assets/images/3dmodeling/ogi/ogi.jpg" />
+    <img src="assets/images/3dmodeling/pichon/pichon.jpg" alt="pichon" data-hd="assets/images/3dmodeling/pichon/pichon.jpg" />
+    <img src="assets/images/3dmodeling/rob/rob.jpg" alt="rob" data-hd="assets/images/3dmodeling/rob/rob.jpg" />
+    <img src="assets/images/3dmodeling/tubos.jpg" alt="tubos" data-hd="assets/images/3dmodeling/tubos.jpg" />
+    <img src="assets/images/3dmodeling/escalas.jpg" alt="escalas" data-hd="assets/images/3dmodeling/escalas.jpg" />
+    <img src="assets/images/3dmodeling/machine.jpg" alt="machine" data-hd="assets/images/3dmodeling/machine.jpg" />
   </section>
 
-
+  <!-- Contenido adicional -->
   <main class="container">
- <p style="max-width: 1280px; margin: 10 auto 2rem; font-size: 1rem; color: #00adb5; text-align: left; font-family: inherit;">
-Explore forms and create visual narratives that transcend the two-dimensional. Combine technical precision with artistic sensitivity, paying attention to every detail to achieve results that optimize the work of the person receiving the geometries and allow them to be manipulated according to their needs. I work from the initial reference research once I have the concept art to the final rendering, adapting to the project's objectives and the specific needs of each client. Blocking, sculpting, retopology, projection, fine detailing, baking and texturing with Substance, shading, lighting, and rendering with Maya.</p>
-  </header>
-
-  <footer>
-    <div class="footer-wrapper">
-      <div class="footer-contact">
-        <h4>Contact</h4>
-        <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
-      </div>
-      <div class="footer-social">
-        <h4>Follow me</h4>
-        <div class="social-icons">
-          <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771"> 
-            <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
-          </a>
-          <a href="https://estebancampos1.artstation.com/"> 
-            <img src="assets/icons/artstation.svg" alt="ArtStation" />
-          </a>
-          <a href="https://www.instagram.com/estcampo/"> 
-            <img src="assets/icons/instagram.svg" alt="Instagram" />
-          </a>
-          <a href="https://vimeo.com/827034828"> 
-            <img src="assets/icons/vimeo.svg" alt="Vimeo" />
-          </a>
-          <a href="https://www.behance.net/EstebanDesign3D/projects"> 
-            <img src="assets/icons/behance.svg" alt="Behance" />
-          </a>
-          <a href="https://x.com/EstebanCampos3D"> 
-            <img src="assets/icons/x.svg" alt="X" />
-          </a>
-        </div>
-      </div>
-      <p class="copyright">
-        <span lang="es">© 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.</span><br /><br />
-        <span lang="en">© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.</span>
-      </p>
+    <p style="margin: 2rem auto; font-size: 1rem; color: #00adb5; text-align: left;">
+      Explore forms and create visual narratives that transcend the two-dimensional. Combine technical precision with artistic sensitivity, paying attention to every detail to achieve results that optimize the work of the person receiving the geometries and allow them to be manipulated according to their needs. I work from the initial reference research once I have the concept art to the final rendering, adapting to the project's objectives and the specific needs of each client. Blocking, sculpting, retopology, projection, fine detailing, baking and texturing with Substance, shading, lighting, and rendering with Maya.
+    </p>
+  </main>
+<footer>
+ <div class="footer-wrapper">
+  <div class="footer-contact">
+    <h4>Contact</h4>
+    <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
+  </div>
+  <div class="footer-social">
+    <h4>Follow me</h4>
+    <div class="social-icons">
+      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
+      <a href="https://estebancampos1.artstation.com/"><img src="assets/icons/artstation.svg" alt="ArtStation" /></a>
+      <a href="https://www.instagram.com/estcampo/"><img src="assets/icons/instagram.svg" alt="Instagram" /></a>
+      <a href="https://vimeo.com/827034828"><img src="assets/icons/vimeo.svg" alt="Vimeo" /></a>
+      <a href="https://www.behance.net/EstebanDesign3D/projects"><img src="assets/icons/behance.svg" alt="Behance" /></a>
+      <a href="https://x.com/EstebanCampos3D"><img src="assets/icons/x.svg" alt="X" /></a>
     </div>
-  </footer>
+  </div>
+     <p class="copyright">
+  <span lang="es">© 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.</span><br /><br />
+  <span lang="en">© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.</span>
+</p>
+ </div>
+</footer>
+
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script> 
+  <script>
+    // Inicialización de particles.js
+    document.addEventListener("DOMContentLoaded", function () {
+      if (window.particlesJS) {
+        particlesJS('particles-js', {
+          "particles": {
+            "number": { "value": 80 },
+            "color": { "value": "#00adb5" },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.5 },
+            "size": { "value": 3 },
+            "line_linked": {
+              "enable": true,
+              "distance": 150,
+              "color": "#00adb5",
+              "opacity": 0.4
+            },
+            "move": {
+              "enable": true,
+              "speed": 1
+            }
+          }
+        });
+      } else {
+        console.error('❌ Particles.js no está disponible');
+      }
+    });
+  </script>
+  <script src="js/gallery-config.js" defer></script>
   <script src="js/main.js" defer></script>
 
 </body>

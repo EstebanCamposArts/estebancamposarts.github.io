@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const baseDir = 'assets/images/3dmodeling'; // Carpeta base donde están tus modelos
+const baseDir = 'assets/images/3dmodeling/'; // Carpeta base donde están tus modelos
 const output = 'js/gallery-config.js';     // Ubicación actualizada del archivo de salida
 
 // Archivos a ignorar
@@ -58,3 +58,7 @@ function buildGalleryConfig() {
 }
 
 buildGalleryConfig();
+
+
+
+
