@@ -14,6 +14,27 @@
       margin-bottom: 2rem;
     }
 
+    .category-buttons {
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .category-buttons button {
+      background-color: #00adb5;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      margin: 0 10px;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .category-buttons button:hover {
+      background-color: #008d90;
+    }
+
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -139,17 +160,15 @@
     <h1 class="section-title">Sports Photography</h1>
     <p>Capturing the energy, emotion, and intensity of athletic moments—this is where action meets artistry.</p>
 
- <!-- Galería de imágenes -->
-<section class="gallery-grid">
-  <img src="assets/images/fotografia/sports/pilota/jpg/pilota_1.jpg" alt="pilota(1)" data-hd="assets/images/fotografia/sports/pilota/jpg/pilota_1.jpg" loading="lazy" onclick="openModal(this)" />
-  <img src="assets/images/fotografia/sports/pilota/jpg/pilota_1." alt="pilota(1)" data-hd="assets/images/fotografia/sports/pilota/jpg/pilota_1." loading="lazy" onclick="openModal(this)" />
+    <!-- Botones de categoría -->
+    <section class="category-buttons">
+      <button onclick="openCategory('pilota')">Pilota</button>
+      <button onclick="openCategory('mtb')">MTB</button>
+      <button onclick="openCategory('futsal')">Fútsal</button>
+    </section>
 
-  <img src="assets/images/fotografia/sports/pilota/jpg/pilota_1." alt="pilota(1)" data-hd="assets/images/fotografia/sports/pilota/jpg/pilota_1." loading="lazy" onclick="openModal(this)" />
-  <img src="assets/images/fotografia/sports/pilota/jpg/pilota_1." alt="pilota(1)" data-hd="assets/images/fotografia/sports/pilota/jpg/pilota_1." loading="lazy" onclick="openModal(this)" />
-  <img src="assets/images/fotografia/sports/pilota/jpg/pilota_1." alt="pilota(1)" data-hd="assets/images/fotografia/sports/pilota/jpg/pilota_1." loading="lazy" onclick="openModal(this)" />
-  <img src="assets/images/fotografia/sports/pilota/jpg/pilota_1." alt="pilota(1)" data-hd="assets/images/fotografia/sports/pilota/jpg/pilota_1." loading="lazy" onclick="openModal(this)" />
-
- </section>
+    <!-- Galería de miniaturas (se rellena dinámicamente) -->
+    <section class="gallery-grid" id="thumbnailGallery"></section>
 
     <!-- Navegación -->
     <nav class="photo-sections-nav">
@@ -227,35 +246,62 @@
     });
   </script>
 
-  <!-- Modal JS -->
+  <!-- Script del Modal Dinámico -->
   <script>
     const modal = document.getElementById("slideshowModal");
     const modalImage = document.getElementById("modalImage");
-    const images = Array.from(document.querySelectorAll(".gallery-grid img"));
+    const thumbnailGallery = document.getElementById("thumbnailGallery");
+
+    let imageList = [];
     let currentIndex = 0;
 
-    function openModal(imgElement) {
-      currentIndex = images.indexOf(imgElement);
-      modalImage.src = imgElement.dataset.hd;
+    function openCategory(category) {
+      // Limpiar galería previa
+      thumbnailGallery.innerHTML = "";
+
+      // Generar miniaturas
+      for (let i = 1; i <= 24; i++) {
+        const thumbPath = `assets/images/fotografia/sports/${category}/jpg/${category}_${i}.jpg`;
+        const img = document.createElement("img");
+        img.src = thumbPath;
+        img.alt = `${category}(${i})`;
+        img.dataset.hd = thumbPath;
+        img.onclick = () => openSlideshow(category, i);
+        thumbnailGallery.appendChild(img);
+      }
+    }
+
+    function openSlideshow(category, startIdx) {
+      imageList = [];
+      for (let i = 1; i <= 24; i++) {
+        const imagePath = `assets/images/fotografia/sports/${category}/jpg/${category}_${i}.jpg`;
+        imageList.push(imagePath);
+      }
+
+      currentIndex = startIdx - 1;
+      modalImage.src = imageList[currentIndex];
       modal.style.display = "flex";
     }
 
     function closeModal() {
       modal.style.display = "none";
       modalImage.src = "";
+      imageList = [];
     }
 
     function nextImage() {
-      currentIndex = (currentIndex + 1) % images.length;
-      modalImage.src = images[currentIndex].dataset.hd;
+      if (imageList.length === 0) return;
+      currentIndex = (currentIndex + 1) % imageList.length;
+      modalImage.src = imageList[currentIndex];
     }
 
     function prevImage() {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      modalImage.src = images[currentIndex].dataset.hd;
+      if (imageList.length === 0) return;
+      currentIndex = (currentIndex - 1 + imageList.length) % imageList.length;
+      modalImage.src = imageList[currentIndex];
     }
 
-    // Cerrar al presionar fuera de la imagen
+    // Cerrar al hacer clic fuera de la imagen
     modal.addEventListener("click", function(e) {
       if (e.target === modal) {
         closeModal();
@@ -271,6 +317,5 @@
       }
     });
   </script>
-
 </body>
 </html>
