@@ -259,13 +259,13 @@
       // Limpiar galería previa
       thumbnailGallery.innerHTML = "";
 
-      // Generar miniaturas
+      // Generar miniaturas .webp
       for (let i = 1; i <= 24; i++) {
-        const thumbPath = `assets/images/fotografia/sports/${category}/jpg/${category}_${i}.jpg`;
+        const thumbPath = `assets/images/fotografia/sports/${category}/webp/${category}_${i}.webp`;
         const img = document.createElement("img");
         img.src = thumbPath;
         img.alt = `${category}(${i})`;
-        img.dataset.hd = thumbPath;
+        img.dataset.hd = `assets/images/fotografia/sports/${category}/jpg/${category}_${i}.jpg`; // Alta calidad
         img.onclick = () => openSlideshow(category, i);
         thumbnailGallery.appendChild(img);
       }
