@@ -4,147 +4,121 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Esteban Campos Polo | Graphic Designer & 3D Modeler</title>
-  <link rel="stylesheet" href="styles/styles.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      height: 100%;
-      overflow: hidden;
-      font-family: Helvetica, Arial, sans-serif;
-      background-color: black;
-      color: white;
-    }
-    .horizontal-scroll {
-      display: flex;
-      flex-direction: row;
-      height: 100vh;
-      width: 100%;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-    }
-    section {
-      flex: 0 0 auto;
-      width: 33vw;
-      height: 100vh;
-      scroll-snap-align: start;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    nav {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      z-index: 100;
-      background-color: rgba(0, 0, 0, 0.8);
-      padding: 1rem;
-      border-radius: 8px;
-    }
-    nav a {
-      display: block;
-      margin-bottom: 0.5rem;
-      text-decoration: none;
-      color: white;
-      font-weight: bold;
-    }
-    img, video {
-      max-width: 100%;
-      height: auto;
-      margin-bottom: 1rem;
-    }
-    header {
-      position: fixed;
-      top: 1rem;
-      width: 100%;
-      text-align: center;
-      z-index: 99;
-      font-size: 1.2rem;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-    .downloads {
-      margin-top: 1rem;
-    }
-    .downloads a {
-      color: white;
-      text-decoration: underline;
-      margin: 0 0.5rem;
-    }
-  </style>
+  <link rel="stylesheet" href="styles/styles.css" />
 </head>
 <body>
-  <header>ESTEBAN CAMPOS POLO | GRAPHIC DESIGNER & 3D MODELER</header>
-  <nav>
-    <a href="#about">About</a>
-    <a href="#graphic-design">Graphic Design</a>
-    <a href="#photography">Photography</a>
-    <a href="#3d-modeling">3D Modeling</a>
-    <a href="#game">Games</a>
-    <a href="#cultural-events">Cultural Events</a>
-    <a href="#travel-landscape">Travel & Landscape</a>
-    <a href="#weddings-life">Weddings & Life</a>
-    <a href="#social-reportage">Social Reportage</a>
-    <a href="#sports">Sports</a>
+  <header class="site-header">
+    <h1>ESTEBAN CAMPOS POLO</h1>
+    <p>Graphic Designer & 3D Modeler</p>
+  </header>
+
+  <nav class="main-nav">
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#graphic-design">Graphic Design</a></li>
+      <li><a href="#3d-modeling">3D Modeling</a></li>
+      <li><a href="#photography">Photography</a></li>
+      <li><a href="#cultural-events">Cultural Events</a></li>
+      <li><a href="#travel-landscape">Travel & Landscape</a></li>
+      <li><a href="#weddings-life">Weddings & Life</a></li>
+      <li><a href="#social-reportage">Social Reportage</a></li>
+      <li><a href="#sports">Sports</a></li>
+      <li><a href="#games">Games</a></li>
+    </ul>
   </nav>
 
-  <div class="horizontal-scroll">
-    <section id="about">
-      <h2>About Me</h2>
-      <p>Multidisciplinary designer and artist with experience in photography, graphic design, 3D modeling, and more.</p>
-      <div class="downloads">
-        <a href="assets/Curriculum.pdf" download>Download CV (ES)</a>
-        <a href="assets/Resume.pdf" download>Download CV (EN)</a>
+  <div class="horizontal-scroll-container">
+    <!-- Cada section representa una "columna" vertical -->
+    <section id="about" class="scroll-section">
+      <div class="section-content">
+        <h2>About Me</h2>
+        <p>Multidisciplinary designer and artist with experience in photography, graphic design, 3D modeling, and more.</p>
+        <div class="downloads">
+          <a href="assets/Curriculum.pdf" download>Download CV (ES)</a>
+          <a href="assets/Resume.pdf" download>Download CV (EN)</a>
+        </div>
       </div>
     </section>
-    <section id="graphic-design">
-      <h2>Graphic Design</h2>
-      <img src="assets/images/graphicdesign/cartel DESBORDAOS guerre_Mesa de trabajo 1.jpg" alt="Cartel Desbordados" />
+
+    <section id="graphic-design" class="scroll-section">
+      <div class="section-content">
+        <h2>Graphic Design</h2>
+        <img src="assets/images/graphicdesign/cartel DESBORDAOS guerre_Mesa de trabajo 1.jpg" alt="Cartel Desbordados" />
+      </div>
     </section>
-    <section id="photography">
-      <h2>Photography</h2>
-      <img src="assets/images/photography.webp" alt="Photography example" />
+
+    <section id="3d-modeling" class="scroll-section">
+      <div class="section-content">
+        <h2>3D Modeling</h2>
+        <img src="assets/images/3dmodeling/machine.jpg" alt="3D Machine" />
+        <img src="assets/images/3dmodeling/rob/rob_1.jpg" alt="Rob 1" />
+        <img src="assets/images/3dmodeling/rob/rob_2.jpg" alt="Rob 2" />
+      </div>
     </section>
-    <section id="3d-modeling">
-      <h2>3D Modeling</h2>
-      <img src="assets/images/3dmodeling/machine.jpg" alt="3D Machine" />
-      <img src="assets/images/3dmodeling/rob/rob_1.jpg" alt="Rob 1" />
-      <img src="assets/images/3dmodeling/rob/rob_2.jpg" alt="Rob 2" />
+
+    <section id="photography" class="scroll-section">
+      <div class="section-content">
+        <h2>Photography</h2>
+        <img src="assets/images/photography.webp" alt="Photography example" />
+      </div>
     </section>
-    <section id="game">
-      <h2>Games</h2>
-      <video controls>
-        <source src="assets/video/demoportfolio.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
+
+    <section id="cultural-events" class="scroll-section">
+      <div class="section-content">
+        <h2>Cultural Events</h2>
+        <img src="assets/images/fotografia/culturalevents/jpg/fest2025(1).jpg" alt="Festival 2025" />
+        <img src="assets/images/fotografia/culturalevents/jpg/fest2025(2).jpg" alt="Festival 2025" />
+      </div>
     </section>
-    <section id="cultural-events">
-      <h2>Cultural Events</h2>
-      <img src="assets/images/fotografia/culturalevents/jpg/fest2025(1).jpg" alt="Festival 2025" />
-      <img src="assets/images/fotografia/culturalevents/jpg/fest2025(2).jpg" alt="Festival 2025" />
+
+    <section id="travel-landscape" class="scroll-section">
+      <div class="section-content">
+        <h2>Travel & Landscape</h2>
+        <img src="assets/images/fotografia/travel&landscape/jpg/landscape1.jpg" alt="Landscape" />
+      </div>
     </section>
-    <section id="travel-landscape">
-      <h2>Travel & Landscape</h2>
-      <img src="assets/images/fotografia/travel&landscape/jpg/landscape1.jpg" alt="Landscape" />
+
+    <section id="weddings-life" class="scroll-section">
+      <div class="section-content">
+        <h2>Weddings & Life</h2>
+        <img src="assets/images/fotografia/weddings&lifeevents/jpg/wedding1.jpg" alt="Wedding" />
+      </div>
     </section>
-    <section id="weddings-life">
-      <h2>Weddings & Life</h2>
-      <img src="assets/images/fotografia/weddings&lifeevents/jpg/wedding1.jpg" alt="Wedding" />
+
+    <section id="social-reportage" class="scroll-section">
+      <div class="section-content">
+        <h2>Social Reportage</h2>
+        <img src="assets/images/fotografia/socialreportage/jpg/social1.jpg" alt="Social reportage" />
+      </div>
     </section>
-    <section id="social-reportage">
-      <h2>Social Reportage</h2>
-      <img src="assets/images/fotografia/socialreportage/jpg/social1.jpg" alt="Social reportage" />
+
+    <section id="sports" class="scroll-section">
+      <div class="section-content">
+        <h2>Sports</h2>
+        <img src="assets/images/fotografia/sports/pilota/jpg/pilota_1.jpg" alt="Pilota" />
+      </div>
     </section>
-    <section id="sports">
-      <h2>Sports</h2>
-      <img src="assets/images/fotografia/sports/pilota/jpg/pilota_1.jpg" alt="Pilota" />
+
+    <section id="games" class="scroll-section">
+      <div class="section-content">
+        <h2>Games</h2>
+        <video controls>
+          <source src="assets/video/demoportfolio.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
     </section>
   </div>
+
+  <footer class="site-footer">
+    <p>&copy; 2025 Esteban Campos Polo. All rights reserved.</p>
+    <div class="social-icons">
+      <a href="#"><img src="assets/icons/instagram.svg" alt="Instagram" /></a>
+      <a href="#"><img src="assets/icons/behance.svg" alt="Behance" /></a>
+      <a href="#"><img src="assets/icons/artstation.svg" alt="ArtStation" /></a>
+      <a href="#"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
+      <a href="#"><img src="assets/icons/vimeo.svg" alt="Vimeo" /></a>
+    </div>
+  </footer>
 </body>
 </html>
