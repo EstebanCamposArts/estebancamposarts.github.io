@@ -2,148 +2,176 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Esteban Campos Polo – Portfolio</title>
-
-  <!-- Google Fonts Inter -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esteban Campos Polo - Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet" />
-
-  <!-- Estilos CSS -->
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Scripts de analítica y cookies (como tienes) -->
-  <script async defer data-domain="estebancamposarts.github.io" src="https://plausible.io/js/plausible.js"></script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-  <script>
+<script async defer data-domain="estebancamposarts.github.io" src="https://plausible.io/js/plausible.js"></script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-MF62GH7N9W');
+</script>
+
+<!-- Cookie Consent by Osano -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+<script>
+  window.addEventListener("load", function(){
+    window.cookieconsent.initialise({
+      palette: {
+        popup: { background: "#000" },
+        button: { background: "#f1d600", text: "#000" }
+      },
+      theme: "classic",
+      position: "bottom-right",
+      type: "opt-in",
+      content: {
+        message: "Este sitio web usa cookies para analizar el tráfico con Google Analytics.",
+        dismiss: "Aceptar",
+        allow: "Permitir cookies",
+        deny: "Rechazar",
+        link: "Más información",
+        href: "https://policies.google.com/technologies/cookies"
+      },
+      onInitialise: function (status) {
+        var type = this.options.type;
+        var didConsent = this.hasConsented();
+        if (type === 'opt-in' && didConsent) {
+          loadGA(); // Si consiente, cargamos GA
+        }
+      },
+      onStatusChange: function(status) {
+        var didConsent = this.hasConsented();
+        if (didConsent) {
+          loadGA();
+        }
+      }
+    });
+  });
+
+  function loadGA() {
+    var gtagScript = document.createElement("script");
+    gtagScript.setAttribute("async", "");
+    gtagScript.setAttribute("src", "https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX");
+    document.head.appendChild(gtagScript);
+
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-MF62GH7N9W');
-  </script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
-  <script>
-    window.addEventListener("load", function(){
-      window.cookieconsent.initialise({
-        palette: { popup: { background: "#000" }, button: { background: "#f1d600", text: "#000" } },
-        theme: "classic",
-        position: "bottom-right",
-        type: "opt-in",
-        content: {
-          message: "Este sitio web usa cookies para analizar el tráfico con Google Analytics.",
-          dismiss: "Aceptar",
-          allow: "Permitir cookies",
-          deny: "Rechazar",
-          link: "Más información",
-          href: "https://policies.google.com/technologies/cookies"
-        },
-        onInitialise: function (status) {
-          var type = this.options.type;
-          var didConsent = this.hasConsented();
-          if (type === 'opt-in' && didConsent) {
-            loadGA();
-          }
-        },
-        onStatusChange: function(status) {
-          var didConsent = this.hasConsented();
-          if (didConsent) {
-            loadGA();
-          }
-        }
-      });
-    });
-    function loadGA() {
-      var gtagScript = document.createElement("script");
-      gtagScript.setAttribute("async", "");
-      gtagScript.setAttribute("src", "https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX");
-      document.head.appendChild(gtagScript);
-
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-8VMES8F4MN');
-    }
-  </script>
+    gtag('config', 'G-8VMES8F4MN');
+  }
+</script>
 </head>
 <body>
+  <!-- Fondo particles.js -->
+    <div id="particles-js"></div>
 
-  <!-- Fondo Particles.js -->
-  <div id="particles-js"></div>
-
-  <header class="header container">
-    <h1 class="logo">Esteban Campos Polo</h1>
-    <nav class="nav">
-      <a href="#about">About me</a>
+    <header class="container">
+    <div class="logo">PORTFOLIO</div>
+    <nav>
+      <a href="about.html">About me</a>
       <a href="#portfolio">Portfolio</a>
       <a href="#contact">Contact</a>
     </nav>
-  </header>
+</header>
 
-  <main>
-    <section class="hero container" id="about" aria-label="Introducción">
-      <div class="hero-left">
-        <h2 class="hero-title">Diseñador gráfico & Modelador 3D</h2>
-        <p class="hero-subtitle">Más de 15 años creando contenido visual impactante y soluciones creativas.</p>
-        <a href="assets/Resume.pdf" download="Esteban_Campos_Polo_CV.pdf" class="btn-primary" aria-label="Descargar CV">Download CV</a>
+
+
+  <section class="hero container">
+    <div class="hero-left">
+      <h1>Esteban <span>Campos Polo</span></h1>
+      <h2>3D Character Artist<br />Graphic Designer</h2>
+    </div>
+       <div class="hero-right">
+       <a href="assets/Resume.pdf" download="Esteban_Campos_Polo_CV.pdf" class="btn-primary">DOWNLOAD RESUME</a>
+       <div class="hero-right">
+       <a href="assets/Curriculum.pdf" download="Esteban_Campos_Polo_CV.pdf" class="btn-primary">DESCARGAR CURRICULUM</a>
+    </div>
+  </section>
+
+
+
+<section class="video-section">
+    <div class="hero-center">
+    <nav>
+      <h2>VIDEO EN ALTA CALIDAD EN VIMEO</span></h2>
+      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener noreferrer">PULSA AQUI PARA VERLO</a>
+    </nav>
+    </div>
+  <div class="video-container">
+    <video controls autoplay muted loop playsinline>
+      <source src="assets/video/demoportfolio.mp4" type="video/mp4">
+      Tu navegador no soporta la etiqueta de video.
+    </video>
+  </div>
+</section>
+
+  <section class="portfolio container" id="portfolio">
+    <div class="portfolio-categories">
+      <div class="category">
+       <!-- <h4>3D Modeling</h4> -->
+       <!-- <img src="assets/images/modeling.webp" alt="3D Modeling" /> -->
+        <p><a href="3d-modeling.html">3D MODELING</a></p>
       </div>
-      <div class="hero-right">
-        <video controls autoplay muted loop playsinline class="hero-video" aria-label="Demo portfolio video">
-          <source src="assets/video/demoportfolio.mp4" type="video/mp4" />
-          Tu navegador no soporta la etiqueta de video.
-        </video>
-        <a href="https://vimeo.com/827034828" target="_blank" rel="noopener noreferrer" class="btn-secondary" aria-label="Ver demo reel en Vimeo">Ver Demo Reel en Vimeo</a>
+      <div class="category">
+      <!--  <h4>Photography</h4> -->
+      <!--  <img src="assets/images/photography.webp" alt="Photography" /> -->
+        <p><a href="photography.html">PHOTOGRAPHY</a></p>
       </div>
-    </section>
-
-    <section id="portfolio" class="portfolio container" aria-label="Portafolio">
-      <h2>Portfolio</h2>
-      <div class="portfolio-grid">
-        <a href="3d-modeling.html" class="portfolio-item">3D Modeling</a>
-        <a href="photography.html" class="portfolio-item">Photography</a>
-        <a href="graphic-design.html" class="portfolio-item">Graphic Design</a>
+      <div class="category">
+       <!-- <h4>Graphic Design</h4> -->
+       <!-- <img src="assets/images/graphic_design.webp" alt="Graphic Design" /> -->
+        <p><a href="graphic-design.html">GRAPHIC DESIGN</a></p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="welcome container" aria-label="Bienvenida">
-      <h2>Welcome to my Portfolio</h2>
-      <p>
-        Hello! I'm Esteban Campos Polo, a graphic designer and 3D artist. Here you can see a selection of my best work.
-        If you'd like to collaborate or learn more, please get in touch.
-      </p>
-    </section>
-  </main>
+<section class="welcome-message container">
+  <h2>Welcome to my Portfolio</h2>
+  <p>
+    Hello! I'm Esteban Campos Polo, a graphic designer and 3D artist. This is a space where I share a selection of my most representative work in 3D modeling, graphic design, and photography.If you're interested in hiring my services, collaborating on a project, or simply learning more about my work, feel free to get in touch. I'm always open to new opportunities.Thank you for visiting. I hope you enjoy exploring my work as much as I enjoy creating it.
+  </p>
+</section>
 
-  <footer class="footer container" id="contact" aria-label="Contacto">
+  <footer class="container" id="contact">
     <div class="footer-contact">
-      <h3>Contact</h3>
-      <p>Email: <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a></p>
+      <h4>CONTACT</h4>
+      <p>Email</p>
+      <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
     </div>
     <div class="footer-social">
-      <h3>Social Networks</h3>
-      <nav class="social-icons" aria-label="Redes sociales">
-        <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+      <h4>SOCIAL NETWORKS</h4>
+      <div class="social-icons">
+        <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener noreferrer">
           <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
         </a>
-        <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener noreferrer" aria-label="ArtStation">
+        <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener noreferrer">
           <img src="assets/icons/artstation.svg" alt="ArtStation" />
         </a>
-        <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener noreferrer">
           <img src="assets/icons/instagram.svg" alt="Instagram" />
         </a>
-        <a href="https://vimeo.com/827034828" target="_blank" rel="noopener noreferrer" aria-label="Vimeo">
+	<a href="https://vimeo.com/827034828" target="_blank" rel="noopener noreferrer">
           <img src="assets/icons/vimeo.svg" alt="Vimeo" />
         </a>
-        <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener noreferrer" aria-label="Behance">
+	<a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener noreferrer">
           <img src="assets/icons/behance.svg" alt="Behance" />
         </a>
-        <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener noreferrer" aria-label="X">
+	<a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener noreferrer">
           <img src="assets/icons/x.svg" alt="X" />
         </a>
-      </nav>
+      </div>
     </div>
-    <p class="copyright">
-      © 2025 Esteban Campos Polo. All content is the intellectual property of the author. No unauthorized copying or distribution.
-    </p>
+     <p class="copyright">
+  <span lang="es">© 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.</span><br /><br />
+  <span lang="en">© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.</span>
+</p>
   </footer>
 
   <!-- Particles.js -->
