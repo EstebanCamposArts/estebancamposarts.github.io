@@ -1,147 +1,271 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Esteban Campos Polo | Graphic Designer & 3D Artist</title>
-  <link rel="stylesheet" href="styles/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esteban Campos Polo - Portfolio</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
     body {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      background-color: #000;
-      color: white;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f2f2;
+      color: #000;
     }
+
     header {
-      padding: 1.5rem 0 0.5rem;
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.2rem;
-      letter-spacing: 1px;
-      background-color: #000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      border-bottom: 2px solid #ccc;
     }
-    nav {
-      display: none;
+
+    .branding {
+      text-align: left;
     }
-    section {
-      padding: 2rem 1rem;
+
+    .branding h1 {
+      margin: 0;
+      font-size: 1.8em;
+      letter-spacing: 0.3em;
     }
-    h2 {
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      color: white;
+
+    .branding h2 {
+      margin: 0.2rem 0;
+      font-size: 1.3em;
     }
-    h3 {
-      margin: 0.5rem 0;
-      font-size: 0.9rem;
+
+    .branding h3 {
+      margin: 0;
+      font-size: 1em;
       font-weight: normal;
     }
-    .scroll-gallery {
-      display: flex;
-      overflow-x: auto;
-      gap: 1rem;
-      padding: 0.5rem 0;
-      scroll-snap-type: x mandatory;
-    }
-    .scroll-gallery img {
-      height: 180px;
-      flex: 0 0 auto;
-      object-fit: contain;
-      background: white;
-      padding: 0.5rem;
-      scroll-snap-align: start;
-    }
-    .video-highlight {
+
+    .cv-links {
       display: flex;
       justify-content: center;
-      margin-bottom: 2rem;
+      gap: 2rem;
+      padding: 1rem;
+      background-color: #e6e6e6;
     }
-    .video-highlight video {
-      width: 60%;
-      max-width: 800px;
-      border: 2px solid white;
-    }
-    .downloads {
-      margin-top: 1rem;
-      text-align: center;
-    }
-    .downloads a {
+
+    .cv-links a {
+      text-decoration: none;
+      font-weight: bold;
+      background-color: #000;
       color: white;
-      text-decoration: underline;
-      margin: 0 1rem;
-      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    .cv-links a:hover {
+      background-color: #333;
+    }
+
+    nav {
+      text-align: right;
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .banner-image {
+      width: 100%;
+      display: block;
+    }
+
+    .section {
+      padding: 2rem;
+    }
+
+    .section h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5em;
+    }
+
+    .logo-grid {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+    }
+
+    .logo-grid img,
+    .logo-grid video {
+      width: 180px;
+      height: auto;
+      object-fit: cover;
+      background: white;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      filter: grayscale(100%);
+      transition: filter 0.3s ease-in-out;
+      cursor: pointer;
+    }
+
+    .logo-grid img:hover,
+    .logo-grid video:hover {
+      filter: grayscale(0%);
+    }
+
+    footer {
+      background-color: #ccc;
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9em;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .modal-content {
+      margin: 5% auto;
+      display: block;
+      max-width: 90%;
+      max-height: 80vh;
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
     }
   </style>
 </head>
+
 <body>
   <header>
-    ESTEBAN CAMPOS POLO | DISEÑADOR GRAFICO & MODELADOR 3D
+    <div class="branding">
+      <h2>Esteban Campos Polo</h2>
+      <h3>Graphic Designer & 3D Artist</h3>
+    </div>
+    <nav>
+      <a href="about.html">About</a>
+      <a href="graphic-design.html">Graphic Design</a>
+      <a href="photography.html">Photography</a>
+      <a href="3d-modeling.html">3D Art</a>
+      <a href="contact.html">Contact</a>
+    </nav>
   </header>
 
-  <section id="about">
-    <div class="downloads">
-      <a href="assets/Curriculum.pdf" download>Download CV (ES)</a>
-      <a href="assets/Resume.pdf" download>Download CV (EN)</a>
+  <div class="cv-links">
+    <a href="assets/Curriculum.pdf" download>Descargar CV Español</a>
+    <a href="assets/Resume.pdf" download>Download CV English</a>
+  </div>
+
+  <img src="assets/images/banner_1200x171.jpg" alt="Banner" class="banner-image">
+
+  <section class="section">
+    <h3>GRAPHIC DESIGN<br><small>Branding & Identity</small></h3>
+    <div class="logo-grid">
+      <img src="assets/images/logotipos/cascosymasoutlet.jpg" alt="Cascos y más Outlet">
+      <img src="assets/images/logotipos/silverfish.jpg" alt="Silver Fish">
+      <img src="assets/images/logotipos/pleurotus.jpg" alt="Pleurotus">
+      <img src="assets/images/logotipos/mermelaida.jpg" alt="Confituras Mermelaida">
+      <img src="assets/images/logotipos/merlot.jpg" alt="Merlot">
+      <img src="assets/images/logotipos/goalkeeper.jpg" alt="Goalkeeper Explorers">
+      <img src="assets/images/logotipos/creamania.jpg" alt="Creamania">
     </div>
   </section>
 
-  <section id="3d-video">
-    <div class="video-highlight">
-      <video controls>
-        <source src="assets/video/demoportfolio.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
+  <section class="section">
+    <h3>PHOTOGRAPHY - Cultural Events</h3>
+    <div class="logo-grid">
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(1).webp">
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(2).webp">
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(3).webp">
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(4).webp">
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(5).webp">
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(6).webp">
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(7).webp">
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(8).webp">
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(9).webp">
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(10).webp">
     </div>
   </section>
 
-  <section id="graphic-design">
-    <h2>GRAPHIC DESIGN</h2>
-    <h3>Branding & Identity</h3>
-    <div class="scroll-gallery">
-      <img src="assets/images/logotipos/casinojavea.jpg" alt="Logo 1">
-      <img src="assets/images/logotipos/saborsfish.jpg" alt="Logo 2">
-      <img src="assets/images/logotipos/pleurotus.jpg" alt="Logo 3">
-      <img src="assets/images/logotipos/confiteria.jpg" alt="Logo 4">
-      <img src="assets/images/logotipos/merlot.jpg" alt="Logo 5">
-      <img src="assets/images/logotipos/apicola.jpg" alt="Logo 6">
-      <img src="assets/images/logotipos/crea.jpg" alt="Logo 7">
-    </div>
-    <h3>Posters / Advertising</h3>
-    <div class="scroll-gallery">
-      <img src="assets/images/graphicdesign/cartel DESBORDAOS guerre_Mesa de trabajo 1.jpg" alt="Desbordados 1">
-      <img src="assets/images/graphicdesign/cartel DESBORDAOS guerre_Mesa de trabajo 2.jpg" alt="Desbordados 2">
-    </div>
-  </section>
-
-  <section id="photography">
-    <h2>PHOTOGRAPHY</h2>
-    <h3>Sports</h3>
-    <div class="scroll-gallery">
-      <img src="assets/images/fotografia/sports/pilota/jpg/pilota_1.jpg" alt="Pilota 1">
-      <img src="assets/images/fotografia/sports/pilota/jpg/pilota_2.jpg" alt="Pilota 2">
-      <img src="assets/images/fotografia/sports/pilota/jpg/pilota_3.jpg" alt="Pilota 3">
-      <img src="assets/images/fotografia/sports/pilota/jpg/pilota_4.jpg" alt="Pilota 4">
-      <img src="assets/images/fotografia/sports/pilota/jpg/pilota_5.jpg" alt="Pilota 5">
-      <img src="assets/images/fotografia/sports/pilota/jpg/pilota_6.jpg" alt="Pilota 6">
+  <section class="section">
+    <h3>3D ART - Modeling</h3>
+    <div class="logo-grid">
+      <img src="assets/images/3dmodeling/ogi/ogi.jpg">
+      <img src="assets/images/3dmodeling/ayara/ayara.jpg">
+      <img src="assets/images/3dmodeling/jack/jack.jpg">
+      <img src="assets/images/3dmodeling/cleo/cleo.jpg">
+      <img src="assets/images/3dmodeling/golem/golem.jpg">
+      <img src="assets/images/3dmodeling/bust/bust.jpg">
+      <img src="assets/images/3dmodeling/ashora/ashora.jpg">
+      <img src="assets/images/3dmodeling/pichon/pichon.jpg">
+      <img src="assets/images/3dmodeling/rob/rob.jpg">
+      <img src="assets/images/3dmodeling/escalas.jpg">
+      <img src="assets/images/3dmodeling/machine.jpg">
+      <img src="assets/images/3dmodeling/machine_1.jpg">
+      <img src="assets/images/3dmodeling/tubos.jpg">
+      <img src="assets/images/3dmodeling/rookies.JPG">
     </div>
   </section>
 
-  <section id="3d-art">
-    <h2>3D ART</h2>
-    <div class="scroll-gallery">
-      <img src="assets/images/3dmodeling/machine.jpg" alt="Machine">
-      <img src="assets/images/3dmodeling/rob/rob_1.jpg" alt="Rob 1">
-      <img src="assets/images/3dmodeling/rob/rob_2.jpg" alt="Rob 2">
-      <img src="assets/images/3dmodeling/rob/rob_3.jpg" alt="Rob 3">
-      <img src="assets/images/3dmodeling/rob/rob_4.jpg" alt="Rob 4">
-      <img src="assets/images/3dmodeling/rob/rob_5.jpg" alt="Rob 5">
+  <section class="section">
+    <h3>VIDEO - Demos & Projects</h3>
+    <div class="logo-grid">
+      <video controls src="assets/video/demoportfolio.mp4"></video>
+      <video controls src="assets/videos/ayara_1.mp4"></video>
+      <video controls src="assets/videos/rob_1.mp4"></video>
+      <video controls src="assets/videos/rob_2.mp4"></video>
     </div>
   </section>
+
+  <footer>
+    © 2025 Esteban Campos Polo. Todos los derechos reservados.
+  </footer>
+
+  <div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
+
+  <script>
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImage");
+
+    document.querySelectorAll('.logo-grid img').forEach(img => {
+      img.addEventListener('click', function () {
+        modal.style.display = "block";
+        modalImg.src = this.src;
+        modalImg.alt = this.alt;
+      });
+    });
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
 </body>
+
 </html>
