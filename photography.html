@@ -1,41 +1,122 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Photography</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esteban Campos Polo - Photography</title>
   <style>
-    .section-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #00adb5;
-      text-align: left;
-      margin-bottom: 2rem;
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f2f2;
+      color: #000;
     }
 
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      border-bottom: 2px solid #ccc;
+    }
+
+    .branding h2 {
+      margin: 0.2rem 0;
+      font-size: 1.3em;
+    }
+
+    .branding h3 {
+      margin: 0;
+      font-size: 1em;
+      font-weight: normal;
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .cv-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem;
+      background-color: #e6e6e6;
+    }
+
+    .cv-links a {
+      text-decoration: none;
+      font-weight: bold;
+      background-color: #000;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    .cv-links a:hover {
+      background-color: #333;
+    }
+
+    .banner-image {
+      width: 100%;
+      display: block;
+    }
+
+    .section {
       padding: 2rem;
     }
 
-    .gallery-grid img {
+    .section h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5em;
+    }
+
+    .logo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .logo-grid figure {
+      margin: 0;
+      text-align: center;
+      width: 180px;
+    }
+
+    .logo-grid img {
       width: 100%;
-      height: 150px;
+      height: auto;
       object-fit: cover;
-      border-radius: 12px;
-      filter: grayscale(100%) brightness(80%);
-      transition: all 0.3s ease;
+      background: white;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      filter: grayscale(100%);
+      transition: filter 0.3s ease-in-out;
       cursor: pointer;
     }
 
-    .gallery-grid img:hover {
-      filter: grayscale(0%) brightness(100%);
-      transform: scale(1.05);
+    .logo-grid img:hover {
+      filter: grayscale(0%);
+    }
+
+    .logo-grid figcaption {
+      margin-top: 0.3rem;
+      font-size: 0.85rem;
+      color: #333;
+    }
+
+    footer {
+      background-color: #ccc;
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9em;
     }
 
     .modal {
@@ -47,192 +128,132 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.9);
-      align-items: center;
       justify-content: center;
+      align-items: center;
     }
 
-    .modal img {
+    .modal-content {
       max-width: 90%;
-      max-height: 80%;
-      border-radius: 12px;
+      max-height: 80vh;
+      display: block;
+      margin: auto;
     }
 
-    .modal .close, .modal .prev, .modal .next {
+    .close {
       position: absolute;
-      color: white;
-      font-size: 2rem;
-      cursor: pointer;
-      background: none;
-      border: none;
-    }
-
-    .modal .close {
       top: 20px;
-      right: 30px;
+      right: 35px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    .modal .prev {
-      left: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .modal .next {
-      right: 30px;
-      top: 50%;
-      transform: translateY(-50%);
+    /* Texto descriptivo */
+    .description {
+      max-width: 1200px;
+      margin: 1rem auto 2rem;
+      font-size: 1rem;
+      color: #000;
+      text-align: left;
+      font-family: inherit;
     }
 
   </style>
 </head>
-<body>
-  <div id="particles-js"></div>
 
-  <header class="container">
-    <div class="logo">PORTFOLIO</div>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="branding">
+      <h2>Esteban Campos Polo</h2>
+      <h3>Graphic Designer & 3D Artist</h3>
+    </div>
     <nav>
       <a href="index.html">Home</a>
-      <a href="about.html">About me</a>
-      <a href="3d-modeling.html">3D Modeling</a>
       <a href="graphic-design.html">Graphic Design</a>
+      <a href="photography.html">Photography</a>
+      <a href="3d-modeling.html">3D Art</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
     </nav>
   </header>
 
-<main class="container">
-    <h1 class="section-title">Photography</h1>
-    <section class="gallery-grid">
-      <!-- Cada imagen dentro de un enlace y con nombre debajo -->
-      <div class="gallery-item">
-        <a href="sports.html" aria-label="Sports">
-          <img src="assets/images/fotografia/sports/pilota/webp/28_04_2025_ECP_Pilota_al_Castell_Onil_14.webp" alt="28_04_2025_ECP_Pilota_al_Castell_Onil_14" loading="lazy" />
-          <span>Sports</span>
-        </a>
-      </div>
-      <div class="gallery-item">
-        <a href="weddings&lifeevents.html" aria-label="Weddings & Life Events">
-          <img src="assets/images/fotografia/thumbs/fest2025(2).webp" alt="fest2025(2)" loading="lazy" />
-          <span>Weddings & Life Events</span>
-        </a>
-      </div>
-      <div class="gallery-item">
-        <a href="socialreportage.html" aria-label="Social Reportage">
-          <img src="assets/images/fotografia/thumbs/fest2025(3).webp" alt="fest2025(3)" loading="lazy" />
-          <span>Social Reportage</span>
-        </a>
-      </div>
-      <div class="gallery-item">
-        <a href="travel&landscape.html" aria-label="Travel & Landscape">
-          <img src="assets/images/fotografia/thumbs/fest2025(4).webp" alt="fest2025(4)" loading="lazy" />
-          <span>Travel & Landscape</span>
-        </a>
-      </div>
-      <div class="gallery-item">
-        <a href="cultureevents.html" aria-label="Culture events">
-          <img src="assets/images/fotografia/thumbs/fest2025(5).webp" alt="fest2025(5)" loading="lazy" />
-          <span>Culture events</span>
-        </a>
-      </div>
-    </section>
-  </main>
-<p style="max-width: 1200px; margin: 0 auto 2rem; font-size: 1rem; color: #00adb5; text-align: left; font-family: inherit;">
-  In this section, you will find a carefully curated selection of my photographic works covering various styles and themes. From the emotion and dynamism of sports, through the beauty and sensitivity of weddings and life events, to the natural storytelling of social reportage. I also invite you to discover landscapes and travels that capture the essence of each place, and cultural events that showcase the richness and diversity of our traditions. Every image is a story, a moment frozen with passion and creativity.
-</p>
-
-<footer>
- <div class="footer-wrapper">
-  <div class="footer-contact">
-    <h4>Contact</h4>
-    <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
+  <!-- CV Links -->
+  <div class="cv-links">
+    <a href="assets/Curriculum.pdf" download>Descargar CV Español</a>
+    <a href="assets/Resume.pdf" download>Download CV English</a>
   </div>
-  <div class="footer-social">
-    <h4>Follow me</h4>
-    <div class="social-icons">
-      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
-      <a href="https://estebancampos1.artstation.com/"><img src="assets/icons/artstation.svg" alt="ArtStation" /></a>
-      <a href="https://www.instagram.com/estcampo/"><img src="assets/icons/instagram.svg" alt="Instagram" /></a>
-      <a href="https://vimeo.com/827034828"><img src="assets/icons/vimeo.svg" alt="Vimeo" /></a>
-      <a href="https://www.behance.net/EstebanDesign3D/projects"><img src="assets/icons/behance.svg" alt="Behance" /></a>
-      <a href="https://x.com/EstebanCampos3D"><img src="assets/icons/x.svg" alt="X" /></a>
+
+ 
+
+  <!-- Photography Section -->
+  <section class="section">
+    <h3>PHOTOGRAPHY<br><small>Cultural & Lifestyle</small></h3>
+    <div class="logo-grid">
+      <figure>
+        <img src="assets/images/fotografia/sports/pilota/webp/28_04_2025_ECP_Pilota_al_Castell_Onil_14.webp" alt="Sports" loading="lazy">
+        <figcaption>Sports</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/fotografia/thumbs/fest2025(2).webp" alt="Weddings & Life Events" loading="lazy">
+        <figcaption>Weddings & Life Events</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/fotografia/thumbs/fest2025(3).webp" alt="Social Reportage" loading="lazy">
+        <figcaption>Social Reportage</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/fotografia/thumbs/fest2025(4).webp" alt="Travel & Landscape" loading="lazy">
+        <figcaption>Travel & Landscape</figcaption>
+      </figure>
+      <figure>
+        <a href="culturalevents.html">
+    <img src="assets/images/fotografia/thumbs/fest2025(5).webp" alt="Cultural Events" loading="lazy">
+    <figcaption>Cultural Events</figcaption>
+  </a>
+      </figure>
     </div>
-  </div>
-     <p class="copyright">
-  <span lang="es">© 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.</span><br /><br />
-  <span lang="en">© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.</span>
-</p>
+  </section>
 
- </div>
-</footer>
+  <p class="description">
+    In this section, you will find a carefully curated selection of my photographic works covering various styles and themes. From the emotion and dynamism of sports, through the beauty and sensitivity of weddings and life events, to the natural storytelling of social reportage. I also invite you to discover landscapes and travels that capture the essence of each place, and cultural events that showcase the richness and diversity of our traditions. Every image is a story, a moment frozen with passion and creativity.
+  </p>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 Esteban Campos Polo. Todos los derechos reservados.
+  </footer>
 
   <!-- Modal -->
-  <div class="modal" id="slideshowModal">
-    <button class="close" onclick="closeModal()">×</button>
-    <button class="prev" onclick="prevImage()">❮</button>
-    <img id="modalImage" src="" alt="Foto en alta calidad" />
-    <button class="next" onclick="nextImage()">❯</button>
+  <div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
   </div>
-
-  <!-- Particles JS -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 20 },
-        color: { value: "#ffffff" },
-        shape: { type: "circle" },
-        opacity: { value: 0.3 },
-        size: { value: 3 },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: "#ffffff",
-          opacity: 0.2,
-          width: 1
-        },
-        move: { enable: true, speed: 2 }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "repulse" },
-          onclick: { enable: true, mode: "push" }
-        },
-        modes: {
-          repulse: { distance: 100 },
-          push: { particles_nb: 4 }
-        }
-      },
-      retina_detect: true
-    });
-  </script>
 
   <!-- Modal JS -->
   <script>
-    const modal = document.getElementById("slideshowModal");
-    const modalImage = document.getElementById("modalImage");
-    const images = Array.from(document.querySelectorAll(".gallery-grid img"));
-    let currentIndex = 0;
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImage");
 
-    function openModal(imgElement) {
-      currentIndex = images.indexOf(imgElement);
-      modalImage.src = imgElement.dataset.hd;
-      modal.style.display = "flex";
-    }
+    document.querySelectorAll('.logo-grid img').forEach(img => {
+      img.addEventListener('click', function () {
+        modal.style.display = "flex";
+        modalImg.src = this.src;
+        modalImg.alt = this.alt;
+      });
+    });
 
     function closeModal() {
       modal.style.display = "none";
     }
 
-    function nextImage() {
-      currentIndex = (currentIndex + 1) % images.length;
-      const nextImg = images[currentIndex];
-      modalImage.src = nextImg.dataset.hd;
-    }
-
-    function prevImage() {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      const prevImg = images[currentIndex];
-      modalImage.src = prevImg.dataset.hd;
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
     }
   </script>
 </body>
+
 </html>
