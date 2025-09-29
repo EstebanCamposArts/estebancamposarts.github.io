@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Esteban Campos Polo - Contact</title>
+  <title>Contact - Esteban Campos Polo</title>
   <style>
     body {
       margin: 0;
@@ -39,8 +39,30 @@
       font-weight: bold;
     }
 
-    main.container {
-      max-width: 1200px;
+    .cv-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem;
+      background-color: #e6e6e6;
+    }
+
+    .cv-links a {
+      text-decoration: none;
+      font-weight: bold;
+      background-color: #000;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    .cv-links a:hover {
+      background-color: #333;
+    }
+
+    main {
+      max-width: 900px;
       margin: 2rem auto;
       padding: 0 1rem;
     }
@@ -53,52 +75,44 @@
       margin-bottom: 2rem;
     }
 
-    form.contact-form {
+    form {
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      background-color: #fff;
+      background: #fff;
       padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
-    form.contact-form input,
-    form.contact-form textarea {
-      padding: 0.8rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
+    input, textarea {
       width: 100%;
-      box-sizing: border-box;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.3s;
     }
 
-    form.contact-form textarea {
-      resize: vertical;
+    input:focus, textarea:focus {
+      border-color: #00adb5;
     }
 
-    form.contact-form button {
+    button {
       background-color: #00adb5;
       color: #fff;
       font-weight: bold;
-      padding: 0.8rem;
+      padding: 0.75rem 1rem;
       border: none;
       border-radius: 6px;
       cursor: pointer;
       transition: background-color 0.3s;
     }
 
-    form.contact-form button:hover {
-      background-color: #007a82;
-    }
-
-    .description {
-      max-width: 1200px;
-      margin: 1rem auto 2rem;
-      font-size: 1rem;
-      color: #000;
-      text-align: left;
-      font-family: inherit;
+    button:hover {
+      background-color: #007d85;
     }
 
     footer {
@@ -109,44 +123,29 @@
     }
 
     .footer-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-contact, .footer-social {
+      margin-bottom: 1rem;
+    }
+
+    .footer-social .social-icons {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
-    .footer-contact a,
-    .footer-social a img {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .footer-social {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    .footer-social img {
+    .footer-social .social-icons img {
       width: 24px;
       height: 24px;
     }
 
-    /* Particles background */
-    #particles-js {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      top: 0;
-      left: 0;
-    }
   </style>
 </head>
 <body>
-  <!-- Particles Background -->
-  <div id="particles-js"></div>
-
   <!-- Header -->
   <header>
     <div class="branding">
@@ -163,26 +162,26 @@
     </nav>
   </header>
 
-  <!-- Main Content -->
-  <main class="container">
-    <h1 class="section-title">Contact</h1>
+  <!-- CV Links -->
+  <div class="cv-links">
+    <a href="assets/Curriculum.pdf" download>Descargar CV Español</a>
+    <a href="assets/Resume.pdf" download>Download CV English</a>
+  </div>
 
-    <p class="description">
-      If you have any questions, project proposals, or collaboration ideas, feel free to contact me using the form below. I will respond as soon as possible.
-    </p>
-
-    <!-- Contact Form -->
-    <form class="contact-form" action="https://formsubmit.co/estebancampospolo@gmail.com" method="POST">
+  <!-- Contact Form -->
+  <main>
+    <h1 class="section-title">Contact Me</h1>
+    <form action="https://formsubmit.co/estebancampospolo@gmail.com" method="POST">
       <input type="text" name="name" placeholder="Your Name" required>
       <input type="email" name="email" placeholder="Your Email" required>
       <input type="text" name="subject" placeholder="Subject" required>
       <textarea name="message" placeholder="Your Message" rows="6" required></textarea>
-      <button type="submit">Send Message</button>
 
-      <!-- Optional: CAPTCHA protection -->
+      <!-- Opcionales -->
       <input type="hidden" name="_captcha" value="false">
-      <!-- Optional: redirect after submission -->
       <input type="hidden" name="_next" value="https://tu-sitio.com/gracias.html">
+
+      <button type="submit">Send Message</button>
     </form>
   </main>
 
@@ -195,12 +194,14 @@
       </div>
       <div class="footer-social">
         <h4>Follow me</h4>
-        <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771"><img src="assets/icons/linkedin.svg" alt="LinkedIn"></a>
-        <a href="https://estebancampos1.artstation.com/"><img src="assets/icons/artstation.svg" alt="ArtStation"></a>
-        <a href="https://www.instagram.com/estcampo/"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
-        <a href="https://vimeo.com/827034828"><img src="assets/icons/vimeo.svg" alt="Vimeo"></a>
-        <a href="https://www.behance.net/EstebanDesign3D/projects"><img src="assets/icons/behance.svg" alt="Behance"></a>
-        <a href="https://x.com/EstebanCampos3D"><img src="assets/icons/x.svg" alt="X"></a>
+        <div class="social-icons">
+          <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771"><img src="assets/icons/linkedin.svg" alt="LinkedIn"></a>
+          <a href="https://estebancampos1.artstation.com/"><img src="assets/icons/artstation.svg" alt="ArtStation"></a>
+          <a href="https://www.instagram.com/estcampo/"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
+          <a href="https://vimeo.com/827034828"><img src="assets/icons/vimeo.svg" alt="Vimeo"></a>
+          <a href="https://www.behance.net/EstebanDesign3D/projects"><img src="assets/icons/behance.svg" alt="Behance"></a>
+          <a href="https://x.com/EstebanCampos3D"><img src="assets/icons/x.svg" alt="X"></a>
+        </div>
       </div>
       <p class="copyright">
         <span lang="es">© 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.</span><br><br>
@@ -208,39 +209,5 @@
       </p>
     </div>
   </footer>
-
-  <!-- Particles JS -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 40 },
-        color: { value: "#00adb5" },
-        shape: { type: "circle" },
-        opacity: { value: 0.3 },
-        size: { value: 3 },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: "#00adb5",
-          opacity: 0.2,
-          width: 1
-        },
-        move: { enable: true, speed: 2 }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "repulse" },
-          onclick: { enable: true, mode: "push" }
-        },
-        modes: {
-          repulse: { distance: 100 },
-          push: { particles_nb: 4 }
-        }
-      },
-      retina_detect: true
-    });
-  </script>
 </body>
 </html>
