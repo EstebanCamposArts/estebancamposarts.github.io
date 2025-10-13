@@ -151,6 +151,128 @@
       font-weight: bold;
       cursor: pointer;
     }
+
+    /* =============================
+       OPTIMIZACIÓN MÓVIL PROFESIONAL
+       ============================= */
+    @media (max-width: 768px) {
+
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+        text-align: left;
+      }
+
+      .branding h2 {
+        font-size: 1.4em;
+        letter-spacing: 0.15em;
+      }
+
+      .branding h3 {
+        font-size: 0.95em;
+      }
+
+      nav {
+        width: 100%;
+        text-align: left;
+        margin-top: 0.5rem;
+      }
+
+      nav a {
+        display: inline-block;
+        margin: 0.3rem 0.5rem 0.3rem 0;
+        font-size: 0.95em;
+      }
+
+      .cv-links {
+        flex-direction: column;
+        gap: 0.8rem;
+        padding: 1rem;
+      }
+
+      .cv-links a {
+        width: 100%;
+        text-align: center;
+        font-size: 0.95em;
+      }
+
+      .banner-image {
+        height: auto;
+        object-fit: cover;
+      }
+
+      .section {
+        padding: 1.2rem;
+      }
+
+      .section h3 {
+        font-size: 1.2em;
+        text-align: left;
+        line-height: 1.3em;
+      }
+
+      .logo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0.8rem;
+        overflow-x: visible;
+      }
+
+      .logo-grid img,
+      .logo-grid video {
+        width: 100%;
+        height: auto;
+        padding: 0.3rem;
+      }
+
+      footer {
+        font-size: 0.85em;
+        padding: 1rem;
+      }
+
+      /* Modal optimizado para móviles */
+      .modal-content {
+        max-width: 95%;
+        max-height: 75vh;
+      }
+
+      .close {
+        font-size: 30px;
+        top: 10px;
+        right: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+
+      .branding h2 {
+        font-size: 1.2em;
+      }
+
+      .branding h3 {
+        font-size: 0.85em;
+      }
+
+      nav a {
+        display: block;
+        margin: 0.3rem 0;
+      }
+
+      .logo-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+      }
+
+      .cv-links a {
+        font-size: 0.9em;
+        padding: 0.6rem;
+      }
+
+      footer {
+        font-size: 0.8em;
+      }
+    }
   </style>
 </head>
 
@@ -192,7 +314,7 @@
   <section class="section">
     <h3>PHOTOGRAPHY - Cultural Events</h3>
     <div class="logo-grid">
-      <img src="assets/images/fotografia/culturalevents/webp/fest2025(1).webp"> 
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(1).webp">
       <img src="assets/images/fotografia/culturalevents/webp/fest2025(2).webp">
       <img src="assets/images/fotografia/culturalevents/webp/fest2025(3).webp">
       <img src="assets/images/fotografia/culturalevents/webp/fest2025(4).webp">
@@ -237,7 +359,6 @@
 
   <footer>
     © 2025 Esteban Campos Polo. Todos los derechos reservados.
-    </div>
   </footer>
 
   <div id="imageModal" class="modal">
