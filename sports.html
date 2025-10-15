@@ -3,27 +3,73 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sports Photography</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Sports Photography - Esteban Campos Polo</title>
   <style>
-    .section-title {
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f2f2;
+      color: #000;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      border-bottom: 2px solid #ccc;
+    }
+
+    .branding h2 {
+      margin: 0.2rem 0;
+      font-size: 1.3em;
+    }
+
+    .branding h3 {
+      margin: 0;
+      font-size: 1em;
+      font-weight: normal;
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .section {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section h1 {
       font-size: 1.8rem;
       font-weight: 700;
-      color: #00adb5;
+      color: #000;
+      margin-bottom: 0.5rem;
       text-align: left;
+    }
+
+    .section p {
+      font-size: 1rem;
+      color: #333;
       margin-bottom: 2rem;
     }
 
+    /* Botones de categoría */
     .category-buttons {
       text-align: center;
-      margin: 2rem 0;
+      margin-bottom: 2rem;
     }
 
     .category-buttons button {
-      background-color: #00adb5;
+      background-color: #000;
       color: white;
       border: none;
-      padding: 12px 24px;
+      padding: 10px 20px;
       margin: 0 10px;
       font-size: 1rem;
       border-radius: 6px;
@@ -32,33 +78,60 @@
     }
 
     .category-buttons button:hover {
-      background-color: #008d90;
+      background-color: #333;
     }
 
+    /* Galería */
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
     }
 
     .gallery-grid img {
       width: 100%;
-      height: 150px;
+      height: 180px;
       object-fit: cover;
-      border-radius: 12px;
-      filter: grayscale(100%) brightness(80%);
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: white;
+      filter: grayscale(100%);
       transition: all 0.3s ease;
       cursor: pointer;
     }
 
     .gallery-grid img:hover {
-      filter: grayscale(0%) brightness(100%);
-      transform: scale(1.05);
+      filter: grayscale(0%);
+      transform: scale(1.03);
     }
 
+    /* Navegación a otras secciones */
+    .photo-sections-nav {
+      text-align: center;
+      margin-top: 3rem;
+    }
+
+    .photo-sections-nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: #000;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    .photo-sections-nav a:hover {
+      color: #333;
+    }
+
+    footer {
+      background-color: #ccc;
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9em;
+      margin-top: 3rem;
+    }
+
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -75,18 +148,16 @@
     .modal img {
       max-width: 90%;
       max-height: 80%;
-      border-radius: 12px;
+      border-radius: 6px;
     }
 
-    .modal .close,
-    .modal .prev,
-    .modal .next {
+    .modal button {
       position: absolute;
       color: white;
       font-size: 2rem;
-      cursor: pointer;
       background: none;
       border: none;
+      cursor: pointer;
     }
 
     .modal .close {
@@ -106,102 +177,56 @@
       transform: translateY(-50%);
     }
 
-    footer {
-      background-color: #222;
-      color: white;
-      padding: 2rem 0;
-      text-align: center;
-    }
-
-    .footer-contact,
-    .footer-social {
-      margin-bottom: 1rem;
-    }
-
-    .footer-social .social-icons a {
-      margin: 0 10px;
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-    }
-
-    .footer-social .social-icons img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .footer-copy {
-      font-size: 0.85rem;
-      color: #aaa;
-      margin-top: 1rem;
-    }
   </style>
 </head>
+
 <body>
-
-  <!-- Fondo particles -->
-  <div id="particles-js"></div>
-
   <!-- Header -->
-  <header class="container">
-    <div class="logo">PORTFOLIO</div>
+  <header>
+    <div class="branding">
+      <h2>Esteban Campos Polo</h2>
+      <h3>Graphic Designer & 3D Artist</h3>
+    </div>
     <nav>
       <a href="index.html">Home</a>
-      <a href="about.html">About me</a>
-      <a href="3d-modeling.html">3D Modeling</a>
       <a href="graphic-design.html">Graphic Design</a>
       <a href="photography.html">Photography</a>
+      <a href="3d-modeling.html">3D Art</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
     </nav>
   </header>
 
-  <!-- Contenido principal -->
-  <main class="container">
-    <h1 class="section-title">Sports Photography</h1>
+  <!-- Main Section -->
+  <section class="section">
+    <h1>Sports Photography</h1>
     <p>Capturing the energy, emotion, and intensity of athletic moments—this is where action meets artistry.</p>
 
     <!-- Botones de categoría -->
-    <section class="category-buttons">
+    <div class="category-buttons">
       <button onclick="openCategory('pilota')">Pilota</button>
       <button onclick="openCategory('mtb')">MTB</button>
       <button onclick="openCategory('futsal')">Fútsal</button>
-    </section>
+    </div>
 
-    <!-- Galería de miniaturas (se rellena dinámicamente) -->
-    <section class="gallery-grid" id="thumbnailGallery"></section>
+    <!-- Galería dinámica -->
+    <div class="gallery-grid" id="thumbnailGallery"></div>
 
-    <!-- Navegación -->
+    <!-- Navegación a otras secciones -->
     <nav class="photo-sections-nav">
       <a href="weddings&lifeevents.html">Weddings & Life Events</a>
       <a href="socialreportage.html">Social Reportage</a>
       <a href="travel&landscape.html">Travel & Landscape</a>
       <a href="culturalevents.html">Cultural Events</a>
     </nav>
-  </main>
+  </section>
 
   <!-- Footer -->
   <footer>
-    <div class="footer-wrapper">
-      <div class="footer-contact">
-        <h4>Contact</h4>
-        <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
-      </div>
-      <div class="footer-social">
-        <h4>Follow me</h4>
-        <div class="social-icons">
-          <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771"><img  src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
-          <a href="https://estebancampos1.artstation.com/"><img  src="assets/icons/artstation.svg" alt="ArtStation" /></a>
-          <a href="https://www.instagram.com/estcampo/"><img  src="assets/icons/instagram.svg" alt="Instagram" /></a>
-          <a href="https://vimeo.com/827034828"><img  src="assets/icons/vimeo.svg" alt="Vimeo" /></a>
-          <a href="https://www.behance.net/EstebanDesign3D/projects"><img  src="assets/icons/behance.svg" alt="Behance" /></a>
-          <a href="https://x.com/EstebanCampos3D"><img  src="assets/icons/x.svg" alt="X" /></a>
-        </div>
-      </div>
-      <p class="copyright">
-        <span lang="es">© 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.</span><br /><br />
-        <span lang="en">© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.</span>
-      </p>
-    </div>
+    © 2025 Esteban Campos Polo. Todos los derechos reservados.  
+    <a href="https://hits.sh/estebancamposarts.github.io/photography.html/">
+      <img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/photography.html.svg?color=9f9f9f" />
+    </a>
   </footer>
 
   <!-- Modal -->
@@ -212,41 +237,7 @@
     <button class="next" onclick="nextImage()">❯</button>
   </div>
 
-  <!-- Particles JS -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script> 
-  <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 20 },
-        color: { value: "#ffffff" },
-        shape: { type: "circle" },
-        opacity: { value: 0.3 },
-        size: { value: 3 },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: "#ffffff",
-          opacity: 0.2,
-          width: 1
-        },
-        move: { enable: true, speed: 2 }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "repulse" },
-          onclick: { enable: true, mode: "push" }
-        },
-        modes: {
-          repulse: { distance: 100 },
-          push: { particles_nb: 4 }
-        }
-      },
-      retina_detect: true
-    });
-  </script>
-
-  <!-- Script del Modal Dinámico -->
+  <!-- JS -->
   <script>
     const modal = document.getElementById("slideshowModal");
     const modalImage = document.getElementById("modalImage");
@@ -256,16 +247,13 @@
     let currentIndex = 0;
 
     function openCategory(category) {
-      // Limpiar galería previa
       thumbnailGallery.innerHTML = "";
-
-      // Generar miniaturas .webp
       for (let i = 1; i <= 24; i++) {
         const thumbPath = `assets/images/fotografia/sports/${category}/webp/${category}_${i}.webp`;
         const img = document.createElement("img");
         img.src = thumbPath;
         img.alt = `${category}(${i})`;
-        img.dataset.hd = `assets/images/fotografia/sports/${category}/jpg/${category}_${i}.jpg`; // Alta calidad
+        img.dataset.hd = `assets/images/fotografia/sports/${category}/jpg/${category}_${i}.jpg`;
         img.onclick = () => openSlideshow(category, i);
         thumbnailGallery.appendChild(img);
       }
@@ -277,7 +265,6 @@
         const imagePath = `assets/images/fotografia/sports/${category}/jpg/${category}_${i}.jpg`;
         imageList.push(imagePath);
       }
-
       currentIndex = startIdx - 1;
       modalImage.src = imageList[currentIndex];
       modal.style.display = "flex";
@@ -301,15 +288,11 @@
       modalImage.src = imageList[currentIndex];
     }
 
-    // Cerrar al hacer clic fuera de la imagen
-    modal.addEventListener("click", function(e) {
-      if (e.target === modal) {
-        closeModal();
-      }
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closeModal();
     });
 
-    // Teclas de flecha izquierda/derecha para navegar
-    document.addEventListener("keydown", function(e) {
+    document.addEventListener("keydown", function (e) {
       if (modal.style.display === "flex") {
         if (e.key === "ArrowRight") nextImage();
         if (e.key === "ArrowLeft") prevImage();
