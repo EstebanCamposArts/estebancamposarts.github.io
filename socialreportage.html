@@ -4,6 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Social Reportage - Esteban Campos Polo</title>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MF62GH7N9W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MF62GH7N9W');
+</script>
+
   <style>
     /* === Estilo uniforme del portfolio === */
     body {
@@ -11,6 +21,30 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f2f2f2;
       color: #000;
+    }
+
+    /* Footer: iconos sociales discretos para mantener la estética */
+    .footer-social {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .footer-social a img {
+      width: 22px;
+      height: 22px;
+      display: inline-block;
+      vertical-align: middle;
+      filter: none;
+      opacity: 0.95;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .footer-social a img:hover {
+      opacity: 1;
+      transform: translateY(-2px);
     }
 
     header {
@@ -231,6 +265,26 @@
   <!-- Footer -->
   <footer>
     © 2025 Esteban Campos Polo. Todos los derechos reservados.
+    <div class="footer-social" aria-label="Redes sociales">
+      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener">
+        <img src="assets/icons/linkedin.svg" alt="LinkedIn">
+      </a>
+      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener">
+        <img src="assets/icons/artstation.svg" alt="ArtStation">
+      </a>
+      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener">
+        <img src="assets/icons/instagram.svg" alt="Instagram">
+      </a>
+      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener">
+        <img src="assets/icons/vimeo.svg" alt="Vimeo">
+      </a>
+      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener">
+        <img src="assets/icons/behance.svg" alt="Behance">
+      </a>
+      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener">
+        <img src="assets/icons/x.svg" alt="X">
+      </a>
+    </div>
     <a href="https://hits.sh/estebancamposarts.github.io/photography.html/">
       <img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/photography.html.svg?color=9f9f9f" />
     </a>

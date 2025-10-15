@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact - Esteban Campos Polo</title>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MF62GH7N9W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MF62GH7N9W');
+</script>
+
   <style>
     body {
       margin: 0;
@@ -19,6 +29,30 @@
       padding: 1rem 2rem;
       background-color: #fff;
       border-bottom: 2px solid #ccc;
+    }
+
+    /* Footer: iconos sociales discretos para mantener la estética */
+    .footer-social {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .footer-social a img {
+      width: 22px;
+      height: 22px;
+      display: inline-block;
+      vertical-align: middle;
+      filter: none;
+      opacity: 0.95;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .footer-social a img:hover {
+      opacity: 1;
+      transform: translateY(-2px);
     }
 
     .branding h2 {
