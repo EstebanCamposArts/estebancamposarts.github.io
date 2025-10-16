@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esteban Campos Polo - 3D Modeling</title>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8VMES8F4MN');
+</script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f2f2;
+      color: #000;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      border-bottom: 2px solid #ccc;
+    }
+
+    /* Footer: iconos sociales discretos para mantener la estética */
+    .footer-social {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .footer-social a img {
+      width: 22px;
+      height: 22px;
+      display: inline-block;
+      vertical-align: middle;
+      filter: none;
+      opacity: 0.95;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .footer-social a img:hover {
+      opacity: 1;
+      transform: translateY(-2px);
+    } 
+
+    .branding h2 {
+      margin: 0.2rem 0;
+      font-size: 1.3em;
+    }
+
+    .branding h3 {
+      margin: 0;
+      font-size: 1em;
+      font-weight: normal;
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .cv-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem;
+      background-color: #e6e6e6;
+    }
+
+    .cv-links a {
+      text-decoration: none;
+      font-weight: bold;
+      background-color: #000;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    .cv-links a:hover {
+      background-color: #333;
+    }
+
+    .section {
+      padding: 2rem;
+    }
+
+    .section h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5em;
+    }
+
+    .logo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .logo-grid figure {
+      margin: 0;
+      text-align: center;
+      width: 180px;
+    }
+
+    .logo-grid img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: white;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      filter: grayscale(100%);
+      transition: filter 0.3s ease-in-out, transform 0.3s ease-in-out;
+      cursor: pointer;
+    }
+
+    .logo-grid img:hover {
+      filter: grayscale(0%);
+      transform: scale(1.05);
+    }
+
+    .logo-grid figcaption {
+      margin-top: 0.3rem;
+      font-size: 0.85rem;
+      color: #333;
+    }
+
+    footer {
+      background-color: #ccc;
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9em;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      max-height: 80vh;
+      display: block;
+      margin: auto;
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .description {
+      max-width: 1200px;
+      margin: 1rem auto 2rem;
+      font-size: 1rem;
+      color: #000;
+      text-align: left;
+      font-family: inherit;
+      padding: 0 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="branding">
+      <h2>Esteban Campos Polo</h2>
+      <h3>Graphic Designer & 3D Artist</h3>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="graphic-design.html">Graphic Design</a>
+      <a href="photography.html">Photography</a>
+      <a href="3d-modeling.html">3D Art</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <!-- CV Links -->
+  <div class="cv-links">
+    <a href="assets/Curriculum.pdf" download>Descargar CV Español</a>
+    <a href="assets/Resume.pdf" download>Download CV English</a>
+  </div>
+
+  <!-- 3D Modeling Section -->
+  <section class="section">
+    <h3>3D MODELING<br><small>Models & Renderings</small></h3>
+    <div class="logo-grid">
+      <figure>
+        <img src="assets/images/3dmodeling/golem/golem.jpg" alt="Golem" loading="lazy">
+        <figcaption>Golem</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/3dmodeling/ashora/ashora.jpg" alt="Ashora" loading="lazy">
+        <figcaption>Ashora</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/3dmodeling/ayara/ayara.jpg" alt="Ayara" loading="lazy">
+        <figcaption>Ayara</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/3dmodeling/bust/bust.jpg" alt="Bust" loading="lazy">
+        <figcaption>Bust</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/3dmodeling/cleo/cleo.jpg" alt="Cleo" loading="lazy">
+        <figcaption>Cleo</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/3dmodeling/jack/jack.jpg" alt="Jack" loading="lazy">
+        <figcaption>Jack</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/3dmodeling/ogi/ogi.jpg" alt="Ogi" loading="lazy">
+        <figcaption>Ogi</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/3dmodeling/pichon/pichon.jpg" alt="Pichon" loading="lazy">
+        <figcaption>Pichon</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/3dmodeling/rob/rob.jpg" alt="Rob" loading="lazy">
+        <figcaption>Rob</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/3dmodeling/tubos.jpg" alt="Tubos" loading="lazy">
+        <figcaption>Tubos</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/3dmodeling/escalas.jpg" alt="Escalas" loading="lazy">
+        <figcaption>Escalas</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/3dmodeling/machine.jpg" alt="Machine" loading="lazy">
+        <figcaption>Machine</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <p class="description">
+    Explore forms and create visual narratives that transcend the two-dimensional. Combine technical precision with artistic sensitivity, paying attention to every detail to achieve results that optimize the work of the person receiving the geometries and allow them to be manipulated according to their needs. I work from the initial reference research once I have the concept art to the final rendering, adapting to the project's objectives and the specific needs of each client. Blocking, sculpting, retopology, projection, fine detailing, baking and texturing with Substance, shading, lighting, and rendering with Maya.
+  </p>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 Esteban Campos Polo. Todos los derechos reservados.
+    <div class="footer-social" aria-label="Redes sociales">
+      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener">
+        <img src="assets/icons/linkedin.svg" alt="LinkedIn">
+      </a>
+      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener">
+        <img src="assets/icons/artstation.svg" alt="ArtStation">
+      </a>
+      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener">
+        <img src="assets/icons/instagram.svg" alt="Instagram">
+      </a>
+      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener">
+        <img src="assets/icons/vimeo.svg" alt="Vimeo">
+      </a>
+      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener">
+        <img src="assets/icons/behance.svg" alt="Behance">
+      </a>
+      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener">
+        <img src="assets/icons/x.svg" alt="X">
+      </a>
+    </div>
+
+<a href="https://hits.sh/estebancamposarts.github.io/3d-modeling.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/3d-modeling.html.svg?color=9f9f9f"/></a>
+  </footer>
+
+  <!-- Modal -->
+  <div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
+
+  <!-- Modal JS -->
+  <script>
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImage");
+
+    document.querySelectorAll('.logo-grid img').forEach(img => {
+      img.addEventListener('click', function () {
+        modal.style.display = "flex";
+        modalImg.src = this.src;
+        modalImg.alt = this.alt;
+      });
+    });
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+</body>
+
+</html>
