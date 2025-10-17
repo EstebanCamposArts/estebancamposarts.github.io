@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Esteban Campos Polo - Artificial intelligence</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esteban Campos Polo - Artificial Intelligence</title>
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
@@ -12,7 +11,6 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-8VMES8F4MN');
 </script>
 
@@ -31,30 +29,6 @@
       padding: 1rem 2rem;
       background-color: #fff;
       border-bottom: 2px solid #ccc;
-    }
-
-    /* Footer: iconos sociales discretos para mantener la estética */
-    .footer-social {
-      margin-top: 0.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.6rem;
-      align-items: center;
-    }
-
-    .footer-social a img {
-      width: 22px;
-      height: 22px;
-      display: inline-block;
-      vertical-align: middle;
-      filter: none;
-      opacity: 0.95;
-      transition: opacity 0.2s, transform 0.15s;
-    }
-
-    .footer-social a img:hover {
-      opacity: 1;
-      transform: translateY(-2px);
     }
 
     .branding h2 {
@@ -97,54 +71,76 @@
       background-color: #333;
     }
 
-    .banner-image {
-      width: 100%;
-      display: block;
-    }
-
     .section {
       padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     .section h3 {
       margin-bottom: 1rem;
-      font-size: 1.5em;
+      font-size: 1.8em;
+      font-weight: 700;
     }
 
-    .logo-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: center;
-    }
-
-    .logo-grid figure {
-      margin: 0;
+    /* 🔹 Miniaturas uniformes, grises y coloreables */
+    .category-buttons {
       text-align: center;
-      width: 200px; /* tamaño uniforme del contenedor */
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.2rem;
     }
 
-    .logo-grid img {
-      width: 100%;
-      height: 180px; /* altura fija para uniformar */
-      object-fit: cover; /* recorta la imagen sin deformarla */
-      background: white;
-      padding: 0.5rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
+    .category-buttons button {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .category-buttons button:hover {
+      transform: scale(1.05);
+    }
+
+    .category-buttons img {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #ccc;
       filter: grayscale(100%);
-      transition: filter 0.3s ease-in-out;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .category-buttons img:hover {
+      filter: grayscale(0%);
+      transform: scale(1.03);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: white;
+      filter: grayscale(100%);
+      transition: all 0.3s ease;
       cursor: pointer;
     }
 
-    .logo-grid img:hover {
+    .gallery-grid img:hover {
       filter: grayscale(0%);
-    }
-
-    .logo-grid figcaption {
-      margin-top: 0.3rem;
-      font-size: 0.85rem;
-      color: #333;
+      transform: scale(1.03);
     }
 
     footer {
@@ -152,6 +148,30 @@
       padding: 1rem;
       text-align: center;
       font-size: 0.9em;
+      margin-top: 3rem;
+    }
+
+    .footer-social {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .footer-social a img {
+      width: 22px;
+      height: 22px;
+      display: inline-block;
+      vertical-align: middle;
+      filter: none;
+      opacity: 0.95;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .footer-social a img:hover {
+      opacity: 1;
+      transform: translateY(-2px);
     }
 
     .modal {
@@ -163,37 +183,49 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.9);
-      justify-content: center;
       align-items: center;
+      justify-content: center;
     }
 
-    .modal-content {
+    .modal img {
       max-width: 90%;
-      max-height: 80vh;
-      display: block;
-      margin: auto;
+      max-height: 80%;
+      border-radius: 6px;
     }
 
-    .close {
+    .modal button {
       position: absolute;
-      top: 20px;
-      right: 35px;
-      color: #fff;
-      font-size: 40px;
-      font-weight: bold;
+      color: white;
+      font-size: 2rem;
+      background: none;
+      border: none;
       cursor: pointer;
     }
 
-    /* Texto descriptivo */
+    .modal .close {
+      top: 20px;
+      right: 30px;
+    }
+
+    .modal .prev {
+      left: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .modal .next {
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
     .description {
       max-width: 1200px;
-      margin: 1rem auto 2rem;
+      margin: 2rem auto;
       font-size: 1rem;
       color: #000;
       text-align: left;
-      font-family: inherit;
     }
-
   </style>
 </head>
 
@@ -221,41 +253,32 @@
     <a href="assets/Resume.pdf" download>Download CV English</a>
   </div>
 
-  <!-- Photography Section -->
+  <!-- Main Section -->
   <section class="section">
     <h3>ARTIFICIAL INTELLIGENCE<br><small>Image generation</small></h3>
-    <div class="logo-grid">
-      <figure>
-        <a href="echoesofmarble.html">
-          <img src="assets/images/AI/webp/echo/pens (3).webp" alt="Echoes of Marble" loading="lazy">
-          <figcaption>Echoes of Marble</figcaption>
-        </a>
-      </figure>
-      <figure>
-        <a href="creepyseed.html">
-          <img src="assets/images/AI/webp/creepy/creepy (4).webp" alt="Creepy Seed" loading="lazy">
-          <figcaption>Creepy Seed</figcaption>
-        </a>
-      </figure>
-      <figure>
-        <a href="Valenciasingleservings.html">
-          <img src="assets/images/AI/webp/val/Prod (4).webp" alt="Valencia: Single Servings" loading="lazy">
-          <figcaption>Valencia: Single Servings</figcaption>
-        </a>
-      </figure>
-      <figure>
-        <a href="clothes.html">
-          <img src="assets/images/AI/webp/clothes/cloth (7).webp" alt="clothes" loading="lazy">
-          <figcaption>Clothes</figcaption>
-        </a>
-      </figure>
 
+    <!-- Miniaturas como botones -->
+    <div class="category-buttons">
+      <button onclick="openCategory('echo')">
+        <img src="assets/images/AI/webp/echo/echo (3).webp" alt="Echoes of Marble">
+      </button>
+      <button onclick="openCategory('creepy')">
+        <img src="assets/images/AI/webp/creepy/creepy (4).webp" alt="Creepy Seed">
+      </button>
+      <button onclick="openCategory('val')">
+        <img src="assets/images/AI/webp/val/val (4).webp" alt="Valencia Single Servings">
+      </button>
+      <button onclick="openCategory('clothes')">
+        <img src="assets/images/AI/webp/clothes/clothes (7).webp" alt="Clothes">
+      </button>
+    </div>
+
+    <div class="gallery-grid" id="thumbnailGallery"></div>
   </section>
 
   <p class="description">
-   I present a selection of visual works created through artificial intelligence and generative AI techniques. My intention in making art with AI is to explore the creative possibilities offered by generative models, transforming ideas, concepts, and emotions into images.
-
-Each piece is born from a carefully thought-out and elaborated artistic direction process: from the formulation of prompts and the selection of visual styles, to the final composition and the integration of digital retouching. This practice has allowed me to create a fusion between creativity and expression through words combined with technological power, developing projects that merge aesthetics, innovation, and visual storytelling..
+    I present a selection of visual works created through artificial intelligence and generative AI techniques. My intention in making art with AI is to explore the creative possibilities offered by generative models, transforming ideas, concepts, and emotions into images.<br><br>
+    Each piece is born from a carefully thought-out and elaborated artistic direction process: from the formulation of prompts and the selection of visual styles, to the final composition and the integration of digital retouching. This practice has allowed me to create a fusion between creativity and expression through words combined with technological power, developing projects that merge aesthetics, innovation, and visual storytelling.
   </p>
 
   <!-- Footer -->
@@ -281,38 +304,88 @@ Each piece is born from a carefully thought-out and elaborated artistic directio
         <img src="assets/icons/x.svg" alt="X">
       </a>
     </div>
-    <a href="https://hits.sh/estebancamposarts.github.io/photography.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/photography.html.svg?color=9f9f9f" /></a>
+    <a href="https://hits.sh/estebancamposarts.github.io/IA.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/IA.html.svg?color=9f9f9f" /></a>
   </footer>
 
   <!-- Modal -->
-  <div id="imageModal" class="modal">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <img class="modal-content" id="modalImage">
+  <div class="modal" id="slideshowModal">
+    <button class="close" onclick="closeModal()">×</button>
+    <button class="prev" onclick="prevImage()">❮</button>
+    <img id="modalImage" src="" alt="Foto en alta calidad" />
+    <button class="next" onclick="nextImage()">❯</button>
   </div>
 
-  <!-- Modal JS -->
+  <!-- JS -->
   <script>
-    const modal = document.getElementById("imageModal");
-    const modalImg = document.getElementById("modalImage");
+    const modal = document.getElementById("slideshowModal");
+    const modalImage = document.getElementById("modalImage");
+    const thumbnailGallery = document.getElementById("thumbnailGallery");
 
-    document.querySelectorAll('.logo-grid img').forEach(img => {
-      img.addEventListener('click', function () {
-        modal.style.display = "flex";
-        modalImg.src = this.src;
-        modalImg.alt = this.alt;
-      });
-    });
+    let imageList = [];
+    let currentIndex = 0;
+
+    const categoryCounts = {
+      echo: 55,
+      creepy: 9,
+      val: 4,
+      clothes: 12
+    };
+
+    function openCategory(category) {
+      thumbnailGallery.innerHTML = "";
+      const count = categoryCounts[category] || 0;
+      for (let i = 1; i <= count; i++) {
+        const thumbPath = `assets/images/AI/webp/${category}/${category} (${i}).webp`;
+        const img = document.createElement("img");
+        img.src = thumbPath;
+        img.alt = `${category} (${i})`;
+        img.dataset.hd = `assets/images/AI/jpg/${category}/${category} (${i}).jpg`;
+        img.onclick = () => openSlideshow(category, i);
+        thumbnailGallery.appendChild(img);
+      }
+    }
+
+    function openSlideshow(category, startIdx) {
+      imageList = [];
+      const count = categoryCounts[category] || 0;
+      for (let i = 1; i <= count; i++) {
+        const imagePath = `assets/images/AI/jpg/${category}/${category} (${i}).jpg`;
+        imageList.push(imagePath);
+      }
+      currentIndex = startIdx - 1;
+      modalImage.src = imageList[currentIndex];
+      modal.style.display = "flex";
+    }
 
     function closeModal() {
       modal.style.display = "none";
+      modalImage.src = "";
+      imageList = [];
     }
 
-    window.onclick = function (event) {
-      if (event.target === modal) {
-        modal.style.display = "none";
-      }
+    function nextImage() {
+      if (imageList.length === 0) return;
+      currentIndex = (currentIndex + 1) % imageList.length;
+      modalImage.src = imageList[currentIndex];
     }
+
+    function prevImage() {
+      if (imageList.length === 0) return;
+      currentIndex = (currentIndex - 1 + imageList.length) % imageList.length;
+      modalImage.src = imageList[currentIndex];
+    }
+
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (modal.style.display === "flex") {
+        if (e.key === "ArrowRight") nextImage();
+        if (e.key === "ArrowLeft") prevImage();
+        if (e.key === "Escape") closeModal();
+      }
+    });
   </script>
 </body>
-
 </html>

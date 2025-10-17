@@ -239,7 +239,7 @@
 
     <!-- Botones de categoría -->
     <div class="category-buttons">
-      <button onclick="openCategory('pilota')">Pilota</button>
+      <button onclick="openCategory('pilota')">Pilota Valenciana</button>
       <button onclick="openCategory('mtb')">MTB</button>
       <button onclick="openCategory('futsal')">Fútsal</button>
       <button onclick="openCategory('otros')">Otros</button>
@@ -301,9 +301,18 @@
     let imageList = [];
     let currentIndex = 0;
 
+    // 🔧 Número de imágenes por categoría
+    const categoryCounts = {
+      pilota: 24,
+      mtb: 9,
+      futsal: 6,
+      otros: 7
+    };
+
     function openCategory(category) {
       thumbnailGallery.innerHTML = "";
-      for (let i = 1; i <= 24; i++) {
+      const count = categoryCounts[category] || 0;
+      for (let i = 1; i <= count; i++) {
         const thumbPath = `assets/images/fotografia/sports/${category}/webp/${category}_${i}.webp`;
         const img = document.createElement("img");
         img.src = thumbPath;
@@ -316,7 +325,8 @@
 
     function openSlideshow(category, startIdx) {
       imageList = [];
-      for (let i = 1; i <= 24; i++) {
+      const count = categoryCounts[category] || 0;
+      for (let i = 1; i <= count; i++) {
         const imagePath = `assets/images/fotografia/sports/${category}/jpg/${category}_${i}.jpg`;
         imageList.push(imagePath);
       }
