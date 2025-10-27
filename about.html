@@ -124,6 +124,49 @@
       text-align: center;
       font-size: 0.9em;
     }
+/* Nuevo CSS a añadir a la etiqueta <style> */
+/* -------------------------------------- */
+
+/* 1. Wrapper para centrar y manejar el espacio entre los dos botones */
+.contact-buttons-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem; /* Espacio entre los botones */
+    margin-top: 2rem; 
+    margin-bottom: 2rem; 
+    max-width: 900px; /* Alinea con el ancho del main */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 2. Estilo del botón (Copia los estilos de 'button' pero aplicado a 'a') */
+.contact-button-style {
+    /* Copia de los estilos de 'button' */
+    background-color: #00adb5;
+    color: #fff;
+    font-weight: bold;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    text-align: center; /* Centra el texto en el enlace */
+    display: inline-block; /* Permite aplicar padding y ancho */
+}
+
+.contact-button-style:hover {
+    background-color: #007d85; /* Estilo de hover igual que el botón de envío */
+}
+
+/* 3. Media Query para que se vean bien en móviles */
+@media (max-width: 600px) {
+    .contact-buttons-wrapper {
+        flex-direction: column; /* Apila los botones verticalmente */
+        gap: 0.75rem;
+        padding: 0 1rem;
+    }
+}
   </style>
 </head>
 
@@ -160,7 +203,9 @@
     <p>Enjoy my portfolio, and if you want to work with me, the "Contact" section is open for you to write anytime.</p>
  
       <p>I am open to hiring, paid collaborations and advice.</p>
-
+   <div class="contact-buttons-wrapper">
+    <a href="contact.html" class="contact-button-style" lang="en">Contact me</a>
+</div>
 
 
     <p><strong>ESPAÑOL:</strong><br>
@@ -177,11 +222,12 @@
 
     <p>Estoy abierto a contratación, colaboraciones remuneradas y asesoramiento.</p>
 
-    
+       <div class="contact-buttons-wrapper">
+    <a href="contact.html" class="contact-button-style" lang="es">Contáctame</a>
   </section>
     <hr>
+</div>
 
-   
 
   <footer>
     © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
