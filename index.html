@@ -396,8 +396,8 @@
   </header>
 
 <div class="cv-links">
-  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Descargar CV Español</a>
-  <a href="assets/Resume.pdf" id="download-cv-en" download>Download CV English</a>
+  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
+  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
 </div>
 
 <script>
@@ -565,6 +565,11 @@
       }
     }
   </script>
+<script>
+  document.addEventListener('contextmenu', event => event.preventDefault());
+  document.addEventListener('dragstart', event => event.preventDefault());
+</script>
+
 </body>
 
 </html>

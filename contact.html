@@ -199,10 +199,11 @@
   </header>
 
   <!-- CV Links -->
-  <div class="cv-links">
-    <a href="assets/Curriculum.pdf" download>Descargar CV Español</a>
-    <a href="assets/Resume.pdf" download>Download CV English</a>
-  </div>
+<div class="cv-links">
+  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
+  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
+</div>
+
 
   <!-- Contact Form -->
   <main>
@@ -268,5 +269,9 @@
 
 <a href="https://hits.sh/estebancamposarts.github.io/contact.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/contact.html.svg?color=9f9f9f"/></a>
   </footer>
+<script>
+  document.addEventListener('contextmenu', event => event.preventDefault());
+  document.addEventListener('dragstart', event => event.preventDefault());
+</script>
 </body>
 </html>

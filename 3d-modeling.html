@@ -95,6 +95,7 @@
 
     .cv-links a:hover {
       background-color: #333;
+
     }
 
     .section {
@@ -211,10 +212,11 @@
   </header>
 
   <!-- CV Links -->
-  <div class="cv-links">
-    <a href="assets/Curriculum.pdf" download>Descargar CV Español</a>
-    <a href="assets/Resume.pdf" download>Download CV English</a>
-  </div>
+<div class="cv-links">
+  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
+  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
+</div>
+
 
   <!-- 3D Modeling Section -->
   <section class="section">
@@ -334,6 +336,10 @@
       }
     }
   </script>
+<script>
+  document.addEventListener('contextmenu', event => event.preventDefault());
+  document.addEventListener('dragstart', event => event.preventDefault());
+</script>
 </body>
 
 </html>

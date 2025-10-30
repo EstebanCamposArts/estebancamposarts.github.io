@@ -211,10 +211,11 @@
   </header>
 
   <!-- CV Links -->
-  <div class="cv-links">
-    <a href="assets/Curriculum.pdf" download>Descargar CV Español</a>
-    <a href="assets/Resume.pdf" download>Download CV English</a>
-  </div>
+<div class="cv-links">
+  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
+  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
+</div>
+
 
   <p class="description">
 This collection explores the intersection between classical antiquity and contemporary digital expression. It appropriates the iconography of the Greco-Roman bust, a symbol of permanence, history, and idealized beauty, and subjects it to a chromatic and textural reinvention.
@@ -675,6 +676,10 @@ Each piece fuses the timeless serenity of sculpted marble with explosions of col
       }
     }
   </script>
+<script>
+  document.addEventListener('contextmenu', event => event.preventDefault());
+  document.addEventListener('dragstart', event => event.preventDefault());
+</script>
 </body>
 
 </html>

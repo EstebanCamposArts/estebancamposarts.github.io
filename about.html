@@ -167,6 +167,26 @@
         padding: 0 1rem;
     }
 }
+    .cv-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem;
+      background-color: #e6e6e6;
+    }
+
+    .cv-links a {
+      text-decoration: none;
+      font-weight: bold;
+      background-color: #000;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    .cv-links a:hover {
+      background-color: #333;
   </style>
 </head>
 
@@ -187,7 +207,13 @@
     </nav>
   </header>
 
+<div class="cv-links">
+  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
+  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
+</div>
+
   <img src="assets/images/banner_1200x171.jpg" alt="Banner" class="banner-image">
+
 
   <section class="section">
     <h2>About Me / Sobre mí</h2>
@@ -257,6 +283,10 @@
 
 <a href="https://hits.sh/estebancamposarts.github.io/about.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/about.html.svg?color=9f9f9f"/></a>
   </footer>
+<script>
+  document.addEventListener('contextmenu', event => event.preventDefault());
+  document.addEventListener('dragstart', event => event.preventDefault());
+</script>
 </body>
 
 </html>

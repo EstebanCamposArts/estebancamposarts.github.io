@@ -249,10 +249,12 @@
     </nav>
   </header>
 
-  <div class="cv-links">
-    <a href="assets/Curriculum.pdf" download>Descargar CV Español</a>
-    <a href="assets/Resume.pdf" download>Download CV English</a>
-  </div>
+  <!-- CV Links -->
+<div class="cv-links">
+  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
+  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
+</div>
+
 
  <main class="container"> <p style="max-width: 1280px; margin: 10 auto 2rem; font-size: 0.85rem; color: #000; text-align: center; font-family: inherit;"> Every project is an opportunity to communicate, connect, and transform ideas into visual experiences. I always combine creativity and aesthetics, adapting to the specific needs of each brand. I develop unique identities that convey values, generate impact, and remain memorable. From conceptualization to final execution, my methodology guarantees original, authentic results aligned with my clients' objectives..</p>
 
@@ -515,6 +517,10 @@
       }
     }
   </script>
+<script>
+  document.addEventListener('contextmenu', event => event.preventDefault());
+  document.addEventListener('dragstart', event => event.preventDefault());
+</script>
 </body>
 
 </html>
