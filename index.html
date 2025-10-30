@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Esteban Campos Polo - Portfolio</title>
 
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -50,6 +49,8 @@
       filter: none;
       opacity: 0.95;
       transition: opacity 0.2s, transform 0.15s;
+      /* Eliminar el margen inferior que estaba causando un salto */
+      margin-bottom: -4px; 
     }
 
     .footer-social a img:hover {
@@ -186,9 +187,114 @@
       cursor: pointer;
     }
 
+    /* ============================================ */
+    /* ESTILOS DEL BLOQUE DUAL (VIDEO + IMAGEN) */
+    /* ============================================ */
+    .dual-media {
+      display: flex;
+      flex-wrap: wrap; 
+      justify-content: center;
+      align-items: flex-start; 
+      gap: 2rem; 
+      margin-top: 1rem;
+    }
+
+    .media-item {
+      /* Ocupa casi la mitad del ancho en escritorio (45%) */
+      flex: 1 1 45%; 
+      text-align: center;
+      max-width: 550px;
+    }
+
+    .media-item video,
+    .media-item img {
+      width: 100%;
+      height: 340px; 
+      object-fit: contain; 
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      display: block;
+      margin: 0 auto; 
+      /* Posición por defecto: centro 50% 50% */
+      object-position: 50% 10%; 
+    }
+
+    .media-caption {
+      font-size: 0.9em;
+      color: #555;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+    
+    /* ========================================================= */
+    /* ESTILOS DEL FORMULARIO DE SUSCRIPCIÓN (Caja Biselada) */
+    /* ========================================================= */
+    .subscribe-section {
+        background-color: #fff; /* Usamos blanco para diferenciarla del fondo gris */
+        text-align: center;
+        padding: 2rem 2rem 1.5rem; 
+        border-radius: 8px; /* Esquinas biseladas */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+        border: 1px solid #ccc; /* Borde simple */
+        
+        max-width: 600px; 
+        margin: 3rem auto 2rem auto; /* Espaciado */
+    }
+
+    .subscribe-section h3 {
+        margin-bottom: 0.5rem;
+        font-size: 1.5em; 
+        color: #000;
+    }
+
+    .subscribe-section p {
+        margin-bottom: 1.5rem;
+        color: #555;
+    }
+
+    .subscription-form {
+      /* Aquí usamos display: flex para que el input y el botón queden juntos */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 450px;
+      margin: 0 auto;
+    }
+    
+    .subscription-form input[type="email"] {
+        padding: 0.7rem;
+        border: 1px solid #ccc;
+        /* Redondeamos solo la esquina izquierda */
+        border-radius: 6px 0 0 6px; 
+        flex-grow: 1; /* Ocupa el espacio */
+        box-sizing: border-box;
+        font-size: 1em;
+        vertical-align: top;
+        height: 40px; 
+    }
+
+    .subscription-form button {
+        background-color: #000; /* Negro como tus botones de CV */
+        color: white;
+        padding: 0.7rem 1rem;
+        border: none;
+        /* Redondeamos solo la esquina derecha */
+        border-radius: 0 6px 6px 0; 
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 1em;
+        transition: background-color 0.3s;
+        vertical-align: top;
+        height: 40px; 
+    }
+
+    .subscription-form button:hover {
+        background-color: #333;
+    }
+
     /* =============================
-       OPTIMIZACIÓN MÓVIL PROFESIONAL
-       ============================= */
+    OPTIMIZACIÓN MÓVIL PROFESIONAL
+    ============================= */
     @media (max-width: 768px) {
 
       header {
@@ -276,6 +382,20 @@
         top: 10px;
         right: 20px;
       }
+
+      /* RESPONSIVE para móvil (Apilamiento de media) */
+      .dual-media {
+          flex-direction: column; /* Apila el video y la imagen */
+          align-items: center;
+      }
+      .media-item {
+          flex: 1 1 100%; /* Ocupa todo el ancho */
+          max-width: 100%;
+      }
+      .media-item video,
+      .media-item img {
+          height: auto; /* Altura automática en móvil */
+      }
     }
 
     @media (max-width: 480px) {
@@ -306,76 +426,22 @@
       footer {
         font-size: 0.8em;
       }
+      
+      /* Ajuste responsive para móviles del formulario de suscripción */
+      .subscription-form {
+          flex-direction: column;
+          gap: 0.5rem;
+      }
+      .subscription-form input[type="email"],
+      .subscription-form button {
+          width: 100%;
+          margin: 0;
+          border-radius: 6px;
+      }
+      .subscribe-section {
+          margin: 2rem 10px;
+      }
     }
-
-        .section
-        {
-            padding: 2rem;
-        }
-
-        .section h3 {
-            margin-bottom: 1rem;
-            font-size: 1.5em;
-        }
-
-        /* ============================================ */
-        /* ESTILOS DEL BLOQUE DUAL (VIDEO + IMAGEN) */
-        /* ============================================ */
-        .dual-media {
-            display: flex;
-            flex-wrap: wrap; 
-            justify-content: center;
-            align-items: flex-start; 
-            gap: 2rem; 
-            margin-top: 1rem;
-        }
-
-        .media-item {
-            /* Ocupa casi la mitad del ancho en escritorio (45%) */
-            flex: 1 1 45%; 
-            text-align: center;
-            max-width: 550px;
-        }
-
-           .media-item video,
-           .media-item img {
-            width: 100%;
-            height: 340px; 
-            object-fit: contain; 
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            display: block;
-            margin: 0 auto; 
-            /* Posición por defecto: centro 50% 50% */
-            object-position: 50% 10%; 
-       
-        }
-
-        .media-caption {
-            font-size: 0.9em;
-            color: #555;
-            margin-top: 0.5rem;
-            text-align: center;
-        }
-
-        /* RESPONSIVE para móvil (Apilamiento) */
-        @media (max-width: 768px) {
-            .section {
-                padding: 1.2rem;
-            }
-            .dual-media {
-                flex-direction: column; /* Apila el video y la imagen */
-                align-items: center;
-            }
-            .media-item {
-                flex: 1 1 100%; /* Ocupa todo el ancho */
-                max-width: 100%;
-            }
-            .media-item video,
-            .media-item img {
-                height: auto; /* Altura automática en móvil */
-            }
-
   </style>
 </head>
 
@@ -418,27 +484,23 @@
   });
 </script>
 
-
- <!-- <img src="assets/images/banner_1200x171.jpg" alt="Banner" class="banner-image">-->
-
-
 <section class="section">
-        <h3>LATEST PROJECT</h3>
-                <p class="media-caption">All my models have their own story. If you'd like to know it, contact me and I'll upload it</p>
-        <div class="dual-media">
-            
-            <div class="media-item">
-                <video controls src="assets/video/demoportfolio.mp4"></video>
-                <p class="media-caption">Demo reel - creative process</p>
-            </div>
-
-            <div class="media-item">
-                <img src="assets/images/3dmodeling/lia/liawiphd.jpg" alt="WIP - Lia del viento">
-                <p class="media-caption">WIP - Lia del viento</p>
-            </div>
-
+    <h3>LATEST PROJECT</h3>
+    <p class="media-caption">All my models have their own story. If you'd like to know it, contact me and I'll upload it</p>
+    <div class="dual-media">
+        
+        <div class="media-item">
+            <video controls src="assets/video/demoportfolio.mp4"></video>
+            <p class="media-caption">Demo reel - creative process</p>
         </div>
-    </section>
+
+        <div class="media-item">
+            <img src="assets/images/3dmodeling/lia/liawiphd.jpg" alt="WIP - Lia del viento">
+            <p class="media-caption">WIP - Lia del viento</p>
+        </div>
+
+    </div>
+</section>
 
 
   <section class="section">
@@ -504,7 +566,23 @@
     </div>
   </section>
 
- 
+
+  <section class="section subscribe-section">
+    <h3>📢 Would you like to receive an email when I update my projects? <p> ¿Te gustaría recibir un correo electrónico cuando actualice mis proyectos?</p> </h3>
+    <p>Subscribe to receive an email notification when I update my portfolio </p> <p>Suscríbete para recibir un aviso en tu correo cuando actualice mi portafolio.</p>
+    
+    <form action="https://gmail.us13.list-manage.com/subscribe/post?u=ce97b195943aa1a0051775611&amp;id=ddfad98f0f&amp;f_id=003fc2e1f0" method="POST" class="subscription-form" target="_blank">
+        
+        <input type="email" name="EMAIL" placeholder="Introduce tu correo electrónico - Enter your email address" required>
+        
+        <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ce97b195943aa1a0051775611_ddfad98f0f" tabindex="-1" value="">
+        </div>
+        
+        <button type="submit">Subscribe / Suscribirme</button>
+    </form>
+</section>
+
 
   <footer>
     © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
@@ -532,7 +610,6 @@
       </a>
     </div>
   <br>
-  <!-- Contador de visitas -->
   <a href="https://hits.sh/estebancamposarts.github.io/index.html/">
     <img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/index.html.svg?color=9f9f9f"/>
   </a>
@@ -565,10 +642,12 @@
       }
     }
   </script>
+
 <script>
   document.addEventListener('contextmenu', event => event.preventDefault());
   document.addEventListener('dragstart', event => event.preventDefault());
 </script>
+
 
 </body>
 

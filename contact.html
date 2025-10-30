@@ -178,6 +178,22 @@
       height: 24px;
     }
 
+      /* Ajuste responsive para móviles del formulario de suscripción */
+      .subscription-form {
+          flex-direction: column;
+          gap: 0.5rem;
+      }
+      .subscription-form input[type="email"],
+      .subscription-form button {
+          width: 100%;
+          margin: 0;
+          border-radius: 6px;
+      }
+      .subscribe-section {
+          margin: 2rem 10px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -222,7 +238,24 @@
       <button type="submit">Send Message</button> 
       </div>
  </div>
+  <section class="section subscribe-section">
+    <h3>📢 Would you like to receive an email when I update my projects? <p> ¿Te gustaría recibir un correo electrónico cuando actualice mis proyectos?</p> </h3>
+    <p>Subscribe to receive an email notification when I update my portfolio </p> <p>Suscríbete para recibir un aviso en tu correo cuando actualice mi portafolio.</p>
+    
+    <form action="https://gmail.us13.list-manage.com/subscribe/post?u=ce97b195943aa1a0051775611&amp;id=ddfad98f0f&amp;f_id=003fc2e1f0" method="POST" class="subscription-form" target="_blank">
+        
+        <input type="email" name="EMAIL" placeholder="Introduce tu correo electrónico - Enter your email address" required>
+        
+        <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ce97b195943aa1a0051775611_ddfad98f0f" tabindex="-1" value="">
+        </div>
+        
+        <button type="submit">Subscribe / Suscribirme</button>
     </form>
+</section>
+    </form>
+
+
   </main>
 
 <div style="text-align:center; font-size:0.85rem; color:#000; margin-top:1rem;">
@@ -242,6 +275,8 @@
         If you leave a like or a comment, you’d really help me grow and improve.<br><br>
         Thanks again, and best regards..
 </div>
+
+
 
   <!-- Footer -->
   <footer>

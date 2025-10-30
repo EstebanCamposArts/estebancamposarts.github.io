@@ -187,6 +187,83 @@
 
     .cv-links a:hover {
       background-color: #333;
+    }
+
+/* ========================================================= */
+/* ESTILOS DEL FORMULARIO DE SUSCRIPCIÓN (Caja Biselada) */
+/* ========================================================= */
+.subscribe-section {
+    background-color: #fff; /* Usamos blanco para diferenciarla del fondo gris */
+    text-align: center;
+    padding: 2rem 2rem 1.5rem; /* Más padding para que se vea mejor */
+    /* Bordes biselados (cambiamos el radio para el efecto biselado) */
+    border-radius: 8px; /* Radio estándar que usas en otros elementos */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil para darle volumen */
+    border: 1px solid #ccc; /* Borde simple para enmarcarla */
+    
+    max-width: 600px; 
+    margin: 2rem auto; /* Centra la caja en la página */
+}
+
+.subscribe-section h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.5em; /* Asegura el tamaño del título */
+    color: #000;
+}
+
+.subscribe-section p {
+    margin-bottom: 1.5rem;
+    color: #555;
+}
+
+.subscription-form {
+    display: inline-block;
+}
+
+.subscription-form input[type="email"] {
+    padding: 0.7rem;
+    border: 1px solid #ccc;
+    border-radius: 6px 0 0 6px; 
+    width: 60%;
+    max-width: 300px;
+    box-sizing: border-box;
+    font-size: 1em;
+    vertical-align: top;
+    height: 40px; 
+}
+
+.subscription-form button {
+    background-color: #000;
+    color: white;
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: 0 6px 6px 0; 
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1em;
+    transition: background-color 0.3s;
+    vertical-align: top;
+    height: 40px; 
+}
+
+.subscription-form button:hover {
+    background-color: #333;
+}
+
+/* RESPONSIVE para móvil (Apilamiento) */
+@media (max-width: 480px) {
+    .subscription-form input[type="email"],
+    .subscription-form button {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+        border-radius: 6px; 
+    }
+    .subscribe-section {
+        margin: 1rem 10px; /* Margen menor en móvil */
+    }
+}
+
   </style>
 </head>
 
@@ -254,6 +331,21 @@
     <hr>
 </div>
 
+  <section class="section subscribe-section">
+    <h3>📢 Would you like to receive an email when I update my projects? <p> ¿Te gustaría recibir un correo electrónico cuando actualice mis proyectos?</p> </h3>
+    <p>Subscribe to receive an email notification when I update my portfolio </p> <p>Suscríbete para recibir un aviso en tu correo cuando actualice mi portafolio.</p>
+    
+    <form action="https://gmail.us13.list-manage.com/subscribe/post?u=ce97b195943aa1a0051775611&amp;id=ddfad98f0f&amp;f_id=003fc2e1f0" method="POST" class="subscription-form" target="_blank">
+        
+        <input type="email" name="EMAIL" placeholder="Introduce tu correo electrónico - Enter your email address" required>
+        
+        <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_ce97b195943aa1a0051775611_ddfad98f0f" tabindex="-1" value="">
+        </div>
+        
+        <button type="submit">Subscribe / Suscribirme</button>
+    </form>
+</section>
 
   <footer>
     © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
