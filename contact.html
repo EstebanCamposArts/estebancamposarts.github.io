@@ -221,18 +221,25 @@
 
   <!-- Contact Form -->
   <main>
-    <h1 class="section-title">Contact Me</h1>
-    <form action="https://formsubmit.co/3382246d25f880896907d32401bdb417" method="POST">
-      <label for="name">Your Name</label>
-      <input type="text" id="name" name="name" placeholder="Your Name" required>
+<form action="https://formspree.io/f/manaljaa" method="POST">
 
-      <label for="email">Your Email</label>
-      <input type="email" id="email" name="email" placeholder="Your Email" required>
+  <label>
+    Your email:
+    <input type="email" name="email">
+  </label>
 
+<label>
+    Subject:
+    <input type="text" name="subject" placeholder>
+  </label>
 
+  <label>
+    Your message:
+    <textarea name="message"></textarea>
+  </label>
 
-      <label for="message">Message</label>
-      <textarea id="message" name="message" placeholder="Your Message" rows="6" required></textarea>
+  <button type="submit">Send</button>
+
 
       <!-- Opcionales -->
       <input type="hidden" name="_captcha" value="false">
@@ -240,9 +247,7 @@
       <input type="hidden" name="_template" value="box">
       <input type="hidden" name="_subject" value="Nuevo mensaje desde tu Portfolio">
       <input type="hidden" name="_autoresponse" value="Gracias por tu mensaje, te responderé en cuanto pueda.">
-
-      <button type="submit">Send Message</button>
-    </form>
+</form>
   </main>
 
   <section style="text-align:center; font-size:0.85rem; color:#000; margin-top:1rem;">
