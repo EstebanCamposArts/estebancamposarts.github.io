@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact - Esteban Campos Polo</title>
+  <title>Contact | Esteban Campos Polo – Graphic Designer & 3D Artist</title>
+  <meta name="description" content="Contact page of Esteban Campos Polo, Graphic Designer & 3D Artist. Get in touch for design, 3D modeling, photography and visual projects.">
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-8VMES8F4MN');
-</script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8VMES8F4MN');
+  </script>
 
   <style>
     body {
@@ -32,30 +32,6 @@
       border-bottom: 2px solid #ccc;
     }
 
-    /* Footer: iconos sociales discretos para mantener la estética */
-    .footer-social {
-      margin-top: 0.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.6rem;
-      align-items: center;
-    }
-
-    .footer-social a img {
-      width: 22px;
-      height: 22px;
-      display: inline-block;
-      vertical-align: middle;
-      filter: none;
-      opacity: 0.95;
-      transition: opacity 0.2s, transform 0.15s;
-    }
-
-    .footer-social a img:hover {
-      opacity: 1;
-      transform: translateY(-2px);
-    }
-
     .branding h2 {
       margin: 0.2rem 0;
       font-size: 1.3em;
@@ -67,11 +43,20 @@
       font-weight: normal;
     }
 
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
     nav a {
       margin-left: 1.5rem;
       text-decoration: none;
       color: #000;
       font-weight: bold;
+    }
+
+    nav a.active {
+      color: #00adb5;
     }
 
     .cv-links {
@@ -118,6 +103,10 @@
       padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    label {
+      font-weight: bold;
     }
 
     input, textarea {
@@ -173,25 +162,35 @@
       flex-wrap: wrap;
     }
 
-    .footer-social .social-icons img {
+    .footer-social .social-icons a img {
       width: 24px;
       height: 24px;
+      display: inline-block;
+      vertical-align: middle;
+      opacity: 0.95;
+      transition: opacity 0.2s, transform 0.15s;
     }
 
-      /* Ajuste responsive para móviles del formulario de suscripción */
-      .subscription-form {
-          flex-direction: column;
-          gap: 0.5rem;
-      }
-      .subscription-form input[type="email"],
-      .subscription-form button {
-          width: 100%;
-          margin: 0;
-          border-radius: 6px;
-      }
-      .subscribe-section {
-          margin: 2rem 10px;
-      }
+    .footer-social .social-icons a img:hover {
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+
+    /* Ajuste responsive para móviles del formulario de suscripción */
+    .subscription-form {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .subscription-form input[type="email"],
+    .subscription-form button {
+      width: 100%;
+      margin: 0;
+      border-radius: 6px;
+    }
+
+    .subscribe-section {
+      margin: 2rem 10px;
     }
 
   </style>
@@ -203,61 +202,92 @@
       <h2>Esteban Campos Polo</h2>
       <h3>Graphic Designer & 3D Artist</h3>
     </div>
-    <nav>
+    <nav aria-label="Main navigation">
       <a href="index.html">Home</a>
       <a href="graphic-design.html">Graphic Design</a>
       <a href="photography.html">Photography</a>
       <a href="3d-modeling.html">3D Art</a>
       <a href="IA.html">AI</a>
       <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
+      <a href="contact.html" class="active">Contact</a>
     </nav>
   </header>
 
   <!-- CV Links -->
-<div class="cv-links">
-  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
-  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
-</div>
-
+  <div class="cv-links">
+    <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
+    <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
+  </div>
 
   <!-- Contact Form -->
   <main>
     <h1 class="section-title">Contact Me</h1>
-      <form action="https://formsubmit.co/3382246d25f880896907d32401bdb417" method="POST">
-      <input type="text" name="name" placeholder="Your Name" required>
-      <input type="email" name="email" placeholder="Your Email" required>
-      <input type="text" name="subject" placeholder="Subject" required>
-      <textarea name="message" placeholder="Your Message" rows="6" required></textarea>
+    <form action="https://formsubmit.co/3382246d25f880896907d32401bdb417" method="POST">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="name" placeholder="Your Name" required>
+
+      <label for="email">Your Email</label>
+      <input type="email" id="email" name="email" placeholder="Your Email" required>
+
+
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" placeholder="Your Message" rows="6" required></textarea>
 
       <!-- Opcionales -->
       <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_next" value="https://tu-sitio.com/gracias.html">
+      <input type="hidden" name="_next" value="https://estebancamposarts.github.io/index.html">
+      <input type="hidden" name="_template" value="box">
+      <input type="hidden" name="_subject" value="Nuevo mensaje desde tu Portfolio">
+      <input type="hidden" name="_autoresponse" value="Gracias por tu mensaje, te responderé en cuanto pueda.">
 
-          </div>
-      <button type="submit">Send Message</button> 
-      </div>
- </div>
+      <button type="submit">Send Message</button>
     </form>
   </main>
 
-<div style="text-align:center; font-size:0.85rem; color:#000; margin-top:1rem;">
-   Si has llegado hasta aquí, probablemente algo en mi trabajo ha llamado tu atención y eso me encanta.<br><br>
-        Estoy abierto a nuevas oportunidades profesionales, colaboraciones o proyectos donde crear algo auténtico y con personalidad.<br><br>
-        Puedes escribirme directamente a través del formulario o, si prefieres, contactar por correo en <strong>estebancampospolo@gmail.com</strong>.<br><br>
-        También puedes descargar mi CV completo para más detalles sobre mi trayectoria.<br><br>
-        Te agradezco mucho que hayas visitado mi portfolio, también puedes seguirme en redes sociales.<br><br>
-        Si me dejas un me gusta o un comentario me ayudarías a crecer y a mejorar.<br><br>
-        Gracias de nuevo, un saludo..  
-<br><br><br>  
-       If you’ve made it this far, something in my work probably caught your attention — and I love that.<br><br>
-        I’m open to new professional opportunities, collaborations, or projects where we can create something authentic and full of personality.<br><br>
-        You can reach out directly through the form, or if you prefer, contact me by email at <strong>estebancampospolo@gmail.com</strong>.<br><br>
-        You can also download my full CV for more details about my background.<br><br>
-        I truly appreciate you taking the time to visit my portfolio. You can also follow me on social media.<br><br>
-        If you leave a like or a comment, you’d really help me grow and improve.<br><br>
-        Thanks again, and best regards..
-</div>
+  <section style="text-align:center; font-size:0.85rem; color:#000; margin-top:1rem;">
+    <p lang="es">
+      Si has llegado hasta aquí, probablemente algo en mi trabajo ha llamado tu atención y eso me encanta.<br><br>
+      Estoy abierto a nuevas oportunidades profesionales, colaboraciones o proyectos donde crear algo auténtico y con personalidad.<br><br>
+      Puedes escribirme directamente a través del formulario o, si prefieres, contactar por correo en <a href="mailto:estebancampospolo@gmail.com"><strong>estebancampospolo@gmail.com</strong></a>.<br><br>
+      También puedes descargar mi CV completo para más detalles sobre mi trayectoria.<br><br>
+      Te agradezco mucho que hayas visitado mi portfolio, también puedes seguirme en redes sociales.<br><br>
+      Si me dejas un me gusta o un comentario me ayudarías a crecer y a mejorar.<br><br>
+      Gracias de nuevo, un saludo.
+    </p>
+    <p lang="en">
+      If you’ve made it this far, something in my work probably caught your attention — and I love that.<br><br>
+      I’m open to new professional opportunities, collaborations, or projects where we can create something authentic and full of personality.<br><br>
+      You can reach out directly through the form, or if you prefer, contact me by email at <a href="mailto:estebancampospolo@gmail.com"><strong>estebancampospolo@gmail.com</strong></a>.<br><br>
+      You can also download my full CV for more details about my background.<br><br>
+      I truly appreciate you taking the time to visit my portfolio. You can also follow me on social media.<br><br>
+      If you leave a like or a comment, you’d really help me grow and improve.<br><br>
+      Thanks again, and best regards.
+    </p>
+  </section>
+
+
+
+<section style="max-width:900px; margin:2rem auto; padding:1rem; font-size:0.85rem; color:#000;">
+  <h4>Política de Privacidad / Privacy Policy</h4>
+  <p lang="es">
+    Yo, Esteban Campos Polo, valoro tu privacidad y me comprometo a proteger tus datos personales. La información que me proporciones a través del formulario de contacto será utilizada únicamente para responder a tus consultas o solicitudes profesionales.  
+    <br><br>
+    No comparto, vendo ni transfiero tus datos a terceros. Todos los mensajes que reciba se almacenan de manera segura y se eliminan cuando ya no son necesarios para los fines mencionados.  
+    <br><br>
+    Al enviar este formulario, aceptas que tus datos sean procesados conforme a esta política de privacidad. Si tienes alguna duda sobre tus datos personales, puedes escribirme directamente a <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>.
+  </p>
+  <p lang="en">
+    I, Esteban Campos Polo, value your privacy and am committed to protecting your personal data. The information you provide through the contact form will only be used to respond to your professional inquiries or requests.  
+    <br><br>
+    I do not share, sell, or transfer your data to third parties. All messages I receive are stored securely and deleted when no longer necessary for the purposes stated.  
+    <br><br>
+    By submitting this form, you agree that your data will be processed in accordance with this privacy policy. If you have any questions about your personal data, you can contact me directly at <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>.
+  </p>
+</section>
+
+
+
 
 
 
@@ -271,12 +301,12 @@
       <div class="footer-social">
         <h4>Follow me</h4>
         <div class="social-icons">
-          <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771"><img src="assets/icons/linkedin.svg" alt="LinkedIn"></a>
-          <a href="https://estebancampos1.artstation.com/"><img src="assets/icons/artstation.svg" alt="ArtStation"></a>
-          <a href="https://www.instagram.com/estcampo/"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
-          <a href="https://vimeo.com/827034828"><img src="assets/icons/vimeo.svg" alt="Vimeo"></a>
-          <a href="https://www.behance.net/EstebanDesign3D/projects"><img src="assets/icons/behance.svg" alt="Behance"></a>
-          <a href="https://x.com/EstebanCampos3D"><img src="assets/icons/x.svg" alt="X"></a>
+          <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><img src="assets/icons/linkedin.svg" alt="Perfil de LinkedIn"></a>
+          <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener noreferrer" aria-label="ArtStation"><img src="assets/icons/artstation.svg" alt="Perfil de ArtStation"></a>
+          <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img src="assets/icons/instagram.svg" alt="Perfil de Instagram"></a>
+          <a href="https://vimeo.com/827034828" target="_blank" rel="noopener noreferrer" aria-label="Vimeo"><img src="assets/icons/vimeo.svg" alt="Perfil de Vimeo"></a>
+          <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener noreferrer" aria-label="Behance"><img src="assets/icons/behance.svg" alt="Perfil de Behance"></a>
+          <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><img src="assets/icons/x.svg" alt="Perfil de X"></a>
         </div>
       </div>
       <p class="copyright">
@@ -284,12 +314,12 @@
         <span lang="en">© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.</span>
       </p>
     </div>
-
-<a href="https://hits.sh/estebancamposarts.github.io/contact.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/contact.html.svg?color=9f9f9f"/></a>
+    <a href="https://hits.sh/estebancamposarts.github.io/contact.html"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/contact.html.svg?color=9f9f9f" loading="lazy"/></a>
   </footer>
-<script>
-  document.addEventListener('contextmenu', event => event.preventDefault());
-  document.addEventListener('dragstart', event => event.preventDefault());
-</script>
+
+  <script>
+    // Bloque de protección ligero, sin afectar accesibilidad ni UX
+    document.addEventListener('dragstart', event => event.preventDefault());
+  </script>
 </body>
 </html>
