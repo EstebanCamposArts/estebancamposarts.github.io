@@ -6,14 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Esteban Campos Polo - Portfolio</title>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-8VMES8F4MN');
-</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8VMES8F4MN');
+  </script>
 
   <style>
     body {
@@ -32,7 +31,6 @@
       border-bottom: 2px solid #ccc;
     }
 
-    /* Footer: iconos sociales discretos para mantener la estética */
     .footer-social {
       margin-top: 0.5rem;
       display: flex;
@@ -46,17 +44,16 @@
       height: 22px;
       display: inline-block;
       vertical-align: middle;
-      filter: none;
       opacity: 0.95;
       transition: opacity 0.2s, transform 0.15s;
-      /* Eliminar el margen inferior que estaba causando un salto */
-      margin-bottom: -4px; 
+      margin-bottom: -4px;
     }
 
     .footer-social a img:hover {
       opacity: 1;
       transform: translateY(-2px);
     }
+
     .branding {
       text-align: left;
     }
@@ -111,11 +108,6 @@
       font-weight: bold;
     }
 
-    .banner-image {
-      width: 100%;
-      display: block;
-    }
-
     .section {
       padding: 2rem;
     }
@@ -125,38 +117,98 @@
       font-size: 1.5em;
     }
 
-    .logo-grid {
-      display: flex;
-      gap: 1rem;
-      overflow-x: auto;
-      padding-bottom: 1rem;
-    }
-
-    .logo-grid img,
-    .logo-grid video {
-      width: 180px;
-      height: auto;
-      object-fit: cover;
-      background: white;
-      padding: 0.5rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      filter: grayscale(100%);
-      transition: filter 0.3s ease-in-out;
-      cursor: pointer;
-    }
-
-    .logo-grid img:hover,
-    .logo-grid video:hover {
-      filter: grayscale(0%);
-    }
-
     footer {
       background-color: #ccc;
       padding: 1rem;
       text-align: center;
       font-size: 0.9em;
     }
+
+
+/* ============================================ */
+/* GALERÍA EN LÍNEA (HORIZONTAL) */
+/* ============================================ */
+
+.portfolio-grid {
+  display: flex;
+  justify-content: center;   /* CENTRA LAS IMÁGENES */
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding: 1.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: #999 #e5e5e5;
+}
+
+/* Scrollbar para Chrome */
+.portfolio-grid::-webkit-scrollbar {
+  height: 8px;
+}
+.portfolio-grid::-webkit-scrollbar-track {
+  background: #e5e5e5;
+  border-radius: 10px;
+}
+.portfolio-grid::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 10px;
+}
+
+.grid-item {
+  flex: 0 0 auto;
+  width: 200px;
+  text-align: center;
+  text-decoration: none;
+  color: #000;
+}
+
+.grid-item img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  filter: grayscale(100%);
+  transition: filter 0.5s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+.grid-item:hover img {
+  filter: grayscale(0%);
+  transform: scale(1.05);
+}
+
+.grid-item p {
+  margin-top: 0.4rem;
+  font-weight: bold;
+  font-size: 0.95em;
+}
+
+/* ============================================ */
+/* VISTA MÓVIL (VERTICAL) */
+/* ============================================ */
+@media (max-width: 600px) {
+  .portfolio-grid {
+    display: grid !important;
+    grid-template-columns: 1fr;   /* una columna */
+    justify-items: center;        /* centra cada elemento */
+    overflow-x: visible;          /* elimina scroll horizontal */
+    gap: 1.2rem;
+  }
+
+  .grid-item {
+    width: 80% !important;        /* ancho cómodo */
+  }
+
+  .grid-item img {
+    width: 100% !important;       /* imagen responisva */
+    height: auto !important;      /* mantiene proporción */
+  }
+}
+
+
+
+    /* =============================
+       MODAL VIEW
+    ============================= */
 
     .modal {
       display: none;
@@ -166,7 +218,6 @@
       top: 0;
       width: 100%;
       height: 100%;
-      overflow: auto;
       background-color: rgba(0, 0, 0, 0.9);
     }
 
@@ -187,130 +238,15 @@
       cursor: pointer;
     }
 
-    /* ============================================ */
-    /* ESTILOS DEL BLOQUE DUAL (VIDEO + IMAGEN) */
-    /* ============================================ */
-    .dual-media {
-      display: flex;
-      flex-wrap: wrap; 
-      justify-content: center;
-      align-items: flex-start; 
-      gap: 2rem; 
-      margin-top: 1rem;
-    }
-
-    .media-item {
-      /* Ocupa casi la mitad del ancho en escritorio (45%) */
-      flex: 1 1 45%; 
-      text-align: center;
-      max-width: 550px;
-    }
-
-    .media-item video,
-    .media-item img {
-      width: 100%;
-      height: 340px; 
-      object-fit: contain; 
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      display: block;
-      margin: 0 auto; 
-      /* Posición por defecto: centro 50% 50% */
-      object-position: 50% 10%; 
-    }
-
-    .media-caption {
-      font-size: 0.9em;
-      color: #555;
-      margin-top: 0.5rem;
-      text-align: center;
-    }
-    
-    /* ========================================================= */
-    /* ESTILOS DEL FORMULARIO DE SUSCRIPCIÓN (Caja Biselada) */
-    /* ========================================================= */
-    .subscribe-section {
-        background-color: #fff; /* Usamos blanco para diferenciarla del fondo gris */
-        text-align: center;
-        padding: 2rem 2rem 1.5rem; 
-        border-radius: 8px; /* Esquinas biseladas */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-        border: 1px solid #ccc; /* Borde simple */
-        
-        max-width: 600px; 
-        margin: 3rem auto 2rem auto; /* Espaciado */
-    }
-
-    .subscribe-section h3 {
-        margin-bottom: 0.5rem;
-        font-size: 1.5em; 
-        color: #000;
-    }
-
-    .subscribe-section p {
-        margin-bottom: 1.5rem;
-        color: #555;
-    }
-
-    .subscription-form {
-      /* Aquí usamos display: flex para que el input y el botón queden juntos */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      max-width: 450px;
-      margin: 0 auto;
-    }
-    
-    .subscription-form input[type="email"] {
-        padding: 0.7rem;
-        border: 1px solid #ccc;
-        /* Redondeamos solo la esquina izquierda */
-        border-radius: 6px 0 0 6px; 
-        flex-grow: 1; /* Ocupa el espacio */
-        box-sizing: border-box;
-        font-size: 1em;
-        vertical-align: top;
-        height: 40px; 
-    }
-
-    .subscription-form button {
-        background-color: #000; /* Negro como tus botones de CV */
-        color: white;
-        padding: 0.7rem 1rem;
-        border: none;
-        /* Redondeamos solo la esquina derecha */
-        border-radius: 0 6px 6px 0; 
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 1em;
-        transition: background-color 0.3s;
-        vertical-align: top;
-        height: 40px; 
-    }
-
-    .subscription-form button:hover {
-        background-color: #333;
-    }
-
     /* =============================
-    OPTIMIZACIÓN MÓVIL PROFESIONAL
+        RESPONSIVE
     ============================= */
-    @media (max-width: 768px) {
 
+    @media (max-width: 768px) {
       header {
         flex-direction: column;
         align-items: flex-start;
         padding: 1rem;
-        text-align: left;
-      }
-
-      .branding h2 {
-        font-size: 1.4em;
-        letter-spacing: 0.15em;
-      }
-
-      .branding h3 {
-        font-size: 0.95em;
       }
 
       nav {
@@ -320,58 +256,22 @@
       }
 
       nav a {
-        display: inline-block;
         margin: 0.3rem 0.5rem 0.3rem 0;
         font-size: 0.95em;
+        display: inline-block;
       }
 
       .cv-links {
         flex-direction: column;
         gap: 0.8rem;
-        padding: 1rem;
       }
 
-      .cv-links a {
-        width: 100%;
-        text-align: center;
-        font-size: 0.95em;
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+        max-width: 260px;
+        padding: 0 1rem;
       }
 
-      .banner-image {
-        height: auto;
-        object-fit: cover;
-      }
-
-      .section {
-        padding: 1.2rem;
-      }
-
-      .section h3 {
-        font-size: 1.2em;
-        text-align: left;
-        line-height: 1.3em;
-      }
-
-      .logo-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 0.8rem;
-        overflow-x: visible;
-      }
-
-      .logo-grid img,
-      .logo-grid video {
-        width: 100%;
-        height: auto;
-        padding: 0.3rem;
-      }
-
-      footer {
-        font-size: 0.85em;
-        padding: 1rem;
-      }
-
-      /* Modal optimizado para móviles */
       .modal-content {
         max-width: 95%;
         max-height: 75vh;
@@ -382,55 +282,23 @@
         top: 10px;
         right: 20px;
       }
-
-      /* RESPONSIVE para móvil (Apilamiento de media) */
-      .dual-media {
-          flex-direction: column; /* Apila el video y la imagen */
-          align-items: center;
-      }
-      .media-item {
-          flex: 1 1 100%; /* Ocupa todo el ancho */
-          max-width: 100%;
-      }
-      .media-item video,
-      .media-item img {
-          height: auto; /* Altura automática en móvil */
-      }
     }
 
     @media (max-width: 480px) {
-
-      .branding h2 {
-        font-size: 1.2em;
-      }
-
-      .branding h3 {
-        font-size: 0.85em;
-      }
-
       nav a {
         display: block;
         margin: 0.3rem 0;
       }
 
-      .logo-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 0.5rem;
-      }
-
-      .cv-links a {
-        font-size: 0.9em;
-        padding: 0.6rem;
-      }
-
       footer {
         font-size: 0.8em;
       }
-      
+    }
   </style>
 </head>
 
 <body>
+
   <header>
     <div class="branding">
       <h2>Esteban Campos Polo</h2>
@@ -446,134 +314,52 @@
     </nav>
   </header>
 
-<div class="cv-links">
-  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
-  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
-</div>
+  <div class="cv-links">
+    <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
+    <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
+  </div>
 
-<script>
-  // Evento descarga CV Español
-  document.getElementById("download-cv-es").addEventListener("click", function() {
-    gtag('event', 'download_cv', {
-      'event_category': 'Resume',
-      'event_label': 'CV_Espanol.pdf'
+  <script>
+    document.getElementById("download-cv-es").addEventListener("click", function () {
+      gtag('event', 'download_cv', {
+        'event_category': 'Resume',
+        'event_label': 'CV_Espanol.pdf'
+      });
     });
-  });
 
-  // Evento descarga CV Inglés
-  document.getElementById("download-cv-en").addEventListener("click", function() {
-    gtag('event', 'download_cv', {
-      'event_category': 'Resume',
-      'event_label': 'CV_English.pdf'
+    document.getElementById("download-cv-en").addEventListener("click", function () {
+      gtag('event', 'download_cv', {
+        'event_category': 'Resume',
+        'event_label': 'CV_English.pdf'
+      });
     });
-  });
-</script>
+  </script>
 
-<section class="section">
-    <h3>LATEST PROJECT</h3>
-    <p class="media-caption">All my models have their own story. If you'd like to know it, contact me and I'll upload it</p>
-    <div class="dual-media">
-        
-        <div class="media-item">
-            <video controls src="assets/video/demoportfolio.mp4"></video>
-            <p class="media-caption">Demo reel - creative process</p>
-        </div>
+  <!-- ===============================
+       PORTFOLIO GRID
+  =============================== -->
 
-        <div class="media-item">
-            <img src="assets/images/3dmodeling/lia/liawiphd.jpg" alt="WIP - Lia del viento">
-            <p class="media-caption">WIP - Lia del viento</p>
-        </div>
+<section class="portfolio-grid">
+  <a href="graphic-design.html" class="grid-item" aria-label="Graphic Design">
+      <img src="assets/images/graphicdesign/mockups/camocream.jpg" alt="Graphic Design">
+      <p>Graphic Design</p>
+  </a>
 
-    </div>
+  <a href="photography.html" class="grid-item" aria-label="Photography">
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(6).webp" alt="Photography">
+      <p>Photography</p>
+  </a>
+
+  <a href="3d-modeling.html" class="grid-item" aria-label="3D Art">
+      <img src="assets/images/3dmodeling/golem/golem.jpg" alt="3D Art">
+      <p>3D Art</p>
+  </a>
+
+  <a href="IA.html" class="grid-item" aria-label="Artificial intelligence">
+      <img src="assets/images/AI/webp/clothes/clothes (7).webp" alt="Artificial intelligence">
+      <p>Artificial intelligence</p>
+  </a>
 </section>
-
-
-  <section class="section">
-    <h3>3D ART - Modeling</h3> <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener"><h3>If you want to know more, visit my Artstation</h3>
-      </a>
-
-    <div class="logo-grid">
-      <img src="assets/images/3dmodeling/ogi/ogi.jpg">
-      <img src="assets/images/3dmodeling/ayara/ayara.jpg">
-      <img src="assets/images/3dmodeling/jack/jack.jpg">
-      <img src="assets/images/3dmodeling/cleo/cleo.jpg">
-      <img src="assets/images/3dmodeling/golem/golem.jpg">
-      <img src="assets/images/3dmodeling/bust/bust.jpg">
-      <img src="assets/images/3dmodeling/ashora/ashora.jpg">
-      <img src="assets/images/3dmodeling/pichon/pichon.jpg">
-      <img src="assets/images/3dmodeling/rob/rob.jpg">
-      <img src="assets/images/3dmodeling/escalas.jpg">
-      <img src="assets/images/3dmodeling/machine.jpg">
-      <img src="assets/images/3dmodeling/machine_1.jpg">
-      <img src="assets/images/3dmodeling/tubos.jpg">
-      <img src="assets/images/3dmodeling/rookies.JPG">
-    </div>
-  </section>
-
-  <section class="section">
-    <h3>VIDEO - Demos & Projects</h3> <a href="https://vimeo.com/827034828" target="_blank" rel="noopener"><h3>If you want to know more, visit my Reel in Vimeo</h3>
-      </a>
-
-    <div class="logo-grid">
-      <video controls src="assets/video/demoportfolio.mp4"></video>
-      <video controls src="assets/videos/ayara_1.mp4"></video>
-      <video controls src="assets/videos/rob_1.mp4"></video>
-      <video controls src="assets/videos/rob_2.mp4"></video>
-    </div>
-  </section>
-
-  <section class="section">
-    <h3>GRAPHIC DESIGN<br><small>Branding & Identity</small></h3>
-    <div class="logo-grid">
-      <img src="assets/images/logotipos/cascosymasoutlet.jpg" alt="Cascos y más Outlet">
-      <img src="assets/images/logotipos/silverfish.jpg" alt="Silver Fish">
-      <img src="assets/images/logotipos/pleurotus.jpg" alt="Pleurotus">
-      <img src="assets/images/logotipos/mermelaida.jpg" alt="Confituras Mermelaida">
-      <img src="assets/images/logotipos/merlot.jpg" alt="Merlot">
-      <img src="assets/images/logotipos/goalkeeper.jpg" alt="Goalkeeper Explorers">
-      <img src="assets/images/logotipos/creamania.jpg" alt="Creamania">
-    </div>
-  </section>
-
-  <section class="section">
-    <h3>MOCKUPS<br><small>Brand</small></h3>
-    <div class="logo-grid">
-      <img src="assets/images/graphicdesign/mockups/cascosymasoutlet.jpg" alt="Cascos y más Outlet">
-      <img src="assets/images/graphicdesign/mockups/silverfish.jpg" alt="Silver Fish">
-      <img src="assets/images/graphicdesign/mockups/pleurotus.jpg" alt="Pleurotus">
-      <img src="assets/images/graphicdesign/mockups/mermelaida.jpg" alt="Confituras Mermelaida">
-      <img src="assets/images/graphicdesign/mockups/merlot.jpg" alt="Merlot">
-      <img src="assets/images/graphicdesign/mockups/goalkeeper.jpg" alt="Goalkeeper Explorers">
-      <img src="assets/images/graphicdesign/mockups/creamania.jpg" alt="Creamanía">
-      <img src="assets/images/graphicdesign/mockups/canephora.jpg" alt="Canephora">
-      <img src="assets/images/graphicdesign/mockups/24futsal.jpg" alt="24futsal">
-      <img src="assets/images/graphicdesign/mockups/agri-cultura.jpg" alt="Agri-Cultura">
-      <img src="assets/images/graphicdesign/mockups/airforguns.jpg" alt="Air For Guns">
-      <img src="assets/images/graphicdesign/mockups/cafeparis.jpg" alt="Cafe París">
-      <img src="assets/images/graphicdesign/mockups/camocream.jpg" alt="Camocream">
-
-    </div>
-  </section>
-
-
-
-  <section class="section">
-    <h3>PHOTOGRAPHY - Cultural Events</h3>
-    <div class="logo-grid">
-      <img src="assets/images/fotografia/culturalevents/webp/fest2025(1).webp">
-      <img src="assets/images/fotografia/culturalevents/webp/fest2025(2).webp">
-      <img src="assets/images/fotografia/culturalevents/webp/fest2025(3).webp">
-      <img src="assets/images/fotografia/culturalevents/webp/fest2025(4).webp">
-      <img src="assets/images/fotografia/culturalevents/webp/fest2025(5).webp">
-      <img src="assets/images/fotografia/culturalevents/webp/fest2025(6).webp">
-      <img src="assets/images/fotografia/culturalevents/webp/fest2025(7).webp">
-      <img src="assets/images/fotografia/culturalevents/webp/fest2025(8).webp">
-      <img src="assets/images/fotografia/culturalevents/webp/fest2025(9).webp">
-      <img src="assets/images/fotografia/culturalevents/webp/fest2025(10).webp">
-    </div>
-  </section>
-
-
 
 
 

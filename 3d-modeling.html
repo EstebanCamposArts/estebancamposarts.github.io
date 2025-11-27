@@ -190,6 +190,46 @@
       font-family: inherit;
       padding: 0 2rem;
     }
+
+ /* ============================================ */
+    /* ESTILOS DEL BLOQUE DUAL (VIDEO + IMAGEN) */
+    /* ============================================ */
+    .dual-media {
+      display: flex;
+      flex-wrap: wrap; 
+      justify-content: center;
+      align-items: flex-start; 
+      gap: 2rem; 
+      margin-top: 1rem;
+    }
+
+    .media-item {
+      /* Ocupa casi la mitad del ancho en escritorio (45%) */
+      flex: 1 1 45%; 
+      text-align: center;
+      max-width: 550px;
+    }
+
+    .media-item video,
+    .media-item img {
+      width: 100%;
+      height: 340px; 
+      object-fit: contain; 
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      display: block;
+      margin: 0 auto; 
+      /* Posición por defecto: centro 50% 50% */
+      object-position: 50% 10%; 
+    }
+
+    .media-caption {
+      font-size: 0.9em;
+      color: #555;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+    
   </style>
 </head>
 
@@ -216,6 +256,26 @@
   <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
   <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
 </div>
+
+
+<section class="section">
+    <h3>LATEST PROJECT</h3>
+    <p class="media-caption">All my models have their own story. If you'd like to know it, contact me and I'll upload it</p>
+    <div class="dual-media">
+        
+        <div class="media-item">
+            <video controls src="assets/video/demoportfolio.mp4"></video>
+            <p class="media-caption">Demo reel - creative process</p>
+        </div>
+
+        <div class="media-item">
+            <img src="assets/images/3dmodeling/lia/liawiphd.jpg" alt="WIP - Lia del viento">
+            <p class="media-caption">WIP - Lia del viento</p>
+        </div>
+
+    </div>
+</section>
+
 
 
   <!-- 3D Modeling Section -->
@@ -273,6 +333,9 @@
     </div>
   </section>
 
+  <section class="section">
+    <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener"><h3>If you want to know more, visit my Artstation</h3>
+      </a>
   <p class="description">
     Explore forms and create visual narratives that transcend the two-dimensional. Combine technical precision with artistic sensitivity, paying attention to every detail to achieve results that optimize the work of the person receiving the geometries and allow them to be manipulated according to their needs. I work from the initial reference research once I have the concept art to the final rendering, adapting to the project's objectives and the specific needs of each client. Blocking, sculpting, retopology, projection, fine detailing, baking and texturing with Substance, shading, lighting, and rendering with Maya.
   </p>
