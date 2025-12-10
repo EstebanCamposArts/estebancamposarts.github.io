@@ -2,518 +2,768 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Graphic Design</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphic Design</title>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-  gtag('config', 'G-8VMES8F4MN');
-</script>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f2f2f2;
-      color: #000;
-    }
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: #fff;
-      border-bottom: 2px solid #ccc;
-    }
+        gtag('config', 'G-8VMES8F4MN');
+    </script>
+    
+    <link rel="preconnect" href="https://estebancamposarts.github.io">
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f2f2f2;
+            color: #000;
+        }
 
-    .branding {
-      text-align: left;
-    }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #fff;
+            border-bottom: 2px solid #ccc;
+        }
 
-    .branding h1 {
-      margin: 0;
-      font-size: 1.8em;
-      letter-spacing: 0.3em;
-    }
+        .branding {
+            text-align: left;
+        }
 
-    .branding h2 {
-      margin: 0.2rem 0;
-      font-size: 1.3em;
-    }
+        .branding h2 {
+            margin: 0.2rem 0;
+            font-size: 1.3em;
+        }
 
-    .branding h3 {
-      margin: 0;
-      font-size: 1em;
-      font-weight: normal;
-    }
+        .branding h3 {
+            margin: 0;
+            font-size: 1em;
+            font-weight: normal;
+        }
 
-    .cv-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      padding: 1rem;
-      background-color: #e6e6e6;
-    }
+        .cv-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1rem;
+            background-color: #e6e6e6;
+        }
 
-    .cv-links a {
-      text-decoration: none;
-      font-weight: bold;
-      background-color: #000;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.3s;
-    }
+        .cv-links a {
+            text-decoration: none;
+            font-weight: bold;
+            background-color: #000;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
 
-    .cv-links a:hover {
-      background-color: #333;
-    }
+        .cv-links a:hover {
+            background-color: #333;
+        }
 
-    nav {
-      text-align: right;
-    }
+        nav {
+            text-align: right;
+        }
 
-    nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #000;
-      font-weight: bold;
-    }
+        nav a {
+            margin-left: 1.5rem;
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+        }
 
-    .banner-image {
-      width: 100%;
-      display: block;
-    }
+        .section {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-    .section {
-      padding: 2rem;
-    }
+        .section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5em;
+        }
 
-    .section h3 {
-      margin-bottom: 1rem;
-      font-size: 1.5em;
-    }
+        /* --- ESTILOS SLIDESHOW CON TRANSICIÓN DE DESLIZAMIENTO SIMPLE --- */
+        #hero-slideshow {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin: 0 auto 2rem;
+            overflow: hidden; 
+        }
 
-    /* Mantengo el comportamiento horizontal desplazable (scroll-x) del original */
-    .logo-grid {
-      display: flex;
-      gap: 1rem;
-      overflow-x: auto;
-      padding-bottom: 1rem;
-    }
+        .slide {
+            /* Todas las diapositivas apiladas */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            
+            /* Preparación para el deslizamiento: muevo la diapositiva fuera de la pantalla (a la derecha) */
+            transform: translateX(100%); 
+            
+            /* Duración de la animación de deslizamiento */
+            transition: transform 0.6s ease-out, opacity 0.6s ease-out; 
+        }
 
-    /* Uso figure/figcaption sin romper el estilo original: cada figure mantiene el ancho de las imágenes originales */
-    .logo-grid figure {
-      margin: 0;
-      width: 180px;
-      flex: 0 0 auto;
-      text-align: center;
-    }
+        .slide.current {
+            /* Diapositiva que ya se mostró, se queda en el centro */
+            opacity: 1;
+            transform: translateX(0);
+        }
 
-    .logo-grid img,
-    .logo-grid video {
-      width: 180px;
-      height: auto;
-      object-fit: cover;
-      background: white;
-      padding: 0.5rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      filter: grayscale(100%);
-      transition: filter 0.3s ease-in-out;
-      cursor: pointer;
-      display: block;
-    }
+        .slide.active {
+            /* Diapositiva entrante (se superpone a 'current' y la saca) */
+            opacity: 1;
+            transform: translateX(0); /* Entra desde el 100% y se queda en 0% (centro) */
+            z-index: 10; /* Asegura que la nueva se vea por encima */
+        }
+        
+        /* La clase 'leaving' se usará para mover la diapositiva saliente hacia la izquierda */
+        .slide.leaving {
+            opacity: 1;
+            transform: translateX(-100%); /* Sale hacia la izquierda */
+            transition: transform 0.6s ease-out;
+            z-index: 5;
+        }
 
-    .logo-grid img:hover,
-    .logo-grid video:hover {
-      filter: grayscale(0%);
-    }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Asegura que llene el espacio sin bordes */
+            display: block;
+        }
+        /* Fin de los estilos de deslizamiento */
 
-    .logo-grid figcaption {
-      margin-top: 0.35rem;
-      font-size: 0.85rem;
-      color: #333;
-      line-height: 1.1;
-    }
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+            color: white;
+            padding: 40px 20px 10px;
+            font-size: 1.1em;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: left;
+            z-index: 15;
+        }
 
-    footer {
-      background-color: #ccc;
-      padding: 1rem;
-      text-align: center;
-      font-size: 0.9em;
-    }
+        /* Indicadores de diapositivas */
+        #slide-indicators {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: flex;
+            gap: 8px;
+        }
 
-    /* Footer: iconos sociales discretos para mantener la estética */
-    .footer-social {
-      margin-top: 0.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.6rem;
-      align-items: center;
-    }
+        .dot {
+            height: 10px;
+            width: 10px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
 
-    .footer-social a img {
-      width: 22px;
-      height: 22px;
-      display: inline-block;
-      vertical-align: middle;
-      filter: none;
-      opacity: 0.95;
-      transition: opacity 0.2s, transform 0.15s;
-    }
+        .dot.active {
+            background-color: #fff;
+            transform: scale(1.2);
+        }
 
-    .footer-social a img:hover {
-      opacity: 1;
-      transform: translateY(-2px);
-    }
+        /* --- BLOQUE DE MISIÓN REFORZADO --- */
+        .mission-quote {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            text-align: center;
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #333;
+            border-left: 6px solid #000;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
 
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.9);
-    }
+        .mission-quote p {
+            margin: 0;
+            font-style: italic;
+        }
 
-    .modal-content {
-      margin: 5% auto;
-      display: block;
-      max-width: 90%;
-      max-height: 80vh;
-    }
 
-    .close {
-      position: absolute;
-      top: 20px;
-      right: 35px;
-      color: #fff;
-      font-size: 40px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+        /* --- ESTILOS GRID --- */
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            padding-bottom: 1rem;
+        }
 
-    /* Mejora pequeña: ocultar scrollbar visual en navegadores compatibles para un look más limpio (no cambia layout) */
-    .logo-grid::-webkit-scrollbar {
-      height: 8px;
-    }
+        .logo-grid figure {
+            margin: 0;
+            text-align: center;
+        }
 
-    .logo-grid::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.1);
-      border-radius: 4px;
-    }
-.logo-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-}
+        .logo-grid img:hover,
+        .logo-grid video:hover {
+            filter: grayscale(0%);
+        }
 
-.logo-grid figure {
-  margin: 0;
-  text-align: center;
-}
+        .logo-grid img,
+        .logo-grid video {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            background: white;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            filter: grayscale(100%);
+            transition: filter 0.3s ease-in-out;
+            cursor: pointer;
+            display: block;
+        }
 
-.logo-grid figcaption {
-  margin-top: 0.3rem;
-  font-size: 0.85rem;
-  color: #333;
-}
+        .logo-grid figcaption {
+            margin-top: 0.3rem;
+            font-size: 0.85rem;
+            color: #333;
+            line-height: 1.1;
+        }
 
-  </style>
+        /* Footer y Modal */
+        footer {
+            background-color: #ccc;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .footer-social {
+            margin-top: 0.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            align-items: center;
+        }
+
+        .footer-social a img {
+            width: 22px;
+            height: 22px;
+            display: inline-block;
+            vertical-align: middle;
+            filter: none;
+            opacity: 0.95;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+
+        .footer-social a img:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90vh;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .logo-grid::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .logo-grid::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .dual-media {
+            display: none;
+        }
+    </style>
 
 
 <body>
-  <header>
-    <div class="branding">
-      <h2>Esteban Campos Polo</h2>
-      <h3>Graphic Designer & 3D Artist</h3>
-    </div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="graphic-design.html">Graphic Design</a>
-      <a href="photography.html">Photography</a>
-      <a href="3d-modeling.html">3D Art</a>
-      <a href="IA.html">AI</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
+    <header>
+        <div class="branding">
+            <h2>Esteban Campos Polo</h2>
+            <h3>Graphic Designer & 3D Artist</h3>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="graphic-design.html">Graphic Design</a>
+            <a href="photography.html">Photography</a>
+            <a href="3d-modeling.html">3D Art</a>
+            <a href="IA.html">AI</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
 
-  <!-- CV Links -->
-<div class="cv-links">
-  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
-  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
-</div>
-
-
- <main class="container"> <p style="max-width: 1280px; margin: 10 auto 2rem; font-size: 0.85rem; color: #000; text-align: center; font-family: inherit;"> Every project is an opportunity to communicate, connect, and transform ideas into visual experiences. I always combine creativity and aesthetics, adapting to the specific needs of each brand. I develop unique identities that convey values, generate impact, and remain memorable. From conceptualization to final execution, my methodology guarantees original, authentic results aligned with my clients' objectives..</p>
-
-
-<section class="section">
-  <h3>GRAPHIC DESIGN<br><small>Branding & Identity</small></h3>
-  <div class="logo-grid">
-    <figure>
-      <img src="assets/images/logotipos/camocream.jpg" alt="Camocream" loading="lazy">
-      <figcaption>Camocream</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/logotipos/merlot.jpg" alt="Merlot" loading="lazy">
-      <figcaption>Merlot</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/logotipos/silverfish.jpg" alt="Silverfish" loading="lazy">
-      <figcaption>Silverfish</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/logotipos/canephora.jpg" alt="Canephora" loading="lazy">
-      <figcaption>Canephora</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/logotipos/pleurotus.jpg" alt="Pleurotus" loading="lazy">
-      <figcaption>Pleurotus</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/logotipos/agri-cultura.jpg" alt="Agri Cultura" loading="lazy">
-      <figcaption>Agri-Cultura</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/logotipos/mermelaida.jpg" alt="Confituras Mermelaida" loading="lazy">
-      <figcaption>Confituras Mermelaida</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/logotipos/cascosymasoutlet.jpg" alt="Cascos y más Outlet" loading="lazy">
-      <figcaption>Cascos y más Outlet</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/logotipos/goalkeeper.jpg" alt="Goalkeeper Explorers" loading="lazy">
-      <figcaption>Goalkeeper Explorers</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/logotipos/24futsal.jpg" alt="24 Futsal" loading="lazy">
-      <figcaption>24h Futsal</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/logotipos/creamania.jpg" alt="Creamania" loading="lazy">
-      <figcaption>Creamania</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/logotipos/cafeparis.jpg" alt="Café París" loading="lazy">
-      <figcaption>Café París</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/logotipos/airforguns.jpg" alt="Air for Guns" loading="lazy">
-      <figcaption>Air for Guns</figcaption>
-    </figure>
-  </div>
-
-<h3> <br><small>Mockups</small></h3>
-  <div class="logo-grid">
-      <img src="assets/images/graphicdesign/packsalmon.jpg" alt="packsalmon" loading="lazy">
-      <img src="assets/images/graphicdesign/salmonpack.jpg" alt="salmonpack" loading="lazy">
-      <img src="assets/images/graphicdesign/packcoffe.jpg" alt="packcoffe" loading="lazy">
-      <img src="assets/images/graphicdesign/oil.jpg" alt="oil" loading="lazy">
-      <img src="assets/images/graphicdesign/packthamar.jpg" alt="packthamar" loading="lazy">
-      <img src="assets/images/graphicdesign/cream.jpg" alt="cream" loading="lazy">
-      <img src="assets/images/graphicdesign/wine.jpg" alt="wine" loading="lazy">
-      <img src="assets/images/graphicdesign/mockupjampack.jpg" alt="mockupjampack" loading="lazy">
-      <img src="assets/images/graphicdesign/mockups/cascosymasoutlet.jpg" alt="Cascos y más Outlet">
-      <img src="assets/images/graphicdesign/mockups/silverfish.jpg" alt="Silver Fish">
-      <img src="assets/images/graphicdesign/mockups/pleurotus.jpg" alt="Pleurotus">
-      <img src="assets/images/graphicdesign/mockups/mermelaida.jpg" alt="Confituras Mermelaida">
-      <img src="assets/images/graphicdesign/mockups/merlot.jpg" alt="Merlot">
-      <img src="assets/images/graphicdesign/mockups/goalkeeper.jpg" alt="Goalkeeper Explorers">
-      <img src="assets/images/graphicdesign/mockups/creamania.jpg" alt="Creamanía">
-      <img src="assets/images/graphicdesign/mockups/canephora.jpg" alt="Canephora">
-      <img src="assets/images/graphicdesign/mockups/24futsal.jpg" alt="24futsal">
-      <img src="assets/images/graphicdesign/mockups/agri-cultura.jpg" alt="Agri-Cultura">
-      <img src="assets/images/graphicdesign/mockups/airforguns.jpg" alt="Air For Guns">
-      <img src="assets/images/graphicdesign/mockups/cafeparis.jpg" alt="Cafe París">
-      <img src="assets/images/graphicdesign/mockups/camocream.jpg" alt="Camocream">
-      <img src="assets/images/graphicdesign/mockupwine.jpg" alt="mockupwine" loading="lazy">
-
-  </div>
-
-
-<h3> <br><small>Packaging</small></h3>
-  <div class="logo-grid">
-    <figure>
-      <img src="assets/images/graphicdesign/jampack.jpg" alt="jampack" loading="lazy">
-      <figcaption>Packaging Jam</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/beerpack.jpg" alt="beerpack" loading="lazy">
-      <figcaption>Packaging Beer</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/heromockup.jpg" alt="heromockup" loading="lazy">
-      <figcaption>Hero mockup</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/heropack1.jpg" alt="heropack1" loading="lazy">
-      <figcaption>Packaging layout heroe 1</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/heropack2.jpg" alt="heropack2" loading="lazy">
-      <figcaption>Packaging layout heroe 2</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/heropack3.jpg" alt="heropack3" loading="lazy">
-      <figcaption>Packaging layout heroe 3</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/heropack4.jpg" alt="heropack4" loading="lazy">
-      <figcaption>Packaging layout heroe 4</figcaption>
-    </figure>
-  </div>
-
-
-<h3> <br><small>Web and Interactive</small></h3>
-  <div class="logo-grid">
-    <figure>
-      <img src="assets/images/graphicdesign/appmath.jpg" alt="appmath" loading="lazy">
-      <figcaption>App Maths - Interested in the app? Let's talk!</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/webcfsonil.jpg" alt="webcfsonil" loading="lazy">
-      <figcaption>Web Cfs onil</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/webcarpin.jpg" alt="webcarpin" loading="lazy">
-      <figcaption>Web Carpintería Paco</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/webtaller.jpg" alt="webtaller" loading="lazy">
-      <figcaption>Web taller mecánico</figcaption>
-    </figure>
-  </div>
-
-<h3> <br><small>Editorial, Merchandising, Textil, Signage</small></h3>
-  <div class="logo-grid">
-    <figure>
-      <img src="assets/images/graphicdesign/cfsmagazine.jpg" alt="cfsmagazine" loading="lazy">
-      <figcaption>Cfs magazine</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/rotulo.jpg" alt="rotulo" loading="lazy">
-      <figcaption>Cascos y Más Store Sign</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/bag.jpg" alt="bag" loading="lazy">
-      <figcaption>thebolt_goalkeeper backpacks</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/books.jpg" alt="books" loading="lazy">
-      <figcaption>Editorial Design</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/brandingcreamania.jpg" alt="brandingcreamania" loading="lazy">
-      <figcaption>Creamania Cards</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/cartel DESBORDAOS1.jpg" alt="cartel DESBORDAOS1" loading="lazy">
-      <figcaption>Desbordaos Poster</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/cartel DESBORDAOS2.jpg" alt="cartel DESBORDAOS2" loading="lazy">
-      <figcaption>Desbordaos Poster 2</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/fachadamerlot.jpg" alt="fachadamerlot" loading="lazy">
-      <figcaption>Store Merlot</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/rotulocafeparis.jpg" alt="rotulocafeparis" loading="lazy">
-      <figcaption>Cafe París Sign</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/tshirt.jpg" alt="tshirt" loading="lazy">
-      <figcaption>Campus t-shirts</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/diseñotextil1.jpg" alt="diseñotextil1" loading="lazy">
-      <figcaption>Textile design and slippers 1</figcaption>
-    </figure>
-    <figure>
-      <img src="assets/images/graphicdesign/diseñotextil2.jpg" alt="diseñotextil2" loading="lazy">
-      <figcaption>Textile design and slippers 2</figcaption>
-    </figure>
-  </div>
-</section>
-
-
-
-  <footer>
-    © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
-<br>
-© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
-
-    <div class="footer-social" aria-label="Redes sociales">
-      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener">
-        <img src="assets/icons/linkedin.svg" alt="LinkedIn">
-      </a>
-      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener">
-        <img src="assets/icons/artstation.svg" alt="ArtStation">
-      </a>
-      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener">
-        <img src="assets/icons/instagram.svg" alt="Instagram">
-      </a>
-      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener">
-        <img src="assets/icons/vimeo.svg" alt="Vimeo">
-      </a>
-      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener">
-        <img src="assets/icons/behance.svg" alt="Behance">
-      </a>
-      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener">
-        <img src="assets/icons/x.svg" alt="X">
-      </a>
+    <div class="cv-links">
+        <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
+        <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
     </div>
 
-<a href="https://hits.sh/estebancamposarts.github.io/graphic-design.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/graphic-design.html.svg?color=9f9f9f"/></a>
-  </footer>
+    <div id="hero-slideshow">
+        
+        <div class="slide current">
+            <img src="assets/images/graphicdesign/posterfest26.jpg" alt="Poster for the Patron Saint festivities ">
+            <div class="slide-caption">1/10: LATEST PROJECT: Poster for the Patron Saint festivities</div>
+        </div>
+        
+        <div class="slide">
+            <img src="assets/images/graphicdesign/oil.jpg" alt="Mockup Packaging Aceite de Oliva">
+            <div class="slide-caption">2/10: PACKAGING DESTACADO: Diseño de etiquetado para aceite de oliva premium</div>
+        </div>
+        
+        <div class="slide">
+            <img src="assets/images/graphicdesign/mockups/merlot.jpg" alt="Merlot Branding Mockup">
+            <div class="slide-caption">3/10: BRANDING: Aplicación de identidad visual Merlot</div>
+        </div>
+        
+        <div class="slide">
+            <img src="assets/images/graphicdesign/wine.jpg" alt="Mockup vino tinto">
+            <div class="slide-caption">4/10: PACKAGING: Etiquetado de vino tinto con marca de autor</div>
+        </div>
+        
+        <div class="slide">
+            <img src="assets/images/graphicdesign/packsalmon.jpg" alt="Pack Salmon">
+            <div class="slide-caption">5/10: PACKAGING: Diseño de envase para salmón ahumado</div>
+        </div>
+        
+        <div class="slide">
+            <img src="assets/images/graphicdesign/jampack.jpg" alt="Jam Pack">
+            <div class="slide-caption">6/10: PACKAGING: Diseño de etiqueta para mermelada gourmet</div>
+        </div>
+        
+        <div class="slide">
+            <img src="assets/images/graphicdesign/mockups/silverfish.jpg" alt="Silver Fish Mockup">
+            <div class="slide-caption">7/10: MOCKUP: Aplicación de logo Silverfish en producto</div>
+        </div>
 
-  <div id="imageModal" class="modal">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <img class="modal-content" id="modalImage">
-  </div>
+        <div class="slide">
+            <img src="assets/images/graphicdesign/cfsmagazine.jpg" alt="CFS Magazine">
+            <div class="slide-caption">8/10: EDITORIAL: Diseño de revista deportiva CFS</div>
+        </div>
+        
+        <div class="slide">
+            <img src="assets/images/graphicdesign/books.jpg" alt="Editorial Design Books">
+            <div class="slide-caption">9/10: EDITORIAL: Maquetación y diseño de cubiertas de libros</div>
+        </div>
+        
+        <div class="slide">
+            <img src="assets/images/graphicdesign/rotulo.jpg" alt="Signage">
+            <div class="slide-caption">10/10: RÓTULOS: Diseño de señalética para Cascos y más Outlet</div>
+        </div>
+        
+        <div id="slide-indicators">
+            <span class="dot active" data-slide="1"></span>
+            <span class="dot" data-slide="2"></span>
+            <span class="dot" data-slide="3"></span>
+            <span class="dot" data-slide="4"></span>
+            <span class="dot" data-slide="5"></span>
+            <span class="dot" data-slide="6"></span>
+            <span class="dot" data-slide="7"></span>
+            <span class="dot" data-slide="8"></span>
+            <span class="dot" data-slide="9"></span>
+            <span class="dot" data-slide="10"></span>
+        </div>
+    </div>
+    <main class="container">
+        <section class="mission-quote">
+            <p>Every project is an opportunity to communicate, connect, and transform ideas into visual experiences. I always combine creativity and aesthetics, adapting to the specific needs of each brand. I develop unique identities that convey values, generate impact, and remain memorable. From conceptualization to final execution, my methodology guarantees original, authentic results aligned with my clients' objectives.</p>
+        </section>
 
-  <script>
-    const modal = document.getElementById("imageModal");
-    const modalImg = document.getElementById("modalImage");
 
-    document.querySelectorAll('.logo-grid img').forEach(img => {
-      img.addEventListener('click', function () {
-        modal.style.display = "block";
-        modalImg.src = this.src;
-        modalImg.alt = this.alt || '';
-      });
-    });
+        <section class="section">
+            <h3>GRAPHIC DESIGN<br><small>Branding & Identity</small></h3>
+            <div class="logo-grid">
+                <figure>
+                    <img src="assets/images/logotipos/camocream.jpg" alt="Camocream" loading="lazy">
+                    <figcaption>Camocream</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/logotipos/merlot.jpg" alt="Merlot" loading="lazy">
+                    <figcaption>Merlot</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/logotipos/silverfish.jpg" alt="Silverfish" loading="lazy">
+                    <figcaption>Silverfish</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/logotipos/canephora.jpg" alt="Canephora" loading="lazy">
+                    <figcaption>Canephora</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/logotipos/pleurotus.jpg" alt="Pleurotus" loading="lazy">
+                    <figcaption>Pleurotus</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/logotipos/agri-cultura.jpg" alt="Agri Cultura" loading="lazy">
+                    <figcaption>Agri-Cultura</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/logotipos/mermelaida.jpg" alt="Confituras Mermelaida" loading="lazy">
+                    <figcaption>Confituras Mermelaida</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/logotipos/cascosymasoutlet.jpg" alt="Cascos y más Outlet" loading="lazy">
+                    <figcaption>Cascos y más Outlet</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/logotipos/goalkeeper.jpg" alt="Goalkeeper Explorers" loading="lazy">
+                    <figcaption>Goalkeeper Explorers</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/logotipos/24futsal.jpg" alt="24 Futsal" loading="lazy">
+                    <figcaption>24h Futsal</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/logotipos/creamania.jpg" alt="Creamania" loading="lazy">
+                    <figcaption>Creamania</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/logotipos/cafeparis.jpg" alt="Café París" loading="lazy">
+                    <figcaption>Café París</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/logotipos/airforguns.jpg" alt="Air for Guns" loading="lazy">
+                    <figcaption>Air for Guns</figcaption>
+                </figure>
+            </div>
 
-    function closeModal() {
-      modal.style.display = "none";
-      modalImg.src = '';
-      modalImg.alt = '';
-    }
+            <h3> <br><small>Mockups</small></h3>
+            <div class="logo-grid">
+                <img src="assets/images/graphicdesign/packsalmon.jpg" alt="packsalmon" loading="lazy">
+                <img src="assets/images/graphicdesign/salmonpack.jpg" alt="salmonpack" loading="lazy">
+                <img src="assets/images/graphicdesign/packcoffe.jpg" alt="packcoffe" loading="lazy">
+                <img src="assets/images/graphicdesign/oil.jpg" alt="oil" loading="lazy">
+                <img src="assets/images/graphicdesign/packthamar.jpg" alt="packthamar" loading="lazy">
+                <img src="assets/images/graphicdesign/cream.jpg" alt="cream" loading="lazy">
+                <img src="assets/images/graphicdesign/wine.jpg" alt="wine" loading="lazy">
+                <img src="assets/images/graphicdesign/mockupjampack.jpg" alt="mockupjampack" loading="lazy">
+                <img src="assets/images/graphicdesign/mockups/cascosymasoutlet.jpg" alt="Cascos y más Outlet" loading="lazy">
+                <img src="assets/images/graphicdesign/mockups/silverfish.jpg" alt="Silver Fish" loading="lazy">
+                <img src="assets/images/graphicdesign/mockups/pleurotus.jpg" alt="Pleurotus" loading="lazy">
+                <img src="assets/images/graphicdesign/mockups/mermelaida.jpg" alt="Confituras Mermelaida" loading="lazy">
+                <img src="assets/images/graphicdesign/mockups/merlot.jpg" alt="Merlot" loading="lazy">
+                <img src="assets/images/graphicdesign/mockups/goalkeeper.jpg" alt="Goalkeeper Explorers" loading="lazy">
+                <img src="assets/images/graphicdesign/mockups/creamania.jpg" alt="Creamanía" loading="lazy">
+                <img src="assets/images/graphicdesign/mockups/canephora.jpg" alt="Canephora" loading="lazy">
+                <img src="assets/images/graphicdesign/mockups/24futsal.jpg" alt="24futsal" loading="lazy">
+                <img src="assets/images/graphicdesign/mockups/agri-cultura.jpg" alt="Agri-Cultura" loading="lazy">
+                <img src="assets/images/graphicdesign/mockups/airforguns.jpg" alt="Air For Guns" loading="lazy">
+                <img src="assets/images/graphicdesign/mockups/cafeparis.jpg" alt="Cafe París" loading="lazy">
+                <img src="assets/images/graphicdesign/mockups/camocream.jpg" alt="Camocream" loading="lazy">
+                <img src="assets/images/graphicdesign/mockupwine.jpg" alt="mockupwine" loading="lazy">
 
-    window.onclick = function (event) {
-      if (event.target === modal) {
-        closeModal();
-      }
-    }
-  </script>
-<script>
-  document.addEventListener('contextmenu', event => event.preventDefault());
-  document.addEventListener('dragstart', event => event.preventDefault());
-</script>
+            </div>
+
+
+            <h3> <br><small>Packaging</small></h3>
+            <div class="logo-grid">
+                <figure>
+                    <img src="assets/images/graphicdesign/jampack.jpg" alt="jampack" loading="lazy">
+                    <figcaption>Packaging Jam</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/beerpack.jpg" alt="beerpack" loading="lazy">
+                    <figcaption>Packaging Beer</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/heromockup.jpg" alt="heromockup" loading="lazy">
+                    <figcaption>Hero mockup</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/heropack1.jpg" alt="heropack1" loading="lazy">
+                    <figcaption>Packaging layout heroe 1</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/heropack2.jpg" alt="heropack2" loading="lazy">
+                    <figcaption>Packaging layout heroe 2</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/heropack3.jpg" alt="heropack3" loading="lazy">
+                    <figcaption>Packaging layout heroe 3</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/heropack4.jpg" alt="heropack4" loading="lazy">
+                    <figcaption>Packaging layout heroe 4</figcaption>
+                </figure>
+            </div>
+
+
+            <h3> <br><small>Web and Interactive</small></h3>
+            <div class="logo-grid">
+                <figure>
+                    <img src="assets/images/graphicdesign/appmath.jpg" alt="appmath" loading="lazy">
+                    <figcaption>App Maths - Interested in the app? Let's talk!</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/webcfsonil.jpg" alt="webcfsonil" loading="lazy">
+                    <figcaption>Web Cfs onil</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/webcarpin.jpg" alt="webcarpin" loading="lazy">
+                    <figcaption>Web Carpintería Paco</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/webtaller.jpg" alt="webtaller" loading="lazy">
+                    <figcaption>Web taller mecánico</figcaption>
+                </figure>
+            </div>
+
+            <h3> <br><small>Editorial, Merchandising, Textil, Signage</small></h3>
+            <div class="logo-grid">
+                <figure>
+                    <img src="assets/images/graphicdesign/cfsmagazine.jpg" alt="cfsmagazine" loading="lazy">
+                    <figcaption>Cfs magazine</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/rotulo.jpg" alt="rotulo" loading="lazy">
+                    <figcaption>Cascos y Más Store Sign</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/bag.jpg" alt="bag" loading="lazy">
+                    <figcaption>thebolt_goalkeeper backpacks</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/books.jpg" alt="books" loading="lazy">
+                    <figcaption>Editorial Design</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/brandingcreamania.jpg" alt="brandingcreamania" loading="lazy">
+                    <figcaption>Creamania Cards</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/cartel DESBORDAOS1.jpg" alt="cartel DESBORDAOS1" loading="lazy">
+                    <figcaption>Desbordaos Poster</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/cartel DESBORDAOS2.jpg" alt="cartel DESBORDAOS2" loading="lazy">
+                    <figcaption>Desbordaos Poster 2</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/fachadamerlot.jpg" alt="fachadamerlot" loading="lazy">
+                    <figcaption>Store Merlot</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/rotulocafeparis.jpg" alt="rotulocafeparis" loading="lazy">
+                    <figcaption>Cafe París Sign</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/tshirt.jpg" alt="tshirt" loading="lazy">
+                    <figcaption>Campus t-shirts</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/diseñotextil1.jpg" alt="diseñotextil1" loading="lazy">
+                    <figcaption>Textile design and slippers 1</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/images/graphicdesign/diseñotextil2.jpg" alt="diseñotextil2" loading="lazy">
+                    <figcaption>Textile design and slippers 2</figcaption>
+                </figure>
+            </div>
+        </section>
+
+
+        <footer>
+            © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
+            <br>
+            © 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
+
+            <div class="footer-social" aria-label="Redes sociales">
+                <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener">
+                    <img src="assets/icons/linkedin.svg" alt="LinkedIn">
+                </a>
+                <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener">
+                    <img src="assets/icons/artstation.svg" alt="ArtStation">
+                </a>
+                <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener">
+                    <img src="assets/icons/instagram.svg" alt="Instagram">
+                </a>
+                <a href="https://vimeo.com/827034828" target="_blank" rel="noopener">
+                    <img src="assets/icons/vimeo.svg" alt="Vimeo">
+                </a>
+                <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener">
+                    <img src="assets/icons/behance.svg" alt="Behance">
+                </a>
+                <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener">
+                    <img src="assets/icons/x.svg" alt="X">
+                </a>
+            </div>
+
+            <a href="https://hits.sh/estebancamposarts.github.io/graphic-design.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/graphic-design.html.svg?color=9f9f9f" /></a>
+        </footer>
+
+        <div id="imageModal" class="modal">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img class="modal-content" id="modalImage">
+        </div>
+
+        <script>
+            // --- SLIDESHOW AUTOMÁTICO Y CONTROLADO (JS - CON DESLIZAMIENTO SIMPLE) ---
+            let slideIndex = 1; 
+            const slides = document.querySelectorAll("#hero-slideshow .slide");
+            const dots = document.querySelectorAll("#slide-indicators .dot");
+            const totalSlides = slides.length;
+            let slideshowInterval;
+
+            function showSlides(n) {
+                // Determinar el índice
+                if (n > totalSlides) {
+                    slideIndex = 1;
+                }
+                if (n < 1) {
+                    slideIndex = totalSlides;
+                }
+
+                const prevIndex = (slideIndex === 1) ? totalSlides : slideIndex - 1;
+
+                // 1. Limpiar todas las clases
+                slides.forEach(slide => slide.classList.remove('active', 'current', 'leaving'));
+                dots.forEach(dot => dot.classList.remove('active'));
+
+                // 2. Marcar la diapositiva saliente (la que estaba activa antes)
+                if (slides[prevIndex - 1]) {
+                     slides[prevIndex - 1].classList.add('leaving');
+                }
+
+                // 3. Marcar la nueva diapositiva activa
+                const currentSlideElement = slides[slideIndex - 1];
+                if (currentSlideElement) {
+                    // La diapositiva actual entra. Inicialmente está en translateX(100%) (fuera de pantalla)
+                    // y la clase 'active' la mueve a translateX(0) (dentro de pantalla)
+                    currentSlideElement.classList.add('active');
+                }
+                
+                // 4. Actualizar el indicador
+                dots[slideIndex - 1].classList.add('active');
+            }
+
+            function nextSlide() {
+                // Antes de avanzar, la diapositiva que es 'active' pasa a ser 'current' 
+                // para que la siguiente al entrar la 'empuje' visualmente.
+                const currentSlideElement = slides[slideIndex - 1];
+                if (currentSlideElement) {
+                    currentSlideElement.classList.add('current');
+                    currentSlideElement.classList.remove('active', 'leaving');
+                }
+
+                slideIndex++;
+                if (slideIndex > totalSlides) {
+                    slideIndex = 1;
+                }
+                showSlides(slideIndex);
+            }
+
+            function currentSlide(n) {
+                // Control manual: elimina la animación de deslizamiento para saltos directos
+                slideIndex = n;
+                slides.forEach(slide => slide.classList.remove('active', 'current', 'leaving'));
+                slides[slideIndex - 1].classList.add('current'); 
+                
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[slideIndex - 1].classList.add('active');
+
+                // Reiniciar el intervalo al hacer clic en un indicador
+                clearInterval(slideshowInterval);
+                slideshowInterval = setInterval(nextSlide, 5000); // 5 segundos
+            }
+
+            function startSlideshow() {
+                if (totalSlides > 0) {
+                    slideIndex = 1; // Empezar siempre en el primero
+                    slides[0].classList.add('current'); 
+                    dots[0].classList.add('active');
+                    slideshowInterval = setInterval(nextSlide, 5000); // 5 segundos
+                }
+            }
+
+            // Asignar eventos a los indicadores (dando control al usuario)
+            dots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const slideNumber = parseInt(this.getAttribute('data-slide'));
+                    currentSlide(slideNumber);
+                });
+            });
+
+            window.addEventListener('load', startSlideshow);
+
+
+            // --- SCRIPT MODAL ---
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImage");
+
+            document.querySelectorAll('.logo-grid img').forEach(img => {
+                img.addEventListener('click', function() {
+                    modal.style.display = "flex";
+                    modalImg.src = this.src;
+                    modalImg.alt = this.alt || '';
+                });
+            });
+
+            function closeModal() {
+                modal.style.display = "none";
+                modalImg.src = '';
+                modalImg.alt = '';
+            }
+
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            }
+        </script>
+        <script>
+            // Bloqueo de interacción (Control Percibido)
+            document.addEventListener('contextmenu', event => event.preventDefault());
+            document.addEventListener('dragstart', event => event.preventDefault());
+        </script>
 </body>
 
 </html>

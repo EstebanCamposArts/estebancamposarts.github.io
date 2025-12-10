@@ -1,402 +1,603 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Esteban Campos Polo - Artificial Intelligence</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Esteban Campos Polo - Artificial Intelligence</title>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-8VMES8F4MN');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f2f2f2;
-      color: #000;
-    }
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-8VMES8F4MN');
+    </script>
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: #fff;
-      border-bottom: 2px solid #ccc;
-    }
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f2f2f2;
+            color: #000;
+        }
 
-    .branding h2 {
-      margin: 0.2rem 0;
-      font-size: 1.3em;
-    }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #fff;
+            border-bottom: 2px solid #ccc;
+        }
 
-    .branding h3 {
-      margin: 0;
-      font-size: 1em;
-      font-weight: normal;
-    }
+        .branding h2 {
+            margin: 0.2rem 0;
+            font-size: 1.3em;
+        }
 
-    nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #000;
-      font-weight: bold;
-    }
+        .branding h3 {
+            margin: 0;
+            font-size: 1em;
+            font-weight: normal;
+        }
 
-    .cv-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      padding: 1rem;
-      background-color: #e6e6e6;
-    }
+        nav a {
+            margin-left: 1.5rem;
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+        }
 
-    .cv-links a {
-      text-decoration: none;
-      font-weight: bold;
-      background-color: #000;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.3s;
-    }
+        .cv-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1rem;
+            background-color: #e6e6e6;
+        }
 
-    .cv-links a:hover {
-      background-color: #333;
-    }
+        .cv-links a {
+            text-decoration: none;
+            font-weight: bold;
+            background-color: #000;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
 
-    .section {
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+        .cv-links a:hover {
+            background-color: #333;
+        }
 
-    .section h3 {
-      margin-bottom: 1rem;
-      font-size: 1.8em;
-      font-weight: 700;
-    }
+        /* --- ESTILOS SLIDESHOW CON TRANSICIÓN DE OPACIDAD SUAVE Y ZOOM --- */
+        #hero-slideshow {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
 
-    /* 🔹 Miniaturas uniformes, grises y coloreables */
-    .category-buttons {
-      text-align: center;
-      margin-bottom: 2rem;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1.2rem;
-    }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            /* Duración del desvanecimiento: 1.5s */
+            transition: opacity 1.5s ease-in-out;
+        }
 
-    .category-buttons button {
-      background: none;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
+        .slide.active {
+            opacity: 1;
+            z-index: 10;
+        }
 
-    .category-buttons button:hover {
-      transform: scale(1.05);
-    }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            /* Zoom inicial: un poco ampliado */
+            transform: scale(1.05);
+            /* La transición de transformación debe durar casi todo el intervalo del slide (4s) */
+            transition: transform 4s linear;
+        }
 
-    .category-buttons img {
-      width: 160px;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      filter: grayscale(100%);
-      transition: all 0.4s ease-in-out;
-    }
+        /* Clase que se aplica al activar el slide para iniciar el "encogimiento" */
+        .slide.active .slide-img-zoom {
+            transform: scale(1.00);
+            /* Se encoge suavemente al 100% de su tamaño */
+        }
 
-    .category-buttons img:hover {
-      filter: grayscale(0%);
-      transform: scale(1.03);
-    }
+        /* FIN ESTILOS SLIDESHOW */
 
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-    }
+        .section {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-    .gallery-grid img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      background: white;
-      filter: grayscale(100%);
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
+        .section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.8em;
+            font-weight: 700;
+        }
 
-    .gallery-grid img:hover {
-      filter: grayscale(0%);
-      transform: scale(1.03);
-    }
+        /* === ESTILOS DE CATEGORÍAS (botones) === */
+        .category-buttons {
+            text-align: center;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
 
-    footer {
-      background-color: #ccc;
-      padding: 1rem;
-      text-align: center;
-      font-size: 0.9em;
-      margin-top: 3rem;
-    }
+        .category-buttons button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: none;
+            position: relative;
+            overflow: hidden;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
 
-    .footer-social {
-      margin-top: 0.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.6rem;
-      align-items: center;
-    }
+        .category-buttons button:hover {
+            transform: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
 
-    .footer-social a img {
-      width: 22px;
-      height: 22px;
-      display: inline-block;
-      vertical-align: middle;
-      filter: none;
-      opacity: 0.95;
-      transition: opacity 0.2s, transform 0.15s;
-    }
+        .category-buttons img {
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 0;
+            border: none;
+            filter: none;
+            transition: none;
+        }
 
-    .footer-social a img:hover {
-      opacity: 1;
-      transform: translateY(-2px);
-    }
+        .category-buttons p {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0.5rem 0.5rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            margin: 0;
+            font-size: 0.9em;
+            font-weight: 600;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
 
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.9);
-      align-items: center;
-      justify-content: center;
-    }
+        /* === FIN ESTILOS DE CATEGORÍAS === */
 
-    .modal img {
-      max-width: 90%;
-      max-height: 80%;
-      border-radius: 6px;
-    }
 
-    .modal button {
-      position: absolute;
-      color: white;
-      font-size: 2rem;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
+        /* === ESTILOS DE LA GALERÍA DE MINIATURAS === */
+        .gallery-grid {
+            display: grid;
+            /* Asegura que haya 4 columnas en desktop si el minmax lo permite */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
 
-    .modal .close {
-      top: 20px;
-      right: 30px;
-    }
+        .gallery-grid img {
+            width: 100%;
+            height: 250px;
+            /* Tamaño de miniatura más grande */
+            object-fit: cover;
 
-    .modal .prev {
-      left: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
+            /* Aplicamos los estilos de miniatura: */
+            border: none;
+            /* Eliminamos el borde de 1px */
+            border-radius: 6px;
+            /* Borde redondeado */
+            background: white;
+            filter: none;
+            /* Eliminamos el filtro grayscale */
+            transition: box-shadow 0.3s ease;
+            /* Transición solo para la sombra */
+            cursor: pointer;
 
-    .modal .next {
-      right: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
+            /* Sombra sutil exterior */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
-    .description {
-      max-width: 1200px;
-      margin: 2rem auto;
-      font-size: 1rem;
-      color: #000;
-      text-align: left;
-    }
-  </style>
+            /* Aseguramos que la imagen se mantenga dentro de los límites del grid-item */
+            display: block;
+        }
+
+        .gallery-grid img:hover {
+            filter: none;
+            transform: none;
+            /* Eliminamos el efecto de zoom */
+            /* Acentuamos ligeramente la sombra en hover */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        /* === FIN ESTILOS DE LA GALERÍA DE MINIATURAS === */
+
+        footer {
+            background-color: #ccc;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9em;
+            margin-top: 3rem;
+        }
+
+        .footer-social {
+            margin-top: 0.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            align-items: center;
+        }
+
+        .footer-social a img {
+            width: 22px;
+            height: 22px;
+            display: inline-block;
+            vertical-align: middle;
+            filter: none;
+            opacity: 0.95;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+
+        .footer-social a img:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 6px;
+        }
+
+        .modal button {
+            position: absolute;
+            color: white;
+            font-size: 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal .close {
+            top: 20px;
+            right: 30px;
+        }
+
+        .modal .prev {
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .modal .next {
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .description {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            font-size: 1rem;
+            color: #000;
+            text-align: left;
+        }
+    </style>
 </head>
 
 <body>
-  <!-- Header -->
-  <header>
-    <div class="branding">
-      <h2>Esteban Campos Polo</h2>
-      <h3>Graphic Designer & 3D Artist</h3>
-    </div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="graphic-design.html">Graphic Design</a>
-      <a href="photography.html">Photography</a>
-      <a href="3d-modeling.html">3D Art</a>
-      <a href="IA.html">AI</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
+    <header>
+        <div class="branding">
+            <h2>Esteban Campos Polo</h2>
+            <h3>Graphic Designer & 3D Artist</h3>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="graphic-design.html">Graphic Design</a>
+            <a href="photography.html">Photography</a>
+            <a href="3d-modeling.html">3D Art</a>
+            <a href="IA.html">AI</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
 
-  <!-- CV Links -->
-  <div class="cv-links">
-    <a href="assets/Curriculum.pdf" download>Descargar CV Español</a>
-    <a href="assets/Resume.pdf" download>Download CV English</a>
-  </div>
-
-  <!-- Main Section -->
-  <section class="section">
-    <h3>ARTIFICIAL INTELLIGENCE<br><small>Image generation</small></h3>
-
-    <!-- Miniaturas como botones -->
-    <div class="category-buttons">
-      <button onclick="openCategory('echo')">
-        <img src="assets/images/AI/webp/echo/echo (3).webp" alt="Echoes of Marble">
-      </button>
-      <button onclick="openCategory('creepy')">
-        <img src="assets/images/AI/webp/creepy/creepy (4).webp" alt="Creepy Seed">
-      </button>
-      <button onclick="openCategory('val')">
-        <img src="assets/images/AI/webp/val/val (4).webp" alt="Valencia Single Servings">
-      </button>
-      <button onclick="openCategory('clothes')">
-        <img src="assets/images/AI/webp/clothes/clothes (7).webp" alt="Clothes">
-      </button>
-      <button onclick="openCategory('toys')">
-        <img src="assets/images/AI/webp/toys/toys (12).webp" alt="Toys">
-      </button>
+    <div class="cv-links">
+        <a href="assets/Curriculum.pdf" download>Descargar CV Español</a>
+        <a href="assets/Resume.pdf" download>Download CV English</a>
     </div>
 
-    <div class="gallery-grid" id="thumbnailGallery"></div>
-  </section>
+    <div id="hero-slideshow">
 
-  <p class="description">
-    I present a selection of visual works created through artificial intelligence and generative AI techniques. My intention in making art with AI is to explore the creative possibilities offered by generative models, transforming ideas, concepts, and emotions into images.<br><br>
-    Each piece is born from a carefully thought-out and elaborated artistic direction process: from the formulation of prompts and the selection of visual styles, to the final composition and the integration of digital retouching. This practice has allowed me to create a fusion between creativity and expression through words combined with technological power, developing projects that merge aesthetics, innovation, and visual storytelling.
-  </p>
+        <div class="slide active">
+            <img src="assets/images/AI/webp/echo/echo (3).webp" alt="Echoes of Marble" class="slide-img-zoom">
+        </div>
 
-  <!-- Footer -->
-  <footer>
-       © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
-<br>
-© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
+        <div class="slide">
+            <img src="assets/images/AI/webp/creepy/creepy (4).webp" alt="Creepy Seed" class="slide-img-zoom">
+        </div>
 
-    <div class="footer-social" aria-label="Redes sociales">
-      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener">
-        <img src="assets/icons/linkedin.svg" alt="LinkedIn">
-      </a>
-      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener">
-        <img src="assets/icons/artstation.svg" alt="ArtStation">
-      </a>
-      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener">
-        <img src="assets/icons/instagram.svg" alt="Instagram">
-      </a>
-      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener">
-        <img src="assets/icons/vimeo.svg" alt="Vimeo">
-      </a>
-      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener">
-        <img src="assets/icons/behance.svg" alt="Behance">
-      </a>
-      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener">
-        <img src="assets/icons/x.svg" alt="X">
-      </a>
+        <div class="slide">
+            <img src="assets/images/AI/webp/val/val (4).webp" alt="Valencia Single Servings" class="slide-img-zoom">
+        </div>
+
+        <div class="slide">
+            <img src="assets/images/AI/webp/clothes/clothes (7).webp" alt="Clothes" class="slide-img-zoom">
+        </div>
+
+        <div class="slide">
+            <img src="assets/images/AI/webp/toys/toys (12).webp" alt="Toys" class="slide-img-zoom">
+        </div>
+
+        <div class="slide">
+            <img src="assets/images/AI/webp/echo/echo (3).webp" alt="Echoes of Marble (Duplicado)" class="slide-img-zoom">
+        </div>
+
+        <div class="slide">
+            <img src="assets/images/AI/webp/creepy/creepy (4).webp" alt="Creepy Seed (Duplicado)" class="slide-img-zoom">
+        </div>
+
+        <div class="slide">
+            <img src="assets/images/AI/webp/val/val (4).webp" alt="Valencia Single Servings (Duplicado)" class="slide-img-zoom">
+        </div>
+
+        <div class="slide">
+            <img src="assets/images/AI/webp/clothes/clothes (7).webp" alt="Clothes (Duplicado)" class="slide-img-zoom">
+        </div>
+
+        <div class="slide">
+            <img src="assets/images/AI/webp/toys/toys (12).webp" alt="Toys (Duplicado)" class="slide-img-zoom">
+        </div>
+
     </div>
-    <a href="https://hits.sh/estebancamposarts.github.io/IA.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/IA.html.svg?color=9f9f9f" /></a>
-  </footer>
+    <section class="section">
+        <p class="description">
+            I present a selection of visual works created through artificial intelligence and generative AI techniques. My intention in making art with AI is to explore the creative possibilities offered by generative models, transforming ideas, concepts, and emotions into images.<br><br>
+            Each piece is born from a carefully thought-out and elaborated artistic direction process: from the formulation of prompts and the selection of visual styles, to the final composition and the integration of digital retouching. This practice has allowed me to create a fusion between creativity and expression through words combined with technological power, developing projects that merge aesthetics, innovation, and visual storytelling.
+        </p>
+        <p class="description">
+            Click on the image.
+        </p>
 
-  <!-- Modal -->
-  <div class="modal" id="slideshowModal">
-    <button class="close" onclick="closeModal()">×</button>
-    <button class="prev" onclick="prevImage()">❮</button>
-    <img id="modalImage" src="" alt="Foto en alta calidad" />
-    <button class="next" onclick="nextImage()">❯</button>
-  </div>
+        <div class="category-buttons">
+            <button onclick="openCategory('echo')">
+                <img src="assets/images/AI/webp/echo/echo (3).webp" alt="Echoes of Marble">
+                <p>Echoes of Marble</p>
+            </button>
+            <button onclick="openCategory('creepy')">
+                <img src="assets/images/AI/webp/creepy/creepy (4).webp" alt="Creepy Seed">
+                <p>Creepy Seed</p>
+            </button>
+            <button onclick="openCategory('val')">
+                <img src="assets/images/AI/webp/val/val (4).webp" alt="Valencia Single Servings">
+                <p>Valencia Single Servings</p>
+            </button>
+            <button onclick="openCategory('clothes')">
+                <img src="assets/images/AI/webp/clothes/clothes (7).webp" alt="Clothes">
+                <p>Clothes</p>
+            </button>
+            <button onclick="openCategory('toys')">
+                <img src="assets/images/AI/webp/toys/toys (12).webp" alt="Toys">
+                <p>Toys</p>
+            </button>
+        </div>
 
-  <!-- JS -->
-  <script>
-    const modal = document.getElementById("slideshowModal");
-    const modalImage = document.getElementById("modalImage");
-    const thumbnailGallery = document.getElementById("thumbnailGallery");
+        <div class="gallery-grid" id="thumbnailGallery"></div>
 
-    let imageList = [];
-    let currentIndex = 0;
+    </section>
 
-    const categoryCounts = {
-      echo: 55,
-      creepy: 9,
-      val: 4,
-      clothes: 12,
-      toys: 20
-    };
+    <footer>
+        © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
+        <br>
+        © 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
 
-    function openCategory(category) {
-      thumbnailGallery.innerHTML = "";
-      const count = categoryCounts[category] || 0;
-      for (let i = 1; i <= count; i++) {
-        const thumbPath = `assets/images/AI/webp/${category}/${category} (${i}).webp`;
-        const img = document.createElement("img");
-        img.src = thumbPath;
-        img.alt = `${category} (${i})`;
-        img.dataset.hd = `assets/images/AI/jpg/${category}/${category} (${i}).jpg`;
-        img.onclick = () => openSlideshow(category, i);
-        thumbnailGallery.appendChild(img);
-      }
-    }
+        <div class="footer-social" aria-label="Redes sociales">
+            <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener">
+                <img src="assets/icons/linkedin.svg" alt="LinkedIn">
+            </a>
+            <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener">
+                <img src="assets/icons/artstation.svg" alt="ArtStation">
+            </a>
+            <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener">
+                <img src="assets/icons/instagram.svg" alt="Instagram">
+            </a>
+            <a href="https://vimeo.com/827034828" target="_blank" rel="noopener">
+                <img src="assets/icons/vimeo.svg" alt="Vimeo">
+            </a>
+            <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener">
+                <img src="assets/icons/behance.svg" alt="Behance">
+            </a>
+            <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener">
+                <img src="assets/icons/x.svg" alt="X">
+            </a>
+        </div>
+        <a href="https://hits.sh/estebancamposarts.github.io/IA.html/"><img alt="Hits"
+                src="https://hits.sh/estebancamposarts.github.io/IA.html.svg?color=9f9f9f" /></a>
+    </footer>
 
-    function openSlideshow(category, startIdx) {
-      imageList = [];
-      const count = categoryCounts[category] || 0;
-      for (let i = 1; i <= count; i++) {
-        const imagePath = `assets/images/AI/jpg/${category}/${category} (${i}).jpg`;
-        imageList.push(imagePath);
-      }
-      currentIndex = startIdx - 1;
-      modalImage.src = imageList[currentIndex];
-      modal.style.display = "flex";
-    }
+    <div class="modal" id="slideshowModal">
+        <button class="close" onclick="closeModal()">×</button>
+        <button class="prev" onclick="prevImage()">❮</button>
+        <img id="modalImage" src="" alt="Foto en alta calidad" />
+        <button class="next" onclick="nextImage()">❯</button>
+    </div>
 
-    function closeModal() {
-      modal.style.display = "none";
-      modalImage.src = "";
-      imageList = [];
-    }
+    <script>
+        // =========================================================
+        // SLIDESHOW AUTOMÁTICO CON FADE Y ZOOM OUT (4 segundos)
+        // =========================================================
+        const SLIDE_DURATION = 4000; // 4 segundos
+        const slides = document.querySelectorAll("#hero-slideshow .slide");
+        const totalSlides = slides.length;
+        let slideIndex = 0;
+        let slideshowInterval;
 
-    function nextImage() {
-      if (imageList.length === 0) return;
-      currentIndex = (currentIndex + 1) % imageList.length;
-      modalImage.src = imageList[currentIndex];
-    }
+        /**
+         * Muestra la diapositiva en el índice 'n' con la animación de fade y resetea el zoom.
+         * @param {number} n - El índice de la diapositiva a mostrar (0-based).
+         */
+        const showSlides = (n) => {
+            // 1. Manejar el loop
+            if (n >= totalSlides) {
+                slideIndex = 0;
+            } else if (n < 0) {
+                slideIndex = totalSlides - 1;
+            } else {
+                slideIndex = n;
+            }
 
-    function prevImage() {
-      if (imageList.length === 0) return;
-      currentIndex = (currentIndex - 1 + imageList.length) % imageList.length;
-      modalImage.src = imageList[currentIndex];
-    }
+            // 2. Remover 'active' y resetear zoom en todas las diapositivas
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+                // Resetear el zoom (transform: scale(1.05)) antes de la próxima activación
+                const img = slide.querySelector('.slide-img-zoom');
+                if (img) img.style.transform = 'scale(1.05)';
+            });
 
-    modal.addEventListener("click", function (e) {
-      if (e.target === modal) closeModal();
-    });
+            // 3. Activar el slide actual
+            const currentSlide = slides[slideIndex];
+            currentSlide.classList.add('active');
 
-    document.addEventListener("keydown", function (e) {
-      if (modal.style.display === "flex") {
-        if (e.key === "ArrowRight") nextImage();
-        if (e.key === "ArrowLeft") prevImage();
-        if (e.key === "Escape") closeModal();
-      }
-    });
-  </script>
-<script>
-  document.addEventListener('contextmenu', event => event.preventDefault());
-  document.addEventListener('dragstart', event => event.preventDefault());
-</script>
+            // 4. Iniciar el efecto de "encogimiento" (zoom-out) después de un pequeño retraso
+            const currentImg = currentSlide.querySelector('.slide-img-zoom');
+            if (currentImg) {
+                // Pequeño retraso (10ms) para asegurar que el navegador vea el cambio de estado
+                setTimeout(() => {
+                    currentImg.style.transform = 'scale(1.00)';
+                }, 10);
+            }
+        };
+
+        /**
+         * Avanza a la siguiente diapositiva.
+         */
+        const nextSlide = () => {
+            showSlides(slideIndex + 1);
+        };
+
+        /**
+         * Inicializa el slideshow y el intervalo.
+         */
+        const startSlideshow = () => {
+            if (totalSlides > 0) {
+                showSlides(0); // Mostrar la primera diapositiva
+                slideshowInterval = setInterval(nextSlide, SLIDE_DURATION);
+            }
+        };
+
+        // Iniciar el slideshow al cargar la ventana
+        window.addEventListener('load', startSlideshow);
+
+        // =========================================================
+        // SCRIPTS EXISTENTES PARA LA GALERÍA MODAL
+        // =========================================================
+
+        const modal = document.getElementById("slideshowModal");
+        const modalImage = document.getElementById("modalImage");
+        const thumbnailGallery = document.getElementById("thumbnailGallery");
+
+        let imageList = [];
+        let currentIndex = 0;
+
+        const categoryCounts = {
+            echo: 55,
+            creepy: 9,
+            val: 4,
+            clothes: 12,
+            toys: 20
+        };
+
+        function openCategory(category) {
+            thumbnailGallery.innerHTML = "";
+            const count = categoryCounts[category] || 0;
+            for (let i = 1; i <= count; i++) {
+                const thumbPath = `assets/images/AI/webp/${category}/${category} (${i}).webp`;
+                const img = document.createElement("img");
+                img.src = thumbPath;
+                img.alt = `${category} (${i})`;
+                img.dataset.hd = `assets/images/AI/jpg/${category}/${category} (${i}).jpg`;
+                img.onclick = () => openSlideshow(category, i);
+                thumbnailGallery.appendChild(img);
+            }
+        }
+
+        function openSlideshow(category, startIdx) {
+            imageList = [];
+            const count = categoryCounts[category] || 0;
+            for (let i = 1; i <= count; i++) {
+                const imagePath = `assets/images/AI/jpg/${category}/${category} (${i}).jpg`;
+                imageList.push(imagePath);
+            }
+            currentIndex = startIdx - 1;
+            modalImage.src = imageList[currentIndex];
+            modal.style.display = "flex";
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+            modalImage.src = "";
+            imageList = [];
+        }
+
+        function nextImage() {
+            if (imageList.length === 0) return;
+            currentIndex = (currentIndex + 1) % imageList.length;
+            modalImage.src = imageList[currentIndex];
+        }
+
+        function prevImage() {
+            if (imageList.length === 0) return;
+            currentIndex = (currentIndex - 1 + imageList.length) % imageList.length;
+            modalImage.src = imageList[currentIndex];
+        }
+
+        modal.addEventListener("click", function (e) {
+            if (e.target === modal) closeModal();
+        });
+
+        document.addEventListener("keydown", function (e) {
+            if (modal.style.display === "flex") {
+                if (e.key === "ArrowRight") nextImage();
+                if (e.key === "ArrowLeft") prevImage();
+                if (e.key === "Escape") closeModal();
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('dragstart', event => event.preventDefault());
+    </script>
 </body>
+
 </html>

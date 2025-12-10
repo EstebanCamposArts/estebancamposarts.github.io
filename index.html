@@ -125,62 +125,81 @@
     }
 
 
-/* ============================================ */
-/* GALERÍA EN LÍNEA (HORIZONTAL) */
-/* ============================================ */
-
+/* === ESTILO DE CUADRÍCULA (GRID) === */
 .portfolio-grid {
-  display: flex;
-  justify-content: center;   /* CENTRA LAS IMÁGENES */
-  gap: 1.5rem;
-  overflow-x: auto;
-  padding: 1.5rem;
-  scrollbar-width: thin;
-  scrollbar-color: #999 #e5e5e5;
-}
-
-/* Scrollbar para Chrome */
-.portfolio-grid::-webkit-scrollbar {
-  height: 8px;
-}
-.portfolio-grid::-webkit-scrollbar-track {
-  background: #e5e5e5;
-  border-radius: 10px;
-}
-.portfolio-grid::-webkit-scrollbar-thumb {
-  background: #999;
-  border-radius: 10px;
+    max-width: 1300px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+    
+    /* Grid de 2 columnas, responsivo a 1 columna en móvil */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px; 
 }
 
 .grid-item {
-  flex: 0 0 auto;
-  width: 200px;
-  text-align: center;
-  text-decoration: none;
-  color: #000;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+}
+
+.grid-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.grid-link {
+    text-decoration: none;
+    color: #fff;
+    display: block;
 }
 
 .grid-item img {
-  width: 160px;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  filter: grayscale(100%);
-  transition: filter 0.5s ease, transform 0.3s ease;
-  cursor: pointer;
+    width: 100%;
+    height: 350px; /* Altura fija para uniformidad visual */
+    display: block;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    filter: brightness(0.7); /* Oscurece la imagen para que el texto destaque */
 }
 
 .grid-item:hover img {
-  filter: grayscale(0%);
-  transform: scale(1.05);
+    transform: scale(1.08); /* Efecto de zoom sutil e impactante */
+    filter: brightness(0.9); /* Más clara al pasar el ratón */
 }
 
-.grid-item p {
-  margin-top: 0.4rem;
-  font-weight: bold;
-  font-size: 0.95em;
+.category-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 1rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+    color: white;
+    text-align: center;
+    margin: 0;
+    font-size: 2em;
+    font-weight: 700;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
 }
+
+/* Responsive Design para la cuadrícula */
+@media (max-width: 768px) {
+    .portfolio-grid {
+        grid-template-columns: 1fr; /* Una columna en móvil */
+        padding: 0 1rem;
+    }
+    
+    .grid-item img {
+        height: 300px; 
+    }
+    
+    .category-title {
+        font-size: 1.6em;
+    }
 
 /* ============================================ */
 /* VISTA MÓVIL (VERTICAL) */
@@ -293,7 +312,7 @@
       footer {
         font-size: 0.8em;
       }
-    }
+    
   </style>
 </head>
 
@@ -340,26 +359,35 @@
   =============================== -->
 
 <section class="portfolio-grid">
-  <a href="graphic-design.html" class="grid-item" aria-label="Graphic Design">
-      <img src="assets/images/graphicdesign/mockups/camocream.jpg" alt="Graphic Design">
-      <p>Graphic Design</p>
-  </a>
+    <article class="grid-item">
+        <a href="graphic-design.html" class="grid-link" aria-label="Graphic Design">
+            <img src="assets/images/graphicdesign/mockups/camocream.jpg" alt="Diseño Gráfico - Mockup de Producto" loading="lazy">
+            <h2 class="category-title">Diseño Gráfico</h2>
+        </a>
+    </article>
 
-  <a href="photography.html" class="grid-item" aria-label="Photography">
-      <img src="assets/images/fotografia/culturalevents/webp/fest2025(6).webp" alt="Photography">
-      <p>Photography</p>
-  </a>
+    <article class="grid-item">
+        <a href="photography.html" class="grid-link" aria-label="Photography">
+            <img src="assets/images/fotografia/culturalevents/webp/fest2025(6).webp" alt="Fotografía de Eventos Culturales" loading="lazy">
+            <h2 class="category-title">Fotografía</h2>
+        </a>
+    </article>
 
-  <a href="3d-modeling.html" class="grid-item" aria-label="3D Art">
-      <img src="assets/images/3dmodeling/golem/golem.jpg" alt="3D Art">
-      <p>3D Art</p>
-  </a>
+    <article class="grid-item">
+        <a href="3d-modeling.html" class="grid-link" aria-label="3D Art">
+            <img src="assets/images/3dmodeling/golem/golem.jpg" alt="Render de Arte 3D - Golem" loading="lazy">
+            <h2 class="category-title">3D Art</h2>
+        </a>
+    </article>
 
-  <a href="IA.html" class="grid-item" aria-label="Artificial intelligence">
-      <img src="assets/images/AI/webp/clothes/clothes (7).webp" alt="Artificial intelligence">
-      <p>Artificial intelligence</p>
-  </a>
+    <article class="grid-item">
+        <a href="IA.html" class="grid-link" aria-label="Artificial intelligence">
+            <img src="assets/images/AI/webp/clothes/clothes (7).webp" alt="Imágenes Generadas por Inteligencia Artificial" loading="lazy">
+            <h2 class="category-title">Imágenes IA</h2>
+        </a>
+    </article>
 </section>
+
 
 
 
