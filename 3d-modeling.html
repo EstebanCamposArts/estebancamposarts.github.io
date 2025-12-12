@@ -229,6 +229,51 @@
       margin-top: 0.5rem;
       text-align: center;
     }
+/* ============================================ */
+    /* ESTILOS DE LA GALERÍA DE VÍDEOS EN MINIATURA (NUEVO) */
+    /* ============================================ */
+    .video-gallery-mini {
+        display: grid;
+        /* Cuadrícula de 3 columnas que se adapta automáticamente a tamaños más pequeños */
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+        gap: 20px;
+        padding: 0 2rem;
+        max-width: 1200px;
+        margin: 2rem auto 2rem; 
+    }
+
+    .video-item-embed {
+        background: #000; /* Fondo negro para estética */
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+    }
+
+    .video-responsive-embed {
+        position: relative;
+        /* Mantiene la relación de aspecto 16:9 (altura del vídeo) */
+        padding-bottom: 56.25%; 
+        height: 0;
+        overflow: hidden;
+    }
+
+    .video-responsive-embed iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .video-caption-mini {
+        font-size: 0.9em;
+        color: #fff; /* Texto blanco sobre fondo negro */
+        margin-top: 0;
+        padding: 10px;
+        text-align: center;
+        background: #222; /* Un fondo sutil para la leyenda */
+    }
     
   </style>
 </head>
@@ -276,7 +321,14 @@
     </div>
 </section>
 
+  <section class="section">
+    <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener"><h3>If you want to know more, visit my Artstation</h3>
+      </a>
+  <p class="description">
+    Explore forms and create visual narratives that transcend the two-dimensional. Combine technical precision with artistic sensitivity, paying attention to every detail to achieve results that optimize the work of the person receiving the geometries and allow them to be manipulated according to their needs. I work from the initial reference research once I have the concept art to the final rendering, adapting to the project's objectives and the specific needs of each client. Blocking, sculpting, retopology, projection, fine detailing, baking and texturing with Substance, shading, lighting, and rendering with Maya.
+  </p>
 
+</section>
 
   <!-- 3D Modeling Section -->
   <section class="section">
@@ -333,22 +385,65 @@
     </div>
   </section>
 
-  <section class="section">
-    <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener"><h3>If you want to know more, visit my Artstation</h3>
-      </a>
-  <p class="description">
-    Explore forms and create visual narratives that transcend the two-dimensional. Combine technical precision with artistic sensitivity, paying attention to every detail to achieve results that optimize the work of the person receiving the geometries and allow them to be manipulated according to their needs. I work from the initial reference research once I have the concept art to the final rendering, adapting to the project's objectives and the specific needs of each client. Blocking, sculpting, retopology, projection, fine detailing, baking and texturing with Substance, shading, lighting, and rendering with Maya.
-  </p>
+
+</section>
+
+<section class="section" style="padding-top: 0;">
+    <h3>TURNTABLES</h3>
+    <div class="video-gallery-mini">
+        
+        <div class="video-item-embed">
+            <div class="video-responsive-embed">
+                <iframe 
+                    src="assets/videos/ayara_1.mp4" 
+                    title="Ayara Turntable" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen
+                    loading="lazy">
+                </iframe>
+            </div>
+            <p class="video-caption-mini">AyaraTurntable</p>
+        </div>
+
+        <div class="video-item-embed">
+            <div class="video-responsive-embed">
+                <iframe 
+                    src="assets/videos/rob_1.mp4" 
+                    title="Hard Surface Reel" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen
+                    loading="lazy">
+                </iframe>
+            </div>
+            <p class="video-caption-mini">Hard Surface Modeling Head</p>
+        </div>
+        
+        <div class="video-item-embed">
+            <div class="video-responsive-embed">
+                <iframe 
+                    src="assets/videos/rob_2.mp4" 
+                    title="Sculpting Time-lapse" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen
+                    loading="lazy">
+                </iframe>
+            </div>
+            <p class="video-caption-mini">Rob</p>
+        </div>
+        
+    </div>
+</section>
+
 
   <!-- Footer -->
   <footer>
     © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
 <br>
 © 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
-
+<br>
     <div class="footer-social" aria-label="Redes sociales">
       <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener">
-        <img src="assets/icons/linkedin.svg" alt="LinkedIn">
+        <img src="assets/icons/linkedin.svg" alt="LinkedIn"> 
       </a>
       <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener">
         <img src="assets/icons/artstation.svg" alt="ArtStation">
