@@ -5,14 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Weddings & Life Events - Esteban Campos Polo</title>
 
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-8VMES8F4MN');
+  gtag('config', 'G-8VMES8F4MN', {
+      'send_page_view': true,
+      'link_attribution': true
+  });
+
+  // Función para rastrear eventos personalizados
+  function trackEvent(eventName, category, label) {
+      gtag('event', eventName, {
+          'event_category': category,
+          'event_label': label
+      });
+  }
 </script>
 
   <style>
@@ -221,91 +231,82 @@
     .cv-links a:hover {
       background-color: #333;
     }
-
-
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header>
     <div class="branding">
       <h2>Esteban Campos Polo</h2>
       <h3>Graphic Designer & 3D Artist</h3>
     </div>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="graphic-design.html">Graphic Design</a>
-      <a href="photography.html">Photography</a>
-      <a href="3d-modeling.html">3D Art</a>
-      <a href="IA.html">AI</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
+      <a href="index.html" onclick="trackEvent('nav_click', 'Menu', 'Home')">Home</a>
+      <a href="graphic-design.html" onclick="trackEvent('nav_click', 'Menu', 'Graphic Design')">Graphic Design</a>
+      <a href="photography.html" onclick="trackEvent('nav_click', 'Menu', 'Photography')">Photography</a>
+      <a href="3d-modeling.html" onclick="trackEvent('nav_click', 'Menu', '3D Art')">3D Art</a>
+      <a href="IA.html" onclick="trackEvent('nav_click', 'Menu', 'AI')">AI</a>
+      <a href="about.html" onclick="trackEvent('nav_click', 'Menu', 'About')">About</a>
+      <a href="contact.html" onclick="trackEvent('nav_click', 'Menu', 'Contact')">Contact</a>
     </nav>
   </header>
 
-  <!-- CV Links -->
-<div class="cv-links">
-  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
-  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
+  <div class="cv-links">
+  <a href="assets/Curriculum.pdf" id="download-cv-es" download onclick="trackEvent('download', 'CV', 'Spanish')">Ver o Descargar CV Español</a>
+  <a href="assets/Resume.pdf" id="download-cv-en" download onclick="trackEvent('download', 'CV', 'English')">View or Download CV English</a>
 </div>
 
-  <!-- Main -->
   <main class="section">
     <h1>Weddings & Ceremonies</h1>
     <p>Unforgettable moments filled with love and emotion, preserved forever through timeless photography.</p>
 
-    <!-- Galería -->
     <section class="gallery-grid">
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (1).webp" alt="weddings&lifeevents(1)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (1).jpg" onclick="openModal(this)" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (2).webp" alt="weddings&lifeevents(2)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (2).jpg" onclick="openModal(this)" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (3).webp" alt="weddings&lifeevents(3)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (3).jpg" onclick="openModal(this)" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (4).webp" alt="weddings&lifeevents(4)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (4).jpg" onclick="openModal(this)" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (5).webp" alt="weddings&lifeevents(5)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (5).jpg" onclick="openModal(this)" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (6).webp" alt="weddings&lifeevents(6)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (6).jpg" onclick="openModal(this)" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (7).webp" alt="weddings&lifeevents(7)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (7).jpg" onclick="openModal(this)" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (8).webp" alt="weddings&lifeevents(8)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (8).jpg" onclick="openModal(this)" loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (1).webp" alt="weddings&lifeevents(1)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (1).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 1')" loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (2).webp" alt="weddings&lifeevents(2)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (2).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 2')" loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (3).webp" alt="weddings&lifeevents(3)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (3).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 3')" loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (4).webp" alt="weddings&lifeevents(4)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (4).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 4')" loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (5).webp" alt="weddings&lifeevents(5)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (5).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 5')" loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (6).webp" alt="weddings&lifeevents(6)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (6).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 6')" loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (7).webp" alt="weddings&lifeevents(7)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (7).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 7')" loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (8).webp" alt="weddings&lifeevents(8)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (8).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 8')" loading="lazy" />
     </section>
 
-    <!-- Navegación inferior -->
     <nav class="photo-sections-nav">
-      <a href="sports.html">Sports</a>
-      <a href="socialreportage.html">Social Reportage</a>
-      <a href="travel&landscape.html">Travel & Landscape</a>
-      <a href="culturalevents.html">Cultural Events</a>
+      <a href="sports.html" onclick="trackEvent('nav_click', 'Photo_Submenu', 'Sports')">Sports</a>
+      <a href="socialreportage.html" onclick="trackEvent('nav_click', 'Photo_Submenu', 'Social')">Social Reportage</a>
+      <a href="travel&landscape.html" onclick="trackEvent('nav_click', 'Photo_Submenu', 'Travel')">Travel & Landscape</a>
+      <a href="culturalevents.html" onclick="trackEvent('nav_click', 'Photo_Submenu', 'Cultural')">Cultural Events</a>
     </nav>
   </main>
 
-  <!-- Footer -->
- <footer>
+  <footer>
     © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
 <br>
 © 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
 
     <div class="footer-social" aria-label="Redes sociales">
-      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener">
+      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'LinkedIn', 'Footer')">
         <img src="assets/icons/linkedin.svg" alt="LinkedIn">
       </a>
-      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener">
+      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'ArtStation', 'Footer')">
         <img src="assets/icons/artstation.svg" alt="ArtStation">
       </a>
-      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener">
+      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'Instagram', 'Footer')">
         <img src="assets/icons/instagram.svg" alt="Instagram">
       </a>
-      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener">
+      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'Vimeo', 'Footer')">
         <img src="assets/icons/vimeo.svg" alt="Vimeo">
       </a>
-      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener">
+      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'Behance', 'Footer')">
         <img src="assets/icons/behance.svg" alt="Behance">
       </a>
-      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener">
+      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'X', 'Footer')">
         <img src="assets/icons/x.svg" alt="X">
       </a>
     </div>
 
-<a href="https://hits.sh/estebancamposarts.github.io/weddings&lifeevents.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/weddings&lifeevents.html.svg"/></a></a>
+<a href="https://hits.sh/estebancamposarts.github.io/weddings&lifeevents.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/weddings&lifeevents.html.svg"/></a>
   </footer>
 
-  <!-- Modal -->
   <div class="modal" id="slideshowModal">
     <button class="close" onclick="closeModal()">×</button>
     <button class="prev" onclick="prevImage()">❮</button>
@@ -313,7 +314,6 @@
     <button class="next" onclick="nextImage()">❯</button>
   </div>
 
-  <!-- JS Modal -->
   <script>
     const modal = document.getElementById("slideshowModal");
     const modalImage = document.getElementById("modalImage");

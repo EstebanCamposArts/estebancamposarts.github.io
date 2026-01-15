@@ -240,9 +240,17 @@
         .footer-social {
             margin-top: 0.5rem;
             display: flex;
+            flex-direction: row; /* Asegura línea horizontal */
             justify-content: center;
-            gap: 0.6rem;
+            gap: 1.2rem; /* Mayor separación para que se entienda que son botones individuales */
             align-items: center;
+            flex-wrap: nowrap; /* Evita que salten de línea */
+        }
+
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
         }
 
         .footer-social a img {
@@ -251,13 +259,13 @@
             display: inline-block;
             vertical-align: middle;
             filter: none;
-            opacity: 0.95;
-            transition: opacity 0.2s, transform 0.15s;
+            opacity: 0.8; /* Ligeramente más bajo para que el hover se note más */
+            transition: all 0.3s ease;
         }
 
         .footer-social a img:hover {
             opacity: 1;
-            transform: translateY(-2px);
+            transform: translateY(-4px) scale(1.1); /* Salto y aumento para indicar interactividad */
         }
 
         .modal {
@@ -334,8 +342,8 @@
     </header>
 
     <div class="cv-links">
-        <a href="assets/Curriculum.pdf" download>Descargar CV Español</a>
-        <a href="assets/Resume.pdf" download>Download CV English</a>
+        <a href="assets/Curriculum.pdf" id="cv-es" download>Descargar CV Español</a>
+        <a href="assets/Resume.pdf" id="cv-en" download>Download CV English</a>
     </div>
 
     <div id="hero-slideshow">
@@ -423,22 +431,22 @@
         © 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
 
         <div class="footer-social" aria-label="Redes sociales">
-            <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener">
+            <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener" data-social="LinkedIn">
                 <img src="assets/icons/linkedin.svg" alt="LinkedIn">
             </a>
-            <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener">
+            <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener" data-social="ArtStation">
                 <img src="assets/icons/artstation.svg" alt="ArtStation">
             </a>
-            <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener">
+            <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener" data-social="Instagram">
                 <img src="assets/icons/instagram.svg" alt="Instagram">
             </a>
-            <a href="https://vimeo.com/827034828" target="_blank" rel="noopener">
+            <a href="https://vimeo.com/827034828" target="_blank" rel="noopener" data-social="Vimeo">
                 <img src="assets/icons/vimeo.svg" alt="Vimeo">
             </a>
-            <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener">
+            <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener" data-social="Behance">
                 <img src="assets/icons/behance.svg" alt="Behance">
             </a>
-            <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener">
+            <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener" data-social="X">
                 <img src="assets/icons/x.svg" alt="X">
             </a>
         </div>
@@ -463,12 +471,7 @@
         let slideIndex = 0;
         let slideshowInterval;
 
-        /**
-         * Muestra la diapositiva en el índice 'n' con la animación de fade y resetea el zoom.
-         * @param {number} n - El índice de la diapositiva a mostrar (0-based).
-         */
         const showSlides = (n) => {
-            // 1. Manejar el loop
             if (n >= totalSlides) {
                 slideIndex = 0;
             } else if (n < 0) {
@@ -477,50 +480,38 @@
                 slideIndex = n;
             }
 
-            // 2. Remover 'active' y resetear zoom en todas las diapositivas
             slides.forEach(slide => {
                 slide.classList.remove('active');
-                // Resetear el zoom (transform: scale(1.05)) antes de la próxima activación
                 const img = slide.querySelector('.slide-img-zoom');
                 if (img) img.style.transform = 'scale(1.05)';
             });
 
-            // 3. Activar el slide actual
             const currentSlide = slides[slideIndex];
             currentSlide.classList.add('active');
 
-            // 4. Iniciar el efecto de "encogimiento" (zoom-out) después de un pequeño retraso
             const currentImg = currentSlide.querySelector('.slide-img-zoom');
             if (currentImg) {
-                // Pequeño retraso (10ms) para asegurar que el navegador vea el cambio de estado
                 setTimeout(() => {
                     currentImg.style.transform = 'scale(1.00)';
                 }, 10);
             }
         };
 
-        /**
-         * Avanza a la siguiente diapositiva.
-         */
         const nextSlide = () => {
             showSlides(slideIndex + 1);
         };
 
-        /**
-         * Inicializa el slideshow y el intervalo.
-         */
         const startSlideshow = () => {
             if (totalSlides > 0) {
-                showSlides(0); // Mostrar la primera diapositiva
+                showSlides(0);
                 slideshowInterval = setInterval(nextSlide, SLIDE_DURATION);
             }
         };
 
-        // Iniciar el slideshow al cargar la ventana
         window.addEventListener('load', startSlideshow);
 
         // =========================================================
-        // SCRIPTS EXISTENTES PARA LA GALERÍA MODAL
+        // SCRIPTS EXISTENTES PARA LA GALERÍA MODAL + ANALYTICS
         // =========================================================
 
         const modal = document.getElementById("slideshowModal");
@@ -539,6 +530,9 @@
         };
 
         function openCategory(category) {
+            // ANALYTICS: Clic en categoría
+            gtag('event', 'view_category', { 'event_category': 'IA_Gallery', 'event_label': category });
+
             thumbnailGallery.innerHTML = "";
             const count = categoryCounts[category] || 0;
             for (let i = 1; i <= count; i++) {
@@ -574,12 +568,14 @@
             if (imageList.length === 0) return;
             currentIndex = (currentIndex + 1) % imageList.length;
             modalImage.src = imageList[currentIndex];
+            gtag('event', 'modal_navigation', { 'direction': 'next' });
         }
 
         function prevImage() {
             if (imageList.length === 0) return;
             currentIndex = (currentIndex - 1 + imageList.length) % imageList.length;
             modalImage.src = imageList[currentIndex];
+            gtag('event', 'modal_navigation', { 'direction': 'prev' });
         }
 
         modal.addEventListener("click", function (e) {
@@ -593,8 +589,26 @@
                 if (e.key === "Escape") closeModal();
             }
         });
-    </script>
-    <script>
+
+        // ANALYTICS ADICIONAL
+        // Seguimiento Menú
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                gtag('event', 'nav_click', { 'event_label': this.innerText });
+            });
+        });
+
+        // Seguimiento CV
+        document.getElementById('cv-es').addEventListener('click', () => gtag('event', 'cv_download', { 'language': 'ES' }));
+        document.getElementById('cv-en').addEventListener('click', () => gtag('event', 'cv_download', { 'language': 'EN' }));
+
+        // Seguimiento Redes Sociales
+        document.querySelectorAll('.footer-social a').forEach(social => {
+            social.addEventListener('click', function() {
+                gtag('event', 'social_click', { 'platform': this.getAttribute('data-social') });
+            });
+        });
+
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.addEventListener('dragstart', event => event.preventDefault());
     </script>
