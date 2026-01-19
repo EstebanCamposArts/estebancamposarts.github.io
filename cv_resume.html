@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV | Esteban Campos Polo</title>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8VMES8F4MN');
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #ffffff;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
+    /* === HEADER & NAV === */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      background-color: #fff;
+      border-bottom: 1px solid #eee;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .branding h2 { margin: 0; font-size: 1.5em; text-transform: uppercase; letter-spacing: 2px; }
+    .branding h3 { margin: 0; font-size: 0.9em; color: #666; font-weight: 400; }
+
+    nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      font-size: 0.9em;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: #007bff; }
+
+    /* === CV CONTENT === */
+    .cv-container {
+      max-width: 900px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+
+    .cv-header {
+      border-bottom: 2px solid #1a1a1a;
+      padding-bottom: 2.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .cv-header h1 {
+      font-size: 2.8em;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      font-size: 0.9em;
+      color: #555;
+    }
+    .contact-info a { color: #007bff; text-decoration: none; font-weight: 500; }
+
+    section { margin-bottom: 4rem; }
+
+    h2.section-title {
+      font-size: 1.1em;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-bottom: 1px solid #1a1a1a;
+      padding-bottom: 0.5rem;
+      margin-bottom: 2.5rem;
+      color: #000;
+    }
+
+    .cv-item { margin-bottom: 3rem; }
+    .cv-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      margin-bottom: 0.5rem;
+    }
+    .cv-item h3 { margin: 0; font-size: 1.2em; color: #000; font-weight: 700; }
+    .cv-date { font-weight: 700; color: #007bff; font-size: 0.85em; text-transform: uppercase; }
+    .cv-company { font-weight: 600; color: #444; display: block; margin-bottom: 0.8rem; font-size: 0.95em; }
+    
+    .cv-content p { margin: 0; color: #444; font-size: 0.95em; }
+    .cv-content ul {
+      padding-left: 1.2rem;
+      margin-top: 0.8rem;
+    }
+    .cv-content li { margin-bottom: 0.5rem; font-size: 0.95em; color: #333; }
+
+    /* Habilidades */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 3rem;
+    }
+    .skill-category h4 {
+      margin: 0 0 1.2rem 0;
+      font-size: 0.9em;
+      text-transform: uppercase;
+      color: #666;
+      letter-spacing: 1px;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .tag {
+      background: #f0f0f0;
+      padding: 0.4rem 0.9rem;
+      border-radius: 3px;
+      font-size: 0.8em;
+      font-weight: 600;
+      color: #333;
+      border: 1px solid #e0e0e0;
+    }
+
+    /* === ACTIONS === */
+    .cv-actions {
+      text-align: center;
+      padding: 4rem 0;
+      background: #fcfcfc;
+      border-top: 1px solid #eee;
+    }
+    .btn-download {
+      text-decoration: none;
+      font-weight: 700;
+      background-color: #000;
+      color: #fff;
+      padding: 1rem 2.5rem;
+      border-radius: 4px;
+      transition: all 0.3s;
+      display: inline-block;
+      letter-spacing: 1px;
+    }
+    .btn-download:hover { background-color: #333; transform: translateY(-2px); }
+
+    footer {
+      background-color: #1a1a1a;
+      color: #888;
+      padding: 3rem 1rem;
+      text-align: center;
+      font-size: 0.8em;
+    }
+
+    @media (max-width: 768px) {
+      .cv-item-header { flex-direction: column; }
+      .cv-date { margin-top: 0.3rem; }
+      .cv-header h1 { font-size: 2.2em; }
+    }
+
+    .main-intro {
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .main-intro h1 {
+      font-size: 2.2em;
+      margin: 0 0 0.5rem 0;
+      color: #000;
+    }
+
+    .main-intro h2 {
+      font-size: 1.1em;
+      margin: 0 0 1.5rem 0;
+      color: #555;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    .personal-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 0.8rem;
+      font-size: 0.9em;
+    }
+
+    .personal-links a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .personal-links a:hover { 
+     text-decoration: underline; 
+}
+ /* === FOOTER (ICONOS EN LÍNEA) === */
+    footer {
+      background-color: #1a1a1a;
+      color: #fff;
+      padding: 3rem 1rem;
+      text-align: center;
+      font-size: 0.85em;
+    }
+
+    .footer-social {
+      display: flex;
+      flex-direction: row; /* Fuerza línea horizontal */
+      justify-content: center;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+      flex-wrap: nowrap; /* Evita que salten de línea */
+    }
+
+    .footer-social img {
+      width: 22px;
+      height: 22px;
+      filter: invert(1);
+      opacity: 0.7;
+      transition: all 0.3s ease;
+      display: block;
+    }
+
+    .footer-social img:hover {
+      opacity: 1;
+      transform: translateY(-3px);
+    }
+
+    .copyright-text {
+      opacity: 0.6;
+      max-width: 600px;
+      margin: 0 auto 1.5rem auto;
+      line-height: 1.4;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="branding">
+      <h2>Esteban Campos Polo</h2>
+      <h3>Graphic Designer & 3D Artist</h3>
+    </div>
+    <nav>
+<a href="index.html">Inicio</a>
+      <a href="graphic-design.html">Diseño Gráfico</a>
+      <a href="photography.html">Fotografía</a>
+      <a href="3d-modeling.html">3D Art</a>
+      <a href="about.html">Sobre mí</a>
+      <a href="contact.html">Contacto</a>
+    </nav>
+  </header>
+
+
+<main class="cv-container">
+<div class="main-intro">
+
+      
+      <div class="personal-links">
+        <span>📍 Onil (Alicante)</span>
+        <span>📧 <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a></span>
+        <span>🎨 <a href="https://estebancampos1.artstation.com" target="_blank">ArtStation</a></span>
+        <span>🎬 <a href="https://vimeo.com/827034828" target="_blank">Demo Reel</a></span>
+        <span>🔗 <a href="https://linkedin.com/in/esteban-campos-polo-09852771" target="_blank">LinkedIn</a></span>
+      </div>
+    </div>
+
+  <main class="cv-container">
+    
+    <div class="cv-header">
+      <h1>Perfil Profesional</h1>
+      <p>Diseñador Gráfico Publicitario con más de 15 años de experiencia en proyectos para marketing, publicidad y branding en plataformas impresas y digitales. Experto en diseño editorial, packaging, fotografía de producto y campañas publicitarias. Me he formado en modelado 3D, lo que me permite ampliar mi capacidad de dar soluciones a productos para futuros proyectos.</p>
+
+    <section>
+      <h2 class="section-title">Experiencia Profesional</h2>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Profesional Independiente - Modelador de Personajes 3D</h3>
+          <span class="cv-date">09/2023 - 02/2024</span>
+        </div>
+        <div class="cv-content">
+          <p>Creación de malla base, modelado de High-poly, retopología, UV's, detallado después de la proyección, Baking, pintura, texturizado, Shading y Render de presentación utilizando Maya, Zbrush, Substance Painter y Photoshop.</p>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Diseñador Gráfico</h3>
+          <span class="cv-date">04/2019 – 02/2022</span>
+        </div>
+        <span class="cv-company">Ibi (Alicante) - Franquicias Fast Food</span>
+        <div class="cv-content">
+          <ul>
+            <li>Creación de campañas publicitarias que incrementaron la conversión de clientes.</li>
+            <li>Diseño y adaptación de materiales gráficos para grandes formatos y publicidad impresa.</li>
+            <li>Supervisión de la producción gráfica en diversos soportes.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Diseñador y Encargado del Departamento Gráfico Creativo y Preimpresión</h3>
+          <span class="cv-date">03/2015 - 04/2019</span>
+        </div>
+        <span class="cv-company">Castex Fashion (Textil y Calzado)</span>
+        <div class="cv-content">
+          <ul>
+            <li>Desarrollo de patrones gráficos (Rapports) para textiles.</li>
+            <li>Gestión de la preimpresión, optimización y control de calidad de materiales gráficos.</li>
+            <li>Adaptación de diseños a diferentes plataformas de producción.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Diseñador Gráfico Encargado del Departamento de Marketing y Publicidad</h3>
+          <span class="cv-date">05/2013 - 09/2014</span>
+        </div>
+        <span class="cv-company">Demaretoys (Juguetería)</span>
+        <div class="cv-content">
+          <ul>
+            <li>Creación de campañas de publicidad para medios impresos y digitales.</li>
+            <li>Diseño de packaging y promociones para productos de juguetería.</li>
+            <li>Coordinación de la imagen corporativa de la empresa.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Profesional Independiente (Freelance)</h3>
+          <span class="cv-date">Desde 2010</span>
+        </div>
+        <div class="cv-content">
+          <ul>
+            <li>Diseño de Imagen Corporativa para empresas: creación de manuales de identidad gráfica y aplicaciones.</li>
+            <li>Edición y montaje de DVDs fotográficos y de vídeo.</li>
+            <li>Realización de reportajes fotográficos para fiestas y eventos.</li>
+            <li>Packaging y montajes de producto para empresas.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Diseñador Gráfico Departamento Preimpresión</h3>
+          <span class="cv-date">03/2010 - 12/2010</span>
+        </div>
+        <span class="cv-company">Litochap</span>
+        <div class="cv-content">
+          <ul>
+            <li>Retoque fotográfico digital y fotografía de producto para web.</li>
+            <li>Diseño de packaging, carteles, bandejas y otros productos sobre soporte metálico para el mercado nacional e internacional.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Diseñador Gráfico Departamento Preimpresión</h3>
+          <span class="cv-date">04/2009 - 03/2010</span>
+        </div>
+        <span class="cv-company">Alguns Records Estudi Creatiu</span>
+        <div class="cv-content">
+          <p>Empresa dedicada a la fotografía, marketing y publicidad para empresas.</p>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Diseñador Gráfico y Fotógrafo</h3>
+          <span class="cv-date">01/2009 - 04/2009</span>
+        </div>
+        <span class="cv-company">Coloma y Pastor</span>
+        <div class="cv-content">
+          <ul>
+            <li>Diseño y maquetación de catálogos, bolsos y carteras de viaje.</li>
+            <li>Fotografía de producto y retoque digital.</li>
+            <li>Diseño de packaging: headers, inserts y blisters para juguetes y otros productos.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Diseñador Gráfico, Arte Finalista de Packaging, Catálogos y Fotógrafo</h3>
+          <span class="cv-date">12/2005 - 12/2008</span>
+        </div>
+        <span class="cv-company">Color Baby (Juguetería y Multiprecio)</span>
+        <div class="cv-content">
+          <ul>
+            <li>Diseño y maquetación de catálogos, packaging y material publicitario.</li>
+            <li>Creación de material para productos en venta al por mayor.</li>
+            <li>Fotografía de producto y edición de imágenes.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Diseñador Gráfico</h3>
+          <span class="cv-date">05/2005 - 06/2005</span>
+        </div>
+        <span class="cv-company">Adhesivas Ibi</span>
+        <div class="cv-content">
+          <ul>
+            <li>Maquetación y diseño de etiquetas de vino.</li>
+            <li>Creación de fotolitos con insoladora y preparación para impresión.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Prácticas de Diseño Gráfico</h3>
+          <span class="cv-date">03/2005 - 04/2005</span>
+        </div>
+        <span class="cv-company">BH Seriart</span>
+        <div class="cv-content">
+          <ul>
+            <li>Vectorización y desarrollo de diseños e ilustraciones para fotolitos dirigidos a serigrafía.</li>
+            <li>Realización de catálogos y maquetación de publicaciones.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Asistente de Diseño</h3>
+          <span class="cv-date">1998</span>
+        </div>
+        <span class="cv-company">Green Image</span>
+        <div class="cv-content">
+          <ul>
+            <li>Vectorización de ilustraciones, creación y maquetación de fotolitos para tampografía y blister.</li>
+            <li>Diseño de stickers con varias licencias e impresión mediante máquina láser.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+   <section>
+      <h2 class="section-title">Formación</h2>
+      
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Máster en Modelado de Personajes 3D para Cine y Videojuegos</h3>
+          <span class="cv-date">04/2022-06/2023 - Málaga, España</span>
+        </div>
+        <span class="cv-company">Animum Creativity Advanced School (Málaga)</span>
+        <div class="cv-content">
+           <ul>
+             <li>Formación avanzada en creación de personajes 3D, desde anatomía humana y animal hasta modelado detallado con ZBrush y Autodesk Maya.</li>
+             <li>Retopología, proyección de detalles finos y texturizado PBR con Substance Painter.</li>
+             <li>Optimización de modelos para motores de videojuegos como Unity 3D y renderizado con Autodesk Arnold.</li>
+           </ul>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Fundamentos de Producción 3D</h3>
+          <span class="cv-date">04/2019-10/2019 - Málaga, España</span>
+        </div>
+        <span class="cv-company">Animum Creativity Advanced School</span>
+        <div class="cv-content">
+           <li>Modelado poligonal, mapeo UV y texturizado para cine y videojuegos.</li>
+           <li>Creación de modelos orgánicos y de Hardsurface optimizados para producción.</li>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Técnico Superior en Artes Plásticas y Diseño Gráfico Publicitario</h3>
+          <span class="cv-date">09/2000-06/2004 - Alcoy, Alicante</span>
+        </div>
+        <span class="cv-company">ESDAD Alcoi</span>
+        <div class="cv-content">
+           <li>Formación integral en branding, diseño publicitario, diseño editorial y packaging.</li>
+           <li>Dominio de herramientas como Adobe Photoshop, Illustrator e InDesign.</li>
+           <li>Técnicas de impresión, teoría del color, composición y tipografía.</li>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Stack Técnico</h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h4>Diseño & Post-Producción</h4>
+          <div class="skill-tags">
+            <span class="tag">Adobe Photoshop</span> <span class="tag">Illustrator</span> <span class="tag">InDesign</span>
+            <span class="tag">After Effects</span> <span class="tag">Premiere Pro</span> <span class="tag">Figma</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h4>3D & Producción</h4>
+          <div class="skill-tags">
+            <span class="tag">Autodesk Maya</span> <span class="tag">ZBrush</span> <span class="tag">Substance Painter</span>
+            <span class="tag">Unity 3D</span> <span class="tag">Preimpresión</span> <span class="tag">Fotolitos</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="cv-actions">
+    <a href="assets/Curriculum.pdf" class="btn-download" download>Descargar Curriculum (PDF)</a>
+    <a href="assets/Resume.pdf" class="btn-download" download>Download Resume (PDF)</a>
+  </div>
+
+
+  <footer>
+    <div class="footer-social">
+      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" class="social-track" data-platform="LinkedIn">
+        <img src="assets/icons/linkedin.svg" alt="LinkedIn">
+      </a>
+      <a href="https://estebancampos1.artstation.com/" target="_blank" class="social-track" data-platform="ArtStation">
+        <img src="assets/icons/artstation.svg" alt="ArtStation">
+      </a>
+      <a href="https://www.instagram.com/estcampo/" target="_blank" class="social-track" data-platform="Instagram">
+        <img src="assets/icons/instagram.svg" alt="Instagram">
+      </a>
+      <a href="https://vimeo.com/827034828" target="_blank" class="social-track" data-platform="Vimeo">
+        <img src="assets/icons/vimeo.svg" alt="Vimeo">
+      </a>
+      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" class="social-track" data-platform="Behance">
+        <img src="assets/icons/behance.svg" alt="Behance">
+      </a>
+      <a href="https://x.com/EstebanCampos3D" target="_blank" class="social-track" data-platform="X">
+        <img src="assets/icons/x.svg" alt="X">
+      </a>
+    </div>
+
+    <div class="copyright-text">
+      © 2025 Esteban Campos Polo. All content on this site is intellectual property.
+    </div>
+
+    <a href="https://hits.sh/estebancamposarts.github.io/index.html/">
+      <img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/index.html.svg?color=9f9f9f" style="width: 80px; opacity: 0.8;"/>
+    </a>
+  </footer>
+
+  <script>
+    // 1. RASTREO DE DESCARGAS DE CV
+    document.getElementById("download-cv-es").addEventListener("click", function () {
+      gtag('event', 'download_cv', { 'language': 'Español', 'file': 'Curriculum.pdf' });
+    });
+    document.getElementById("download-cv-en").addEventListener("click", function () {
+      gtag('event', 'download_cv', { 'language': 'English', 'file': 'Resume.pdf' });
+    });
+
+    // 2. RASTREO DE CLICS EN CATEGORÍAS (GRID)
+    document.querySelectorAll('.grid-link-track').forEach(link => {
+      link.addEventListener('click', function() {
+        gtag('event', 'select_content', {
+          'content_type': 'portfolio_category',
+          'item_id': this.getAttribute('data-category')
+        });
+      });
+    });
+
+    // 3. RASTREO DE REDES SOCIALES
+    document.querySelectorAll('.social-track').forEach(link => {
+      link.addEventListener('click', function() {
+        gtag('event', 'click_social', {
+          'platform': this.getAttribute('data-platform')
+        });
+      });
+    });
+
+    // 4. RASTREO DE NAVEGACIÓN SUPERIOR
+    document.querySelectorAll('.nav-track').forEach(link => {
+      link.addEventListener('click', function() {
+        gtag('event', 'navigation_click', {
+          'destination': this.innerText
+        });
+      });
+    });
+
+    // Protección de contenido
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.addEventListener('dragstart', event => event.preventDefault());
+  </script>
+
+</body>
+</html>
