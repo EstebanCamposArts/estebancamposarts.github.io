@@ -492,7 +492,20 @@
       <div class="cv-item">
         <div class="cv-item-header">
           <h3>Técnico Superior en Artes Plásticas y Diseño Gráfico Publicitario</h3>
-          <span class="cv-date">09/2000-06/2004 - Alcoy, Alicante</span>
+          <span class="cv-date">09/2001-06/2004 - Alcoy, Alicante</span>
+        </div>
+        <span class="cv-company">ESDAD Alcoi</span>
+        <div class="cv-content">
+           <li>Formación integral en branding, diseño publicitario, diseño editorial y packaging.</li>
+           <li>Dominio de herramientas como Adobe Photoshop, Illustrator e InDesign.</li>
+           <li>Técnicas de impresión, teoría del color, composición y tipografía.</li>
+        </div>
+      </div>
+
+      <div class="cv-item">
+        <div class="cv-item-header">
+          <h3>Artefinalista en Diseño Gráfico</h3>
+          <span class="cv-date">10/2000-06/2001 - Alcoy, Alicante</span>
         </div>
         <span class="cv-company">ESDAD Alcoi</span>
         <div class="cv-content">
@@ -504,17 +517,17 @@
     </section>
 
     <section>
-      <h2 class="section-title">Stack Técnico</h2>
+      <h2 class="section-title">Skills / Habilidades tecnicas</h2>
       <div class="skills-grid">
         <div class="skill-category">
-          <h4>Diseño & Post-Producción</h4>
+          <h4>Diseño Gráfico y Fotografía</h4>
           <div class="skill-tags">
             <span class="tag">Adobe Photoshop</span> <span class="tag">Illustrator</span> <span class="tag">InDesign</span>
             <span class="tag">After Effects</span> <span class="tag">Premiere Pro</span> <span class="tag">Figma</span>
           </div>
         </div>
         <div class="skill-category">
-          <h4>3D & Producción</h4>
+          <h4>Modelado 3D & Producción</h4>
           <div class="skill-tags">
             <span class="tag">Autodesk Maya</span> <span class="tag">ZBrush</span> <span class="tag">Substance Painter</span>
             <span class="tag">Unity 3D</span> <span class="tag">Preimpresión</span> <span class="tag">Fotolitos</span>
@@ -522,6 +535,32 @@
         </div>
       </div>
     </section>
+
+<section>
+  <h2 class="section-title">Habilidades / Soft Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-category">
+      <h4>Gestión y Organización</h4>
+      <div class="skill-tags">
+        <span class="tag">Gestión de Proyectos</span>
+        <span class="tag">Gestión del Tiempo</span>
+        <span class="tag">Autonomía</span>
+        <span class="tag">Atención al Detalle</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <h4>Interpersonales y Creativas</h4>
+      <div class="skill-tags">
+        <span class="tag">Trabajo en Equipo</span>
+        <span class="tag">Resolución de Problemas</span>
+        <span class="tag">Creatividad</span>
+        <span class="tag">Comunicación Visual</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 
   </main>
 
@@ -554,55 +593,77 @@
     </div>
 
     <div class="copyright-text">
-      © 2025 Esteban Campos Polo. All content on this site is intellectual property.
+  © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
     </div>
+    <div class="copyright-text">
+    © 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
+    </div>
+
 
     <a href="https://hits.sh/estebancamposarts.github.io/index.html/">
       <img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/index.html.svg?color=9f9f9f" style="width: 80px; opacity: 0.8;"/>
     </a>
   </footer>
 
-  <script>
-    // 1. RASTREO DE DESCARGAS DE CV
-    document.getElementById("download-cv-es").addEventListener("click", function () {
-      gtag('event', 'download_cv', { 'language': 'Español', 'file': 'Curriculum.pdf' });
-    });
-    document.getElementById("download-cv-en").addEventListener("click", function () {
-      gtag('event', 'download_cv', { 'language': 'English', 'file': 'Resume.pdf' });
-    });
+ <script>
+  // Helper para enviar eventos a GA4 con seguridad
+  const trackEvent = (name, params) => {
+    if (typeof gtag === 'function') {
+      gtag('event', name, params);
+    }
+  };
 
-    // 2. RASTREO DE CLICS EN CATEGORÍAS (GRID)
-    document.querySelectorAll('.grid-link-track').forEach(link => {
-      link.addEventListener('click', function() {
-        gtag('event', 'select_content', {
-          'content_type': 'portfolio_category',
-          'item_id': this.getAttribute('data-category')
+  // 1. RASTREO DE DESCARGAS DE CV (Corregido y optimizado)
+  ['download-cv-es', 'download-cv-en'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener('click', function() {
+        trackEvent('file_download', {
+          'file_extension': 'pdf',
+          'file_name': id === 'download-cv-es' ? 'Curriculum_ES' : 'Resume_EN',
+          'language': id === 'download-cv-es' ? 'Español' : 'English'
         });
       });
-    });
+    }
+  });
 
-    // 3. RASTREO DE REDES SOCIALES
-    document.querySelectorAll('.social-track').forEach(link => {
-      link.addEventListener('click', function() {
-        gtag('event', 'click_social', {
-          'platform': this.getAttribute('data-platform')
-        });
+  // 2. RASTREO DE REDES SOCIALES (Footer)
+  document.querySelectorAll('.social-track').forEach(link => {
+    link.addEventListener('click', function() {
+      trackEvent('social_click', {
+        'social_platform': this.getAttribute('data-platform') || 'unknown',
+        'outbound': true
       });
     });
+  });
 
-    // 4. RASTREO DE NAVEGACIÓN SUPERIOR
-    document.querySelectorAll('.nav-track').forEach(link => {
-      link.addEventListener('click', function() {
-        gtag('event', 'navigation_click', {
-          'destination': this.innerText
-        });
+  // 3. RASTREO DE NAVEGACIÓN (Menú superior)
+  document.querySelectorAll('.nav-track').forEach(link => {
+    link.addEventListener('click', function() {
+      trackEvent('menu_navigation', {
+        'menu_item': this.innerText.trim()
       });
     });
+  });
 
-    // Protección de contenido
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.addEventListener('dragstart', event => event.preventDefault());
-  </script>
+  // 4. RASTREO DE LECTURA COMPLETA (MODO DIOS)
+  let cvReadTracked = false;
+  window.addEventListener('scroll', function() {
+    if (!cvReadTracked && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+      trackEvent('cv_fully_read', {
+        'page_location': window.location.pathname,
+        'timestamp': new Date().getTime()
+      });
+      cvReadTracked = true;
+    }
+  });
+
+  // 5. PROTECCIÓN DE CONTENIDO (Mantenida por seguridad)
+  document.addEventListener('contextmenu', event => event.preventDefault());
+  document.addEventListener('dragstart', event => event.preventDefault());
+
+  console.log("Rastreadores optimizados activos.");
+</script>
 
 </body>
 </html>
