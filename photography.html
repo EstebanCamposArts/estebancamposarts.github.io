@@ -1,513 +1,275 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Esteban Campos Polo - Photography</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography | Esteban Campos Polo</title>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-8VMES8F4MN');
-</script>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f2f2f2;
-      color: #000;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: #fff;
-      border-bottom: 2px solid #ccc;
-    }
-
-    /* Footer: iconos sociales discretos para mantener la estética */
-    .footer-social {
-      margin-top: 0.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.6rem;
-      align-items: center;
-    }
-
-    .footer-social a img {
-      width: 22px;
-      height: 22px;
-      display: inline-block;
-      vertical-align: middle;
-      filter: none;
-      opacity: 0.95;
-      transition: opacity 0.2s, transform 0.15s;
-    }
-
-    .footer-social a img:hover {
-      opacity: 1;
-      transform: translateY(-2px);
-    }
-
-    .branding h2 {
-      margin: 0.2rem 0;
-      font-size: 1.3em;
-    }
-
-    .branding h3 {
-      margin: 0;
-      font-size: 1em;
-      font-weight: normal;
-    }
-
-    nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #000;
-      font-weight: bold;
-    }
-
-    .cv-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      padding: 1rem;
-      background-color: #e6e6e6;
-    }
-
-    .cv-links a {
-      text-decoration: none;
-      font-weight: bold;
-      background-color: #000;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.3s;
-    }
-
-    .cv-links a:hover {
-      background-color: #333;
-    }
-
-    /* --- ESTILOS SLIDESHOW CON TRANSICIÓN DE OPACIDAD SUAVE Y ZOOM --- */
-    #hero-slideshow {
-        position: relative;
-        width: 100%;
-        height: 500px; 
-        margin: 0 auto;
-        overflow: hidden; 
-    }
-
-    .slide {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        /* Duración del desvanecimiento: 1.5s */
-        transition: opacity 1.5s ease-in-out; 
-    }
-
-    .slide.active {
-        opacity: 1;
-        z-index: 10;
-    }
-
-    .slide img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; 
-        display: block;
-        /* Zoom inicial: un poco ampliado */
-        transform: scale(1.05); 
-        /* La transición de transformación debe durar casi todo el intervalo del slide (4s) */
-        transition: transform 4s linear; 
-    }
-
-    /* Clase que se aplica al activar el slide para iniciar el "encogimiento" */
-    .slide.active .slide-img-zoom {
-        transform: scale(1.00); /* Se encoge suavemente al 100% de su tamaño */
-    }
-    /* FIN ESTILOS SLIDESHOW */
-
-    .section {
-      padding: 2rem;
-    }
-
-    .section h3 {
-      margin-bottom: 1rem;
-      font-size: 1.5em;
-    }
-
-    /* --- MEJORA DE ESTILO DE LAS MINIATURAS (EN LÍNEA) --- */
-    .logo-grid {
-      display: flex;
-      /* FUERZA QUE LOS ELEMENTOS ESTÉN EN UNA SOLA LÍNEA */
-      flex-wrap: nowrap; 
-      gap: 1.5rem; 
-      justify-content: center;
-      margin: 0 auto;
-      padding-bottom: 1rem;
-      /* PERMITE EL DESPLAZAMIENTO HORIZONTAL SI ES NECESARIO */
-      overflow-x: auto; 
-      /* ESTILOS PARA LA BARRA DE DESPLAZAMIENTO (navegadores basados en Webkit) */
-      padding-bottom: 1.5rem; /* Espacio para que no tape la barra */
-    }
-
-    /* Estilos de la barra de desplazamiento (Scrollbar) */
-    .logo-grid::-webkit-scrollbar {
-        height: 8px;
-    }
-
-    .logo-grid::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 4px;
-    }
-
-
-    .logo-grid figure {
-      margin: 0;
-      text-align: center;
-      /* ANCHO MÍNIMO PARA CADA MINIATURA */
-      min-width: 220px; 
-      flex-shrink: 0; /* Evita que las figuras se encojan en exceso */
-      transition: transform 0.3s ease;
-    }
-
-    .logo-grid figure:hover {
-        transform: translateY(-5px);
-    }
-    
-    .logo-grid a {
-        text-decoration: none;
-    }
-
-    .logo-grid img {
-      width: 100%;
-      height: 200px; 
-      object-fit: cover;
-      background: #fff;
-      padding: 0; 
-      border: 1px solid #c0c0c0; 
-      border-radius: 8px; 
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
-      filter: grayscale(100%);
-      transition: filter 0.3s ease-in-out, box-shadow 0.3s;
-      cursor: pointer;
-    }
-
-    .logo-grid img:hover {
-      filter: grayscale(0%);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .logo-grid figcaption {
-      margin-top: 0.6rem;
-      font-size: 0.9rem; 
-      font-weight: bold;
-      color: #333;
-      transition: color 0.3s;
-    }
-
-    .logo-grid figure:hover figcaption {
-         color: #000;
-    }
-
-    footer {
-      background-color: #ccc;
-      padding: 1rem;
-      text-align: center;
-      font-size: 0.9em;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.9);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      max-width: 90%;
-      max-height: 80vh;
-      display: block;
-      margin: auto;
-    }
-
-    .close {
-      position: absolute;
-      top: 20px;
-      right: 35px;
-      color: #fff;
-      font-size: 40px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    /* Texto descriptivo */
-    .description {
-      max-width: 1200px;
-      margin: 1rem auto 2rem;
-      padding: 0 2rem; 
-      font-size: 1rem;
-      color: #000;
-      text-align: left;
-      font-family: inherit;
-    }
-
-  </style>
-</head>
-
-<body>
-  <header>
-    <div class="branding">
-      <h2>Esteban Campos Polo</h2>
-      <h3>Graphic Designer & 3D Artist</h3>
-    </div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="graphic-design.html">Graphic Design</a>
-      <a href="photography.html">Photography</a>
-      <a href="3d-modeling.html">3D Art</a>
-      <a href="IA.html">AI</a>
-      <a href="cv_resume.html" class="nav-track">Curriculum / Resume</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
-
-  <div class="cv-links">
-  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
-  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
-</div>
-
-
-  <div id="hero-slideshow">
-      
-      <div class="slide active">
-          <img src="assets/images/fotografia/thumbs/webp/sport.webp" alt="Fotografía deportiva en primer plano" class="slide-img-zoom">
-      </div>
-      
-      <div class="slide">
-          <img src="assets/images/fotografia/thumbs/webp/wed.webp" alt="Fotografía de boda o evento" class="slide-img-zoom">
-      </div>
-      
-      <div class="slide">
-          <img src="assets/images/fotografia/thumbs/webp/soc.webp" alt="Fotografía de reportaje social o documental" class="slide-img-zoom">
-      </div>
-      
-      <div class="slide">
-          <img src="assets/images/fotografia/thumbs/webp/trav.webp" alt="Fotografía de viaje y paisaje" class="slide-img-zoom">
-      </div>
-      
-      <div class="slide">
-          <img src="assets/images/fotografia/thumbs/webp/cult.webp" alt="Fotografía de eventos culturales y festivales" class="slide-img-zoom">
-      </div>
-      
-      <div class="slide">
-          <img src="assets/images/fotografia/thumbs/webp/sport.webp" alt="Fotografía deportiva (Duplicado)" class="slide-img-zoom">
-      </div>
-      
-      <div class="slide">
-          <img src="assets/images/fotografia/thumbs/webp/wed.webp" alt="Fotografía de boda o evento (Duplicado)" class="slide-img-zoom">
-      </div>
-
-      <div class="slide">
-          <img src="assets/images/fotografia/thumbs/webp/soc.webp" alt="Fotografía de reportaje social (Duplicado)" class="slide-img-zoom">
-      </div>
-
-      <div class="slide">
-          <img src="assets/images/fotografia/thumbs/webp/trav.webp" alt="Fotografía de viaje y paisaje (Duplicado)" class="slide-img-zoom">
-      </div>
-
-      <div class="slide">
-          <img src="assets/images/fotografia/thumbs/webp/cult.webp" alt="Fotografía de eventos culturales (Duplicado)" class="slide-img-zoom">
-      </div>
-      
-  </div>
-  <section class="section">
-    <h3>PHOTOGRAPHY<br><small>Cultural & Lifestyle</small></h3>
-    <div class="logo-grid">
-      <figure>
-        <a href="sports.html">
-          <img src="assets/images/fotografia/thumbs/webp/sport.webp" alt="Sports" loading="lazy">
-          <figcaption>Sports</figcaption>
-        </a>
-      </figure>
-      <figure>
-        <a href="weddings&lifeevents.html">
-          <img src="assets/images/fotografia/thumbs/webp/wed.webp" alt="Weddings & Life Events" loading="lazy">
-          <figcaption>Weddings & Life Events</figcaption>
-        </a>
-      </figure>
-      <figure>
-        <a href="socialreportage.html">
-          <img src="assets/images/fotografia/thumbs/webp/soc.webp" alt="Social Reportage" loading="lazy">
-          <figcaption>Social Reportage</figcaption>
-        </a>
-      </figure>
-      <figure>
-        <a href="travel&landscape.html">
-          <img src="assets/images/fotografia/thumbs/webp/trav.webp" alt="Travel & Landscape" loading="lazy">
-          <figcaption>Travel & Landscape</figcaption>
-        </a>
-      </figure>
-      <figure>
-        <a href="culturalevents.html">
-          <img src="assets/images/fotografia/thumbs/webp/cult.webp" alt="Cultural Events" loading="lazy">
-          <figcaption>Cultural Events</figcaption>
-        </a>
-      </figure>
-    </div>
-  </section>
-
-  <p class="description">
-    In this section, you will find a carefully curated selection of my photographic works covering various styles and themes. From the emotion and dynamism of sports, through the beauty and sensitivity of weddings and life events, to the natural storytelling of social reportage. I also invite you to discover landscapes and travels that capture the essence of each place, and cultural events that showcase the richness and diversity of our traditions. Every image is a story, a moment frozen with passion and creativity.
-  </p>
-
-  <p class="description">
-    En esta sección, encontrarás una cuidada selección de mis trabajos fotográficos que abarcan diversos estilos y temas. Desde la emoción y el dinamismo del deporte, pasando por la belleza y la sensibilidad de las bodas y los acontecimientos de la vida, hasta la naturalidad narrativa del reportaje social. También te invito a descubrir paisajes y viajes que capturan la esencia de cada lugar, y eventos culturales que muestran la riqueza y diversidad de nuestras tradiciones. Cada imagen es una historia, un momento plasmado con pasión y creatividad.
-  </p>
-
-  <footer>
-    © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
-<br>
-© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
-
-    <div class="footer-social" aria-label="Redes sociales">
-      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener">
-        <img src="assets/icons/linkedin.svg" alt="LinkedIn">
-      </a>
-      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener">
-        <img src="assets/icons/artstation.svg" alt="ArtStation">
-      </a>
-      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener">
-        <img src="assets/icons/instagram.svg" alt="Instagram">
-      </a>
-      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener">
-        <img src="assets/icons/vimeo.svg" alt="Vimeo">
-      </a>
-      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener">
-        <img src="assets/icons/behance.svg" alt="Behance">
-      </a>
-      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener">
-        <img src="assets/icons/x.svg" alt="X">
-      </a>
-    </div>
-    <a href="https://hits.sh/estebancamposarts.github.io/photography.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/photography.html.svg?color=9f9f9f" /></a>
-  </footer>
-
-  <div id="imageModal" class="modal">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <img class="modal-content" id="modalImage">
-  </div>
-
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
   <script>
-    /**
-     * SLIDESHOW AUTOMÁTICO CON FADE Y ZOOM OUT (4 segundos)
-     */
-    const SLIDE_DURATION = 4000; // 4 segundos
-    const slides = document.querySelectorAll("#hero-slideshow .slide");
-    const totalSlides = slides.length;
-    let slideIndex = 0; 
-    let slideshowInterval;
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-    /**
-     * Muestra la diapositiva en el índice 'n' con la animación de fade y resetea el zoom.
-     * @param {number} n - El índice de la diapositiva a mostrar (0-based).
-     */
-    const showSlides = (n) => {
-        // 1. Manejar el loop
-        if (n >= totalSlides) {
-            slideIndex = 0;
-        } else if (n < 0) {
-            slideIndex = totalSlides - 1;
-        } else {
-            slideIndex = n;
-        }
-
-        // 2. Remover 'active' y resetear zoom en todas las diapositivas
-        slides.forEach(slide => {
-            slide.classList.remove('active');
-            // Resetear el zoom (transform: scale(1.05)) antes de la próxima activación
-            const img = slide.querySelector('.slide-img-zoom');
-            if (img) img.style.transform = 'scale(1.05)';
-        });
-
-        // 3. Activar el slide actual
-        const currentSlide = slides[slideIndex];
-        currentSlide.classList.add('active');
-
-        // 4. Iniciar el efecto de "encogimiento" (zoom-out) después de un pequeño retraso
-        const currentImg = currentSlide.querySelector('.slide-img-zoom');
-        if (currentImg) {
-             // Pequeño retraso (10ms) para asegurar que el navegador vea el cambio de estado
-            setTimeout(() => {
-                currentImg.style.transform = 'scale(1.00)'; 
-            }, 10); 
-        }
-    };
-
-    /**
-     * Avanza a la siguiente diapositiva.
-     */
-    const nextSlide = () => {
-        showSlides(slideIndex + 1);
-    };
-
-    /**
-     * Inicializa el slideshow y el intervalo.
-     */
-    const startSlideshow = () => {
-        if (totalSlides > 0) {
-            showSlides(0); // Mostrar la primera diapositiva
-            slideshowInterval = setInterval(nextSlide, SLIDE_DURATION);
-        }
-    };
-
-    // Iniciar el slideshow al cargar la ventana
-    window.addEventListener('load', startSlideshow);
-
-    // --- SCRIPT MODAL (Para la Galería) ---
-    const modal = document.getElementById("imageModal");
-    const modalImg = document.getElementById("modalImage");
-
-    document.querySelectorAll('.logo-grid img').forEach(img => {
-      img.addEventListener('click', function () {
-        modal.style.display = "flex";
-        modalImg.src = this.src;
-        modalImg.alt = this.alt;
-      });
+    gtag('config', 'G-8VMES8F4MN', {
+        anonymize_ip: true,
+        send_page_view: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false
     });
 
-    function closeModal() {
-      modal.style.display = "none";
-    }
+    // ─────────────────────────────
+    // GOD MODE (LEGAL EDITION)
+    // ─────────────────────────────
+    const GodMode = {
+        sessionId: crypto.randomUUID(),
 
-    window.onclick = function (event) {
-      if (event.target === modal) {
-        modal.style.display = "none";
-      }
-    }
-    
-    // Bloqueo de interacción
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.addEventListener('dragstart', event => event.preventDefault());
+        baseData() {
+            return {
+                session_id: this.sessionId,
+                path: location.pathname,
+                referrer: document.referrer || 'direct',
+                language: navigator.language,
+                platform: navigator.platform,
+                user_agent: navigator.userAgent,
+                screen_resolution: `${screen.width}x${screen.height}`,
+                viewport: `${window.innerWidth}x${window.innerHeight}`,
+                color_depth: screen.colorDepth,
+                device_memory: navigator.deviceMemory || 'unknown',
+                hardware_concurrency: navigator.hardwareConcurrency || 'unknown',
+                connection: navigator.connection ? navigator.connection.effectiveType : 'unknown',
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                timestamp: new Date().toISOString()
+            };
+        },
+
+        track(event, params = {}) {
+            gtag('event', event, {
+                ...this.baseData(),
+                ...params
+            });
+        }
+    };
+
+    // ─────────────────────────────
+    // EVENTOS AUTOMÁTICOS
+    // ─────────────────────────────
+
+    // Scroll depth
+    let maxScroll = 0;
+    window.addEventListener('scroll', () => {
+        const scrolled = Math.round(
+            (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100
+        );
+        if (scrolled > maxScroll) {
+            maxScroll = scrolled;
+            if ([25, 50, 75, 100].includes(scrolled)) {
+                GodMode.track('scroll_depth', { percent: scrolled });
+            }
+        }
+    });
+
+    // Tiempo activo en página
+    let startTime = Date.now();
+    window.addEventListener('beforeunload', () => {
+         GodMode.track('time_on_page', {
+            seconds: Math.round((Date.now() - startTime) / 1000)
+        });
+    });
+
+    // Clicks
+    document.addEventListener('click', (e) => {
+        const target = e.target.closest('a, button');
+        if (!target) return;
+
+        GodMode.track('click', {
+            tag: target.tagName,
+            text: target.innerText?.slice(0, 50),
+            href: target.href || null
+        });
+    });
   </script>
-</body>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #ffffff; --text: #1f2937; --accent: #0052FF; --muted: #64748b;
+            --light-bg: #f8fafc; --border: #e2e8f0; --radius: 4px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+        /* HEADER OPTIMIZADO */
+        header {
+            position: sticky; top: 0; z-index: 1000; background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px); display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 5%; border-bottom: 1px solid var(--border);
+        }
+        .branding h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
+        .branding h3 { font-size: 0.65rem; color: var(--muted); font-weight: 800; text-transform: uppercase; }
+        
+        nav { display: flex; align-items: center; }
+        nav a { 
+            margin-left: 1.2rem; text-decoration: none; color: var(--text); 
+            font-weight: 700; font-size: 0.7rem; text-transform: uppercase; 
+            transition: var(--transition); letter-spacing: 0.5px;
+        }
+        nav a:hover, nav a.active { color: var(--accent); }
+
+        /* SECCIÓN DE BOTONES CV (ESTILO EXQUISITO) */
+        .cv-actions {
+            display: flex; justify-content: center; gap: 12px;
+            padding: 2rem 5% 1rem; max-width: 1200px; margin: 0 auto;
+        }
+        .btn-cv {
+            text-decoration: none; padding: 0.7rem 1.2rem; border-radius: var(--radius);
+            font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            transition: var(--transition); border: 1.5px solid var(--text); text-align: center;
+        }
+        .btn-es-cv { background: var(--text); color: #fff; }
+        .btn-en-cv { background: transparent; color: var(--text); }
+        .btn-cv:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+        /* HERO SLIDESHOW */
+        #hero-slideshow {
+            position: relative; width: 100%; height: 450px; 
+            overflow: hidden; background: #000;
+        }
+        .slide {
+            position: absolute; inset: 0; opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+        .slide.active { opacity: 1; z-index: 10; }
+        .slide img {
+            width: 100%; height: 100%; object-fit: cover;
+            transform: scale(1.1); transition: transform 5s linear;
+        }
+        .slide.active img { transform: scale(1); }
+
+        /* CATEGORÍAS */
+        .section { padding: 4rem 5%; max-width: 1200px; margin: 0 auto; }
+        .section h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem; border-left: 4px solid var(--accent); padding-left: 1rem; }
+        .section h3 small { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
+
+        .logo-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .logo-grid figure { border-radius: var(--radius); overflow: hidden; position: relative; transition: var(--transition); }
+        .logo-grid img { 
+            width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block;
+            filter: grayscale(100%); transition: var(--transition);
+        }
+        .logo-grid figure:hover img { filter: grayscale(0%); transform: scale(1.05); }
+        .logo-grid figcaption {
+            padding: 1rem; background: var(--bg); font-weight: 700; font-size: 0.9rem;
+            text-align: center; border: 1px solid var(--border); border-top: none;
+        }
+
+        /* DESCRIPCIONES */
+        .description-container { padding: 0 5% 4rem; max-width: 900px; margin: 0 auto; }
+        .description { font-size: 1rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.8; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; }
+
+        /* FOOTER */
+        footer { background: #111827; color: #fff; padding: 4rem 5%; text-align: center; }
+        .footer-social { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; }
+        .footer-social img { width: 22px; filter: invert(1); opacity: 0.6; transition: 0.3s; }
+        .footer-social a:hover img { opacity: 1; transform: translateY(-3px); }
+
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 1rem; padding: 1.5rem; }
+            nav { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+            nav a { margin: 0 0.5rem; font-size: 0.65rem; }
+            
+            .cv-actions { flex-direction: column; width: 100%; padding: 1.5rem 5% 0.5rem; }
+            .btn-cv { width: 100%; font-size: 0.8rem; }
+            
+            #hero-slideshow { height: 300px; }
+            .logo-grid { grid-template-columns: 1fr; }
+            .section h3 { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="branding">
+            <h2>Esteban Campos Polo</h2>
+            <h3>Graphic Designer & 3D Artist</h3>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="graphic-design.html">Design</a>
+            <a href="photography.html" class="active">Photography</a>
+            <a href="3d-modeling.html">3D Art</a>
+            <a href="IA.html">AI</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="cv_resume.html" class="nav-track" id="nav-cv">CV/Resume</a>
+        </nav>
+    </header>
+
+    <div class="cv-actions">
+        <a href="assets/Curriculum.pdf" class="btn-cv btn-es-cv" download>Descargar CV (ES)</a>
+        <a href="assets/Resume.pdf" class="btn-cv btn-en-cv" download>Download Resume (EN)</a>
+    </div>
+
+    <div id="hero-slideshow">
+        <div class="slide active"><img src="assets/images/fotografia/thumbs/webp/sport.webp" alt="Sport"></div>
+        <div class="slide"><img src="assets/images/fotografia/thumbs/webp/wed.webp" alt="Weddings"></div>
+        <div class="slide"><img src="assets/images/fotografia/thumbs/webp/soc.webp" alt="Social"></div>
+        <div class="slide"><img src="assets/images/fotografia/thumbs/webp/trav.webp" alt="Travel"></div>
+        <div class="slide"><img src="assets/images/fotografia/thumbs/webp/cult.webp" alt="Culture"></div>
+    </div>
+
+    <section class="section">
+        <h3>PHOTOGRAPHY<br><small>Cultural & Lifestyle</small></h3>
+        <div class="logo-grid">
+            <figure><a href="sports.html"><img src="assets/images/fotografia/thumbs/webp/sport.webp" alt="Sports"><figcaption>Sports</figcaption></a></figure>
+            <figure><a href="weddings&lifeevents.html"><img src="assets/images/fotografia/thumbs/webp/wed.webp" alt="Weddings"><figcaption>Weddings & Life Events</figcaption></a></figure>
+            <figure><a href="socialreportage.html"><img src="assets/images/fotografia/thumbs/webp/soc.webp" alt="Social"><figcaption>Social Reportage</figcaption></a></figure>
+            <figure><a href="travel&landscape.html"><img src="assets/images/fotografia/thumbs/webp/trav.webp" alt="Travel"><figcaption>Travel & Landscape</figcaption></a></figure>
+            <figure><a href="culturalevents.html"><img src="assets/images/fotografia/thumbs/webp/cult.webp" alt="Culture"><figcaption>Cultural Events</figcaption></a></figure>
+        </div>
+    </section>
+
+    <div class="description-container">
+        <p class="description">
+            In this section, you'll find a carefully curated selection of my photographic work, encompassing diverse styles and themes. Each image tells a story, capturing a moment with care and passion.
+        </p>
+        <p class="description">
+            En esta sección, encontrarás una cuidada selección de mis trabajos fotográficos que abarcan diversos estilos y temas. Cada imagen es una historia, un momento plasmado con cuidado y pasión.
+        </p>
+    </div>
+
+    <footer>
+        <div class="footer-social">
+            <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank"><img src="assets/icons/linkedin.svg" alt="LinkedIn"></a>
+            <a href="https://estebancampos1.artstation.com/" target="_blank"><img src="assets/icons/artstation.svg" alt="ArtStation"></a>
+            <a href="https://www.instagram.com/estcampo/" target="_blank"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
+            <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank"><img src="assets/icons/behance.svg" alt="Behance"></a>
+        </div>
+        <p>© 2025 Esteban Campos Polo. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Slideshow Logic
+        const slides = document.querySelectorAll(".slide");
+        let currentSlide = 0;
+        
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+        setInterval(nextSlide, 4000);
+
+        document.addEventListener('contextmenu', e => e.preventDefault());
+    </script>
+</body>
 </html>

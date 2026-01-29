@@ -1,251 +1,179 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
+    <title>About | Esteban Campos Polo</title>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-        gtag('config', 'G-8VMES8F4MN', {
-            'send_page_view': true,
-            'link_attribution': true
-        });
+    gtag('config', 'G-8VMES8F4MN', {
+        anonymize_ip: true,
+        send_page_view: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false
+    });
 
-        // Función para rastrear eventos personalizados
-        function trackEvent(eventName, category, label) {
-            gtag('event', eventName, {
-                'event_category': category,
-                'event_label': label
+    // ─────────────────────────────
+    // GOD MODE (LEGAL EDITION)
+    // ─────────────────────────────
+    const GodMode = {
+        sessionId: crypto.randomUUID(),
+
+        baseData() {
+            return {
+                session_id: this.sessionId,
+                path: location.pathname,
+                referrer: document.referrer || 'direct',
+                language: navigator.language,
+                platform: navigator.platform,
+                user_agent: navigator.userAgent,
+                screen_resolution: `${screen.width}x${screen.height}`,
+                viewport: `${window.innerWidth}x${window.innerHeight}`,
+                color_depth: screen.colorDepth,
+                device_memory: navigator.deviceMemory || 'unknown',
+                hardware_concurrency: navigator.hardwareConcurrency || 'unknown',
+                connection: navigator.connection ? navigator.connection.effectiveType : 'unknown',
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                timestamp: new Date().toISOString()
+            };
+        },
+
+        track(event, params = {}) {
+            gtag('event', event, {
+                ...this.baseData(),
+                ...params
             });
         }
-    </script>
+    };
+
+    // ─────────────────────────────
+    // EVENTOS AUTOMÁTICOS
+    // ─────────────────────────────
+
+    // Scroll depth
+    let maxScroll = 0;
+    window.addEventListener('scroll', () => {
+        const scrolled = Math.round(
+            (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100
+        );
+        if (scrolled > maxScroll) {
+            maxScroll = scrolled;
+            if ([25, 50, 75, 100].includes(scrolled)) {
+                GodMode.track('scroll_depth', { percent: scrolled });
+            }
+        }
+    });
+
+    // Tiempo activo en página
+    let startTime = Date.now();
+    window.addEventListener('beforeunload', () => {
+         GodMode.track('time_on_page', {
+            seconds: Math.round((Date.now() - startTime) / 1000)
+        });
+    });
+
+    // Clicks
+    document.addEventListener('click', (e) => {
+        const target = e.target.closest('a, button');
+        if (!target) return;
+
+        GodMode.track('click', {
+            tag: target.tagName,
+            text: target.innerText?.slice(0, 50),
+            href: target.href || null
+        });
+    });
+  </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f2f2f2;
-            color: #000;
+        :root {
+            --bg: #ffffff; --text: #1f2937; --accent: #0052FF; --muted: #64748b;
+            --light-bg: #f8fafc; --border: #e2e8f0; --radius: 4px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; }
+
+        /* HEADER */
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background-color: #fff;
-            border-bottom: 2px solid #ccc;
+            position: sticky; top: 0; z-index: 1000; background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px); display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 5%; border-bottom: 1px solid var(--border);
+        }
+        .branding h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
+        .branding h3 { font-size: 0.65rem; color: var(--muted); font-weight: 800; text-transform: uppercase; }
+        
+        nav { display: flex; align-items: center; }
+        nav a { 
+            margin-left: 1.2rem; text-decoration: none; color: var(--text); 
+            font-weight: 700; font-size: 0.7rem; text-transform: uppercase; 
+            transition: var(--transition); letter-spacing: 0.5px;
+        }
+        nav a:hover, nav a.active { color: var(--accent); }
+
+        .lang-switch {
+            margin-left: 1.5rem; background: var(--text); color: #fff; border: none;
+            padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.65rem;
+            font-weight: 800; transition: var(--transition);
         }
 
-        .branding {
-            text-align: left;
-        }
-
-        .branding h2 {
-            margin: 0.2rem 0;
-            font-size: 1.3em;
-        }
-
-        .branding h3 {
-            margin: 0;
-            font-size: 1em;
-            font-weight: normal;
-        }
-
-        nav {
-            text-align: right;
-        }
-
-        nav a {
-            margin-left: 1.5rem;
-            text-decoration: none;
-            color: #000;
-            font-weight: bold;
-        }
-
-        .cv-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            padding: 1rem;
-            background-color: #e6e6e6;
-        }
-
+        /* CV LINKS SECTION */
+        .cv-links { display: flex; justify-content: center; gap: 12px; padding: 2rem 5% 1rem; background: var(--light-bg); }
         .cv-links a {
-            text-decoration: none;
-            font-weight: bold;
-            background-color: #000;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            transition: background-color 0.3s;
+            text-decoration: none; padding: 0.7rem 1.2rem; border-radius: var(--radius);
+            font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            transition: var(--transition); border: 1.5px solid var(--text);
         }
+        #cv-es { background: var(--text); color: #fff; }
+        #cv-en { background: transparent; color: var(--text); }
+        .cv-links a:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-        .cv-links a:hover {
-            background-color: #333;
-        }
+        /* ABOUT LAYOUT */
+        .section { padding: 4rem 5%; max-width: 1100px; margin: 0 auto; }
+        .about-title { font-size: 2rem; font-weight: 800; text-transform: uppercase; margin-bottom: 3rem; text-align: center; letter-spacing: -0.5px; }
 
-        .section {
-            padding: 2rem;
-            max-width: 900px;
-            margin: 0 auto;
-        }
+        .about-layout-container { display: flex; gap: 60px; align-items: flex-start; }
+        .about-image-container { flex: 0 0 350px; position: sticky; top: 120px; }
+        .about-image { width: 100%; height: auto; border-radius: var(--radius); filter: grayscale(20%); transition: var(--transition); }
+        .about-image:hover { filter: grayscale(0%); }
 
-        .section h2 {
-            font-size: 2em;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
+        .about-content-text { flex: 1; }
+        .language-content { display: none; }
+        .language-content.active { display: block; }
+        
+        .about-content-text p { margin-bottom: 1.5rem; font-size: 1rem; color: var(--muted); }
+        .about-content-text p:first-child { font-weight: 800; color: var(--text); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
 
-        .section p {
-            font-size: 1.1em;
-            line-height: 1.6em;
-            margin-bottom: 1rem;
-        }
-
-        .about-layout-container {
-            display: flex;
-            gap: 30px;
-            align-items: flex-start;
-        }
-
-        .about-image-container {
-            flex: 0 0 250px;
-            padding-top: 5px;
-            text-align: center;
-        }
-
-        .about-image {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .about-content-text {
-            flex-grow: 1;
-            min-width: 0;
-        }
-
-        .language-selector {
-            display: flex;
-            justify-content: flex-start;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid #ccc;
-            margin-left: -5px;
-        }
-
-        .language-selector button {
-            background: none;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: bold;
-            color: #555;
-            transition: color 0.3s, border-bottom 0.3s;
-            border-bottom: 3px solid transparent;
-            margin: 0 5px;
-        }
-
-        .language-selector button:hover {
-            color: #000;
-        }
-
-        .language-selector button.active {
-            color: #000;
-            border-bottom: 3px solid #000;
-        }
-
-        .language-content {
-            display: none;
-        }
-
-        .language-content.active {
-            display: block;
-        }
-
-        .contact-buttons-wrapper {
-            display: flex;
-            justify-content: center;
-            margin: 3rem 0;
-        }
-
+        /* CONTACT BUTTON */
+        .contact-buttons-wrapper { margin-top: 3rem; }
         .contact-button-style {
-            background-color: #000;
-            color: #fff;
-            font-weight: bold;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 6px;
-            transition: background-color 0.3s;
-            text-decoration: none;
-            text-align: center;
-            display: inline-block;
-            font-size: 1.1em;
+            display: inline-block; text-decoration: none; padding: 1rem 2rem; 
+            background: var(--accent); color: #fff; font-size: 0.8rem; font-weight: 800;
+            text-transform: uppercase; border-radius: var(--radius); transition: var(--transition);
         }
+        .contact-button-style:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(0,82,255,0.2); }
 
-        .contact-button-style:hover {
-            background-color: #333;
-        }
+        /* FOOTER */
+        footer { background: #111827; color: #fff; padding: 4rem 5%; text-align: center; font-size: 0.75rem; border-top: 1px solid var(--border); }
+        .footer-social { display: flex; justify-content: center; gap: 1.5rem; margin: 1.5rem 0; }
+        .footer-social img { width: 22px; filter: invert(1); opacity: 0.6; transition: var(--transition); }
+        .footer-social a:hover img { opacity: 1; transform: translateY(-3px); }
 
-        footer {
-            background-color: #ccc;
-            padding: 1rem;
-            text-align: center;
-            font-size: 0.9em;
-            margin-top: 3rem;
-        }
-
-        .footer-social {
-            margin-top: 0.5rem;
-            display: flex;
-            justify-content: center;
-            gap: 0.6rem;
-            align-items: center;
-        }
-
-        .footer-social a img {
-            width: 22px;
-            height: 22px;
-            display: inline-block;
-            vertical-align: middle;
-            filter: none;
-            opacity: 0.95;
-            transition: opacity 0.2s, transform 0.15s;
-        }
-
-        .footer-social a img:hover {
-            opacity: 1;
-            transform: translateY(-2px);
-        }
-
-        @media (max-width: 768px) {
-            .about-layout-container {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .about-image-container {
-                flex: none;
-                width: 100%;
-                max-width: 300px;
-                margin: 0 auto;
-                padding-top: 0;
-            }
-
-            .language-selector {
-                justify-content: center;
-                margin-left: 0;
-            }
+        @media (max-width: 900px) {
+            .about-layout-container { flex-direction: column; align-items: center; text-align: center; }
+            .about-image-container { flex: none; width: 100%; max-width: 300px; position: relative; top: 0; margin-bottom: 2rem; }
+            header { flex-direction: column; gap: 1rem; }
+            nav { flex-wrap: wrap; justify-content: center; }
+            nav a { margin: 0.5rem; font-size: 0.6rem; }
         }
     </style>
 </head>
@@ -257,123 +185,145 @@
             <h3>Graphic Designer & 3D Artist</h3>
         </div>
         <nav>
-            <a href="index.html">Home</a>
-            <a href="graphic-design.html">Graphic Design</a>
-            <a href="photography.html">Photography</a>
-            <a href="3d-modeling.html">3D Art</a>
-            <a href="IA.html">AI</a>
-            <a href="cv_resume.html" class="nav-track">Curriculum / Resume</a>
-            <a href="about.html">About</a>
-            <a href="contact.html">Contact</a>
+            <a href="index.html" data-key="nav-home">Home</a>
+            <a href="graphic-design.html" data-key="nav-graphic">Graphic Design</a>
+            <a href="photography.html" data-key="nav-photo">Photography</a>
+            <a href="3d-modeling.html" data-key="nav-3d">3D Art</a>
+            <a href="IA.html" data-key="nav-ai">AI</a>
+            <a href="about.html" class="active" data-key="nav-about">About</a>
+            <a href="cv_resume.html" class="nav-god" data-id="cv" data-es="CV / Resume" data-en="CV / Resume">CV / Resumen</a>
+            <a href="contact.html" data-key="nav-contact">Contact</a>
+            <button class="lang-switch" onclick="toggleLanguage()" id="langBtn">ES</button>
         </nav>
     </header>
 
     <div class="cv-links">
-        <a href="assets/Curriculum.pdf" id="download-cv-es" download onclick="trackEvent('download', 'CV', 'Spanish')">Ver o Descargar CV Español</a>
-        <a href="assets/Resume.pdf" id="download-cv-en" download onclick="trackEvent('download', 'CV', 'English')">View or Download CV English</a>
+        <a href="assets/Curriculum.pdf" id="cv-es" download data-key="cv-download-es">Descargar CV</a>
+        <a href="assets/Resume.pdf" id="cv-en" download data-key="cv-download-en">Download Resume</a>
     </div>
 
     <section class="section">
-        <h2>Sobre mí / About Me</h2>
+        <h2 class="about-title" data-key="about-title">About Me</h2>
 
         <div class="about-layout-container">
             <div class="about-image-container">
-                <img src="assets/images/AI/jpg/toys/toys (14).jpg" alt="Esteban Campos Polo - 3D Avatar" class="about-image">
+                <img src="assets/images/AI/jpg/toys/toys (14).jpg" alt="Esteban Campos Polo" class="about-image">
             </div>
 
             <div class="about-content-text">
-                <div class="language-selector">
-                    <button id="btn-es" class="active" onclick="showLanguage('es')">Español</button>
-                    <button id="btn-en" onclick="showLanguage('en')">English</button>
-                </div>
+    <div id="content-es" class="language-content active">
+        <p><strong>Esteban Campos Polo | Diseñador Gráfico Senior & Artista 3D</strong></p>
 
-                <div id="content-es" class="language-content active">
-                    <p>Esteban Campos Polo | Creative Director & 3D Artist</p>
-                    <p>Como diseñador gráfico publicitario con más de 15 años de trayectoria, mi carrera se define por la solvencia técnica y la capacidad de convertir conceptos en activos visuales. He liderado departamentos creativos y proyectos de branding en sectores como el metal, la moda, el retail y el juguete, colaborando con marcas nacionales y franquicias de primer nivel donde la excelencia es el estándar mínimo.</p>
-                    <p>Mi flujo de trabajo abarca desde la dirección de arte y fotografía de producto y social hasta la preimpresión. Esta visión 360º me permite asegurar que cada pieza mantenga su integridad técnica y visual en cualquier soporte, garantizando resultados óptimos tanto en medios digitales como en producción física.</p>
-                    <p>Recientemente he adquirido conocimientos en 3D digital, especializandome en Modelado 3D para Cine y Videojuegos por Animum Creativity Advanced School, adquiriendo una técnica avanzada en escultura digital, texturizado PBR y optimización tanto para cine y producción como para motores en tiempo real como Unity 3D. Este compromiso con el detalle y la narrativa visual me llevó a ser reconocido como finalista en The Rookies 2023 Draft.</p>
-                    <p>Hoy, fusiono la solidez de la publicidad tradicional con la potencia del arte 3D y la IA generativa para ofrecer soluciones completas, diseñadas para marcas que buscan destacar de un modo original.</p>
-                    <p>Si tiene usted algún proyecto, si nadie más puede ayudarle y me ha encontrado... quizá pueda contratarme.</p>
-                    <p>Gracias por visitar mi portfolio y no se vaya sin descargar mi curriculum.</p>
-                </div>
+        <p>Soy diseñador gráfico publicitario con más de 15 años de experiencia, especializado en packaging, 
+        diseño de producto y producción gráfica, con una trayectoria desarrollada principalmente en entornos 
+        industriales y comerciales, donde las decisiones creativas deben funcionar tanto a nivel visual como técnico.</p>
 
-                <div id="content-en" class="language-content">
-                    <p>Esteban Campos Polo | Creative Director & 3D Artist</p>
-                    <p>As an advertising graphic designer with more than 15 years of experience, my career is defined by technical reliability and the ability to transform concepts into visual assets. I have led creative departments and branding projects in sectors such as metal, fashion, retail, and toys, collaborating with national brands and top-tier franchises where excellence is the minimum standard.</p>
-                    <p>My workflow spans from art direction and product and social photography to pre-printing. This 360º vision allows me to ensure that every piece maintains its technical and visual integrity on any medium, guaranteeing optimal results in both digital media and physical production.</p>
-                    <p>Recently, I have acquired expertise in digital 3D, specializing in 3D Modeling for Film and Video Games at Animum Creativity Advanced School, gaining advanced techniques in digital sculpting, PBR texturing, and optimization for both film production and real-time engines like Unity 3D. This commitment to detail and visual storytelling led me to be recognized as a finalist in The Rookies 2023 Draft.</p>
-                    <p>Today, I merge the solid foundation of traditional advertising with the power of 3D art and generative AI to offer complete solutions, designed for brands looking to stand out in an original way.</p>
-                    <p>If you have a project, if no one else can help, and you have found me... maybe you can hire me.</p>
-                    <p>Thank you for visiting my portfolio, and don't leave without downloading my resume.</p>
+        <p>He trabajado en sectores como juguetería, moda, retail y publicidad, participando en campañas, colecciones 
+        y lanzamientos de producto que requerían coherencia de marca, control de costes, viabilidad productiva y 
+        cumplimiento de plazos. A lo largo de mi carrera he asumido responsabilidades que van desde el diseño y 
+        la dirección gráfica hasta la gestión de preimpresión, control de calidad y coordinación directa con producción y proveedores.</p>
+
+        <p>Mi forma de trabajar se apoya en una visión práctica y orientada a resultados: entiendo el diseño como una
+        herramienta al servicio del producto y del negocio. Esto me permite anticipar problemas técnicos, optimizar 
+        procesos gráficos y asegurar que cada pieza llegue a producción con garantías, ya sea en impresión, gran formato, 
+        punto de venta o medios digitales.</p>
+
+        <p>En los últimos años he incorporado el 3D como herramienta complementaria, aplicándolo a la visualización de producto, 
+        presentación de conceptos y apoyo al desarrollo gráfico, reforzando la comunicación entre diseño, marketing y producción.
+        Me he formado en modelado 3D para cine y videojuegos en Animum Creativity Advanced School, trabajando con escultura digital, 
+        texturizado PBR y optimización para distintos entornos, incluidos motores en tiempo real como Unity.</p>
+
+        <p>Hoy me posiciono como un perfil senior híbrido, capaz de unir diseño gráfico, packaging, producción visual y 3D,
+        aportando criterio, experiencia y comprensión de los procesos. Busco colaborar con marcas, 
+        estudios o equipos que valoren el diseño viable y coherente desde el concepto hasta el producto final.</p>
+
+        <p>Si tiene usted algún proyecto, si nadie más puede ayudarle y me ha encontrado... quizá pueda contratarme.</p>
+
+        <p>Gracias por visitar mi portfolio y no se vaya sin descargar mi currículum.</p>
+    </div>
+
+    <div id="content-en" class="language-content">
+        <p><strong>Esteban Campos Polo | Senior Graphic Designer & 3D Artist</strong></p>
+
+        <p>I am an advertising graphic designer with over 15 years of experience, specialized in packaging, 
+        product design, and graphic production, with a career developed mainly in industrial and commercial 
+        environments, where creative decisions must work both visually and technically.</p>
+
+        <p>I have worked in sectors such as toys, fashion, retail, and advertising, taking part in campaigns, 
+        collections, and product launches that required brand consistency, cost control, production feasibility, 
+        and deadline compliance. Throughout my career, I have assumed responsibilities ranging from design and 
+        graphic direction to prepress management, quality control, and direct coordination with production and suppliers.</p>
+
+        <p>My way of working is based on a practical, results-oriented approach: I understand design as a tool 
+        at the service of the product and the business. This allows me to anticipate technical issues, optimize 
+        graphic processes, and ensure that every piece reaches production with guarantees, whether in print, 
+        large format, point of sale, or digital media.</p>
+
+        <p>In recent years, I have incorporated 3D as a complementary tool, applying it to product visualization, 
+        concept presentation, and support for graphic development, strengthening communication between design, 
+        marketing, and production. I trained in 3D modeling for film and video games at Animum Creativity Advanced School, 
+        working with digital sculpting, PBR texturing, and optimization for different environments, including real-time engines such as Unity.</p>
+
+        <p>Today, I position myself as a hybrid senior profile, capable of combining graphic design, packaging, 
+        visual production, and 3D, bringing criteria, experience, and a deep understanding of processes. I seek to collaborate 
+        with brands, studios, or teams that value viable and coherent design from concept to final product.</p>
+
+        <p>If you have a project, if no one else can help, and you have found me... maybe you can hire me.</p>
+
+        <p>Thank you for visiting my portfolio, and don’t leave without downloading my résumé.</p>
+    </div>
+
+                <div class="contact-buttons-wrapper">
+                    <a href="contact.html" class="contact-button-style" data-key="btn-contact">Contáctame</a>
                 </div>
             </div>
-        </div>
-        <div class="contact-buttons-wrapper">
-            <a href="contact.html" class="contact-button-style" id="contact-button" onclick="trackEvent('click', 'Contact', 'About Page Button')">Contáctame</a>
         </div>
     </section>
 
     <footer>
-        © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
-        <br>
-        © 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
-
-        <div class="footer-social" aria-label="Redes sociales">
-            <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'LinkedIn', 'Footer')">
-                <img src="assets/icons/linkedin.svg" alt="LinkedIn">
-            </a>
-            <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'ArtStation', 'Footer')">
-                <img src="assets/icons/artstation.svg" alt="ArtStation">
-            </a>
-            <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'Instagram', 'Footer')">
-                <img src="assets/icons/instagram.svg" alt="Instagram">
-            </a>
-            <a href="https://vimeo.com/827034828" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'Vimeo', 'Footer')">
-                <img src="assets/icons/vimeo.svg" alt="Vimeo">
-            </a>
-            <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'Behance', 'Footer')">
-                <img src="assets/icons/behance.svg" alt="Behance">
-            </a>
-            <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'X', 'Footer')">
-                <img src="assets/icons/x.svg" alt="X">
-            </a>
+        <p data-key="footer-copy">© 2025 Esteban Campos Polo. All rights reserved.</p>
+        <div class="footer-social">
+            <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank"><img src="assets/icons/linkedin.svg" alt="LinkedIn"></a>
+            <a href="https://estebancampos1.artstation.com/" target="_blank"><img src="assets/icons/artstation.svg" alt="ArtStation"></a>
+            <a href="https://www.instagram.com/estcampo/" target="_blank"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
+            <a href="https://vimeo.com/827034828" target="_blank"><img src="assets/icons/vimeo.svg" alt="Vimeo"></a>
+            <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank"><img src="assets/icons/behance.svg" alt="Behance"></a>
+            <a href="https://x.com/EstebanCampos3D" target="_blank"><img src="assets/icons/x.svg" alt="X"></a>
         </div>
-
-        <a href="https://hits.sh/estebancamposarts.github.io/about.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/about.html.svg?color=9f9f9f" /></a>
     </footer>
 
     <script>
-        function showLanguage(lang) {
-            const contentEs = document.getElementById('content-es');
-            const contentEn = document.getElementById('content-en');
-            const btnEs = document.getElementById('btn-es');
-            const btnEn = document.getElementById('btn-en');
-            const contactButton = document.getElementById('contact-button');
-
-            if (lang === 'es') {
-                contentEs.classList.add('active');
-                contentEn.classList.remove('active');
-                btnEs.classList.add('active');
-                btnEn.classList.remove('active');
-                contactButton.textContent = 'Contáctame';
-                trackEvent('language_switch', 'UI', 'Spanish');
-            } else if (lang === 'en') {
-                contentEn.classList.add('active');
-                contentEs.classList.remove('active');
-                btnEn.classList.add('active');
-                btnEs.classList.remove('active');
-                contactButton.textContent = 'Contact me';
-                trackEvent('language_switch', 'UI', 'English');
+        const translations = {
+            es: {
+                "nav-home": "Inicio", "nav-graphic": "Diseño Gráfico", "nav-photo": "Fotografía", "nav-3d": "Arte 3D", "nav-ai": "IA", "nav-about": "Sobre mí", "nav-contact": "Contacto",
+                "cv-download-es": "Descargar CV", "cv-download-en": "Download Resume",
+                "about-title": "Sobre mí", "btn-contact": "Contáctame",
+                "footer-copy": "© 2025 Esteban Campos Polo. Todos los derechos reservados."
+            },
+            en: {
+                "nav-home": "Home", "nav-graphic": "Graphic Design", "nav-photo": "Photography", "nav-3d": "3D Art", "nav-ai": "AI", "nav-about": "About", "nav-contact": "Contact",
+                "cv-download-es": "Descargar CV", "cv-download-en": "Download Resume",
+                "about-title": "About Me", "btn-contact": "Contact Me",
+                "footer-copy": "© 2025 Esteban Campos Polo. All rights reserved."
             }
+        };
+
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'es' ? 'en' : 'es';
+            document.getElementById('langBtn').innerText = currentLang === 'es' ? 'EN' : 'ES';
+            
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
+            });
+
+            document.getElementById('content-es').classList.toggle('active', currentLang === 'es');
+            document.getElementById('content-en').classList.toggle('active', currentLang === 'en');
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            showLanguage('es');
-        });
-
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('dragstart', event => event.preventDefault());
+        document.addEventListener('contextmenu', e => e.preventDefault());
     </script>
 </body>
-
 </html>

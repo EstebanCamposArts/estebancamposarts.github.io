@@ -6,14 +6,90 @@
   <title>Travel & Landscape - Esteban Campos Polo</title>
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-  gtag('config', 'G-8VMES8F4MN');
-</script>
+    gtag('config', 'G-8VMES8F4MN', {
+        anonymize_ip: true,
+        send_page_view: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false
+    });
+
+    // ─────────────────────────────
+    // GOD MODE (LEGAL EDITION)
+    // ─────────────────────────────
+    const GodMode = {
+        sessionId: crypto.randomUUID(),
+
+        baseData() {
+            return {
+                session_id: this.sessionId,
+                path: location.pathname,
+                referrer: document.referrer || 'direct',
+                language: navigator.language,
+                platform: navigator.platform,
+                user_agent: navigator.userAgent,
+                screen_resolution: `${screen.width}x${screen.height}`,
+                viewport: `${window.innerWidth}x${window.innerHeight}`,
+                color_depth: screen.colorDepth,
+                device_memory: navigator.deviceMemory || 'unknown',
+                hardware_concurrency: navigator.hardwareConcurrency || 'unknown',
+                connection: navigator.connection ? navigator.connection.effectiveType : 'unknown',
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                timestamp: new Date().toISOString()
+            };
+        },
+
+        track(event, params = {}) {
+            gtag('event', event, {
+                ...this.baseData(),
+                ...params
+            });
+        }
+    };
+
+    // ─────────────────────────────
+    // EVENTOS AUTOMÁTICOS
+    // ─────────────────────────────
+
+    // Scroll depth
+    let maxScroll = 0;
+    window.addEventListener('scroll', () => {
+        const scrolled = Math.round(
+            (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100
+        );
+        if (scrolled > maxScroll) {
+            maxScroll = scrolled;
+            if ([25, 50, 75, 100].includes(scrolled)) {
+                GodMode.track('scroll_depth', { percent: scrolled });
+            }
+        }
+    });
+
+    // Tiempo activo en página
+    let startTime = Date.now();
+    window.addEventListener('beforeunload', () => {
+         GodMode.track('time_on_page', {
+            seconds: Math.round((Date.now() - startTime) / 1000)
+        });
+    });
+
+    // Clicks
+    document.addEventListener('click', (e) => {
+        const target = e.target.closest('a, button');
+        if (!target) return;
+
+        GodMode.track('click', {
+            tag: target.tagName,
+            text: target.innerText?.slice(0, 50),
+            href: target.href || null
+        });
+    });
+  </script>
 
   <style>
     /* === Estilo base consistente con el portfolio principal === */
