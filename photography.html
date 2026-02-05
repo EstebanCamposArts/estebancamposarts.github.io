@@ -5,90 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Photography | Esteban Campos Polo</title>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-    gtag('config', 'G-8VMES8F4MN', {
-        anonymize_ip: true,
-        send_page_view: true,
-        allow_google_signals: false,
-        allow_ad_personalization_signals: false
-    });
+        gtag('config', 'G-8VMES8F4MN', {
+            anonymize_ip: true,
+            send_page_view: true,
+            allow_google_signals: false,
+            allow_ad_personalization_signals: false
+        });
+    </script>
 
-    // ─────────────────────────────
-    // GOD MODE (LEGAL EDITION)
-    // ─────────────────────────────
-    const GodMode = {
-        sessionId: crypto.randomUUID(),
+    <script>
+    (function() {
+        const CONFIG = {
+            idsToObserve: ['#hero-slideshow', '.section', '.logo-grid'],
+            scrollDepths: [25, 50, 75, 90, 100],
+            trackedDepths: [],
+            clickCount: 0,
+            clickTimer: null,
+            sessionStartTime: Date.now()
+        };
 
-        baseData() {
-            return {
-                session_id: this.sessionId,
-                path: location.pathname,
-                referrer: document.referrer || 'direct',
-                language: navigator.language,
-                platform: navigator.platform,
-                user_agent: navigator.userAgent,
-                screen_resolution: `${screen.width}x${screen.height}`,
-                viewport: `${window.innerWidth}x${window.innerHeight}`,
-                color_depth: screen.colorDepth,
-                device_memory: navigator.deviceMemory || 'unknown',
-                hardware_concurrency: navigator.hardwareConcurrency || 'unknown',
-                connection: navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                timestamp: new Date().toISOString()
-            };
-        },
-
-        track(event, params = {}) {
-            gtag('event', event, {
-                ...this.baseData(),
-                ...params
-            });
-        }
-    };
-
-    // ─────────────────────────────
-    // EVENTOS AUTOMÁTICOS
-    // ─────────────────────────────
-
-    // Scroll depth
-    let maxScroll = 0;
-    window.addEventListener('scroll', () => {
-        const scrolled = Math.round(
-            (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100
-        );
-        if (scrolled > maxScroll) {
-            maxScroll = scrolled;
-            if ([25, 50, 75, 100].includes(scrolled)) {
-                GodMode.track('scroll_depth', { percent: scrolled });
+        const sendEvent = (name, params = {}) => {
+            if (typeof gtag === 'function') {
+                gtag('event', name, {
+                    ...params,
+                    'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
+                    'page_path': window.location.pathname
+                });
             }
-        }
-    });
+        };
 
-    // Tiempo activo en página
-    let startTime = Date.now();
-    window.addEventListener('beforeunload', () => {
-         GodMode.track('time_on_page', {
-            seconds: Math.round((Date.now() - startTime) / 1000)
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // --- SECCIÓN: SEGURIDAD Y DETECCIÓN DE MODAL ---
+            
+            document.addEventListener('contextmenu', (e) => {
+                if (e.target.tagName === 'IMG') {
+                    // Detecta si la imagen está dentro de un contenedor de modal o es galería
+                    const isModal = e.target.closest('.modal, #imageModal, #slideshowModal') ? 'modal_view' : 'gallery_grid';
+                    sendEvent('security_image_right_click', { 
+                        'src': e.target.src.split('/').pop(),
+                        'context': isModal 
+                    });
+                }
+            });
+
+            document.addEventListener('dragstart', (e) => {
+                if (e.target.tagName === 'IMG') {
+                    sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
+                }
+            });
+
+            // Tracking de apertura de modales (clic en imagen de galería)
+            document.addEventListener('click', (e) => {
+                const target = e.target;
+                
+                // Si se hace clic en una imagen que NO es del modal, asumimos que intenta abrirla
+                if (target.tagName === 'IMG' && !target.closest('.modal, #imageModal, #slideshowModal')) {
+                    sendEvent('engagement_image_open', {
+                        'src': target.src.split('/').pop(),
+                        'alt': target.alt || 'untitled'
+                    });
+                }
+
+                // Rage Clicks
+                CONFIG.clickCount++;
+                clearTimeout(CONFIG.clickTimer);
+                CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
+                if (CONFIG.clickCount > 4) {
+                    sendEvent('ux_rage_click', { 'element': target.tagName + (target.id ? '#'+target.id : '') });
+                    CONFIG.clickCount = 0;
+                }
+            });
+
+            // --- SECCIÓN: NAVEGACIÓN Y CONTENIDO ---
+
+            window.addEventListener('scroll', () => {
+                let h = document.documentElement, b = document.body;
+                let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
+                
+                CONFIG.scrollDepths.forEach(depth => {
+                    if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
+                        CONFIG.trackedDepths.push(depth);
+                        sendEvent('content_scroll_depth', { 'depth': depth + '%' });
+                    }
+                });
+            });
+
+            if ('IntersectionObserver' in window) {
+                let observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                if (entry.isIntersecting) {
+                                    sendEvent('content_view_confirmed', { 'section': entry.target.id || 'gallery_section' });
+                                    observer.unobserve(entry.target);
+                                }
+                            }, 2000);
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                CONFIG.idsToObserve.forEach(selector => {
+                    let el = document.querySelector(selector);
+                    if (el) observer.observe(el);
+                });
+            }
+
+            document.addEventListener('copy', () => {
+                let text = document.getSelection().toString().substring(0, 50);
+                sendEvent('engagement_text_copy', { 'preview': text + '...' });
+            });
         });
-    });
 
-    // Clicks
-    document.addEventListener('click', (e) => {
-        const target = e.target.closest('a, button');
-        if (!target) return;
-
-        GodMode.track('click', {
-            tag: target.tagName,
-            text: target.innerText?.slice(0, 50),
-            href: target.href || null
-        });
-    });
-  </script>
+        window.onerror = (msg, url, line) => {
+            sendEvent('tech_js_error', { 'msg': msg, 'line': line });
+        };
+    })();
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -103,7 +142,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
 
-        /* HEADER OPTIMIZADO */
         header {
             position: sticky; top: 0; z-index: 1000; background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px); display: flex; justify-content: space-between; align-items: center;
@@ -120,7 +158,6 @@
         }
         nav a:hover, nav a.active { color: var(--accent); }
 
-        /* SECCIÓN DE BOTONES CV (ESTILO EXQUISITO) */
         .cv-actions {
             display: flex; justify-content: center; gap: 12px;
             padding: 2rem 5% 1rem; max-width: 1200px; margin: 0 auto;
@@ -134,7 +171,6 @@
         .btn-en-cv { background: transparent; color: var(--text); }
         .btn-cv:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-        /* HERO SLIDESHOW */
         #hero-slideshow {
             position: relative; width: 100%; height: 450px; 
             overflow: hidden; background: #000;
@@ -150,7 +186,6 @@
         }
         .slide.active img { transform: scale(1); }
 
-        /* CATEGORÍAS */
         .section { padding: 4rem 5%; max-width: 1200px; margin: 0 auto; }
         .section h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem; border-left: 4px solid var(--accent); padding-left: 1rem; }
         .section h3 small { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
@@ -170,25 +205,20 @@
             text-align: center; border: 1px solid var(--border); border-top: none;
         }
 
-        /* DESCRIPCIONES */
         .description-container { padding: 0 5% 4rem; max-width: 900px; margin: 0 auto; }
         .description { font-size: 1rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.8; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; }
 
-        /* FOOTER */
         footer { background: #111827; color: #fff; padding: 4rem 5%; text-align: center; }
         .footer-social { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; }
         .footer-social img { width: 22px; filter: invert(1); opacity: 0.6; transition: 0.3s; }
         .footer-social a:hover img { opacity: 1; transform: translateY(-3px); }
 
-        /* MOBILE OPTIMIZATION */
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 1rem; padding: 1.5rem; }
             nav { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
             nav a { margin: 0 0.5rem; font-size: 0.65rem; }
-            
             .cv-actions { flex-direction: column; width: 100%; padding: 1.5rem 5% 0.5rem; }
             .btn-cv { width: 100%; font-size: 0.8rem; }
-            
             #hero-slideshow { height: 300px; }
             .logo-grid { grid-template-columns: 1fr; }
             .section h3 { font-size: 1.2rem; }
@@ -200,7 +230,7 @@
     <header>
         <div class="branding">
             <h2>Esteban Campos Polo</h2>
-            <h3>Graphic Designer & 3D Artist</h3>
+            <h3>Sr. Graphic Packaging and Production Designer</h3>
         </div>
         <nav>
             <a href="index.html">Home</a>
@@ -227,7 +257,7 @@
         <div class="slide"><img src="assets/images/fotografia/thumbs/webp/cult.webp" alt="Culture"></div>
     </div>
 
-    <section class="section">
+    <section class="section" id="photography-categories">
         <h3>PHOTOGRAPHY<br><small>Cultural & Lifestyle</small></h3>
         <div class="logo-grid">
             <figure><a href="sports.html"><img src="assets/images/fotografia/thumbs/webp/sport.webp" alt="Sports"><figcaption>Sports</figcaption></a></figure>
@@ -269,6 +299,7 @@
         }
         setInterval(nextSlide, 4000);
 
+        // Seguridad: Prevenir menú contextual en toda la página
         document.addEventListener('contextmenu', e => e.preventDefault());
     </script>
 </body>

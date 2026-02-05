@@ -18,78 +18,145 @@
         allow_google_signals: false,
         allow_ad_personalization_signals: false
     });
+  </script>
 
-    // ─────────────────────────────
-    // GOD MODE (LEGAL EDITION)
-    // ─────────────────────────────
-    const GodMode = {
-        sessionId: crypto.randomUUID(),
 
-        baseData() {
-            return {
-                session_id: this.sessionId,
-                path: location.pathname,
-                referrer: document.referrer || 'direct',
-                language: navigator.language,
-                platform: navigator.platform,
-                user_agent: navigator.userAgent,
-                screen_resolution: `${screen.width}x${screen.height}`,
-                viewport: `${window.innerWidth}x${window.innerHeight}`,
-                color_depth: screen.colorDepth,
-                device_memory: navigator.deviceMemory || 'unknown',
-                hardware_concurrency: navigator.hardwareConcurrency || 'unknown',
-                connection: navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                timestamp: new Date().toISOString()
-            };
-        },
+    <script>
+(function() {
+    // 1. CONFIGURACIÓN Y ESTADO
+    const CONFIG = {
+        idsToObserve: ['#hero', '#proyectos', '#sobre-mi', '#contacto'], // Ajusta estos IDs a tu HTML
+        scrollDepths: [25, 50, 75, 90, 100],
+        trackedDepths: [],
+        clickCount: 0,
+        clickTimer: null,
+        sessionStartTime: Date.now()
+    };
 
-        track(event, params = {}) {
-            gtag('event', event, {
-                ...this.baseData(),
-                ...params
+    const sendEvent = (name, params = {}) => {
+        if (typeof gtag === 'function') {
+            gtag('event', name, {
+                ...params,
+                'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
+                'memory': navigator.deviceMemory || 'unknown',
+                'page_path': window.location.pathname
             });
         }
     };
 
-    // ─────────────────────────────
-    // EVENTOS AUTOMÁTICOS
-    // ─────────────────────────────
+    // 2. INICIALIZACIÓN AL CARGAR DOM
+    document.addEventListener("DOMContentLoaded", function() {
 
-    // Scroll depth
-    let maxScroll = 0;
-    window.addEventListener('scroll', () => {
-        const scrolled = Math.round(
-            (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100
-        );
-        if (scrolled > maxScroll) {
-            maxScroll = scrolled;
-            if ([25, 50, 75, 100].includes(scrolled)) {
-                GodMode.track('scroll_depth', { percent: scrolled });
+        // --- SECCIÓN: SEGURIDAD Y CLICKS ---
+        
+        // Clic derecho en imágenes e intento de arrastre
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.tagName === 'IMG') {
+                sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
             }
+        });
+
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.tagName === 'IMG') {
+                sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
+            }
+        });
+
+        // Rage Clicks (Detecta frustración: más de 4 clics en 1 seg)
+        document.addEventListener('click', (e) => {
+            CONFIG.clickCount++;
+            clearTimeout(CONFIG.clickTimer);
+            CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
+            
+            if (CONFIG.clickCount > 4) {
+                sendEvent('ux_rage_click', { 'element': e.target.tagName + (e.target.id ? '#'+e.target.id : '') });
+                CONFIG.clickCount = 0;
+            }
+        });
+
+        // --- SECCIÓN: NAVEGACIÓN Y CONTENIDO ---
+
+        // Scroll Tracking Granular
+        window.addEventListener('scroll', () => {
+            let h = document.documentElement, b = document.body;
+            let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
+            
+            CONFIG.scrollDepths.forEach(depth => {
+                if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
+                    CONFIG.trackedDepths.push(depth);
+                    sendEvent('content_scroll_depth', { 'depth': depth + '%' });
+                }
+            });
+        });
+
+        // Visibilidad Real de Proyectos (Intersection Observer)
+        if ('IntersectionObserver' in window) {
+            let observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            if (entry.isIntersecting) { // Si sigue ahí tras 2 segundos
+                                sendEvent('content_view_confirmed', { 'section_id': entry.target.id });
+                                observer.unobserve(entry.target);
+                            }
+                        }, 2000);
+                    }
+                });
+            }, { threshold: 0.6 });
+
+            CONFIG.idsToObserve.forEach(id => {
+                let el = document.querySelector(id);
+                if (el) observer.observe(el);
+            });
         }
-    });
 
-    // Tiempo activo en página
-    let startTime = Date.now();
-    window.addEventListener('beforeunload', () => {
-         GodMode.track('time_on_page', {
-            seconds: Math.round((Date.now() - startTime) / 1000)
+
+        /
+        document.addEventListener('copy', () => {
+            let text = document.getSelection().toString().substring(0, 50);
+            sendEvent('engagement_text_copy', { 'preview': text + '...' });
         });
-    });
 
-    // Clicks
-    document.addEventListener('click', (e) => {
-        const target = e.target.closest('a, button');
-        if (!target) return;
-
-        GodMode.track('click', {
-            tag: target.tagName,
-            text: target.innerText?.slice(0, 50),
-            href: target.href || null
+        // Exit Intent (Solo Desktop)
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY < 0) sendEvent('behavior_exit_intent');
         });
+
+        // Hover en proyectos (Interés sin clic)
+        document.querySelectorAll('.card-proyecto, .portfolio-item').forEach(item => {
+            let hTimer;
+            item.addEventListener('mouseenter', () => {
+                hTimer = setTimeout(() => sendEvent('engagement_hover_interest', { 'id': item.id }), 3000);
+            });
+            item.addEventListener('mouseleave', () => clearTimeout(hTimer));
+        });
+
+        // Detección de AdBlock
+        setTimeout(() => {
+            const test = document.createElement('div');
+            test.className = 'adsbox';
+            test.innerHTML = '&nbsp;';
+            document.body.appendChild(test);
+            sendEvent('tech_adblock_status', { 'active': test.offsetHeight === 0 });
+            test.remove();
+        }, 3000);
     });
-  </script>
+
+
+
+    window.onerror = (msg, url, line) => {
+        sendEvent('tech_js_error', { 'msg': msg, 'line': line });
+    };
+
+    window.addEventListener('load', () => {
+        const perf = performance.getEntriesByType("navigation")[0];
+        if (perf) sendEvent('tech_load_time', { 'ms': Math.round(perf.domComplete) });
+    });
+
+})();
+
+    </script>
+
 
   <style>
     /* === Estilo base consistente con el portfolio principal === */
@@ -334,6 +401,7 @@
       <a href="IA.html">AI</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
+      <a href="cv_resume.html" class="nav-track" id="nav-cv">CV/Resume</a>
     </nav>
   </header>
 

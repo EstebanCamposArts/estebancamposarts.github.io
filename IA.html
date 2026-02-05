@@ -17,78 +17,129 @@
         allow_google_signals: false,
         allow_ad_personalization_signals: false
     });
+  </script>
 
-    // ─────────────────────────────
-    // GOD MODE (LEGAL EDITION)
-    // ─────────────────────────────
-    const GodMode = {
-        sessionId: crypto.randomUUID(),
+    <script>
+(function() {
+    // 1. CONFIGURACIÓN Y ESTADO
+    const CONFIG = {
+        idsToObserve: ['#hero', '#proyectos', '#sobre-mi', '#contacto'], 
+        scrollDepths: [25, 50, 75, 90, 100],
+        trackedDepths: [],
+        clickCount: 0,
+        clickTimer: null,
+        sessionStartTime: Date.now()
+    };
 
-        baseData() {
-            return {
-                session_id: this.sessionId,
-                path: location.pathname,
-                referrer: document.referrer || 'direct',
-                language: navigator.language,
-                platform: navigator.platform,
-                user_agent: navigator.userAgent,
-                screen_resolution: `${screen.width}x${screen.height}`,
-                viewport: `${window.innerWidth}x${window.innerHeight}`,
-                color_depth: screen.colorDepth,
-                device_memory: navigator.deviceMemory || 'unknown',
-                hardware_concurrency: navigator.hardwareConcurrency || 'unknown',
-                connection: navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                timestamp: new Date().toISOString()
-            };
-        },
-
-        track(event, params = {}) {
-            gtag('event', event, {
-                ...this.baseData(),
-                ...params
+    const sendEvent = (name, params = {}) => {
+        if (typeof gtag === 'function') {
+            gtag('event', name, {
+                ...params,
+                'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
+                'memory': navigator.deviceMemory || 'unknown',
+                'page_path': window.location.pathname
             });
         }
     };
 
-    // ─────────────────────────────
-    // EVENTOS AUTOMÁTICOS
-    // ─────────────────────────────
+    // 2. INICIALIZACIÓN AL CARGAR DOM
+    document.addEventListener("DOMContentLoaded", function() {
 
-    // Scroll depth
-    let maxScroll = 0;
-    window.addEventListener('scroll', () => {
-        const scrolled = Math.round(
-            (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100
-        );
-        if (scrolled > maxScroll) {
-            maxScroll = scrolled;
-            if ([25, 50, 75, 100].includes(scrolled)) {
-                GodMode.track('scroll_depth', { percent: scrolled });
+        // --- SECCIÓN: SEGURIDAD Y CLICKS ---
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.tagName === 'IMG') {
+                sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
             }
+        });
+
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.tagName === 'IMG') {
+                sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            CONFIG.clickCount++;
+            clearTimeout(CONFIG.clickTimer);
+            CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
+            
+            if (CONFIG.clickCount > 4) {
+                sendEvent('ux_rage_click', { 'element': e.target.tagName + (e.target.id ? '#'+e.target.id : '') });
+                CONFIG.clickCount = 0;
+            }
+        });
+
+        // --- SECCIÓN: NAVEGACIÓN Y CONTENIDO ---
+        window.addEventListener('scroll', () => {
+            let h = document.documentElement, b = document.body;
+            let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
+            
+            CONFIG.scrollDepths.forEach(depth => {
+                if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
+                    CONFIG.trackedDepths.push(depth);
+                    sendEvent('content_scroll_depth', { 'depth': depth + '%' });
+                }
+            });
+        });
+
+        if ('IntersectionObserver' in window) {
+            let observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            if (entry.isIntersecting) {
+                                sendEvent('content_view_confirmed', { 'section_id': entry.target.id });
+                                observer.unobserve(entry.target);
+                            }
+                        }, 2000);
+                    }
+                });
+            }, { threshold: 0.6 });
+
+            CONFIG.idsToObserve.forEach(id => {
+                let el = document.querySelector(id);
+                if (el) observer.observe(el);
+            });
         }
-    });
 
-    // Tiempo activo en página
-    let startTime = Date.now();
-    window.addEventListener('beforeunload', () => {
-         GodMode.track('time_on_page', {
-            seconds: Math.round((Date.now() - startTime) / 1000)
+        document.addEventListener('copy', () => {
+            let text = document.getSelection().toString().substring(0, 50);
+            sendEvent('engagement_text_copy', { 'preview': text + '...' });
         });
-    });
 
-    // Clicks
-    document.addEventListener('click', (e) => {
-        const target = e.target.closest('a, button');
-        if (!target) return;
-
-        GodMode.track('click', {
-            tag: target.tagName,
-            text: target.innerText?.slice(0, 50),
-            href: target.href || null
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY < 0) sendEvent('behavior_exit_intent');
         });
+
+        document.querySelectorAll('.card-proyecto, .portfolio-item').forEach(item => {
+            let hTimer;
+            item.addEventListener('mouseenter', () => {
+                hTimer = setTimeout(() => sendEvent('engagement_hover_interest', { 'id': item.id }), 3000);
+            });
+            item.addEventListener('mouseleave', () => clearTimeout(hTimer));
+        });
+
+        setTimeout(() => {
+            const test = document.createElement('div');
+            test.className = 'adsbox';
+            test.innerHTML = '&nbsp;';
+            document.body.appendChild(test);
+            sendEvent('tech_adblock_status', { 'active': test.offsetHeight === 0 });
+            test.remove();
+        }, 3000);
     });
-  </script>
+
+    window.onerror = (msg, url, line) => {
+        sendEvent('tech_js_error', { 'msg': msg, 'line': line });
+    };
+
+    window.addEventListener('load', () => {
+        const perf = performance.getEntriesByType("navigation")[0];
+        if (perf) sendEvent('tech_load_time', { 'ms': Math.round(perf.domComplete) });
+    });
+
+})();
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -119,7 +170,6 @@
         }
         nav a:hover, nav a.active { color: var(--accent); }
 
-        /* Botón de idioma */
         .lang-switch {
             margin-left: 1.5rem; background: var(--text); color: #fff; border: none;
             padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.65rem;
@@ -214,7 +264,7 @@
     <header>
         <div class="branding">
             <h2>Esteban Campos Polo</h2>
-            <h3>Graphic Designer & 3D Artist</h3>
+            <h3>Sr. Graphic Packaging and Production Designer</h3>
         </div>
         <nav>
             <a href="index.html" data-key="nav-home">Home</a>
@@ -279,7 +329,6 @@
     </div>
 
     <script>
-        // --- LOGICA DE TRADUCCIÓN ---
         const translations = {
             es: {
                 "nav-home": "Inicio", "nav-graphic": "Diseño Gráfico", "nav-photo": "Fotografía", "nav-3d": "Arte 3D", "nav-ai": "IA", "nav-about": "Sobre mí", "nav-contact": "Contacto", "nav-cv": "CV/Resume",
@@ -302,8 +351,8 @@
         let currentLang = 'en';
         function toggleLanguage() {
             currentLang = currentLang === 'es' ? 'en' : 'es';
-            // ANALYTICS: Cambio de idioma
-            trackEvent('change_language', { 'language': currentLang });
+            // Integración con Omni-Tracker
+            if (typeof gtag === 'function') gtag('event', 'engagement_change_language', { 'language': currentLang });
 
             document.getElementById('langBtn').innerText = currentLang === 'es' ? 'EN' : 'ES';
             document.querySelectorAll('[data-key]').forEach(el => {
@@ -312,16 +361,16 @@
             });
         }
 
-        // --- SLIDESHOW HERO ---
         const slides = document.querySelectorAll("#hero-slideshow .slide");
         let slideIndex = 0;
         setInterval(() => {
-            slides.forEach(s => s.classList.remove('active'));
-            slideIndex = (slideIndex + 1) % slides.length;
-            slides[slideIndex].classList.add('active');
+            if(slides.length > 0) {
+                slides.forEach(s => s.classList.remove('active'));
+                slideIndex = (slideIndex + 1) % slides.length;
+                slides[slideIndex].classList.add('active');
+            }
         }, 4000);
 
-        // --- GALERÍA & MODAL ---
         const modal = document.getElementById("slideshowModal");
         const modalImage = document.getElementById("modalImage");
         const categoryCounts = { echo: 55, creepy: 9, val: 4, clothes: 12, toys: 20 };
@@ -329,9 +378,7 @@
         let currentIndex = 0;
 
         function openCategory(cat) {
-            // ANALYTICS: Selección de categoría
-            trackEvent('view_category', { 'category_name': cat });
-
+            if (typeof gtag === 'function') gtag('event', 'engagement_view_category', { 'category_name': cat });
             const gallery = document.getElementById("thumbnailGallery");
             gallery.innerHTML = "";
             for (let i = 1; i <= categoryCounts[cat]; i++) {
@@ -344,76 +391,31 @@
         }
 
         function openSlideshow(cat, startIdx) {
-            // ANALYTICS: Ver imagen en HD
-            trackEvent('view_image_hd', { 'category': cat, 'image_index': startIdx });
-
+            if (typeof gtag === 'function') gtag('event', 'engagement_view_image_hd', { 'category': cat, 'index': startIdx });
             imageList = [];
-            for (let i = 1; i <= categoryCounts[cat]; i++) imageList.push(`assets/images/AI/jpg/${cat}/${cat} (${i}).jpg`);
+            for (let i = 1; i <= categoryCounts[cat]; i++) {
+                imageList.push(`assets/images/AI/webp/${cat}/${cat} (${i}).webp`);
+            }
             currentIndex = startIdx - 1;
             modalImage.src = imageList[currentIndex];
             modal.style.display = "flex";
         }
 
         function closeModal() { 
-            // ANALYTICS: Cerrar modal
-            trackEvent('close_modal', { 'last_viewed_index': currentIndex + 1 });
             modal.style.display = "none"; 
         }
 
         function nextImage() { 
             currentIndex = (currentIndex + 1) % imageList.length; 
             modalImage.src = imageList[currentIndex];
-            // ANALYTICS: Navegación siguiente
-            trackEvent('gallery_next', { 'new_index': currentIndex + 1 });
         }
 
         function prevImage() { 
             currentIndex = (currentIndex - 1 + imageList.length) % imageList.length; 
             modalImage.src = imageList[currentIndex]; 
-            // ANALYTICS: Navegación anterior
-            trackEvent('gallery_prev', { 'new_index': currentIndex + 1 });
         }
         
         document.addEventListener('contextmenu', e => e.preventDefault());
-
-        // --- ANALYTICS LISTENERS AUTOMÁTICOS AL CARGAR ---
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // 1. Clics en el CV
-            document.querySelectorAll('.cv-links a').forEach(link => {
-                link.addEventListener('click', function() {
-                    trackEvent('download_cv', { 'language': this.id === 'cv-es' ? 'Spanish' : 'English' });
-                });
-            });
-
-            // 2. Clics en Redes Sociales (Footer)
-            document.querySelectorAll('.footer-social a').forEach(link => {
-                link.addEventListener('click', function() {
-                    const platform = this.getAttribute('data-social') || this.href;
-                    trackEvent('social_click', { 'platform': platform });
-                });
-            });
-
-            // 3. Clics en Navegación Principal
-            document.querySelectorAll('nav a').forEach(link => {
-                link.addEventListener('click', function() {
-                    trackEvent('nav_click', { 'section': this.textContent.trim() });
-                });
-            });
-
-            // 4. Rastreo de Scroll Profundo (Scroll Depth)
-            let scrollDepths = { 25: false, 50: false, 90: false };
-            window.addEventListener('scroll', () => {
-                const scrollTop = window.scrollY;
-                const winHeight = window.innerHeight;
-                const docHeight = document.body.offsetHeight;
-                const scrollPercent = (scrollTop / (docHeight - winHeight)) * 100;
-
-                if (scrollPercent > 25 && !scrollDepths[25]) { trackEvent('scroll_depth', {'depth': '25%'}); scrollDepths[25] = true; }
-                if (scrollPercent > 50 && !scrollDepths[50]) { trackEvent('scroll_depth', {'depth': '50%'}); scrollDepths[50] = true; }
-                if (scrollPercent > 90 && !scrollDepths[90]) { trackEvent('scroll_depth', {'depth': '90%'}); scrollDepths[90] = true; }
-            });
-        });
     </script>
 </body>
 </html>

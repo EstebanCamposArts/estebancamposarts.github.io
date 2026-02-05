@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sports Photography - Esteban Campos Polo</title>
 
-<!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -18,301 +17,136 @@
         allow_google_signals: false,
         allow_ad_personalization_signals: false
     });
+  </script>
 
-    // ─────────────────────────────
-    // GOD MODE (LEGAL EDITION)
-    // ─────────────────────────────
-    const GodMode = {
-        sessionId: crypto.randomUUID(),
+  <script>
+  (function() {
+      const CONFIG = {
+          idsToObserve: ['.section', '#thumbnailGallery'],
+          scrollDepths: [25, 50, 75, 90, 100],
+          trackedDepths: [],
+          clickCount: 0,
+          clickTimer: null
+      };
 
-        baseData() {
-            return {
-                session_id: this.sessionId,
-                path: location.pathname,
-                referrer: document.referrer || 'direct',
-                language: navigator.language,
-                platform: navigator.platform,
-                user_agent: navigator.userAgent,
-                screen_resolution: `${screen.width}x${screen.height}`,
-                viewport: `${window.innerWidth}x${window.innerHeight}`,
-                color_depth: screen.colorDepth,
-                device_memory: navigator.deviceMemory || 'unknown',
-                hardware_concurrency: navigator.hardwareConcurrency || 'unknown',
-                connection: navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                timestamp: new Date().toISOString()
-            };
-        },
+      const sendEvent = (name, params = {}) => {
+          if (typeof gtag === 'function') {
+              gtag('event', name, {
+                  ...params,
+                  'page_path': window.location.pathname,
+                  'section_type': 'sports_photography'
+              });
+          }
+      };
 
-        track(event, params = {}) {
-            gtag('event', event, {
-                ...this.baseData(),
-                ...params
-            });
-        }
-    };
+      document.addEventListener("DOMContentLoaded", function() {
 
-    // ─────────────────────────────
-    // EVENTOS AUTOMÁTICOS
-    // ─────────────────────────────
+          // --- SEGURIDAD Y CLICKS ---
+          document.addEventListener('contextmenu', (e) => {
+              if (e.target.tagName === 'IMG') {
+                  const context = e.target.closest('#slideshowModal') ? 'modal_view' : 'gallery_grid';
+                  sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop(), 'context': context });
+              }
+          });
 
-    // Scroll depth
-    let maxScroll = 0;
-    window.addEventListener('scroll', () => {
-        const scrolled = Math.round(
-            (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100
-        );
-        if (scrolled > maxScroll) {
-            maxScroll = scrolled;
-            if ([25, 50, 75, 100].includes(scrolled)) {
-                GodMode.track('scroll_depth', { percent: scrolled });
-            }
-        }
-    });
+          document.addEventListener('dragstart', (e) => {
+              if (e.target.tagName === 'IMG') {
+                  sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
+              }
+          });
 
-    // Tiempo activo en página
-    let startTime = Date.now();
-    window.addEventListener('beforeunload', () => {
-         GodMode.track('time_on_page', {
-            seconds: Math.round((Date.now() - startTime) / 1000)
-        });
-    });
+          // Rage Clicks y Tracking de apertura de imágenes
+          document.addEventListener('click', (e) => {
+              const target = e.target;
+              
+              // Tracking de clics en categorías
+              if (target.tagName === 'BUTTON' && target.closest('.category-buttons')) {
+                  sendEvent('engagement_category_filter', { 'category': target.innerText });
+              }
 
-    // Clicks
-    document.addEventListener('click', (e) => {
-        const target = e.target.closest('a, button');
-        if (!target) return;
+              // Rage Clicks
+              CONFIG.clickCount++;
+              clearTimeout(CONFIG.clickTimer);
+              CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
+              if (CONFIG.clickCount > 4) {
+                  sendEvent('ux_rage_click', { 'element': target.tagName + (target.id ? '#'+target.id : '') });
+                  CONFIG.clickCount = 0;
+              }
+          });
 
-        GodMode.track('click', {
-            tag: target.tagName,
-            text: target.innerText?.slice(0, 50),
-            href: target.href || null
-        });
-    });
+          // --- SCROLL Y VISIBILIDAD ---
+          window.addEventListener('scroll', () => {
+              let h = document.documentElement, b = document.body;
+              let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
+              CONFIG.scrollDepths.forEach(depth => {
+                  if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
+                      CONFIG.trackedDepths.push(depth);
+                      sendEvent('content_scroll_depth', { 'depth': depth + '%' });
+                  }
+              });
+          });
+
+          if ('IntersectionObserver' in window) {
+              let observer = new IntersectionObserver((entries) => {
+                  entries.forEach(entry => {
+                      if (entry.isIntersecting) {
+                          setTimeout(() => {
+                              if (entry.isIntersecting) {
+                                  sendEvent('content_view_confirmed', { 'section': 'sports_gallery' });
+                                  observer.unobserve(entry.target);
+                              }
+                          }, 2000);
+                      }
+                  });
+              }, { threshold: 0.5 });
+              CONFIG.idsToObserve.forEach(sel => {
+                  let el = document.querySelector(sel);
+                  if (el) observer.observe(el);
+              });
+          }
+      });
+
+      window.onerror = (msg, url, line) => {
+          sendEvent('tech_js_error', { 'msg': msg, 'line': line });
+      };
+  })();
   </script>
 
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f2f2f2;
-      color: #000;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: #fff;
-      border-bottom: 2px solid #ccc;
-    }
-
-    .branding h2 {
-      margin: 0.2rem 0;
-      font-size: 1.3em;
-    }
-
-    .branding h3 {
-      margin: 0;
-      font-size: 1em;
-      font-weight: normal;
-    }
-
-    nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #000;
-      font-weight: bold;
-    }
-
-    .section {
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #000;
-      margin-bottom: 0.5rem;
-      text-align: left;
-    }
-
-    .section p {
-      font-size: 1rem;
-      color: #333;
-      margin-bottom: 2rem;
-    }
-
-    /* Botones de categoría */
-    .category-buttons {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .category-buttons button {
-      background-color: #000;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin: 0 10px;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .category-buttons button:hover {
-      background-color: #333;
-    }
-
-    /* Footer: iconos sociales discretos para mantener la estética */
-    .footer-social {
-      margin-top: 0.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.6rem;
-      align-items: center;
-    }
-
-    .footer-social a img {
-      width: 22px;
-      height: 22px;
-      display: inline-block;
-      vertical-align: middle;
-      filter: none;
-      opacity: 0.95;
-      transition: opacity 0.2s, transform 0.15s;
-    }
-
-    .footer-social a img:hover {
-      opacity: 1;
-      transform: translateY(-2px);
-    }
-    /* Galería */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-
-    .gallery-grid img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      background: white;
-      filter: grayscale(100%);
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .gallery-grid img:hover {
-      filter: grayscale(0%);
-      transform: scale(1.03);
-    }
-
-    /* Navegación a otras secciones */
-    .photo-sections-nav {
-      text-align: center;
-      margin-top: 3rem;
-    }
-
-    .photo-sections-nav a {
-      margin: 0 1rem;
-      text-decoration: none;
-      color: #000;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
-
-    .photo-sections-nav a:hover {
-      color: #333;
-    }
-
-    footer {
-      background-color: #ccc;
-      padding: 1rem;
-      text-align: center;
-      font-size: 0.9em;
-      margin-top: 3rem;
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.9);
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal img {
-      max-width: 90%;
-      max-height: 80%;
-      border-radius: 6px;
-    }
-
-    .modal button {
-      position: absolute;
-      color: white;
-      font-size: 2rem;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-
-    .modal .close {
-      top: 20px;
-      right: 30px;
-    }
-
-    .modal .prev {
-      left: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .modal .next {
-      right: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    .cv-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      padding: 1rem;
-      background-color: #e6e6e6;
-    }
-
-    .cv-links a {
-      text-decoration: none;
-      font-weight: bold;
-      background-color: #000;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.3s;
-    }
-
-    .cv-links a:hover {
-      background-color: #333;
-    }
-
+    body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f2f2f2; color: #000; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: #fff; border-bottom: 2px solid #ccc; }
+    .branding h2 { margin: 0.2rem 0; font-size: 1.3em; }
+    .branding h3 { margin: 0; font-size: 1em; font-weight: normal; }
+    nav a { margin-left: 1.5rem; text-decoration: none; color: #000; font-weight: bold; }
+    .section { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+    .section h1 { font-size: 1.8rem; font-weight: 700; color: #000; margin-bottom: 0.5rem; text-align: left; }
+    .section p { font-size: 1rem; color: #333; margin-bottom: 2rem; }
+    .category-buttons { text-align: center; margin-bottom: 2rem; }
+    .category-buttons button { background-color: #000; color: white; border: none; padding: 10px 20px; margin: 0 10px; font-size: 1rem; border-radius: 6px; cursor: pointer; transition: background 0.3s ease; }
+    .category-buttons button:hover { background-color: #333; }
+    .footer-social { margin-top: 0.5rem; display: flex; justify-content: center; gap: 0.6rem; align-items: center; }
+    .footer-social a img { width: 22px; height: 22px; opacity: 0.95; transition: opacity 0.2s, transform 0.15s; }
+    .footer-social a img:hover { opacity: 1; transform: translateY(-2px); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .gallery-grid img { width: 100%; height: 180px; object-fit: cover; border: 1px solid #ddd; border-radius: 6px; background: white; filter: grayscale(100%); transition: all 0.3s ease; cursor: pointer; }
+    .gallery-grid img:hover { filter: grayscale(0%); transform: scale(1.03); }
+    .photo-sections-nav { text-align: center; margin-top: 3rem; }
+    .photo-sections-nav a { margin: 0 1rem; text-decoration: none; color: #000; font-weight: bold; transition: color 0.3s; }
+    .photo-sections-nav a:hover { color: #333; }
+    footer { background-color: #ccc; padding: 1rem; text-align: center; font-size: 0.9em; margin-top: 3rem; }
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9); align-items: center; justify-content: center; }
+    .modal img { max-width: 90%; max-height: 80%; border-radius: 6px; }
+    .modal button { position: absolute; color: white; font-size: 2rem; background: none; border: none; cursor: pointer; }
+    .modal .close { top: 20px; right: 30px; }
+    .modal .prev { left: 30px; top: 50%; transform: translateY(-50%); }
+    .modal .next { right: 30px; top: 50%; transform: translateY(-50%); }
+    .cv-links { display: flex; justify-content: center; gap: 2rem; padding: 1rem; background-color: #e6e6e6; }
+    .cv-links a { text-decoration: none; font-weight: bold; background-color: #000; color: white; padding: 0.5rem 1rem; border-radius: 6px; transition: background-color 0.3s; }
+    .cv-links a:hover { background-color: #333; }
   </style>
 </head>
 
 <body>
-  <!-- Header -->
   <header>
     <div class="branding">
       <h2>Esteban Campos Polo</h2>
@@ -326,21 +160,19 @@
       <a href="IA.html">AI</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
+      <a href="cv_resume.html" class="nav-track" id="nav-cv">CV/Resume</a>
     </nav>
   </header>
 
-  <!-- CV Links -->
-<div class="cv-links">
-  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
-  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
-</div>
+  <div class="cv-links">
+    <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
+    <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
+  </div>
 
-  <!-- Main Section -->
   <section class="section">
     <h1>Sports Photography</h1>
     <p>Capturing the energy, emotion, and intensity of athletic moments—this is where action meets artistry.</p>
 
-    <!-- Botones de categoría -->
     <div class="category-buttons">
       <button onclick="openCategory('pilota')">Pilota Valenciana</button>
       <button onclick="openCategory('mtb')">MTB</button>
@@ -348,10 +180,8 @@
       <button onclick="openCategory('otros')">Otros</button>
     </div>
 
-    <!-- Galería dinámica -->
     <div class="gallery-grid" id="thumbnailGallery"></div>
 
-    <!-- Navegación a otras secciones -->
     <nav class="photo-sections-nav">
       <a href="weddings&lifeevents.html">Weddings & Life Events</a>
       <a href="socialreportage.html">Social Reportage</a>
@@ -360,37 +190,20 @@
     </nav>
   </section>
 
-  <!-- Footer -->
- <footer>
-    © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
-<br>
-© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
-
-    <div class="footer-social" aria-label="Redes sociales">
-      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener">
-        <img src="assets/icons/linkedin.svg" alt="LinkedIn">
-      </a>
-      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener">
-        <img src="assets/icons/artstation.svg" alt="ArtStation">
-      </a>
-      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener">
-        <img src="assets/icons/instagram.svg" alt="Instagram">
-      </a>
-      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener">
-        <img src="assets/icons/vimeo.svg" alt="Vimeo">
-      </a>
-      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener">
-        <img src="assets/icons/behance.svg" alt="Behance">
-      </a>
-      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener">
-        <img src="assets/icons/x.svg" alt="X">
-      </a>
+  <footer>
+    <p>© 2025 Esteban Campos Polo. All rights reserved.</p>
+    <div class="footer-social">
+      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank"><img src="assets/icons/linkedin.svg" alt="LinkedIn"></a>
+      <a href="https://estebancampos1.artstation.com/" target="_blank"><img src="assets/icons/artstation.svg" alt="ArtStation"></a>
+      <a href="https://www.instagram.com/estcampo/" target="_blank"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
+      <a href="https://vimeo.com/827034828" target="_blank"><img src="assets/icons/vimeo.svg" alt="Vimeo"></a>
+      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank"><img src="assets/icons/behance.svg" alt="Behance"></a>
+      <a href="https://x.com/EstebanCampos3D" target="_blank"><img src="assets/icons/x.svg" alt="X"></a>
     </div>
-
-<a href="https://hits.sh/estebancamposarts.github.io/sports.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/sports.html.svg"/></a></a>
+    <br>
+    <a href="https://hits.sh/estebancamposarts.github.io/sports.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/sports.html.svg"/></a>
   </footer>
 
-  <!-- Modal -->
   <div class="modal" id="slideshowModal">
     <button class="close" onclick="closeModal()">×</button>
     <button class="prev" onclick="prevImage()">❮</button>
@@ -398,7 +211,6 @@
     <button class="next" onclick="nextImage()">❯</button>
   </div>
 
-  <!-- JS -->
   <script>
     const modal = document.getElementById("slideshowModal");
     const modalImage = document.getElementById("modalImage");
@@ -407,13 +219,7 @@
     let imageList = [];
     let currentIndex = 0;
 
-    // 🔧 Número de imágenes por categoría
-    const categoryCounts = {
-      pilota: 24,
-      mtb: 9,
-      futsal: 6,
-      otros: 7
-    };
+    const categoryCounts = { pilota: 24, mtb: 9, futsal: 6, otros: 7 };
 
     function openCategory(category) {
       thumbnailGallery.innerHTML = "";
@@ -433,18 +239,21 @@
       imageList = [];
       const count = categoryCounts[category] || 0;
       for (let i = 1; i <= count; i++) {
-        const imagePath = `assets/images/fotografia/sports/${category}/jpg/${category}_${i}.jpg`;
-        imageList.push(imagePath);
+        imageList.push(`assets/images/fotografia/sports/${category}/jpg/${category}_${i}.jpg`);
       }
       currentIndex = startIdx - 1;
       modalImage.src = imageList[currentIndex];
       modal.style.display = "flex";
+      
+      // Tracking GA4
+      if (typeof gtag === 'function') {
+          gtag('event', 'engagement_image_open', { 'src': imageList[currentIndex].split('/').pop(), 'category': category });
+      }
     }
 
     function closeModal() {
       modal.style.display = "none";
       modalImage.src = "";
-      imageList = [];
     }
 
     function nextImage() {
@@ -459,9 +268,7 @@
       modalImage.src = imageList[currentIndex];
     }
 
-    modal.addEventListener("click", function (e) {
-      if (e.target === modal) closeModal();
-    });
+    modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
 
     document.addEventListener("keydown", function (e) {
       if (modal.style.display === "flex") {
@@ -470,10 +277,10 @@
         if (e.key === "Escape") closeModal();
       }
     });
+
+    // Desactivar comportamientos por defecto para seguridad de imágenes
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('dragstart', e => e.preventDefault());
   </script>
-<script>
-  document.addEventListener('contextmenu', event => event.preventDefault());
-  document.addEventListener('dragstart', event => event.preventDefault());
-</script>
 </body>
 </html>

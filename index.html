@@ -3,136 +3,222 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Esteban Campos Polo | Portfolio</title>
+  <title>index | Esteban Campos Polo | Diseño Gráfico y Producción Creativa</title>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
+    gtag('config', 'G-8VMES8F4MN', { anonymize_ip: true });
+  </script>
 
-    gtag('config', 'G-8VMES8F4MN', {
-        anonymize_ip: true,
-        send_page_view: true,
-        allow_google_signals: false,
-        allow_ad_personalization_signals: false
-    });
+  <script>
+(function() {
+    const CONFIG = {
+        // IDs y Clases específicas de index.html
+        idsToObserve: ['.hero', '#main-projects', '#archive-projects', 'footer'], 
+        scrollDepths: [25, 50, 75, 90, 100],
+        trackedDepths: [],
+        clickCount: 0,
+        clickTimer: null,
+        sessionStartTime: Date.now()
+    };
 
-    const GodMode = {
-        sessionId: crypto.randomUUID(),
-        baseData() {
-            return {
-                session_id: this.sessionId,
-                path: location.pathname,
-                referrer: document.referrer || 'direct',
-                language: navigator.language,
-                platform: navigator.platform,
-                user_agent: navigator.userAgent,
-                screen_resolution: `${screen.width}x${screen.height}`,
-                viewport: `${window.innerWidth}x${window.innerHeight}`,
-                timestamp: new Date().toISOString()
-            };
-        },
-        track(event, params = {}) {
-            if (typeof gtag === 'function') {
-                gtag('event', event, {
-                    ...this.baseData(),
-                    ...params
-                });
-            }
+    const sendEvent = (name, params = {}) => {
+        if (typeof gtag === 'function') {
+            gtag('event', name, {
+                ...params,
+                'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
+                'memory': navigator.deviceMemory || 'unknown',
+                'page_path': window.location.pathname
+            });
         }
     };
-  </script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        // --- SEGURIDAD Y CLICKS ---
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.tagName === 'IMG') {
+                sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
+            }
+        });
+
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.tagName === 'IMG') {
+                sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            CONFIG.clickCount++;
+            clearTimeout(CONFIG.clickTimer);
+            CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
+            if (CONFIG.clickCount > 4) {
+                sendEvent('ux_rage_click', { 'element': e.target.tagName + (e.target.id ? '#'+e.target.id : '') });
+                CONFIG.clickCount = 0;
+            }
+        });
+
+        // --- NAVEGACIÓN Y CONTENIDO ---
+        window.addEventListener('scroll', () => {
+            let h = document.documentElement, b = document.body;
+            let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
+            CONFIG.scrollDepths.forEach(depth => {
+                if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
+                    CONFIG.trackedDepths.push(depth);
+                    sendEvent('content_scroll_depth', { 'depth': depth + '%' });
+                }
+            });
+        });
+
+        if ('IntersectionObserver' in window) {
+            let observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            if (entry.isIntersecting) {
+                                sendEvent('content_view_confirmed', { 'section_id': entry.target.id || entry.target.className });
+                                observer.unobserve(entry.target);
+                            }
+                        }, 2000);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            CONFIG.idsToObserve.forEach(selector => {
+                let el = document.querySelector(selector);
+                if (el) observer.observe(el);
+            });
+        }
+
+        // --- INTERACCIÓN ---
+        document.addEventListener('copy', () => {
+            let text = document.getSelection().toString().substring(0, 50);
+            sendEvent('engagement_text_copy', { 'preview': text + '...' });
+        });
+
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY < 0) sendEvent('behavior_exit_intent');
+        });
+
+        // Hover en tarjetas de proyecto
+        document.addEventListener('mouseover', (e) => {
+            let card = e.target.closest('.project-card');
+            if (card) {
+                let hTimer = setTimeout(() => sendEvent('engagement_hover_interest', { 'id': card.id }), 3000);
+                card.addEventListener('mouseleave', () => clearTimeout(hTimer), { once: true });
+            }
+        });
+
+        // AdBlock Detection
+        setTimeout(() => {
+            const test = document.createElement('div');
+            test.className = 'adsbox';
+            test.innerHTML = '&nbsp;';
+            document.body.appendChild(test);
+            sendEvent('tech_adblock_status', { 'active': test.offsetHeight === 0 });
+            test.remove();
+        }, 3000);
+    });
+
+    window.onerror = (msg, url, line) => {
+        sendEvent('tech_js_error', { 'msg': msg, 'line': line });
+    };
+
+    window.addEventListener('load', () => {
+        const perf = performance.getEntriesByType("navigation")[0];
+        if (perf) sendEvent('tech_load_time', { 'ms': Math.round(perf.domComplete) });
+    });
+})();
+</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --bg: #ffffff; --text: #1f2937; --accent: #0052FF; --muted: #64748b;
-      --light-bg: #f8fafc; --border: #e2e8f0; --radius: 4px;
+      --bg: #ffffff; --text: #111827; --accent: #0052FF; --muted: #6b7280;
+      --light-bg: #f9fafb; --border: #e5e7eb; --radius: 12px;
       --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    
     * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
 
     header {
-      position: sticky; top: 0; z-index: 1000; background: rgba(255, 255, 255, 0.9);
+      position: sticky; top: 0; z-index: 1001; background: rgba(255, 255, 255, 0.85);
       backdrop-filter: blur(12px); display: flex; justify-content: space-between; align-items: center;
       padding: 1rem 5%; border-bottom: 1px solid var(--border);
     }
-    .branding h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
-    .branding h3 { font-size: 0.65rem; color: var(--muted); font-weight: 800; text-transform: uppercase; }
+    .branding h2 { font-size: 1rem; text-transform: uppercase; font-weight: 800; }
+    .branding h3 { font-size: 0.6rem; color: var(--muted); font-weight: 700; }
 
-    nav { display: flex; align-items: center; }
-    nav a { margin-left: 1.2rem; text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; transition: var(--transition); }
-    nav a:hover { color: var(--accent); }
-
-    .lang-switch {
-      margin-left: 1.5rem; padding: 6px 12px; border: 2px solid #000;
-      font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: var(--transition);
-      background: #000; color: #fff; border-radius: var(--radius);
+    .cv-links { display: flex; justify-content: center; gap: 12px; padding: 2rem 5% 1rem; }
+    .cv-links a {
+        text-decoration: none; padding: 0.7rem 1.2rem; border-radius: var(--radius);
+        font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+        transition: var(--transition); border: 1.5px solid var(--text);
     }
-    .lang-switch:hover { background: var(--accent); border-color: var(--accent); }
+    #cv-es { background: var(--text); color: #fff; }
+    #cv-en { background: transparent; color: var(--text); }
+    .cv-links a:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-    .hero { padding: clamp(4rem, 10vh, 6rem) 5% 3rem; max-width: 1000px; margin: 0 auto; }
-    .hero h1 { font-size: clamp(1.8rem, 7vw, 2.8rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.2rem; color: #000; letter-spacing: -0.03em; }
-    .hero p { font-size: 1.1rem; color: var(--muted); max-width: 850px; }
-    .punchline { font-size: 1.1rem; font-weight: 700; border-left: 4px solid var(--accent); padding-left: 1.5rem; margin: 2.5rem 0; }
-    .nda-tag { display: inline-block; background: var(--light-bg); color: var(--muted); padding: 5px 12px; border-radius: var(--radius); font-size: 0.65rem; font-weight: 800; border: 1px solid var(--border); text-transform: uppercase; margin-bottom: 1rem; }
+    nav a { margin-left: 1.2rem; text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+    .lang-switch { margin-left: 1.5rem; padding: 6px 12px; border: 2px solid #000; font-size: 0.7rem; font-weight: 800; cursor: pointer; background: #000; color: #fff; border-radius: 6px; }
 
-    .section-title { padding: 0 5%; max-width: 1000px; margin: 4rem auto 1.5rem; display: flex; align-items: center; gap: 15px; }
-    .section-title h2 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); font-weight: 800; }
+    .hero { padding: 5rem 5% 2rem; max-width: 1200px; margin: 0 auto; text-align: center; }
+    .hero h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 1rem; }
+    .hero p { font-size: 1.1rem; color: var(--muted); max-width: 800px; margin: 0 auto; }
+    .nda-tag { display: inline-block; background: var(--light-bg); padding: 5px 12px; border-radius: 20px; font-size: 0.6rem; font-weight: 800; border: 1px solid var(--border); text-transform: uppercase; margin-bottom: 1rem; }
+
+    .section-title { padding: 0 5%; max-width: 1200px; margin: 3rem auto 1.5rem; display: flex; align-items: center; gap: 15px; }
+    .section-title h2 { font-size: 0.7rem; letter-spacing: 2px; color: var(--muted); font-weight: 800; text-transform: uppercase; }
     .section-title .line { height: 1px; background: var(--border); flex-grow: 1; }
 
-    .work-section { max-width: 1000px; margin: 0 auto; padding: 0 5%; }
-    .project-card { border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 1.5rem; transition: var(--transition); }
-    .project-header { width: 100%; background: none; border: none; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .project-header h3 { font-size: 1.15rem; font-weight: 800; }
-    
-    .project-body { max-height: 0; opacity: 0; overflow: hidden; transition: var(--transition); padding: 0 1.5rem; }
-    .project-card.active .project-body { max-height: 2000px; opacity: 1; padding-bottom: 2.5rem; }
+    .work-grid { display: grid; gap: 2rem; max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+    .grid-main { grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); }
+    .grid-archive { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
 
-    .project-content { display: grid; grid-template-columns: 1fr 1.3fr; gap: 2.5rem; }
-    .tech-specs { background: var(--light-bg); padding: 1.5rem; border-radius: var(--radius); border: 1px solid var(--border); margin-top: 1.5rem; }
-    .tech-specs b { color: var(--accent); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
-    .result-tag { margin-top: 15px; font-size: 0.9rem; font-weight: 800; color: #059669; border-top: 1px solid var(--border); padding-top: 10px; }
+    .project-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: var(--transition); display: flex; flex-direction: column; }
+    .project-card:hover { border-color: var(--accent); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08); }
 
-    .slider-container { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
-    .slider { aspect-ratio: 16/10; background: #f1f5f9; position: relative; }
-    .slides { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; }
+    .slider-container { position: relative; aspect-ratio: 16/10; overflow: hidden; background: #f3f4f6; }
+    .slides { display: flex; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; cursor: zoom-in; }
     .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
     
-    .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; width: 40px; height: 40px; cursor: pointer; z-index: 10; font-weight: bold; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; width: 32px; height: 32px; cursor: pointer; z-index: 10; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: 0.2s; }
     .slider-btn:hover { background: var(--accent); color: white; }
-    .prev { left: 10px; } .next { right: 10px; }
+    .prev { left: 8px; } .next { right: 8px; }
 
-    .slider-nav { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
-    .dot { width: 6px; height: 6px; background: rgba(0,0,0,0.2); border-radius: 50%; cursor: pointer; }
-    .dot.active { background: var(--accent); width: 18px; border-radius: 3px; }
+    .slider-nav { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; z-index: 11; }
+    .dot { width: 5px; height: 5px; background: rgba(0,0,0,0.2); border-radius: 50%; cursor: pointer; }
+    .dot.active { background: var(--accent); width: 12px; border-radius: 3px; }
 
-    .visual-archive { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; padding: 0 5%; max-width: 1000px; margin: 0 auto 5rem; }
-    .archive-item { position: relative; aspect-ratio: 1/1; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); cursor: pointer; }
-    .archive-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-    .archive-item:hover img { transform: scale(1.08); }
-    .archive-item .label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.85); color: #fff; padding: 12px; font-size: 0.6rem; font-weight: 700; text-transform: uppercase; opacity: 0; transform: translateY(10px); transition: 0.3s; }
-    .archive-item:hover .label { opacity: 1; transform: translateY(0); }
+    .project-info { padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column; }
+    .project-info h3 { font-size: 1rem; font-weight: 800; margin-bottom: 0.4rem; line-height: 1.2; }
+    .project-info p.desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; }
 
-    .cv-links { display: flex; justify-content: center; gap: 1.5rem; padding: 5rem 1rem; background: var(--light-bg); border-top: 1px solid var(--border); }
-    .cv-links a { text-decoration: none; font-size: 0.8rem; font-weight: 800; border: 2px solid #000; color: #000; padding: 1rem 2rem; border-radius: var(--radius); transition: 0.3s; }
-    .cv-links a:hover { background: #000; color: #fff; }
+    .tech-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.6rem 0.8rem; background: var(--light-bg); border-radius: 6px; border: 1px solid var(--border); margin-top: auto; }
+    .tech-header span { font-size: 0.65rem; font-weight: 800; color: var(--accent); }
 
-    footer { background: #111827; color: #fff; padding: 4rem 5%; text-align: center; }
-    .footer-social { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2.5rem; }
-    .footer-social img { width: 24px; height: 24px; filter: invert(1); opacity: 0.6; transition: 0.3s; }
-    .footer-social img:hover { opacity: 1; transform: translateY(-4px); }
-    .copyright-text { opacity: 0.4; font-size: 0.7rem; margin-top: 2rem; }
+    .tech-content { max-height: 0; opacity: 0; overflow: hidden; transition: var(--transition); }
+    .project-card.active .tech-content { max-height: 500px; opacity: 1; padding-top: 1rem; }
+    
+    .tech-specs { border-left: 2px solid var(--accent); padding-left: 0.8rem; font-size: 0.8rem; }
+    .tech-specs b { font-size: 0.6rem; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 0.3rem; }
+    .result-tag { margin-top: 0.8rem; font-weight: 800; color: #059669; font-size: 0.8rem; }
 
-    @media (max-width: 850px) {
-      header { flex-direction: column; padding: 1.5rem; gap: 1rem; }
-      nav a { margin: 0.3rem 0.6rem; font-size: 0.65rem; }
-      .project-content { grid-template-columns: 1fr; }
-    }
+    #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; cursor: zoom-out; }
+    #lightbox img { max-width: 90%; max-height: 90%; object-fit: contain; }
+
+    footer { background: #111827; color: #fff; padding: 3rem 5%; text-align: center; margin-top: 4rem; }
+    .footer-social { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .footer-social img { width: 20px; filter: invert(1); opacity: 0.5; }
+
+    @media (max-width: 1024px) { .grid-archive { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); } }
+    @media (max-width: 600px) { .grid-main, .grid-archive { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -140,198 +226,194 @@
   <header>
     <div class="branding">
       <h2 id="brand-name">Esteban Campos Polo</h2>
-      <h3 id="brand-sub">DISEÑO GRÁFICO & PRODUCCIÓN</h3>
+      <h3 id="brand-sub">Sr. Graphic Packaging and Production Designer</h3>
     </div>
     <nav>
-      <a href="graphic-design.html">Graphic Design</a>
-      <a href="photography.html">Photography</a>
-      <a href="3d-modeling.html">3D Art</a>
-      <a href="IA.html">AI</a>
-      <a href="cv_resume.html">CV/Resume</a>
+      <a href="graphic-design.html">Diseño Gráfico</a>
+      <a href="photography.html">Fotografía</a>
+      <a href="3d-modeling.html">Arte 3D</a>
+      <a href="IA.html">IA</a>
+      <a href="about.html">About</a>
+      <a href="cv_resume.html">CV</a>
       <button class="lang-switch" onclick="toggleLang()" id="langBtn">ENGLISH</button>
     </nav>
   </header>
 
+  <div class="cv-links">
+    <a href="assets/Curriculum.pdf" id="cv-es" download>Descargar CV</a>
+    <a href="assets/Resume.pdf" id="cv-en" download>Download Resume</a>
+  </div>
+
   <main>
     <section class="hero">
-      <div class="nda-tag" id="nda-tag">Proyectos adaptados bajo NDA</div>
-      <h1 id="hero-title">Diseñador Gráfico Senior orientado a producción.</h1>
-      <p id="hero-desc">Cargando...</p>
-      <div class="punchline" id="punchline">...</div>
+      <div class="nda-tag">Proyectos bajo NDA / Confidencialidad</div>
+      <h1 id="hero-title">Sr. Graphic Packaging and Production Designer.</h1>
+      <p id="hero-desc">Más de 20 años de experiencia dominando el flujo completo.</p>
     </section>
 
-    <div class="section-title"><h2 id="title-solutions">SOLUCIONES TÉCNICAS</h2><div class="line"></div></div>
-    <section class="work-section" id="projects-container"></section>
+    <div class="section-title"><h2 id="title-solutions">PROYECTOS DESTACADOS</h2><div class="line"></div></div>
+    <section class="work-grid grid-main" id="main-projects"></section>
 
-    <div class="section-title"><h2 id="title-archive">ARCHIVO SELECCIONADO</h2><div class="line"></div></div>
-    <div class="visual-archive" id="archive-grid"></div>
+    <div class="section-title"><h2 id="title-archive">ARCHIVO TÉCNICO</h2><div class="line"></div></div>
+    <section class="work-grid grid-archive" id="archive-projects"></section>
   </main>
 
-  <section class="cv-links">
-    <a href="assets/Curriculum.pdf" download>Descargar CV</a>
-    <a href="assets/Resume.pdf" download>Download Resume</a>
-  </section>
+  <div id="lightbox" onclick="this.style.display='none'"><img src="" id="lightbox-img"></div>
 
   <footer>
     <div class="footer-social" id="footer-social-links"></div>
-    <p class="copyright-text">© 2025 Esteban Campos Polo. Intellectual Property.</p>
+    <p style="opacity:0.3; font-size:0.6rem">© 2026 Esteban Campos Polo. Todos los derechos reservados.</p>
   </footer>
 
   <script>
     let currentLang = 'es';
+    const sliderState = {};
 
-    const archiveImgs = [
-      { img: "assets/images/graphicdesign/mockups/canephora.jpg", es: "Branding Café", en: "Branding Café" },
-      { img: "assets/images/graphicdesign/appmath.jpg", es: "App Matemáticas", en: "Math app" },
-      { img: "assets/images/graphicdesign/heromockup.jpg", es: "Diseño packaging", en: "Packaging Design" },
-      { img: "assets/images/graphicdesign/wine.jpg", es: "Etiqueta vino", en: "Wine Label" },
-      { img: "assets/images/graphicdesign/mockups/merlot.jpg", es: "Rótulo luminoso Merlot", en: "Merlot wine label" },
-      { img: "assets/images/graphicdesign/mockupmerlot.jpg", es: "Branding Merlot", en: "Merlot Branding" },
-      { img: "assets/images/graphicdesign/mockups/pleurotus.jpg", es: "Diseño de Packaging", en: "Structural Design" },
-      { img: "assets/images/graphicdesign/mockups/mermelaida.jpg", es: "Etiqueta Mermelaida", en: "Mermelaida Label" },
-      { img: "assets/images/graphicdesign/mockups/creamania.jpg", es: "Identidad Corporativa", en: "Brand Identity" },
-      { img: "assets/images/graphicdesign/webcfsonil.jpg", es: "Diseño web", en: "Web Design" }
+    const mainProjects = [
+      { id: "p0", imgs: ["assets/images/graphicdesign/lacampana.jpg"] },
+      { id: "p1", imgs: ["assets/images/graphicdesign/cream.jpg", "assets/images/graphicdesign/mockups/camocream.jpg"] },
+      { id: "p2", imgs: ["assets/images/graphicdesign/beerpack.jpg", "assets/images/graphicdesign/salmonpack.jpg"] },
+      { id: "p3", imgs: ["assets/images/graphicdesign/mockups/cafeparis.jpg", "assets/images/graphicdesign/rotulocafeparis.jpg"] }
+    ];
+
+    const archiveProjects = [
+      { id: "a1", imgs: ["assets/images/graphicdesign/mockups/canephora.jpg"] },
+      { id: "a2", imgs: ["assets/images/graphicdesign/appmath.jpg"] },
+      { id: "a3", imgs: ["assets/images/graphicdesign/heromockup.jpg"] },
+      { id: "a4", imgs: ["assets/images/graphicdesign/wine.jpg"] },
+      { id: "a5", imgs: ["assets/images/graphicdesign/mockups/merlot.jpg"] },
+      { id: "a6", imgs: ["assets/images/graphicdesign/mockups/pleurotus.jpg"] },
+      { id: "a7", imgs: ["assets/images/graphicdesign/mockupjampack.jpg", "assets/images/graphicdesign/mockups/mermelaida.jpg"] },
+      { id: "a8", imgs: ["assets/images/graphicdesign/webcfsonil.jpg"] }
     ];
 
     const translations = {
       es: {
-        brandSub: "DISEÑO GRÁFICO & PRODUCCIÓN",
-        heroTitle: "Diseñador Gráfico Senior orientado a producción.",
-        heroDesc: "Más de 15 años especializándome en diseño gráfico aplicado a producción industrial. Preimpresión técnica y preparación de artes finales para fábrica sin errores.",
-        punchline: "Diseñar es solo una parte. El valor real es asegurar que la producción llega a fábrica sin sorpresas.",
-        nda: "Selección de proyectos protegidos",
-        solTitle: "SOLUCIONES TÉCNICAS",
-        arcTitle: "ARCHIVO SELECCIONADO",
-        langBtn: "ENGLISH",
-        techLabel: "CRITERIO TÉCNICO +",
-        applyLabel: "Criterio aplicado",
-        projects: [
-          { title: "Gestión de color — Línea Camocream", desc: "Diseño de imagen e implementacion sobre el producto.", insight: "Decisión técnica sobre uso de tintas planas para garantizar estabilidad cromática en diferentes productos de la colección y diferentes modelos de empaque y materiales.", result: "Resultado: Empaques de alta calidad y resistencia." },
-          { title: "Estandarización de Packaging — Retail", desc: "Diseño del artefinal del packaging siguendo la guia de estilo de la marca y todos los elementos gráficos destacabñes.", insight: "Control riguroso de color basado en CMYK, sistema de reproducción utilizado posterior corte, doblado y embalado del producto.", result: "Resultado: Reducción de los tiempos de producción y de entrega." },
-          { title: "Rotulación y Señalética — Café París", desc: "Reconstrucción de elementos de fachada: Diseño y fabricación de banderolas y vinilos.", insight: "Escalado vectorial preciso, adaptación y medidas del producto final y estudio de materiales para alta durabilidad exterior.", result: "Resultado: Productos del alta calidad y durabilidad siendo fiel a la marca." },
-          { title: "Gráfica de Gran Formato — Cascos y Más", desc: "Diseño branding, adaptación para reproducción. Fabricación de vinilos y rótulo retroiluminado.", insight: " Estudio de marca y vectorización del producto. Fabricación de vinilos en diferentes colores preparados para su colocación.", result: "Resultado: Producto de alta calidad y durabilidad." }
+        heroTitle: "Diseño gráfico y soluciones técnicas orientadas a la fabricación.",
+        heroDesc: "Dominio integral del flujo de trabajo: desde el briefing inicial hasta la salida de máquina.",
+        techBtn: "VER DETALLES TÉCNICOS",
+        apply: "CRITERIO DE PRODUCCIÓN",
+        main: [
+          { title: "Litografía Metálica — La Campana", desc: "Packaging premium de hojalata.", insight: "Vectorización integra manual. Gestión de tintas y barnices.", result: "Producción industrial precisa." },
+          { title: "Gestión de color — Camocream", desc: "Diseño técnico sobre soporte complejo.", insight: "Tintas planas para estabilidad cromática.", result: "Éxito: Fidelidad de marca." },
+          { title: "Packaging Retail — Gran Consumo", desc: "Desarrollo de artes finales.", insight: "Control exhaustivo CMYK.", result: "Reducción de mermas." },
+          { title: "Señalética — Café París", desc: "Reconstrucción visual gran formato.", insight: "Escalado vectorial de alta precisión.", result: "Durabilidad extrema." }
+        ],
+        archive: [
+          { title: "Canephora", desc: "Branding café.", insight: "Adaptado a flexible.", result: "Premium." },
+          { title: "App Educativa", desc: "Matemáticas.", insight: "Diseño e interfaz.", result: "Aprendizaje lúdico." },
+          { title: "Packaging Juguetes", desc: "Diseño estructural.", insight: "Preparación para imprenta.", result: "Montaje limpio." },
+          { title: "Etiqueta Vinícola", desc: "Sector vino.", insight: "Papeles técnicos.", result: "Resistencia." },
+          { title: "Merlot", desc: "Rótulo retroiluminado.", insight: "Estudio de visibilidad.", result: "Impacto visual." },
+          { title: "Caja fresh", desc: "Packaging producto fresco.", insight: "Gestión de tintas.", result: "Alta calidad." },
+          { title: "Mermelaida", desc: "Identidad producto.", insight: "Tipografía personalizada.", result: "Diferenciación." },
+          { title: "Web CFS Onil", desc: "Interfaz responsive.", insight: "Optimización assets.", result: "Carga rápida." }
         ]
       },
       en: {
-        brandSub: "GRAPHIC DESIGN & PRODUCTION",
-        heroTitle: "Senior Graphic Designer focused on production.",
-        heroDesc: "Over 15 years specializing in industrial production-oriented design. Technical pre-press for error-free manufacturing.",
-        punchline: "Designing is only part of the process. The real value is ensuring production reaches the factory without surprises.",
-        nda: "Selection of protected projects",
-        solTitle: "TECHNICAL SOLUTIONS",
-        arcTitle: "SELECTED ARCHIVE",
-        langBtn: "ESPAÑOL",
-        techLabel: "TECHNICAL CRITERIA +",
-        applyLabel: "Applied criteria",
-projects: [
-          { title: "Color Management — Camocream Line", desc: "Image design and product implementation.", insight: "Technical decision on the use of spot colors to guarantee chromatic stability across different products in the collection and various packaging models and materials.", result: "Result: High-quality, durable packaging." },
-          { title: "Packaging Standardization — Retail", desc: "Final artwork design following the brand style guide and all key graphic elements.", insight: "Rigorous CMYK-based color control, reproduction system used for subsequent cutting, folding, and product packaging.", result: "Result: Reduced production and delivery times." },
-          { title: "Signage & Wayfinding — Café París", desc: "Facade element reconstruction: Design and manufacturing of outdoor banners and vinyls.", insight: "Precise vector scaling, adaptation to final product measurements, and material study for high outdoor durability.", result: "Result: High-quality, durable products faithful to the brand identity." },
-          { title: "Large Format Graphics — Cascos y Más", desc: "Branding design and reproduction adaptation. Manufacturing of vinyls and backlit signage.", insight: "Brand study and product vectorization. Production of vinyls in various colors, prepared for installation.", result: "Result: High-quality and durable product." }
+        heroTitle: "Graphic design and technical solutions geared towards manufacturing.",
+        heroDesc: "Full workflow mastery: from initial briefing to machine output.",
+        techBtn: "VIEW TECHNICAL DETAILS",
+        apply: "PRODUCTION CRITERIA",
+        main: [
+          { title: "Metal Lithography — La Campana", desc: "Premium tinplate packaging.", insight: "Manual vectorization and ink management.", result: "Precise industrial production." },
+          { title: "Color Management — Camocream", desc: "Technical design on complex substrates.", insight: "Spot colors for stability.", result: "Success: Brand fidelity." },
+          { title: "Retail Packaging — FMCG", desc: "Final artwork development.", insight: "CMYK profile control.", result: "Reduced waste." },
+          { title: "Signage — Café París", desc: "Large format visual reconstruction.", insight: "High-precision vector scaling.", result: "Extreme durability." }
+        ],
+        archive: [
+          { title: "Canephora", desc: "Coffee branding.", insight: "Flexible packaging design.", result: "Premium." },
+          { title: "Educational App", desc: "Math app.", insight: "Design and interface.", result: "Playful learning." },
+          { title: "Toy Packaging", desc: "Structural design.", insight: "Print preparation.", result: "Clean assembly." },
+          { title: "Wine Label", desc: "Wine sector.", insight: "Technical papers.", result: "Resistant." },
+          { title: "Merlot", desc: "Backlit sign.", insight: "Visibility study.", result: "Visual impact." },
+          { title: "Fresh Box", desc: "Fresh produce packaging.", insight: "Ink management.", result: "High quality." },
+          { title: "Mermelaida", desc: "Product identity.", insight: "Custom typography.", result: "Differentiation." },
+          { title: "Web CFS Onil", desc: "Responsive interface.", insight: "Asset optimization.", result: "Fast loading." }
         ]
       }
     };
 
-    const projectData = [
-      { id: "p1", imgs: ["assets/images/graphicdesign/mockups/camocream.jpg", "assets/images/graphicdesign/cream.jpg"] },
-      { id: "p2", imgs: ["assets/images/graphicdesign/beerpack.jpg", "assets/images/graphicdesign/salmonpack.jpg"] },
-      { id: "p3", imgs: ["assets/images/graphicdesign/mockups/cafeparis.jpg", "assets/images/graphicdesign/rotulocafeparis.jpg"] },
-      { id: "p4", imgs: ["assets/images/graphicdesign/mockups/cascosymasoutlet.jpg", "assets/images/graphicdesign/rotulo.jpg"] }
-    ];
-
-    function render() {
-      const t = translations[currentLang];
-      document.getElementById('brand-sub').innerText = t.brandSub;
-      document.getElementById('hero-title').innerText = t.heroTitle;
-      document.getElementById('hero-desc').innerText = t.heroDesc;
-      document.getElementById('punchline').innerText = t.punchline;
-      document.getElementById('nda-tag').innerText = t.nda;
-      document.getElementById('title-solutions').innerText = t.solTitle;
-      document.getElementById('title-archive').innerText = t.arcTitle;
-      document.getElementById('langBtn').innerText = t.langBtn;
-
-      document.getElementById('projects-container').innerHTML = t.projects.map((p, i) => `
-        <article class="project-card" id="${projectData[i].id}">
-          <button class="project-header" onclick="toggleP('${projectData[i].id}', '${p.title}')">
-            <h3>${p.title}</h3>
-            <span style="font-size:9px; font-weight:800; color:var(--accent);">${t.techLabel}</span>
-          </button>
-          <div class="project-body">
-            <div class="project-content">
-              <div>
-                <p style="font-size:0.95rem; margin-bottom:1.2rem;">${p.desc}</p>
-                <div class="tech-specs"><b>${t.applyLabel}</b><p>${p.insight}</p><div class="result-tag">${p.result}</div></div>
-              </div>
-              <div class="slider-container">
-                <button class="slider-btn prev" onclick="changeS('${projectData[i].id}', -1, '${p.title}')">&#10094;</button>
-                <button class="slider-btn next" onclick="changeS('${projectData[i].id}', 1, '${p.title}')">&#10095;</button>
-                <div class="slider" id="sl-${projectData[i].id}">
-                  <div class="slides">${projectData[i].imgs.map(img => `<img src="${img}" loading="lazy">`).join('')}</div>
-                  <div class="slider-nav">${projectData[i].imgs.map((_, idx) => `<div class="dot ${idx===0?'active':''}" onclick="moveSlide(${idx}, 'sl-${projectData[i].id}', '${p.title}')"></div>`).join('')}</div>
-                </div>
+    function createCard(data, trans) {
+      return `
+        <article class="project-card" id="${data.id}">
+          <div class="slider-container">
+            ${data.imgs.length > 1 ? `<button class="slider-btn prev" onclick="changeS('${data.id}', -1)">&#10094;</button><button class="slider-btn next" onclick="changeS('${data.id}', 1)">&#10095;</button>` : ''}
+            <div class="slides" id="sl-${data.id}" onclick="openLightbox(this)">
+              ${data.imgs.map(img => `<img src="${img}" loading="lazy">`).join('')}
+            </div>
+            ${data.imgs.length > 1 ? `<div class="slider-nav">${data.imgs.map((_, idx) => `<div class="dot ${idx===0?'active':''}" onclick="moveSlide(${idx}, '${data.id}')"></div>`).join('')}</div>` : ''}
+          </div>
+          <div class="project-info">
+            <h3>${trans.title}</h3>
+            <p class="desc">${trans.desc}</p>
+            <div class="tech-header" onclick="toggleTech('${data.id}')">
+              <span>${translations[currentLang].techBtn}</span>
+              <span>▼</span>
+            </div>
+            <div class="tech-content">
+              <div class="tech-specs">
+                <b>${translations[currentLang].apply}</b>
+                <p>${trans.insight}</p>
+                <div class="result-tag">${trans.result}</div>
               </div>
             </div>
           </div>
         </article>
-      `).join('');
+      `;
+    }
 
-      document.getElementById('archive-grid').innerHTML = archiveImgs.map(item => {
-        const label = currentLang === 'es' ? item.es : item.en;
-        return `
-          <div class="archive-item" onclick="GodMode.track('archive_click', {item: '${label}'})">
-            <img src="${item.img}" loading="lazy">
-            <div class="label">${label}</div>
-          </div>
-        `;
-      }).join('');
+    function render() {
+      const t = translations[currentLang];
+      document.getElementById('hero-title').innerText = t.heroTitle;
+      document.getElementById('hero-desc').innerText = t.heroDesc;
+      document.getElementById('langBtn').innerText = currentLang === 'es' ? 'ENGLISH' : 'ESPAÑOL';
+      document.getElementById('main-projects').innerHTML = mainProjects.map((p, i) => createCard(p, t.main[i])).join('');
+      document.getElementById('archive-projects').innerHTML = archiveProjects.map((p, i) => createCard(p, t.archive[i])).join('');
+    }
+
+    function toggleTech(id) { document.getElementById(id).classList.toggle('active'); }
+
+    function moveSlide(idx, pId) {
+      const slider = document.getElementById(`sl-${pId}`);
+      const dots = document.querySelectorAll(`#${pId} .dot`);
+      if (slider) slider.style.transform = `translateX(-${idx * 100}%)`;
+      if (dots.length) {
+        dots.forEach(d => d.classList.remove('active'));
+        dots[idx].classList.add('active');
+      }
+      sliderState[pId] = idx;
+    }
+
+    function changeS(pId, dir) {
+      const list = [...mainProjects, ...archiveProjects];
+      const project = list.find(p => p.id === pId);
+      const total = project.imgs.length;
+      let current = sliderState[pId] || 0;
+      current = (current + dir + total) % total;
+      moveSlide(current, pId);
+    }
+
+    function openLightbox(el) {
+      const pId = el.id.replace('sl-', '');
+      const currentIdx = sliderState[pId] || 0;
+      const src = el.querySelectorAll('img')[currentIdx].src;
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').style.display = 'flex';
     }
 
     function toggleLang() {
       currentLang = currentLang === 'es' ? 'en' : 'es';
-      GodMode.track('lang_change', { lang: currentLang });
       render();
     }
 
-    function toggleP(id, title) {
-      const el = document.getElementById(id);
-      const active = el.classList.contains('active');
-      document.querySelectorAll('.project-card').forEach(c => c.classList.remove('active'));
-      if(!active) {
-        el.classList.add('active');
-        GodMode.track('project_expand', { project: title });
-      }
-    }
-
-    const sliderState = {};
-    function moveSlide(idx, slId, title) {
-      const slides = document.querySelector(`#${slId} .slides`);
-      const dots = document.querySelectorAll(`#${slId} .dot`);
-      if(slides) slides.style.transform = `translateX(-${idx * 100}%)`;
-      dots.forEach(d => d.classList.remove('active'));
-      if(dots[idx]) dots[idx].classList.add('active');
-      sliderState[slId] = idx;
-    }
-
-    function changeS(pId, dir, title) {
-      const slId = `sl-${pId}`;
-      const total = document.querySelectorAll(`#${slId} .dot`).length;
-      let current = sliderState[slId] || 0;
-      current = (current + dir + total) % total;
-      moveSlide(current, slId, title);
-    }
-
     window.onload = () => {
-      render(); // Cargamos el contenido inmediatamente
+      render();
       const social = [
         { n: "LinkedIn", i: "assets/icons/linkedin.svg", u: "https://www.linkedin.com/in/esteban-campos-polo-09852771" },
-        { n: "Behance", i: "assets/icons/behance.svg", u: "https://www.behance.net/EstebanDesign3D/projects" },
-        { n: "Instagram", i: "assets/icons/instagram.svg", u: "https://www.instagram.com/estcampo/" }
+        { n: "Behance", i: "assets/icons/behance.svg", u: "https://www.behance.net/EstebanDesign3D/projects" }
       ];
-      const footerSocial = document.getElementById('footer-social-links');
-      if(footerSocial) {
-        footerSocial.innerHTML = social.map(s => `<a href="${s.u}" target="_blank"><img src="${s.i}" alt="${s.n}"></a>`).join('');
-      }
-      GodMode.track('page_ready');
+      document.getElementById('footer-social-links').innerHTML = social.map(s => `<a href="${s.u}" target="_blank"><img src="${s.i}" alt="${s.n}"></a>`).join('');
     };
   </script>
 </body>

@@ -18,78 +18,138 @@
         allow_google_signals: false,
         allow_ad_personalization_signals: false
     });
+  </script>
+    <script>
+(function() {
+    // 1. CONFIGURACIÓN Y ESTADO
+    const CONFIG = {
+        idsToObserve: ['#hero', '#proyectos', '#sobre-mi', '#contacto'], // Ajusta estos IDs a tu HTML
+        scrollDepths: [25, 50, 75, 90, 100],
+        trackedDepths: [],
+        clickCount: 0,
+        clickTimer: null,
+        sessionStartTime: Date.now()
+    };
 
-    // ─────────────────────────────
-    // GOD MODE (LEGAL EDITION)
-    // ─────────────────────────────
-    const GodMode = {
-        sessionId: crypto.randomUUID(),
-
-        baseData() {
-            return {
-                session_id: this.sessionId,
-                path: location.pathname,
-                referrer: document.referrer || 'direct',
-                language: navigator.language,
-                platform: navigator.platform,
-                user_agent: navigator.userAgent,
-                screen_resolution: `${screen.width}x${screen.height}`,
-                viewport: `${window.innerWidth}x${window.innerHeight}`,
-                color_depth: screen.colorDepth,
-                device_memory: navigator.deviceMemory || 'unknown',
-                hardware_concurrency: navigator.hardwareConcurrency || 'unknown',
-                connection: navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                timestamp: new Date().toISOString()
-            };
-        },
-
-        track(event, params = {}) {
-            gtag('event', event, {
-                ...this.baseData(),
-                ...params
+    const sendEvent = (name, params = {}) => {
+        if (typeof gtag === 'function') {
+            gtag('event', name, {
+                ...params,
+                'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
+                'memory': navigator.deviceMemory || 'unknown',
+                'page_path': window.location.pathname
             });
         }
     };
 
-    // ─────────────────────────────
-    // EVENTOS AUTOMÁTICOS
-    // ─────────────────────────────
+    // 2. INICIALIZACIÓN AL CARGAR DOM
+    document.addEventListener("DOMContentLoaded", function() {
 
-    // Scroll depth
-    let maxScroll = 0;
-    window.addEventListener('scroll', () => {
-        const scrolled = Math.round(
-            (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100
-        );
-        if (scrolled > maxScroll) {
-            maxScroll = scrolled;
-            if ([25, 50, 75, 100].includes(scrolled)) {
-                GodMode.track('scroll_depth', { percent: scrolled });
+        // --- SECCIÓN: SEGURIDAD Y CLICKS ---
+        
+        // Clic derecho en imágenes e intento de arrastre
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.tagName === 'IMG') {
+                sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
             }
+        });
+
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.tagName === 'IMG') {
+                sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
+            }
+        });
+
+        // Rage Clicks (Detecta frustración: más de 4 clics en 1 seg)
+        document.addEventListener('click', (e) => {
+            CONFIG.clickCount++;
+            clearTimeout(CONFIG.clickTimer);
+            CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
+            
+            if (CONFIG.clickCount > 4) {
+                sendEvent('ux_rage_click', { 'element': e.target.tagName + (e.target.id ? '#'+e.target.id : '') });
+                CONFIG.clickCount = 0;
+            }
+        });
+
+        // --- SECCIÓN: NAVEGACIÓN Y CONTENIDO ---
+
+        // Scroll Tracking Granular
+        window.addEventListener('scroll', () => {
+            let h = document.documentElement, b = document.body;
+            let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
+            
+            CONFIG.scrollDepths.forEach(depth => {
+                if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
+                    CONFIG.trackedDepths.push(depth);
+                    sendEvent('content_scroll_depth', { 'depth': depth + '%' });
+                }
+            });
+        });
+
+        // Visibilidad Real de Proyectos (Intersection Observer)
+        if ('IntersectionObserver' in window) {
+            let observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            if (entry.isIntersecting) { // Si sigue ahí tras 2 segundos
+                                sendEvent('content_view_confirmed', { 'section_id': entry.target.id });
+                                observer.unobserve(entry.target);
+                            }
+                        }, 2000);
+                    }
+                });
+            }, { threshold: 0.6 });
+
+            CONFIG.idsToObserve.forEach(id => {
+                let el = document.querySelector(id);
+                if (el) observer.observe(el);
+            });
         }
-    });
 
-    // Tiempo activo en página
-    let startTime = Date.now();
-    window.addEventListener('beforeunload', () => {
-         GodMode.track('time_on_page', {
-            seconds: Math.round((Date.now() - startTime) / 1000)
+        // Engagement: Copiado de texto
+        document.addEventListener('copy', () => {
+            let text = document.getSelection().toString().substring(0, 50);
+            sendEvent('engagement_text_copy', { 'preview': text + '...' });
         });
-    });
 
-    // Clicks
-    document.addEventListener('click', (e) => {
-        const target = e.target.closest('a, button');
-        if (!target) return;
-
-        GodMode.track('click', {
-            tag: target.tagName,
-            text: target.innerText?.slice(0, 50),
-            href: target.href || null
+        // Exit Intent (Solo Desktop)
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY < 0) sendEvent('behavior_exit_intent');
         });
+
+        // Hover en proyectos (Interés sin clic)
+        document.querySelectorAll('.card-proyecto, .portfolio-item').forEach(item => {
+            let hTimer;
+            item.addEventListener('mouseenter', () => {
+                hTimer = setTimeout(() => sendEvent('engagement_hover_interest', { 'id': item.id }), 3000);
+            });
+            item.addEventListener('mouseleave', () => clearTimeout(hTimer));
+        });
+
+        // Detección de AdBlock
+        setTimeout(() => {
+            const test = document.createElement('div');
+            test.className = 'adsbox';
+            test.innerHTML = '&nbsp;';
+            document.body.appendChild(test);
+            sendEvent('tech_adblock_status', { 'active': test.offsetHeight === 0 });
+            test.remove();
+        }, 3000);
     });
-  </script>
+
+    window.onerror = (msg, url, line) => {
+        sendEvent('tech_js_error', { 'msg': msg, 'line': line });
+    };
+
+    window.addEventListener('load', () => {
+        const perf = performance.getEntriesByType("navigation")[0];
+        if (perf) sendEvent('tech_load_time', { 'ms': Math.round(perf.domComplete) });
+    });
+
+})();
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -108,7 +168,7 @@
 
         body {
             margin: 0;
-            font-family: 'Inter', sans-serif; /* Cambio a Inter */
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg);
             color: var(--text);
             line-height: 1.6;
@@ -160,7 +220,7 @@
 
         form {
             display: flex; flex-direction: column; gap: 1.5rem;
-            background: #fff; padding: 0; border: none; box-shadow: none; /* Reset del estilo anterior */
+            background: #fff; padding: 0; border: none; box-shadow: none;
         }
 
         label {
@@ -204,7 +264,7 @@
         .privacy-section {
             max-width: 800px; margin: 4rem auto; padding: 2rem;
             background: var(--light-bg); border-radius: var(--radius);
-            font-size: 0.5rem; color: var(--muted); text-align: left;
+            font-size: 0.7rem; color: var(--muted); text-align: left;
         }
         .privacy-section h4 {
             margin-top: 0; margin-bottom: 1rem; color: var(--text);
@@ -247,7 +307,7 @@
     <header>
         <div class="branding">
             <h2>Esteban Campos Polo</h2>
-            <h3>Graphic Designer & 3D Artist</h3>
+            <h3>Sr. Graphic Packaging and Production Designer</h3>
         </div>
         <nav aria-label="Main navigation">
             <a href="index.html" data-key="nav-home">Home</a>
@@ -256,7 +316,7 @@
             <a href="3d-modeling.html" data-key="nav-3d">3D Art</a>
             <a href="IA.html" data-key="nav-ai">AI</a>
             <a href="about.html" data-key="nav-about">About</a>
-            <a href="cv_resume.html" class="nav-god" data-id="cv" data-es="CV / Resume" data-en="CV / Resume">CV / Resumen</a>
+            <a href="cv_resume.html" data-id="cv">CV / Resume</a>
             <a href="contact.html" class="active" data-key="nav-contact">Contact</a>
             <button class="lang-switch" onclick="toggleLanguage()" id="langBtn">ES</button>
         </nav>
@@ -270,36 +330,35 @@
     <main>
         <form action="https://formspree.io/f/manaljaa" method="POST">
             <label>
-                <span data-key="form-name">Your Name:</span>
-                <input type="text" name="name" required placeholder="">
+                <span data-key="form-name">Tu Nombre:</span>
+                <input type="text" name="name" required>
             </label>
 
             <label>
-                <span data-key="form-email">Your email:</span>
-                <input type="email" name="email">
+                <span data-key="form-email">Tu email:</span>
+                <input type="email" name="email" required>
             </label>
 
             <label>
-                <span data-key="form-subject">Subject:</span>
-                <input type="text" name="subject" placeholder="">
+                <span data-key="form-subject">Asunto:</span>
+                <input type="text" name="subject">
             </label>
 
             <label>
-                <span data-key="form-message">Your message:</span>
-                <textarea name="message"></textarea>
+                <span data-key="form-message">Tu mensaje:</span>
+                <textarea name="message" required></textarea>
             </label>
 
-            <button type="submit" data-key="form-btn">Send</button>
+            <button type="submit" data-key="form-btn">Enviar</button>
 
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_next" value="https://estebancamposarts.github.io/index.html">
             <input type="hidden" name="_template" value="box">
-            <input type="hidden" name="_autoresponse" value="Thank you for your message. I will respond as soon as possible.">
         </form>
 
         <section class="text-section">
             <div id="thanks-es" class="lang-content active">
-                <p lang="es">
+                <p>
                     Si has llegado hasta aquí, probablemente algo en mi trabajo ha llamado tu atención y eso me encanta.<br><br>
                     Estoy abierto a nuevas oportunidades profesionales, colaboraciones o proyectos donde crear algo auténtico y con personalidad.<br><br>
                     Puedes escribirme directamente a través del formulario o, si prefieres, contactar por correo en <a href="mailto:estebancampospolo@gmail.com"><strong>estebancampospolo@gmail.com</strong></a>.<br><br>
@@ -310,7 +369,7 @@
                 </p>
             </div>
             <div id="thanks-en" class="lang-content">
-                <p lang="en">
+                <p>
                     If you’ve made it this far, something in my work probably caught your attention — and I love that.<br><br>
                     I’m open to new professional opportunities, collaborations, or projects where we can create something authentic and full of personality.<br><br>
                     You can reach out directly through the form, or if you prefer, contact me by email at <a href="mailto:estebancampospolo@gmail.com"><strong>estebancampospolo@gmail.com</strong></a>.<br><br>
@@ -326,7 +385,7 @@
     <section class="privacy-section">
         <h4 data-key="priv-title">Política de Privacidad / Privacy Policy</h4>
         <div id="priv-es" class="lang-content active">
-            <p lang="es">
+            <p>
                 Yo, Esteban Campos Polo, valoro tu privacidad y me comprometo a proteger tus datos personales. La información que me proporciones a través del formulario de contacto será utilizada únicamente para responder a tus consultas o solicitudes profesionales.  
                 <br><br>
                 No comparto, vendo ni transfiero tus datos a terceros. Todos los mensajes que reciba se almacenan de manera segura y se eliminan cuando ya no son necesarios para los fines mencionados.  
@@ -335,7 +394,7 @@
             </p>
         </div>
         <div id="priv-en" class="lang-content">
-            <p lang="en">
+            <p>
                 I, Esteban Campos Polo, value your privacy and am committed to protecting your personal data. The information you provide through the contact form will only be used to respond to your professional inquiries or requests.  
                 <br><br>
                 I do not share, sell, or transfer your data to third parties. All messages I receive are stored securely and deleted when no longer necessary for the purposes stated.  
@@ -354,17 +413,17 @@
             <div class="footer-social">
                 <h4>Follow me</h4>
                 <div class="social-icons">
-                    <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><img src="assets/icons/linkedin.svg" alt="Perfil de LinkedIn"></a>
-                    <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener noreferrer" aria-label="ArtStation"><img src="assets/icons/artstation.svg" alt="Perfil de ArtStation"></a>
-                    <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img src="assets/icons/instagram.svg" alt="Perfil de Instagram"></a>
-                    <a href="https://vimeo.com/827034828" target="_blank" rel="noopener noreferrer" aria-label="Vimeo"><img src="assets/icons/vimeo.svg" alt="Perfil de Vimeo"></a>
-                    <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener noreferrer" aria-label="Behance"><img src="assets/icons/behance.svg" alt="Perfil de Behance"></a>
-                    <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><img src="assets/icons/x.svg" alt="Perfil de X"></a>
+                    <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener noreferrer"><img src="assets/icons/linkedin.svg" alt="LinkedIn"></a>
+                    <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener noreferrer"><img src="assets/icons/artstation.svg" alt="ArtStation"></a>
+                    <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener noreferrer"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
+                    <a href="https://vimeo.com/827034828" target="_blank" rel="noopener noreferrer"><img src="assets/icons/vimeo.svg" alt="Vimeo"></a>
+                    <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener noreferrer"><img src="assets/icons/behance.svg" alt="Behance"></a>
+                    <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener noreferrer"><img src="assets/icons/x.svg" alt="X"></a>
                 </div>
             </div>
             <div class="copyright">
-                <span lang="es" id="copy-es" class="lang-content active">© 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.</span>
-                <span lang="en" id="copy-en" class="lang-content">© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.</span>
+                <span id="copy-es" class="lang-content active">© 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.</span>
+                <span id="copy-en" class="lang-content">© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.</span>
             </div>
         </div>
         <div style="margin-top: 2rem;">
@@ -376,7 +435,7 @@
         // Bloque de protección ligero
         document.addEventListener('dragstart', event => event.preventDefault());
 
-        // Script de traducción (Solo para botones y nav, el contenido texto se mantiene literal)
+        // Script de traducción
         const translations = {
             es: {
                 "nav-home": "Inicio", "nav-graphic": "Diseño", "nav-photo": "Fotos", "nav-3d": "3D", "nav-ai": "IA", "nav-about": "Sobre mí", "nav-contact": "Contacto",
@@ -392,19 +451,17 @@
             }
         };
 
-        let currentLang = 'es'; // Iniciamos en Español según el HTML original que prioriza ES
+        let currentLang = 'es';
 
         function toggleLanguage() {
             currentLang = currentLang === 'es' ? 'en' : 'es';
             document.getElementById('langBtn').innerText = currentLang === 'es' ? 'EN' : 'ES';
             
-            // Traducir Nav y Etiquetas cortas
             document.querySelectorAll('[data-key]').forEach(el => {
                 const key = el.getAttribute('data-key');
                 if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
             });
 
-            // Alternar visibilidad de los bloques de texto LARGOS (contenido original)
             document.getElementById('thanks-es').classList.toggle('active', currentLang === 'es');
             document.getElementById('thanks-en').classList.toggle('active', currentLang === 'en');
             
@@ -414,6 +471,9 @@
             document.getElementById('copy-es').classList.toggle('active', currentLang === 'es');
             document.getElementById('copy-en').classList.toggle('active', currentLang === 'en');
         }
+
+        // Prevenir context menu global
+        document.addEventListener('contextmenu', e => e.preventDefault());
     </script>
 </body>
 </html>

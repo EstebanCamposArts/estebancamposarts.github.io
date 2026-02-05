@@ -17,78 +17,147 @@
         allow_google_signals: false,
         allow_ad_personalization_signals: false
     });
+  </script>
 
-    // ─────────────────────────────
-    // GOD MODE (LEGAL EDITION)
-    // ─────────────────────────────
-    const GodMode = {
-        sessionId: crypto.randomUUID(),
 
-        baseData() {
-            return {
-                session_id: this.sessionId,
-                path: location.pathname,
-                referrer: document.referrer || 'direct',
-                language: navigator.language,
-                platform: navigator.platform,
-                user_agent: navigator.userAgent,
-                screen_resolution: `${screen.width}x${screen.height}`,
-                viewport: `${window.innerWidth}x${window.innerHeight}`,
-                color_depth: screen.colorDepth,
-                device_memory: navigator.deviceMemory || 'unknown',
-                hardware_concurrency: navigator.hardwareConcurrency || 'unknown',
-                connection: navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                timestamp: new Date().toISOString()
-            };
-        },
+    <script>
+(function() {
+    // 1. CONFIGURACIÓN Y ESTADO
+    const CONFIG = {
+        idsToObserve: ['#hero', '#proyectos', '#sobre-mi', '#contacto'], // Ajusta estos IDs a tu HTML
+        scrollDepths: [25, 50, 75, 90, 100],
+        trackedDepths: [],
+        clickCount: 0,
+        clickTimer: null,
+        sessionStartTime: Date.now()
+    };
 
-        track(event, params = {}) {
-            gtag('event', event, {
-                ...this.baseData(),
-                ...params
+    const sendEvent = (name, params = {}) => {
+        if (typeof gtag === 'function') {
+            gtag('event', name, {
+                ...params,
+                'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
+                'memory': navigator.deviceMemory || 'unknown',
+                'page_path': window.location.pathname
             });
         }
     };
 
-    // ─────────────────────────────
-    // EVENTOS AUTOMÁTICOS
-    // ─────────────────────────────
+    // 2. INICIALIZACIÓN AL CARGAR DOM
+    document.addEventListener("DOMContentLoaded", function() {
 
-    // Scroll depth
-    let maxScroll = 0;
-    window.addEventListener('scroll', () => {
-        const scrolled = Math.round(
-            (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100
-        );
-        if (scrolled > maxScroll) {
-            maxScroll = scrolled;
-            if ([25, 50, 75, 100].includes(scrolled)) {
-                GodMode.track('scroll_depth', { percent: scrolled });
+        // --- SECCIÓN: SEGURIDAD Y CLICKS ---
+        
+        // Clic derecho en imágenes e intento de arrastre
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.tagName === 'IMG') {
+                sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
             }
+        });
+
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.tagName === 'IMG') {
+                sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
+            }
+        });
+
+        // Rage Clicks (Detecta frustración: más de 4 clics en 1 seg)
+        document.addEventListener('click', (e) => {
+            CONFIG.clickCount++;
+            clearTimeout(CONFIG.clickTimer);
+            CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
+            
+            if (CONFIG.clickCount > 4) {
+                sendEvent('ux_rage_click', { 'element': e.target.tagName + (e.target.id ? '#'+e.target.id : '') });
+                CONFIG.clickCount = 0;
+            }
+        });
+
+        // --- SECCIÓN: NAVEGACIÓN Y CONTENIDO ---
+
+        // Scroll Tracking Granular
+        window.addEventListener('scroll', () => {
+            let h = document.documentElement, b = document.body;
+            let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
+            
+            CONFIG.scrollDepths.forEach(depth => {
+                if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
+                    CONFIG.trackedDepths.push(depth);
+                    sendEvent('content_scroll_depth', { 'depth': depth + '%' });
+                }
+            });
+        });
+
+        // Visibilidad Real de Proyectos (Intersection Observer)
+        if ('IntersectionObserver' in window) {
+            let observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            if (entry.isIntersecting) { // Si sigue ahí tras 2 segundos
+                                sendEvent('content_view_confirmed', { 'section_id': entry.target.id });
+                                observer.unobserve(entry.target);
+                            }
+                        }, 2000);
+                    }
+                });
+            }, { threshold: 0.6 });
+
+            CONFIG.idsToObserve.forEach(id => {
+                let el = document.querySelector(id);
+                if (el) observer.observe(el);
+            });
         }
-    });
 
-    // Tiempo activo en página
-    let startTime = Date.now();
-    window.addEventListener('beforeunload', () => {
-         GodMode.track('time_on_page', {
-            seconds: Math.round((Date.now() - startTime) / 1000)
+
+        /
+        document.addEventListener('copy', () => {
+            let text = document.getSelection().toString().substring(0, 50);
+            sendEvent('engagement_text_copy', { 'preview': text + '...' });
         });
-    });
 
-    // Clicks
-    document.addEventListener('click', (e) => {
-        const target = e.target.closest('a, button');
-        if (!target) return;
-
-        GodMode.track('click', {
-            tag: target.tagName,
-            text: target.innerText?.slice(0, 50),
-            href: target.href || null
+        // Exit Intent (Solo Desktop)
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY < 0) sendEvent('behavior_exit_intent');
         });
+
+        // Hover en proyectos (Interés sin clic)
+        document.querySelectorAll('.card-proyecto, .portfolio-item').forEach(item => {
+            let hTimer;
+            item.addEventListener('mouseenter', () => {
+                hTimer = setTimeout(() => sendEvent('engagement_hover_interest', { 'id': item.id }), 3000);
+            });
+            item.addEventListener('mouseleave', () => clearTimeout(hTimer));
+        });
+
+        // Detección de AdBlock
+        setTimeout(() => {
+            const test = document.createElement('div');
+            test.className = 'adsbox';
+            test.innerHTML = '&nbsp;';
+            document.body.appendChild(test);
+            sendEvent('tech_adblock_status', { 'active': test.offsetHeight === 0 });
+            test.remove();
+        }, 3000);
     });
-  </script>
+
+
+
+    window.onerror = (msg, url, line) => {
+        sendEvent('tech_js_error', { 'msg': msg, 'line': line });
+    };
+
+    window.addEventListener('load', () => {
+        const perf = performance.getEntriesByType("navigation")[0];
+        if (perf) sendEvent('tech_load_time', { 'ms': Math.round(perf.domComplete) });
+    });
+
+})();
+
+    </script>
+
+
+
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -182,7 +251,7 @@
     <header>
         <div class="branding">
             <h2>Esteban Campos Polo</h2>
-            <h3>Graphic Designer & 3D Artist</h3>
+            <h3>Sr. Graphic Packaging and Production Designer</h3>
         </div>
         <nav>
             <a href="index.html" data-key="nav-home">Home</a>
@@ -212,65 +281,35 @@
 
             <div class="about-content-text">
     <div id="content-es" class="language-content active">
-        <p><strong>Esteban Campos Polo | Diseñador Gráfico Senior & Artista 3D</strong></p>
+<p><strong>Esteban Campos Polo | Diseño Gráfico y Producción Creativa</strong></p>
 
-        <p>Soy diseñador gráfico publicitario con más de 15 años de experiencia, especializado en packaging, 
-        diseño de producto y producción gráfica, con una trayectoria desarrollada principalmente en entornos 
-        industriales y comerciales, donde las decisiones creativas deben funcionar tanto a nivel visual como técnico.</p>
+        <p>Soy Esteban Campos Polo. Llevo más de 15 años como diseñador gráfico publicitario, pero mi terreno de juego siempre ha sido el mundo real: el packaging, el producto y la producción gráfica. Me he formado en entornos industriales donde las ideas no solo tienen que ser bonitas, sino que tienen que funcionar técnicamente.</p>
 
-        <p>He trabajado en sectores como juguetería, moda, retail y publicidad, participando en campañas, colecciones 
-        y lanzamientos de producto que requerían coherencia de marca, control de costes, viabilidad productiva y 
-        cumplimiento de plazos. A lo largo de mi carrera he asumido responsabilidades que van desde el diseño y 
-        la dirección gráfica hasta la gestión de preimpresión, control de calidad y coordinación directa con producción y proveedores.</p>
+        <p>He trabajado en el sector del juguete, moda y retail, gestionando lanzamientos donde la imagen de marca, el control de costes y los plazos de entrega no perdonan. Mi fuerte es que controlo el proceso de punta a punta: desde el diseño y la dirección gráfica hasta la preimpresión y el control de calidad a pie de máquina. Entiendo el diseño como una herramienta para el negocio; me anticipo a los problemas técnicos y aseguro que cada pieza llegue a producción con garantías, ya sea en hojalata, cartón, gran formato o digital.</p>
 
-        <p>Mi forma de trabajar se apoya en una visión práctica y orientada a resultados: entiendo el diseño como una
-        herramienta al servicio del producto y del negocio. Esto me permite anticipar problemas técnicos, optimizar 
-        procesos gráficos y asegurar que cada pieza llegue a producción con garantías, ya sea en impresión, gran formato, 
-        punto de venta o medios digitales.</p>
+        <p>En los últimos años he sumado el 3D a mi flujo de trabajo. No solo como algo estético, sino como una herramienta para visualizar conceptos y apoyar el desarrollo gráfico. Me he formado en Animum, en modelado para cine y videojuegos, dominando escultura digital, texturizado PBR y optimización en tiempo real.</p>
 
-        <p>En los últimos años he incorporado el 3D como herramienta complementaria, aplicándolo a la visualización de producto, 
-        presentación de conceptos y apoyo al desarrollo gráfico, reforzando la comunicación entre diseño, marketing y producción.
-        Me he formado en modelado 3D para cine y videojuegos en Animum Creativity Advanced School, trabajando con escultura digital, 
-        texturizado PBR y optimización para distintos entornos, incluidos motores en tiempo real como Unity.</p>
+        <p>Hoy me defino como un perfil senior híbrido: alguien que une el diseño gráfico y el packaging con la producción visual y el 3D. Aporto criterio, veteranía y, sobre todo, la seguridad de que sé cómo llevar un concepto hasta el producto final minimizando cualquier inconveniente y errores.</p>
 
-        <p>Hoy me posiciono como un perfil senior híbrido, capaz de unir diseño gráfico, packaging, producción visual y 3D,
-        aportando criterio, experiencia y comprensión de los procesos. Busco colaborar con marcas, 
-        estudios o equipos que valoren el diseño viable y coherente desde el concepto hasta el producto final.</p>
+        <p>Si tienes un proyecto complejo, si necesitas soluciones donde otros ven problemas y has llegado hasta aquí... quizá puedas contratarme.</p>
 
-        <p>Si tiene usted algún proyecto, si nadie más puede ayudarle y me ha encontrado... quizá pueda contratarme.</p>
-
-        <p>Gracias por visitar mi portfolio y no se vaya sin descargar mi currículum.</p>
+        <p>Gracias por pasarte por mi portfolio. Y no te vayas sin echarle un ojo a mi currículum.</p>
     </div>
 
     <div id="content-en" class="language-content">
-        <p><strong>Esteban Campos Polo | Senior Graphic Designer & 3D Artist</strong></p>
+<p><strong>Esteban Campos Polo | Graphic Design & Creative Production</strong></p>
 
-        <p>I am an advertising graphic designer with over 15 years of experience, specialized in packaging, 
-        product design, and graphic production, with a career developed mainly in industrial and commercial 
-        environments, where creative decisions must work both visually and technically.</p>
+        <p>I am Esteban Campos Polo. I have been a Senior Graphic Designer for over 15 years, but my playground has always been the real world: packaging, product design, and graphic production. I cut my teeth in industrial environments where ideas don't just have to look good—they have to be technically viable.</p>
 
-        <p>I have worked in sectors such as toys, fashion, retail, and advertising, taking part in campaigns, 
-        collections, and product launches that required brand consistency, cost control, production feasibility, 
-        and deadline compliance. Throughout my career, I have assumed responsibilities ranging from design and 
-        graphic direction to prepress management, quality control, and direct coordination with production and suppliers.</p>
+        <p>Working across the toy, fashion, and retail sectors, I’ve managed launches where brand image, cost control, and deadlines are non-negotiable. My strength lies in my end-to-end control of the process: from initial design and art direction to pre-press and on-site quality control at the printing press. I view design as a business tool; I anticipate technical hurdles and ensure every piece hits production with full guarantees—whether it's on tinplate, cardboard, large format, or digital media.</p>
 
-        <p>My way of working is based on a practical, results-oriented approach: I understand design as a tool 
-        at the service of the product and the business. This allows me to anticipate technical issues, optimize 
-        graphic processes, and ensure that every piece reaches production with guarantees, whether in print, 
-        large format, point of sale, or digital media.</p>
+        <p>In recent years, I have integrated 3D into my workflow—not just for aesthetics, but as a powerful tool for concept visualization and supporting graphic development. I trained at Animum Creativity Advanced School in 3D modeling for film and video games, mastering digital sculpting, PBR texturing, and real-time optimization.</p>
 
-        <p>In recent years, I have incorporated 3D as a complementary tool, applying it to product visualization, 
-        concept presentation, and support for graphic development, strengthening communication between design, 
-        marketing, and production. I trained in 3D modeling for film and video games at Animum Creativity Advanced School, 
-        working with digital sculpting, PBR texturing, and optimization for different environments, including real-time engines such as Unity.</p>
+        <p>Today, I define myself as a senior hybrid profile: someone who bridges the gap between graphic design, packaging, visual production, and 3D. I bring judgment, experience, and above all, the peace of mind that comes from knowing how to take a concept to the final product while minimizing any issues or errors.</p>
 
-        <p>Today, I position myself as a hybrid senior profile, capable of combining graphic design, packaging, 
-        visual production, and 3D, bringing criteria, experience, and a deep understanding of processes. I seek to collaborate 
-        with brands, studios, or teams that value viable and coherent design from concept to final product.</p>
+        <p>If you have a complex project, if you need solutions where others see problems, and you’ve made it this far... maybe you can hire me.</p>
 
-        <p>If you have a project, if no one else can help, and you have found me... maybe you can hire me.</p>
-
-        <p>Thank you for visiting my portfolio, and don’t leave without downloading my résumé.</p>
+        <p>Thanks for visiting my portfolio. Don't leave without checking out my resume.</p>
     </div>
 
                 <div class="contact-buttons-wrapper">
