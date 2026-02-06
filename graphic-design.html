@@ -20,9 +20,8 @@
 
     <script>
 (function() {
-    // 1. CONFIGURACIÓN Y ESTADO
     const CONFIG = {
-        idsToObserve: ['#hero', '#proyectos', '#sobre-mi', '#contacto'], // Ajusta estos IDs a tu HTML
+        idsToObserve: ['#hero', '#proyectos', '#sobre-mi', '#contacto'],
         scrollDepths: [25, 50, 75, 90, 100],
         trackedDepths: [],
         clickCount: 0,
@@ -41,12 +40,7 @@
         }
     };
 
-    // 2. INICIALIZACIÓN AL CARGAR DOM
     document.addEventListener("DOMContentLoaded", function() {
-
-        // --- SECCIÓN: SEGURIDAD Y CLICKS ---
-        
-        // Clic derecho en imágenes e intento de arrastre
         document.addEventListener('contextmenu', (e) => {
             if (e.target.tagName === 'IMG') {
                 sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
@@ -59,7 +53,6 @@
             }
         });
 
-        // Rage Clicks (Detecta frustración: más de 4 clics en 1 seg)
         document.addEventListener('click', (e) => {
             CONFIG.clickCount++;
             clearTimeout(CONFIG.clickTimer);
@@ -71,9 +64,6 @@
             }
         });
 
-        // --- SECCIÓN: NAVEGACIÓN Y CONTENIDO ---
-
-        // Scroll Tracking Granular
         window.addEventListener('scroll', () => {
             let h = document.documentElement, b = document.body;
             let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
@@ -86,13 +76,12 @@
             });
         });
 
-        // Visibilidad Real de Proyectos (Intersection Observer)
         if ('IntersectionObserver' in window) {
             let observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         setTimeout(() => {
-                            if (entry.isIntersecting) { // Si sigue ahí tras 2 segundos
+                            if (entry.isIntersecting) {
                                 sendEvent('content_view_confirmed', { 'section_id': entry.target.id });
                                 observer.unobserve(entry.target);
                             }
@@ -107,19 +96,15 @@
             });
         }
 
-
-        /
         document.addEventListener('copy', () => {
             let text = document.getSelection().toString().substring(0, 50);
             sendEvent('engagement_text_copy', { 'preview': text + '...' });
         });
 
-        // Exit Intent (Solo Desktop)
         document.addEventListener('mouseleave', (e) => {
-            if (e.clientY < 0) sendEvent('behavior_exit_intent');
+            if (e.target.tagName === 'HTML' && e.clientY < 0) sendEvent('behavior_exit_intent');
         });
 
-        // Hover en proyectos (Interés sin clic)
         document.querySelectorAll('.card-proyecto, .portfolio-item').forEach(item => {
             let hTimer;
             item.addEventListener('mouseenter', () => {
@@ -128,7 +113,6 @@
             item.addEventListener('mouseleave', () => clearTimeout(hTimer));
         });
 
-        // Detección de AdBlock
         setTimeout(() => {
             const test = document.createElement('div');
             test.className = 'adsbox';
@@ -139,8 +123,6 @@
         }, 3000);
     });
 
-
-
     window.onerror = (msg, url, line) => {
         sendEvent('tech_js_error', { 'msg': msg, 'line': line });
     };
@@ -149,9 +131,7 @@
         const perf = performance.getEntriesByType("navigation")[0];
         if (perf) sendEvent('tech_load_time', { 'ms': Math.round(perf.domComplete) });
     });
-
 })();
-
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -236,13 +216,11 @@
         .grid-item { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); background: #fff; transition: var(--transition); position: relative; }
         .grid-item:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.06); }
         
-        /* Modificaciones para Slideshow con Flechas */
         .grid-item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: #eee; cursor: zoom-in; }
         .slideshow-container { position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; }
-        .slideshow-container img { position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.5s ease-in-out; }
-        .slideshow-container img.active { opacity: 1; position: relative; }
+        .slideshow-container img { position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.5s ease-in-out; pointer-events: none; }
+        .slideshow-container img.active { opacity: 1; position: relative; pointer-events: auto; }
 
-        /* Estilos de las Flechas */
         .nav-btn {
             position: absolute; top: 50%; transform: translateY(-50%);
             background: rgba(255,255,255,0.8); border: none; width: 28px; height: 28px;
@@ -262,8 +240,16 @@
         .footer-social img { width: 24px; height: 24px; filter: invert(1); opacity: 0.6; transition: 0.3s; }
         .footer-social img:hover { opacity: 1; transform: translateY(-3px); }
 
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; cursor: zoom-out; }
-        .modal img { max-width: 95%; max-height: 90vh; object-fit: contain; }
+        /* MODAL MEJORADO */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
+        .modal img { max-width: 90%; max-height: 85vh; object-fit: contain; }
+        .modal-nav { position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; pointer-events: none; }
+        .modal-nav button { 
+            pointer-events: auto; background: rgba(255,255,255,0.1); color: white; border: none; 
+            width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; transition: 0.3s;
+        }
+        .modal-nav button:hover { background: var(--accent); }
+        .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 35px; cursor: pointer; line-height: 1; }
 
         @media (max-width: 768px) {
             header { flex-direction: column; padding: 1rem; gap: 1rem; }
@@ -282,20 +268,18 @@
     <header>
         <div class="branding">
             <h2>Esteban Campos Polo</h2>
-            <h3 data-es="Sr. Graphic Packaging and Production Designer" data-en="Sr. Graphic Packaging and Production Designer">Diseño Gráfico y Producción</h3>
+            <h3 data-es="Diseño Gráfico y Producción" data-en="Graphic Design & Production">Diseño Gráfico y Producción</h3>
         </div>
         <nav>
-            <a href="index.html" data-id="home" data-es="Inicio" data-en="Home">Inicio</a>
-            <a href="graphic-design.html" class="active" data-id="design" data-es="Diseño" data-en="Design">Diseño</a>
-            <a href="photography.html" data-id="photography" data-es="Fotografía" data-en="Photography">Fotografía</a>
-            <a href="3d-modeling.html" data-id="3dart" data-es="Arte 3D" data-en="3D Art">Arte 3D</a>
-            <a href="IA.html" data-id="ia" data-es="IA" data-en="AI">IA</a>
-            <a href="cv_resume.html" data-id="cv" data-es="CV / Resume" data-en="CV / Resume">CV / Resumen</a>
-            <a href="contact.html" class="nav-link" data-key="nav-co">Contacto</a>
-            <div class="lang-selector" onclick="toggleLanguage()" role="button">
-                <span id="btn-es">ES</span>
-                <span>/</span>
-                <span id="btn-en">EN</span>
+            <a href="index.html" data-es="Inicio" data-en="Home">Inicio</a>
+            <a href="graphic-design.html" class="active" data-es="Diseño" data-en="Design">Diseño</a>
+            <a href="photography.html" data-es="Fotografía" data-en="Photography">Fotografía</a>
+            <a href="3d-modeling.html" data-es="Arte 3D" data-en="3D Art">Arte 3D</a>
+            <a href="IA.html" data-es="IA" data-en="AI">IA</a>
+            <a href="cv_resume.html" data-es="CV / Resume" data-en="CV / Resume">CV / Resume</a>
+            <a href="contact.html" data-es="Contacto" data-en="Contact">Contacto</a>
+            <div class="lang-selector" onclick="toggleLanguage()">
+                <span id="btn-es">ES</span> / <span id="btn-en">EN</span>
             </div>
         </nav>
     </header>
@@ -316,7 +300,7 @@
         </div>
 
         <section class="page-header">
-            <h1 data-es="Portafolio de Diseño Gráfico" data-en="Graphic Design Portfolio">Portafolio de Diseño Gráfico</h1>
+            <h1 data-es="Portfolio de Diseño Gráfico" data-en="Graphic Design Portfolio">Portafolio de Diseño Gráfico</h1>
             <div class="mission-box">
                 <p data-es="Diseñador gráfico senior especializado en **identidad de marca, packaging y diseño para producción**." 
                    data-en="Senior graphic designer specializing in **brand identity, packaging, and production design**.">
@@ -348,12 +332,16 @@
         <p>© 2025 Esteban Campos Polo · <span data-es="Todos los derechos reservados." data-en="All rights reserved.">Todos los derechos reservados.</span></p>
     </footer>
 
-    <div id="imageModal" class="modal" onclick="closeModal()">
-        <img id="modalImg" src="">
+    <div id="imageModal" class="modal">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div class="modal-nav">
+            <button onclick="changeModalSlide(-1)">&#10094;</button>
+            <button onclick="changeModalSlide(1)">&#10095;</button>
+        </div>
+        <img id="modalImg" src="" onclick="event.stopPropagation()">
     </div>
 
     <script>
-
         const mockupsData = [
             { images: ['assets/images/graphicdesign/valen2.png', 'assets/images/graphicdesign/tshirtvalenciabasket.jpg', 'assets/images/graphicdesign/valen3.png', 'assets/images/graphicdesign/valen1.png'], name: 'Design sport shirts' },
             { images: ['assets/images/graphicdesign/mockups/silverfish.jpg', 'assets/images/graphicdesign/packsalmon.jpg', 'assets/images/graphicdesign/salmonpack.jpg'], name: 'Salmon Pack 3D' },
@@ -407,8 +395,7 @@
             { images: ['assets/images/graphicdesign/fachadamerlot.jpg'], name: 'Store Facade Vinyl' },
             { images: ['assets/images/graphicdesign/mockups/goalkeeper.jpg'], name: 'Sport Equipment Sign' },
             { images: ['assets/images/graphicdesign/mockups/24futsal.jpg'], name: 'Arena Signage' },
-            { images: ['assets/images/graphicdesign/mockups/airforguns.jpg'], name: 'Outdoor Sign' },
-   
+            { images: ['assets/images/graphicdesign/mockups/airforguns.jpg'], name: 'Outdoor Sign' }
         ];
 
         const editorialData = [
@@ -419,11 +406,12 @@
             { images: ['assets/images/graphicdesign/brandingcreamania.jpg'], name: 'Business Cards' },
             { images: ['assets/images/graphicdesign/DESBORDAOS1.jpg', 'assets/images/graphicdesign/DESBORDAOS2.jpg'], name: 'Desbordaos Posters' },
             { images: ['assets/images/graphicdesign/tshirtvalenciabasket.jpg', 'assets/images/graphicdesign/valen2.png', 'assets/images/graphicdesign/valen3.png', 'assets/images/graphicdesign/valen1.png'], name: 'Design sport shirts' },
-            { images: ['assets/images/graphicdesign/textil2.png', 'assets/images/graphicdesign/textil1.jpg'], name: 'Textile Pattern' } 
-           
+            { images: ['assets/images/graphicdesign/textil2.png', 'assets/images/graphicdesign/textil1.jpg'], name: 'Textile Pattern' }
         ];
 
         let currentLang = localStorage.getItem('preferredLang') || 'es';
+        let currentModalImages = [];
+        let currentModalIdx = 0;
 
         function updateContent() {
             document.querySelectorAll('[data-es]').forEach(el => {
@@ -440,64 +428,104 @@
             updateContent();
         }
 
-        // FUNCION RENDERIZADO UNIFICADA
         function renderGrid(containerId, data) {
             const container = document.getElementById(containerId);
             if(!container) return;
             
             container.innerHTML = data.map((item, index) => {
                 const uniqueId = `${containerId}-${index}`;
-                
-                // Generamos todas las imágenes
                 const imgsHtml = item.images.map((img, i) => 
-                    `<img src="${img}" class="${i === 0 ? 'active' : ''}" alt="${item.name}" onclick="openModal('${img}', '${item.name}')">`
+                    `<img src="${img}" class="${i === 0 ? 'active' : ''}" alt="${item.name}">`
                 ).join('');
 
-                // SOLO mostramos botones si hay más de 1 imagen
                 const buttonsHtml = item.images.length > 1 ? `
-                    <button class="nav-btn prev-btn" onclick="prevSlide('${uniqueId}')">&#10094;</button>
-                    <button class="nav-btn next-btn" onclick="nextSlide('${uniqueId}')">&#10095;</button>
+                    <button class="nav-btn prev-btn" onclick="prevSlide(event, '${uniqueId}')">&#10094;</button>
+                    <button class="nav-btn next-btn" onclick="nextSlide(event, '${uniqueId}')">&#10095;</button>
                 ` : '';
 
                 return `
-                    <div class="grid-item" id="${uniqueId}">
+                    <div class="grid-item" id="${uniqueId}" onclick="openModal('${containerId}', ${index})">
                         ${buttonsHtml}
-                        <div class="slideshow-container">
-                            ${imgsHtml}
-                        </div>
+                        <div class="slideshow-container">${imgsHtml}</div>
                         <div class="grid-info"><h4>${item.name}</h4></div>
                     </div>
                 `;
             }).join('');
         }
 
-        // NAVEGACION MANUAL
-        function nextSlide(containerId) {
+        function nextSlide(e, containerId) {
+            e.stopPropagation();
             const container = document.getElementById(containerId);
             const imgs = container.querySelectorAll('.slideshow-container img');
             let activeIdx = Array.from(imgs).findIndex(img => img.classList.contains('active'));
-            
             imgs[activeIdx].classList.remove('active');
             activeIdx = (activeIdx + 1) % imgs.length;
             imgs[activeIdx].classList.add('active');
         }
 
-        function prevSlide(containerId) {
+        function prevSlide(e, containerId) {
+            e.stopPropagation();
             const container = document.getElementById(containerId);
             const imgs = container.querySelectorAll('.slideshow-container img');
             let activeIdx = Array.from(imgs).findIndex(img => img.classList.contains('active'));
-            
             imgs[activeIdx].classList.remove('active');
             activeIdx = (activeIdx - 1 + imgs.length) % imgs.length;
             imgs[activeIdx].classList.add('active');
         }
 
-        function openModal(src, name) {
-            document.getElementById('modalImg').src = src;
+        // LOGICA MODAL DINAMICA
+        function openModal(dataType, itemIdx) {
+            const dataMap = {
+                'grid-mockups': mockupsData,
+                'grid-packaging': packagingData,
+                'grid-branding': brandingData,
+                'grid-web': webData,
+                'grid-editorial': editorialData,
+                'grid-signage': signageData
+            };
+            
+            const item = dataMap[dataType][itemIdx];
+            currentModalImages = item.images;
+            
+            // Detectar qué imagen está activa en el grid para abrir esa primero
+            const gridEl = document.getElementById(`${dataType}-${itemIdx}`);
+            const activeImgInGrid = gridEl.querySelector('.active').src;
+            currentModalIdx = item.images.findIndex(img => activeImgInGrid.includes(img));
+            if(currentModalIdx === -1) currentModalIdx = 0;
+
+            updateModalImage();
             document.getElementById('imageModal').style.display = 'flex';
+            
+            // Mostrar/ocultar flechas si solo hay una imagen
+            document.querySelector('.modal-nav').style.display = currentModalImages.length > 1 ? 'flex' : 'none';
         }
 
-        function closeModal() { document.getElementById('imageModal').style.display = 'none'; }
+        function updateModalImage() {
+            document.getElementById('modalImg').src = currentModalImages[currentModalIdx];
+        }
+
+        function changeModalSlide(step) {
+            currentModalIdx = (currentModalIdx + step + currentModalImages.length) % currentModalImages.length;
+            updateModalImage();
+        }
+
+        function closeModal() { 
+            document.getElementById('imageModal').style.display = 'none'; 
+        }
+
+        // Cerrar al hacer clic fuera de la imagen
+        document.getElementById('imageModal').onclick = function(e) {
+            if(e.target === this) closeModal();
+        };
+
+        // Navegación por teclado
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('imageModal').style.display === 'flex') {
+                if (e.key === "ArrowRight") changeModalSlide(1);
+                if (e.key === "ArrowLeft") changeModalSlide(-1);
+                if (e.key === "Escape") closeModal();
+            }
+        });
 
         window.onload = () => {
             updateContent();
