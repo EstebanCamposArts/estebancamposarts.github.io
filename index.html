@@ -340,7 +340,14 @@
           <div class="slider-container">
             ${data.imgs.length > 1 ? `<button class="slider-btn prev" onclick="changeS('${data.id}', -1)">&#10094;</button><button class="slider-btn next" onclick="changeS('${data.id}', 1)">&#10095;</button>` : ''}
             <div class="slides" id="sl-${data.id}" onclick="openLightbox(this)">
-              ${data.imgs.map(img => `<img src="${img}" loading="lazy">`).join('')}
+              ${data.imgs.map(img => {
+                  // Lógica para usar miniatura webp en la vista previa
+                  let filename = img.split('/').pop();
+                  let nameOnly = filename.substring(0, filename.lastIndexOf('.'));
+                  let thumbSrc = `assets/images/webp/${nameOnly}.webp`;
+                  // Se guarda la ruta original en data-full para el lightbox
+                  return `<img src="${thumbSrc}" data-full="${img}" loading="lazy">`;
+              }).join('')}
             </div>
             ${data.imgs.length > 1 ? `<div class="slider-nav">${data.imgs.map((_, idx) => `<div class="dot ${idx===0?'active':''}" onclick="moveSlide(${idx}, '${data.id}')"></div>`).join('')}</div>` : ''}
           </div>
@@ -397,7 +404,11 @@
     function openLightbox(el) {
       const pId = el.id.replace('sl-', '');
       const currentIdx = sliderState[pId] || 0;
-      const src = el.querySelectorAll('img')[currentIdx].src;
+      // Recuperamos el objeto imagen actual
+      const imgObj = el.querySelectorAll('img')[currentIdx];
+      // Leemos el atributo data-full donde guardamos la ruta original
+      const src = imgObj.getAttribute('data-full');
+      
       document.getElementById('lightbox-img').src = src;
       document.getElementById('lightbox').style.display = 'flex';
     }
