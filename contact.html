@@ -14,141 +14,96 @@
 
     gtag('config', 'G-8VMES8F4MN', {
         anonymize_ip: true,
-        send_page_view: true,
+        send_page_view: false,
         allow_google_signals: false,
         allow_ad_personalization_signals: false
     });
   </script>
     <script>
-(function() {
-    // 1. CONFIGURACIÓN Y ESTADO
-    const CONFIG = {
-        idsToObserve: ['#hero', '#proyectos', '#sobre-mi', '#contacto'], // Ajusta estos IDs a tu HTML
-        scrollDepths: [25, 50, 75, 90, 100],
-        trackedDepths: [],
-        clickCount: 0,
-        clickTimer: null,
-        sessionStartTime: Date.now()
-    };
+    (function() {
+        const CONFIG = {
+            idsToObserve: ['.contact-container', '#footer'],
+            scrollDepths: [25, 50, 75, 90, 100],
+            trackedDepths: [],
+            clickCount: 0,
+            clickTimer: null,
+            sessionStartTime: Date.now()
+        };
 
-    const sendEvent = (name, params = {}) => {
-        if (typeof gtag === 'function') {
-            gtag('event', name, {
-                ...params,
-                'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                'memory': navigator.deviceMemory || 'unknown',
-                'page_path': window.location.pathname
-            });
-        }
-    };
-
-    // 2. INICIALIZACIÓN AL CARGAR DOM
-    document.addEventListener("DOMContentLoaded", function() {
-
-        // --- SECCIÓN: SEGURIDAD Y CLICKS ---
-        
-        // Clic derecho en imágenes e intento de arrastre
-        document.addEventListener('contextmenu', (e) => {
-            if (e.target.tagName === 'IMG') {
-                sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
+        const sendEvent = (name, params = {}) => {
+            if (typeof gtag === 'function') {
+                gtag('event', name, {
+                    ...params,
+                    'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
+                    'page_path': window.location.pathname
+                });
             }
-        });
+        };
 
-        document.addEventListener('dragstart', (e) => {
-            if (e.target.tagName === 'IMG') {
-                sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
-            }
-        });
-
-        // Rage Clicks (Detecta frustración: más de 4 clics en 1 seg)
-        document.addEventListener('click', (e) => {
-            CONFIG.clickCount++;
-            clearTimeout(CONFIG.clickTimer);
-            CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
-            
-            if (CONFIG.clickCount > 4) {
-                sendEvent('ux_rage_click', { 'element': e.target.tagName + (e.target.id ? '#'+e.target.id : '') });
-                CONFIG.clickCount = 0;
-            }
-        });
-
-        // --- SECCIÓN: NAVEGACIÓN Y CONTENIDO ---
-
-        // Scroll Tracking Granular
-        window.addEventListener('scroll', () => {
-            let h = document.documentElement, b = document.body;
-            let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
-            
-            CONFIG.scrollDepths.forEach(depth => {
-                if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
-                    CONFIG.trackedDepths.push(depth);
-                    sendEvent('content_scroll_depth', { 'depth': depth + '%' });
+        document.addEventListener("DOMContentLoaded", function() {
+            // --- SEGURIDAD Y CLICS ---
+            document.addEventListener('contextmenu', (e) => {
+                if (e.target.tagName === 'IMG') {
+                    sendEvent('security_image_right_click', { 
+                        'src': e.target.src.split('/').pop()
+                    });
                 }
             });
-        });
 
-        // Visibilidad Real de Proyectos (Intersection Observer)
-        if ('IntersectionObserver' in window) {
-            let observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            if (entry.isIntersecting) { // Si sigue ahí tras 2 segundos
-                                sendEvent('content_view_confirmed', { 'section_id': entry.target.id });
-                                observer.unobserve(entry.target);
-                            }
-                        }, 2000);
+            document.addEventListener('click', (e) => {
+                const target = e.target;
+                
+                // Track Descarga CV/Resume
+                if (target.classList.contains('btn-cv')) {
+                    sendEvent('engagement_cv_download', {
+                        'language': target.getAttribute('data-lang'),
+                        'filename': target.href.split('/').pop()
+                    });
+                }
+
+                // Rage Clicks
+                CONFIG.clickCount++;
+                clearTimeout(CONFIG.clickTimer);
+                CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
+                if (CONFIG.clickCount > 4) {
+                    sendEvent('ux_rage_click', { 'element': target.tagName + (target.id ? '#'+target.id : '') });
+                    CONFIG.clickCount = 0;
+                }
+            });
+
+            // --- SCROLL & VISIBILIDAD ---
+            window.addEventListener('scroll', () => {
+                let h = document.documentElement, b = document.body;
+                let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
+                CONFIG.scrollDepths.forEach(depth => {
+                    if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
+                        CONFIG.trackedDepths.push(depth);
+                        sendEvent('content_scroll_depth', { 'depth': depth + '%' });
                     }
                 });
-            }, { threshold: 0.6 });
-
-            CONFIG.idsToObserve.forEach(id => {
-                let el = document.querySelector(id);
-                if (el) observer.observe(el);
             });
-        }
 
-        // Engagement: Copiado de texto
-        document.addEventListener('copy', () => {
-            let text = document.getSelection().toString().substring(0, 50);
-            sendEvent('engagement_text_copy', { 'preview': text + '...' });
+            if ('IntersectionObserver' in window) {
+                let observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                if (entry.isIntersecting) {
+                                    sendEvent('content_view_confirmed', { 'section': entry.target.id || 'gallery' });
+                                    observer.unobserve(entry.target);
+                                }
+                            }, 2000);
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                CONFIG.idsToObserve.forEach(selector => {
+                    let el = document.querySelector(selector);
+                    if (el) observer.observe(el);
+                });
+            }
         });
-
-        // Exit Intent (Solo Desktop)
-        document.addEventListener('mouseleave', (e) => {
-            if (e.clientY < 0) sendEvent('behavior_exit_intent');
-        });
-
-        // Hover en proyectos (Interés sin clic)
-        document.querySelectorAll('.card-proyecto, .portfolio-item').forEach(item => {
-            let hTimer;
-            item.addEventListener('mouseenter', () => {
-                hTimer = setTimeout(() => sendEvent('engagement_hover_interest', { 'id': item.id }), 3000);
-            });
-            item.addEventListener('mouseleave', () => clearTimeout(hTimer));
-        });
-
-        // Detección de AdBlock
-        setTimeout(() => {
-            const test = document.createElement('div');
-            test.className = 'adsbox';
-            test.innerHTML = '&nbsp;';
-            document.body.appendChild(test);
-            sendEvent('tech_adblock_status', { 'active': test.offsetHeight === 0 });
-            test.remove();
-        }, 3000);
-    });
-
-    window.onerror = (msg, url, line) => {
-        sendEvent('tech_js_error', { 'msg': msg, 'line': line });
-    };
-
-    window.addEventListener('load', () => {
-        const perf = performance.getEntriesByType("navigation")[0];
-        if (perf) sendEvent('tech_load_time', { 'ms': Math.round(perf.domComplete) });
-    });
-
-})();
+    })();
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -300,6 +255,40 @@
             nav { flex-wrap: wrap; justify-content: center; }
             nav a { margin: 0.5rem; font-size: 0.6rem; }
         }
+
+.cv-actions-hero { 
+    display: flex; 
+    justify-content: center; 
+    gap: 15px; 
+    padding: 2rem 5% 0; 
+}
+.btn-cv {
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+    border: 2px solid #111827;
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+}
+.btn-es-cv { background: #111827; color: #fff; }
+.btn-en-cv { background: transparent; color: #111827; }
+.btn-cv:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+    border-color: #0052FF; 
+}
+
+@media (max-width: 768px) {
+    .cv-actions-hero { flex-direction: column; width: 100%; }
+    .btn-cv { width: 100%; justify-content: center; }
+}
     </style>
 </head>
 <body>
@@ -322,10 +311,10 @@
         </nav>
     </header>
 
-    <div class="cv-links">
-        <a href="assets/Curriculum.pdf" id="download-cv-es" download data-key="cv-download-es">Descargar CV</a>
-        <a href="assets/Resume.pdf" id="download-cv-en" download data-key="cv-download-en">Download Resume</a>
-    </div>
+<div class="cv-actions-hero">
+    <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
+    <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
+</div>
 
     <main>
         <form action="https://formspree.io/f/manaljaa" method="POST">
@@ -422,8 +411,8 @@
                 </div>
             </div>
             <div class="copyright">
-                <span id="copy-es" class="lang-content active">© 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.</span>
-                <span id="copy-en" class="lang-content">© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.</span>
+                <span id="copy-es" class="lang-content active">© 2026 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.</span>
+                <span id="copy-en" class="lang-content">© 2026 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.</span>
             </div>
         </div>
         <div style="margin-top: 2rem;">
@@ -474,6 +463,28 @@
 
         // Prevenir context menu global
         document.addEventListener('contextmenu', e => e.preventDefault());
+
+window.forceDownload = function(lang, filename) {
+    const filePath = 'assets/' + filename;
+
+    // 1. Envío de evento a Google Analytics
+    if (typeof gtag === 'function') {
+        gtag('event', 'engagement_cv_download', {
+            'language': lang,
+            'filename': filename,
+            'page_path': window.location.pathname
+        });
+    }
+
+    // 2. Forzar descarga real
+    const link = document.createElement('a');
+    link.href = filePath;
+    link.setAttribute('download', filename);
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
     </script>
 </body>
 </html>

@@ -10,13 +10,18 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
-    gtag('config', 'G-8VMES8F4MN', { anonymize_ip: true });
+
+    gtag('config', 'G-8VMES8F4MN', { 
+        anonymize_ip: true,
+        send_page_view: false,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false 
+    });
   </script>
 
   <script>
 (function() {
     const CONFIG = {
-        // IDs y Clases específicas de index.html
         idsToObserve: ['.hero', '#main-projects', '#archive-projects', 'footer'], 
         scrollDepths: [25, 50, 75, 90, 100],
         trackedDepths: [],
@@ -30,28 +35,34 @@
             gtag('event', name, {
                 ...params,
                 'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                'memory': navigator.deviceMemory || 'unknown',
-                'page_path': window.location.pathname
+                'page_path': window.location.pathname,
+                'is_mobile': /Mobi|Android/i.test(navigator.userAgent)
             });
         }
     };
 
     document.addEventListener("DOMContentLoaded", function() {
         
-        // --- SEGURIDAD Y CLICKS ---
+        // --- 1. TRACKING DE CONVERSIÓN (CV/RESUME) ---
+        document.querySelectorAll('.btn-cv-track').forEach(btn => {
+            btn.addEventListener('click', function() {
+                sendEvent('engagement_cv_download', {
+                    'language': this.getAttribute('data-lang'),
+                    'filename': this.href.split('/').pop(),
+                    'location': 'hero_actions'
+                });
+            });
+        });
+
+        // --- 2. SEGURIDAD Y UX ---
         document.addEventListener('contextmenu', (e) => {
             if (e.target.tagName === 'IMG') {
                 sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
             }
         });
 
-        document.addEventListener('dragstart', (e) => {
-            if (e.target.tagName === 'IMG') {
-                sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
-            }
-        });
-
         document.addEventListener('click', (e) => {
+            // Rage Click Detection
             CONFIG.clickCount++;
             clearTimeout(CONFIG.clickTimer);
             CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
@@ -61,25 +72,17 @@
             }
         });
 
-        // --- NAVEGACIÓN Y CONTENIDO ---
-        window.addEventListener('scroll', () => {
-            let h = document.documentElement, b = document.body;
-            let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
-            CONFIG.scrollDepths.forEach(depth => {
-                if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
-                    CONFIG.trackedDepths.push(depth);
-                    sendEvent('content_scroll_depth', { 'depth': depth + '%' });
-                }
-            });
-        });
-
+        // --- 3. VISIBILIDAD DE PROYECTOS (Intersection Observer) ---
         if ('IntersectionObserver' in window) {
             let observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
+                        // Confirmamos que el usuario realmente lo vio (2 seg de dwell time)
                         setTimeout(() => {
                             if (entry.isIntersecting) {
-                                sendEvent('content_view_confirmed', { 'section_id': entry.target.id || entry.target.className });
+                                sendEvent('content_view_confirmed', { 
+                                    'section_id': entry.target.id || entry.target.className 
+                                });
                                 observer.unobserve(entry.target);
                             }
                         }, 2000);
@@ -93,43 +96,22 @@
             });
         }
 
-        // --- INTERACCIÓN ---
-        document.addEventListener('copy', () => {
-            let text = document.getSelection().toString().substring(0, 50);
-            sendEvent('engagement_text_copy', { 'preview': text + '...' });
-        });
-
-        document.addEventListener('mouseleave', (e) => {
-            if (e.clientY < 0) sendEvent('behavior_exit_intent');
-        });
-
-        // Hover en tarjetas de proyecto
+        // --- 4. INTERACCIÓN CON TARJETAS (Hover e Intención) ---
         document.addEventListener('mouseover', (e) => {
             let card = e.target.closest('.project-card');
             if (card) {
-                let hTimer = setTimeout(() => sendEvent('engagement_hover_interest', { 'id': card.id }), 3000);
+                let hTimer = setTimeout(() => {
+                    sendEvent('engagement_project_interest', { 'project_id': card.id });
+                }, 3000);
                 card.addEventListener('mouseleave', () => clearTimeout(hTimer), { once: true });
             }
         });
-
-        // AdBlock Detection
-        setTimeout(() => {
-            const test = document.createElement('div');
-            test.className = 'adsbox';
-            test.innerHTML = '&nbsp;';
-            document.body.appendChild(test);
-            sendEvent('tech_adblock_status', { 'active': test.offsetHeight === 0 });
-            test.remove();
-        }, 3000);
     });
 
-    window.onerror = (msg, url, line) => {
-        sendEvent('tech_js_error', { 'msg': msg, 'line': line });
-    };
-
+    // Tracking de Rendimiento
     window.addEventListener('load', () => {
         const perf = performance.getEntriesByType("navigation")[0];
-        if (perf) sendEvent('tech_load_time', { 'ms': Math.round(perf.domComplete) });
+        if (perf) sendEvent('tech_load_performance', { 'load_ms': Math.round(perf.domComplete) });
     });
 })();
 </script>
@@ -155,100 +137,147 @@
     .branding h2 { font-size: 1rem; text-transform: uppercase; font-weight: 800; }
     .branding h3 { font-size: 0.6rem; color: var(--muted); font-weight: 700; }
 
-    .cv-links { display: flex; justify-content: center; gap: 12px; padding: 2rem 5% 1rem; }
-    .cv-links a {
-        text-decoration: none; padding: 0.7rem 1.2rem; border-radius: var(--radius);
-        font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-        transition: var(--transition); border: 1.5px solid var(--text);
+    /* Estilo Botones CV Unificado */
+    .cv-actions-hero { display: flex; justify-content: center; gap: 15px; padding: 2rem 5% 0; }
+    .btn-cv {
+        text-decoration: none; padding: 0.8rem 1.5rem; border-radius: var(--radius);
+        font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+        transition: var(--transition); border: 2px solid var(--text); display: inline-flex; align-items: center;
     }
-    #cv-es { background: var(--text); color: #fff; }
-    #cv-en { background: transparent; color: var(--text); }
-    .cv-links a:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .btn-es-cv { background: var(--text); color: #fff; }
+    .btn-en-cv { background: transparent; color: var(--text); }
+    .btn-cv:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--accent); }
+    .btn-en-cv:hover { color: var(--accent); }
 
-    nav a { margin-left: 1.2rem; text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
-    .lang-switch { margin-left: 1.5rem; padding: 6px 12px; border: 2px solid #000; font-size: 0.7rem; font-weight: 800; cursor: pointer; background: #000; color: #fff; border-radius: 6px; }
+    nav a { margin-left: 1.2rem; text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.7rem; text-transform: uppercase; transition: 0.3s; }
+    nav a:hover { color: var(--accent); }
+    .lang-switch { margin-left: 1.5rem; padding: 8px 14px; border: none; font-size: 0.7rem; font-weight: 800; cursor: pointer; background: var(--text); color: #fff; border-radius: 6px; transition: 0.3s; }
+    .lang-switch:hover { background: var(--accent); }
 
-    .hero { padding: 5rem 5% 2rem; max-width: 1200px; margin: 0 auto; text-align: center; }
-    .hero h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 1rem; }
+    .hero { padding: 4rem 5% 2rem; max-width: 1200px; margin: 0 auto; text-align: center; }
+    .hero h1 { font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 1rem; line-height: 1.1; }
     .hero p { font-size: 1.1rem; color: var(--muted); max-width: 800px; margin: 0 auto; }
-    .nda-tag { display: inline-block; background: var(--light-bg); padding: 5px 12px; border-radius: 20px; font-size: 0.6rem; font-weight: 800; border: 1px solid var(--border); text-transform: uppercase; margin-bottom: 1rem; }
+    .nda-tag { display: inline-block; background: var(--light-bg); padding: 6px 14px; border-radius: 20px; font-size: 0.65rem; font-weight: 800; border: 1px solid var(--border); text-transform: uppercase; margin-bottom: 1.5rem; color: var(--accent); }
 
-    .section-title { padding: 0 5%; max-width: 1200px; margin: 3rem auto 1.5rem; display: flex; align-items: center; gap: 15px; }
-    .section-title h2 { font-size: 0.7rem; letter-spacing: 2px; color: var(--muted); font-weight: 800; text-transform: uppercase; }
+    .section-title { padding: 0 5%; max-width: 1200px; margin: 4rem auto 2rem; display: flex; align-items: center; gap: 20px; }
+    .section-title h2 { font-size: 0.75rem; letter-spacing: 3px; color: var(--muted); font-weight: 800; text-transform: uppercase; }
     .section-title .line { height: 1px; background: var(--border); flex-grow: 1; }
 
-    .work-grid { display: grid; gap: 2rem; max-width: 1200px; margin: 0 auto; padding: 0 5%; }
-    .grid-main { grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); }
-    .grid-archive { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+    .work-grid { display: grid; gap: 2.5rem; max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+    .grid-main { grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); }
+    .grid-archive { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
 
     .project-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: var(--transition); display: flex; flex-direction: column; }
-    .project-card:hover { border-color: var(--accent); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08); }
+    .project-card:hover { border-color: var(--accent); box-shadow: 0 30px 60px -15px rgba(0,0,0,0.1); transform: translateY(-5px); }
 
     .slider-container { position: relative; aspect-ratio: 16/10; overflow: hidden; background: #f3f4f6; }
-    .slides { display: flex; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; cursor: zoom-in; }
+    .slides { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; cursor: zoom-in; }
     .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
     
-    .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; width: 32px; height: 32px; cursor: pointer; z-index: 10; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: 0.2s; }
+    .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.95); border: none; width: 36px; height: 36px; cursor: pointer; z-index: 10; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
     .slider-btn:hover { background: var(--accent); color: white; }
-    .prev { left: 8px; } .next { right: 8px; }
+    .prev { left: 12px; } .next { right: 12px; }
 
-    .slider-nav { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; z-index: 11; }
-    .dot { width: 5px; height: 5px; background: rgba(0,0,0,0.2); border-radius: 50%; cursor: pointer; }
-    .dot.active { background: var(--accent); width: 12px; border-radius: 3px; }
+    .slider-nav { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 11; }
+    .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; transition: 0.3s; backdrop-filter: blur(4px); }
+    .dot.active { background: #fff; width: 18px; border-radius: 4px; }
 
-    .project-info { padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column; }
-    .project-info h3 { font-size: 1rem; font-weight: 800; margin-bottom: 0.4rem; line-height: 1.2; }
-    .project-info p.desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; }
+    .project-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
+    .project-info h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .project-info p.desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
 
-    .tech-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.6rem 0.8rem; background: var(--light-bg); border-radius: 6px; border: 1px solid var(--border); margin-top: auto; }
-    .tech-header span { font-size: 0.65rem; font-weight: 800; color: var(--accent); }
+    .tech-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.8rem 1rem; background: var(--light-bg); border-radius: 8px; border: 1px solid var(--border); margin-top: auto; transition: 0.3s; }
+    .tech-header:hover { background: #fff; border-color: var(--accent); }
+    .tech-header span { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; }
 
     .tech-content { max-height: 0; opacity: 0; overflow: hidden; transition: var(--transition); }
-    .project-card.active .tech-content { max-height: 500px; opacity: 1; padding-top: 1rem; }
+    .project-card.active .tech-content { max-height: 600px; opacity: 1; padding-top: 1.2rem; }
     
-    .tech-specs { border-left: 2px solid var(--accent); padding-left: 0.8rem; font-size: 0.8rem; }
-    .tech-specs b { font-size: 0.6rem; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 0.3rem; }
-    .result-tag { margin-top: 0.8rem; font-weight: 800; color: #059669; font-size: 0.8rem; }
+    .tech-specs { border-left: 3px solid var(--accent); padding-left: 1rem; font-size: 0.85rem; }
+    .tech-specs b { font-size: 0.65rem; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 0.4rem; letter-spacing: 1px; }
+    .result-tag { margin-top: 1rem; font-weight: 800; color: #059669; font-size: 0.85rem; display: flex; align-items: center; gap: 5px; }
+    .result-tag::before { content: '✓'; }
 
-    #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; cursor: zoom-out; }
-    #lightbox img { max-width: 90%; max-height: 90%; object-fit: contain; }
+    #lightbox { position: fixed; inset: 0; background: rgba(10,10,15,0.98); z-index: 2000; display: none; align-items: center; justify-content: center; cursor: zoom-out; backdrop-filter: blur(8px); }
+    #lightbox img { max-width: 95%; max-height: 92%; object-fit: contain; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
 
-    footer { background: #111827; color: #fff; padding: 3rem 5%; text-align: center; margin-top: 4rem; }
-    .footer-social { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; }
-    .footer-social img { width: 20px; filter: invert(1); opacity: 0.5; }
+    footer { background: #0a0a0f; color: #fff; padding: 5rem 5% 3rem; text-align: center; margin-top: 6rem; }
+    .footer-social { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2.5rem; }
+    .footer-social img { width: 22px; filter: invert(1); opacity: 0.5; transition: 0.3s; }
+    .footer-social a:hover img { opacity: 1; transform: translateY(-5px); }
 
-    @media (max-width: 1024px) { .grid-archive { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); } }
-    @media (max-width: 600px) { .grid-main, .grid-archive { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) {
+      header { flex-direction: column; gap: 1rem; padding: 1.5rem; text-align: center; }
+      nav { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+      nav a { margin: 0 0.5rem; font-size: 0.65rem; }
+      .cv-actions-hero { flex-direction: column; width: 100%; }
+      .btn-cv { width: 100%; justify-content: center; }
+      .grid-main { grid-template-columns: 1fr; }
+
+.cv-actions-hero { 
+    display: flex; 
+    justify-content: center; 
+    gap: 15px; 
+    padding: 2rem 5% 0; 
+}
+.btn-cv {
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+    border: 2px solid #111827;
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+}
+.btn-es-cv { background: #111827; color: #fff; }
+.btn-en-cv { background: transparent; color: #111827; }
+.btn-cv:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+    border-color: #0052FF; 
+}
+
+@media (max-width: 768px) {
+    .cv-actions-hero { flex-direction: column; width: 100%; }
+    .btn-cv { width: 100%; justify-content: center; }
+}
+    }
   </style>
 </head>
 <body>
 
   <header>
     <div class="branding">
-      <h2 id="brand-name">Esteban Campos Polo</h2>
-      <h3 id="brand-sub">Sr. Graphic Packaging and Production Designer</h3>
+      <h2>Esteban Campos Polo</h2>
+      <h3>Sr. Graphic Packaging and Production Designer</h3>
     </div>
     <nav>
-      <a href="graphic-design.html">Diseño Gráfico</a>
-      <a href="photography.html">Fotografía</a>
-      <a href="3d-modeling.html">Arte 3D</a>
-      <a href="IA.html">IA</a>
+      <a href="graphic-design.html">Design</a>
+      <a href="photography.html">Photography</a>
+      <a href="3d-modeling.html">3D Art</a>
+      <a href="IA.html">AI</a>
       <a href="about.html">About</a>
-      <a href="cv_resume.html">CV</a>
+      <a href="cv_resume.html" data-key="nav-cv">CV/Resume</a>
       <button class="lang-switch" onclick="toggleLang()" id="langBtn">ENGLISH</button>
     </nav>
   </header>
 
-  <div class="cv-links">
-    <a href="assets/Curriculum.pdf" id="cv-es" download>Descargar CV</a>
-    <a href="assets/Resume.pdf" id="cv-en" download>Download Resume</a>
-  </div>
-
   <main>
     <section class="hero">
-      <div class="nda-tag">Proyectos bajo NDA / Confidencialidad</div>
+      <div class="nda-tag">Portfolio 2026 | Production & Industrial Design</div>
       <h1 id="hero-title">Sr. Graphic Packaging and Production Designer.</h1>
-      <p id="hero-desc">Más de 20 años de experiencia dominando el flujo completo.</p>
+      <p id="hero-desc">Más de 20 años dominando el flujo completo de artes finales y procesos industriales.</p>
+      
+ <div class="cv-actions-hero">
+    <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
+    <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
+</div>
     </section>
 
     <div class="section-title"><h2 id="title-solutions">PROYECTOS DESTACADOS</h2><div class="line"></div></div>
@@ -262,10 +291,11 @@
 
   <footer>
     <div class="footer-social" id="footer-social-links"></div>
-    <p style="opacity:0.3; font-size:0.6rem">© 2026 Esteban Campos Polo. Todos los derechos reservados.</p>
+    <p style="opacity:0.4; font-size:0.7rem; letter-spacing: 1px;">© 2026 Esteban Campos Polo. All rights reserved.</p>
   </footer>
 
   <script>
+    // Lógica de Renderizado e Idioma (Manteniendo la estructura de datos pero mejorando la inyección)
     let currentLang = 'es';
     const sliderState = {};
 
@@ -289,47 +319,47 @@
 
     const translations = {
       es: {
-        heroTitle: "Diseño gráfico y soluciones técnicas orientadas a la fabricación.",
-        heroDesc: "Dominio integral del flujo de trabajo: desde el briefing inicial hasta la salida de máquina.",
-        techBtn: "VER DETALLES TÉCNICOS",
-        apply: "CRITERIO DE PRODUCCIÓN",
+        heroTitle: "Soluciones de diseño gráfico orientadas a la fabricación industrial.",
+        heroDesc: "Dominio integral del flujo de trabajo: desde el briefing conceptual hasta la salida de máquina y control de calidad.",
+        techBtn: "Especificaciones Técnicas",
+        apply: "Criterios de Producción",
         main: [
-          { title: "Litografía Metálica — La Campana", desc: "Packaging premium de hojalata.", insight: "Vectorización integra manual. Gestión de tintas y barnices.", result: "Producción industrial precisa." },
-          { title: "Gestión de color — Camocream", desc: "Diseño técnico sobre soporte complejo.", insight: "Tintas planas para estabilidad cromática.", result: "Éxito: Fidelidad de marca." },
-          { title: "Packaging Retail — Gran Consumo", desc: "Desarrollo de artes finales.", insight: "Control exhaustivo CMYK.", result: "Reducción de mermas." },
-          { title: "Señalética — Café París", desc: "Reconstrucción visual gran formato.", insight: "Escalado vectorial de alta precisión.", result: "Durabilidad extrema." }
+          { title: "Litografía Metálica — La Campana", desc: "Packaging premium de hojalata para el sector conservero.", insight: "Vectorización íntegra manual. Gestión de tintas especiales y barnices de reserva.", result: "Producción industrial de alta fidelidad." },
+          { title: "Gestión de Color — Camocream", desc: "Diseño técnico sobre soporte de aluminio complejo.", insight: "Uso de tintas planas (Pantone) para garantizar estabilidad cromática en tiradas masivas.", result: "Consistencia de marca global." },
+          { title: "Packaging Retail — Gran Consumo", desc: "Desarrollo de artes finales para sector alimentación.", insight: "Control exhaustivo de perfiles CMYK y sobreimpresiones.", result: "Optimización de tiempos en imprenta." },
+          { title: "Señalética — Café París", desc: "Reconstrucción visual para aplicación en gran formato.", insight: "Escalado vectorial de alta precisión para corte láser y vinilo.", result: "Acabado estructural duradero." }
         ],
         archive: [
-          { title: "Canephora", desc: "Branding café.", insight: "Adaptado a flexible.", result: "Premium." },
-          { title: "App Educativa", desc: "Matemáticas.", insight: "Diseño e interfaz.", result: "Aprendizaje lúdico." },
-          { title: "Packaging Juguetes", desc: "Diseño estructural.", insight: "Preparación para imprenta.", result: "Montaje limpio." },
-          { title: "Etiqueta Vinícola", desc: "Sector vino.", insight: "Papeles técnicos.", result: "Resistencia." },
-          { title: "Merlot", desc: "Rótulo retroiluminado.", insight: "Estudio de visibilidad.", result: "Impacto visual." },
-          { title: "Caja fresh", desc: "Packaging producto fresco.", insight: "Gestión de tintas.", result: "Alta calidad." },
-          { title: "Mermelaida", desc: "Identidad producto.", insight: "Tipografía personalizada.", result: "Diferenciación." },
-          { title: "Web CFS Onil", desc: "Interfaz responsive.", insight: "Optimización assets.", result: "Carga rápida." }
+          { title: "Canephora", desc: "Branding café.", insight: "Adaptación a envase flexible.", result: "Resultado Premium." },
+          { title: "App Educativa", desc: "UX/UI Matemáticas.", insight: "Diseño de interfaz modular.", result: "Engagement lúdico." },
+          { title: "Packaging Juguetes", desc: "Diseño estructural.", insight: "Preparación para troquelado.", result: "Montaje eficiente." },
+          { title: "Etiqueta Vinícola", desc: "Artes finales vino.", insight: "Gestión de papeles técnicos.", result: "Resistencia a humedad." },
+          { title: "Merlot", desc: "Identidad visual.", insight: "Estudio cromático.", result: "Impacto en lineal." },
+          { title: "Caja Fresh", desc: "Packaging producto fresco.", insight: "Flexografía optimizada.", result: "Impresión limpia." },
+          { title: "Mermelaida", desc: "Branding artesanal.", insight: "Tipografía personalizada.", result: "Diferenciación." },
+          { title: "Web CFS Onil", desc: "Diseño Web.", insight: "Optimización de assets UI.", result: "Carga ultra rápida." }
         ]
       },
       en: {
-        heroTitle: "Graphic design and technical solutions geared towards manufacturing.",
-        heroDesc: "Full workflow mastery: from initial briefing to machine output.",
-        techBtn: "VIEW TECHNICAL DETAILS",
-        apply: "PRODUCTION CRITERIA",
+        heroTitle: "Graphic design solutions geared towards industrial manufacturing.",
+        heroDesc: "Full workflow mastery: from conceptual briefing to machine output and quality control.",
+        techBtn: "Technical Specs",
+        apply: "Production Criteria",
         main: [
-          { title: "Metal Lithography — La Campana", desc: "Premium tinplate packaging.", insight: "Manual vectorization and ink management.", result: "Precise industrial production." },
-          { title: "Color Management — Camocream", desc: "Technical design on complex substrates.", insight: "Spot colors for stability.", result: "Success: Brand fidelity." },
-          { title: "Retail Packaging — FMCG", desc: "Final artwork development.", insight: "CMYK profile control.", result: "Reduced waste." },
-          { title: "Signage — Café París", desc: "Large format visual reconstruction.", insight: "High-precision vector scaling.", result: "Extreme durability." }
+          { title: "Metal Lithography — La Campana", desc: "Premium tinplate packaging for the canning industry.", insight: "Full manual vectorization. Spot inks and spot varnish management.", result: "High-fidelity industrial production." },
+          { title: "Color Management — Camocream", desc: "Technical design on complex aluminum substrates.", insight: "Spot colors (Pantone) to ensure chromatic stability in mass production.", result: "Global brand consistency." },
+          { title: "Retail Packaging — FMCG", desc: "Final artwork development for the food sector.", insight: "Exhaustive control of CMYK profiles and overprints.", result: "Reduced prepress lead times." },
+          { title: "Signage — Café París", desc: "Visual reconstruction for large format applications.", insight: "High-precision vector scaling for laser cutting and vinyl.", result: "Durable structural finish." }
         ],
         archive: [
-          { title: "Canephora", desc: "Coffee branding.", insight: "Flexible packaging design.", result: "Premium." },
-          { title: "Educational App", desc: "Math app.", insight: "Design and interface.", result: "Playful learning." },
-          { title: "Toy Packaging", desc: "Structural design.", insight: "Print preparation.", result: "Clean assembly." },
-          { title: "Wine Label", desc: "Wine sector.", insight: "Technical papers.", result: "Resistant." },
-          { title: "Merlot", desc: "Backlit sign.", insight: "Visibility study.", result: "Visual impact." },
-          { title: "Fresh Box", desc: "Fresh produce packaging.", insight: "Ink management.", result: "High quality." },
-          { title: "Mermelaida", desc: "Product identity.", insight: "Custom typography.", result: "Differentiation." },
-          { title: "Web CFS Onil", desc: "Responsive interface.", insight: "Asset optimization.", result: "Fast loading." }
+          { title: "Canephora", desc: "Coffee branding.", insight: "Flexible packaging adaptation.", result: "Premium outcome." },
+          { title: "Educational App", desc: "UX/UI Math App.", insight: "Modular interface design.", result: "Playful engagement." },
+          { title: "Toy Packaging", desc: "Structural design.", insight: "Die-cut preparation.", result: "Efficient assembly." },
+          { title: "Wine Label", desc: "Wine final artwork.", insight: "Technical paper management.", result: "Moisture resistance." },
+          { title: "Merlot", desc: "Visual identity.", insight: "Chromatic study.", result: "Shelf impact." },
+          { title: "Fresh Box", desc: "Fresh produce packaging.", insight: "Optimized flexography.", result: "Clean printing." },
+          { title: "Mermelaida", desc: "Artisan branding.", insight: "Custom typography.", result: "Market differentiation." },
+          { title: "Web CFS Onil", desc: "Web Design.", insight: "UI asset optimization.", result: "Ultra-fast loading." }
         ]
       }
     };
@@ -341,12 +371,10 @@
             ${data.imgs.length > 1 ? `<button class="slider-btn prev" onclick="changeS('${data.id}', -1)">&#10094;</button><button class="slider-btn next" onclick="changeS('${data.id}', 1)">&#10095;</button>` : ''}
             <div class="slides" id="sl-${data.id}" onclick="openLightbox(this)">
               ${data.imgs.map(img => {
-                  // Lógica para usar miniatura webp en la vista previa
                   let filename = img.split('/').pop();
                   let nameOnly = filename.substring(0, filename.lastIndexOf('.'));
                   let thumbSrc = `assets/images/webp/${nameOnly}.webp`;
-                  // Se guarda la ruta original en data-full para el lightbox
-                  return `<img src="${thumbSrc}" data-full="${img}" loading="lazy">`;
+                  return `<img src="${thumbSrc}" data-full="${img}" loading="lazy" alt="${trans.title}">`;
               }).join('')}
             </div>
             ${data.imgs.length > 1 ? `<div class="slider-nav">${data.imgs.map((_, idx) => `<div class="dot ${idx===0?'active':''}" onclick="moveSlide(${idx}, '${data.id}')"></div>`).join('')}</div>` : ''}
@@ -379,7 +407,10 @@
       document.getElementById('archive-projects').innerHTML = archiveProjects.map((p, i) => createCard(p, t.archive[i])).join('');
     }
 
-    function toggleTech(id) { document.getElementById(id).classList.toggle('active'); }
+    function toggleTech(id) { 
+        document.getElementById(id).classList.toggle('active'); 
+        if(typeof gtag === 'function') gtag('event', 'engagement_tech_expand', { 'project_id': id });
+    }
 
     function moveSlide(idx, pId) {
       const slider = document.getElementById(`sl-${pId}`);
@@ -404,13 +435,11 @@
     function openLightbox(el) {
       const pId = el.id.replace('sl-', '');
       const currentIdx = sliderState[pId] || 0;
-      // Recuperamos el objeto imagen actual
       const imgObj = el.querySelectorAll('img')[currentIdx];
-      // Leemos el atributo data-full donde guardamos la ruta original
       const src = imgObj.getAttribute('data-full');
-      
       document.getElementById('lightbox-img').src = src;
       document.getElementById('lightbox').style.display = 'flex';
+      if(typeof gtag === 'function') gtag('event', 'engagement_lightbox_open', { 'project_id': pId });
     }
 
     function toggleLang() {
@@ -422,10 +451,32 @@
       render();
       const social = [
         { n: "LinkedIn", i: "assets/icons/linkedin.svg", u: "https://www.linkedin.com/in/esteban-campos-polo-09852771" },
-        { n: "Behance", i: "assets/icons/behance.svg", u: "https://www.behance.net/EstebanDesign3D/projects" }
+        { n: "Behance", i: "assets/icons/behance.svg", u: "https://www.behance.net/EstebanDesign3D/projects" },
+        { n: "ArtStation", i: "assets/icons/artstation.svg", u: "https://estebancampos1.artstation.com/" }
       ];
       document.getElementById('footer-social-links').innerHTML = social.map(s => `<a href="${s.u}" target="_blank"><img src="${s.i}" alt="${s.n}"></a>`).join('');
     };
+window.forceDownload = function(lang, filename) {
+    const filePath = 'assets/' + filename;
+
+    // 1. Envío de evento a Google Analytics
+    if (typeof gtag === 'function') {
+        gtag('event', 'engagement_cv_download', {
+            'language': lang,
+            'filename': filename,
+            'page_path': window.location.pathname
+        });
+    }
+
+    // 2. Forzar descarga real
+    const link = document.createElement('a');
+    link.href = filePath;
+    link.setAttribute('download', filename);
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
   </script>
 </body>
 </html>

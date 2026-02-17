@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graphic Design | Esteban Campos Polo</title>
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -11,24 +12,50 @@
         gtag('js', new Date());
         gtag('config', 'G-8VMES8F4MN', { 
             anonymize_ip: true, 
+            send_page_view: false,
             allow_google_signals: false,
             allow_ad_personalization_signals: false 
         });
     </script>
+
     <script>
     (function() {
         const CONFIG = {
-            idsToObserve: ['#branding', '#mockups', '#packaging', '#web', '#editorial', '#signage'],
+            idsToObserve: ['#sec-mockups', '#sec-branding', '#sec-packaging', '#sec-web', '#sec-editorial', '#sec-signage'],
             scrollDepths: [25, 50, 75, 100],
-            trackedDepths: []
+            trackedDepths: [],
+            clickCount: 0,
+            clickTimer: null,
+            sessionStartTime: Date.now()
         };
+
         const sendEvent = (name, params = {}) => {
-            if (typeof gtag === 'function') gtag('event', name, params);
+            if (typeof gtag === 'function') {
+                gtag('event', name, {
+                    ...params,
+                    'page_location': window.location.href,
+                    'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown'
+                });
+            }
         };
+
         document.addEventListener("DOMContentLoaded", () => {
+            // 1. Detección de clics rápidos (posibles bots o usuarios frustrados)
+            document.addEventListener('click', () => {
+                CONFIG.clickCount++;
+                clearTimeout(CONFIG.clickTimer);
+                CONFIG.clickTimer = setTimeout(() => {
+                    if (CONFIG.clickCount > 8) sendEvent('engagement_rapid_clicks', { 'count': CONFIG.clickCount });
+                    CONFIG.clickCount = 0;
+                }, 500);
+            });
+
+            // 2. Seguridad: Clic derecho en imágenes
             document.addEventListener('contextmenu', e => {
                 if (e.target.tagName === 'IMG') sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
             });
+
+            // 3. Profundidad de Scroll
             window.addEventListener('scroll', () => {
                 let h = document.documentElement, b = document.body;
                 let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
@@ -39,9 +66,34 @@
                     }
                 });
             }, { passive: true });
+
+            // 4. Visibilidad de Secciones (Intersection Observer)
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+                        sendEvent('section_view', { 'section_id': entry.target.id });
+                    }
+                });
+            }, { threshold: 0.5 });
+            CONFIG.idsToObserve.forEach(id => {
+                const el = document.querySelector(id);
+                if (el) observer.observe(el);
+            });
+
+            // 5. Tiempo de permanencia al salir
+            window.addEventListener('beforeunload', () => {
+                const duration = Math.round((Date.now() - CONFIG.sessionStartTime) / 1000);
+                sendEvent('engagement_time_on_page', { 'seconds': duration });
+            });
         });
+
+        // Función global para capturar descargas de CV
+        window.trackDownload = function(fileName, lang) {
+            sendEvent('engagement_download_cv', { 'file_name': fileName, 'language': lang });
+        };
     })();
     </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -88,6 +140,7 @@
         .btn-cv {
             text-decoration: none; padding: 0.8rem 1.5rem; border-radius: var(--radius);
             font-size: 0.75rem; font-weight: 800; text-transform: uppercase; border: 1px solid var(--text); transition: var(--transition);
+            display: inline-flex; align-items: center; gap: 8px;
         }
         .btn-es-cv { background: var(--text); color: #fff; }
         .btn-en-cv { background: transparent; color: var(--text); }
@@ -119,7 +172,7 @@
         .collapsible-content {
             max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; background: #fff;
         }
-        .section-wrapper.active .collapsible-content { max-height: 3500px; } 
+        .section-wrapper.active .collapsible-content { max-height: 4500px; } 
 
         .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 20px; padding: 2rem 5%; }
         .grid-item { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); background: #fff; transition: var(--transition); position: relative; cursor: pointer; }
@@ -151,16 +204,56 @@
 
         @media (max-width: 768px) {
             header { flex-direction: column; padding: 1rem; }
-            .submenu { top: 105px; flex-wrap: wrap; gap: 8px; padding: 0.5rem; }
+            header .branding { margin-bottom: 1rem; text-align: center; }
+            nav { flex-wrap: wrap; justify-content: center; gap: 10px; }
+            nav a { margin: 0 0.5rem; }
+            .submenu { top: 115px; flex-wrap: wrap; gap: 8px; padding: 0.5rem; }
             .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .cv-actions { flex-direction: column; padding: 2rem 5% 0; }
+            .btn-cv { width: 100%; text-align: center; justify-content: center; }
         }
+
+.cv-actions-hero { 
+    display: flex; 
+    justify-content: center; 
+    gap: 15px; 
+    padding: 2rem 5% 0; 
+}
+.btn-cv {
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+    border: 2px solid #111827;
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+}
+.btn-es-cv { background: #111827; color: #fff; }
+.btn-en-cv { background: transparent; color: #111827; }
+.btn-cv:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+    border-color: #0052FF; 
+}
+
+@media (max-width: 768px) {
+    .cv-actions-hero { flex-direction: column; width: 100%; }
+    .btn-cv { width: 100%; justify-content: center; }
+}
+
     </style>
 </head>
 <body>
     <header>
         <div class="branding">
             <h2>Esteban Campos Polo</h2>
-            <h3 data-es="Diseño Gráfico y Producción" data-en="Graphic Design & Production">Diseño Gráfico y Producción</h3>
+            <h3 data-es="Sr. Graphic Packaging and Production Designer" data-en="Sr. Graphic Packaging and Production Designer">Diseño Gráfico y Producción</h3>
         </div>
         <nav>
             <a href="index.html" data-es="Inicio" data-en="Home">Inicio</a>
@@ -168,25 +261,26 @@
             <a href="photography.html" data-es="Fotografía" data-en="Photography">Fotografía</a>
             <a href="3d-modeling.html" data-es="Arte 3D" data-en="3D Art">Arte 3D</a>
             <a href="IA.html" data-es="IA" data-en="AI">IA</a>
-            <a href="cv_resume.html" data-es="CV" data-en="CV">CV / Resume</a>
+            <a href="cv_resume.html" data-key="nav-cv">CV/Resume</a>
             <a href="contact.html" data-es="Contacto" data-en="Contact">Contacto</a>
             <div class="lang-selector" onclick="toggleLanguage()"><span id="btn-es">ES</span>/<span id="btn-en">EN</span></div>
         </nav>
     </header>
     
 <nav class="submenu">
-    <a href="#branding" onclick="openSection('sec-branding')" data-es="Branding" data-en="Branding">Branding</a>
-    <a href="#mockups" onclick="openSection('sec-mockups')" data-es="Mockups" data-en="Mockups">Mockups</a>
-    <a href="#packaging" onclick="openSection('sec-packaging')" data-es="Packaging" data-en="Packaging">Packaging</a>
-    <a href="#web" onclick="openSection('sec-web')" data-es="Web/UI" data-en="Web/UI">Web/UI</a>
-    <a href="#editorial" onclick="openSection('sec-editorial')" data-es="Editorial" data-en="Editorial">Editorial</a>
-    <a href="#signage" onclick="openSection('sec-signage')" data-es="Señalética" data-en="Signage">Señalética</a>
+    <a href="#sec-branding" onclick="openSection('sec-branding')" data-es="Branding" data-en="Branding">Branding</a>
+    <a href="#sec-mockups" onclick="openSection('sec-mockups')" data-es="Mockups" data-en="Mockups">Mockups</a>
+    <a href="#sec-packaging" onclick="openSection('sec-packaging')" data-es="Packaging" data-en="Packaging">Packaging</a>
+    <a href="#sec-web" onclick="openSection('sec-web')" data-es="Web/UI" data-en="Web/UI">Web/UI</a>
+    <a href="#sec-editorial" onclick="openSection('sec-editorial')" data-es="Editorial" data-en="Editorial">Editorial</a>
+    <a href="#sec-signage" onclick="openSection('sec-signage')" data-es="Señalética" data-en="Signage">Señalética</a>
 </nav>
+
     <main>
-        <div class="cv-actions">
-            <a href="assets/Curriculum.pdf" target="_blank" class="btn-cv btn-es-cv">Descargar CV (ES)</a>
-            <a href="assets/Resume.pdf" target="_blank" class="btn-cv btn-en-cv">Download Resume (EN)</a>
-        </div>
+<div class="cv-actions-hero">
+    <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
+    <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
+</div>
         
         <section class="page-header">
             <h1 data-es="Portfolio de Diseño Gráfico" data-en="Graphic Design Portfolio">Portafolio de Diseño Gráfico</h1>
@@ -201,7 +295,6 @@
             <div class="collapsible-content"><div class="portfolio-grid" id="grid-mockups"></div></div>
         </div>
 
-
         <div class="section-wrapper" id="sec-branding">
             <div class="section-title" onclick="toggleSection(this)">
                 <h2 data-es="Branding e Identidad" data-en="Branding & Identity">Branding e Identidad</h2>
@@ -209,8 +302,6 @@
             </div>
             <div class="collapsible-content"><div class="portfolio-grid" id="grid-branding"></div></div>
         </div>
-
-
 
         <div class="section-wrapper" id="sec-packaging">
             <div class="section-title" onclick="toggleSection(this)">
@@ -333,7 +424,11 @@
 
         function openSection(id) {
             document.querySelectorAll('.section-wrapper').forEach(sw => sw.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+            const target = document.getElementById(id);
+            if(target) {
+                target.classList.add('active');
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         function updateContent() {
@@ -351,39 +446,16 @@
             updateContent();
         }
 
-        // --- RENDERIZADO MEJORADO: LIMPIEZA DE NOMBRE DE ARCHIVO ---
         function renderGrid(containerId, data) {
             const container = document.getElementById(containerId);
             if(!container) return;
             
             container.innerHTML = data.map((item, index) => {
                 const uniqueId = `${containerId}-${index}`;
-                
                 const imgsHtml = item.images.map((img, i) => {
-                    // 1. Extraer el nombre del archivo con seguridad
-                    // Dividimos por '/' y cogemos el último elemento. Luego dividimos por '.' y cogemos el primero.
-                    // Esto evita problemas con extensiones dobles o puntos en el nombre.
-                    const pathParts = img.split('/');
-                    const fullName = pathParts[pathParts.length - 1];
-                    const fileName = fullName.split('.')[0];
-                    
-                    let webpPath;
-                    if (containerId === 'grid-branding') {
-                        // Sección Branding
-                        webpPath = `assets/images/logotipos/${fileName}.webp`;
-                    } else {
-                        // RESTO DE SECCIONES: Obligatorio assets/images/webp/ + .webp
-                        webpPath = `assets/images/webp/${fileName}.webp`;
-                    }
-
-                    // Forzamos la carga de la ruta WebP. 
-                    // El 'onerror' es un seguro, pero si las imágenes están en la carpeta webp, DEBE cargar webpPath.
-                    return `<img src="${webpPath}" 
-                                 data-original="${img}" 
-                                 class="${i === 0 ? 'active' : ''}" 
-                                 alt="${item.name}" 
-                                 loading="lazy" 
-                                 onerror="if (this.src.indexOf('.webp') !== -1) { this.src='${img}'; }">`;
+                    const fileName = img.split('/').pop().split('.')[0];
+                    let webpPath = containerId === 'grid-branding' ? `assets/images/logotipos/${fileName}.webp` : `assets/images/webp/${fileName}.webp`;
+                    return `<img src="${webpPath}" data-original="${img}" class="${i === 0 ? 'active' : ''}" alt="${item.name}" loading="lazy" onerror="this.src='${img}'">`;
                 }).join('');
                 
                 const nav = item.images.length > 1 ? `<button class="nav-btn prev-btn" onclick="prevSlide(event, '${uniqueId}')">&#10094;</button><button class="nav-btn next-btn" onclick="nextSlide(event, '${uniqueId}')">&#10095;</button>` : '';
@@ -417,6 +489,8 @@
             updateModalImage();
             document.getElementById('imageModal').style.display = 'flex';
             document.querySelector('.modal-nav').style.display = currentModalImages.length > 1 ? 'flex' : 'none';
+            // Analytics: Ver imagen en HD
+            if (typeof gtag === 'function') gtag('event', 'engagement_view_image_hd', { 'image_name': currentModalImages[currentModalIdx].split('/').pop() });
         }
 
         function updateModalImage() { document.getElementById('modalImg').src = currentModalImages[currentModalIdx]; }
@@ -436,7 +510,6 @@
                 { i: "assets/icons/linkedin.svg", u: "https://www.linkedin.com/in/esteban-campos-polo-09852771" },
                 { i: "assets/icons/artstation.svg", u: "https://estebancampos1.artstation.com/" },
                 { i: "assets/icons/instagram.svg", u: "https://www.instagram.com/estcampo/" },
-                { i: "assets/icons/behance.svg", u: "https://www.behance.net/EstebanDesign3D/projects" }
             ];
             document.getElementById('footer-social').innerHTML = social.map(s => `<a href="${s.u}" target="_blank"><img src="${s.i}"></a>`).join('');
         };
@@ -448,6 +521,27 @@
                 if (e.key === "Escape") closeModal();
             }
         });
+window.forceDownload = function(lang, filename) {
+    const filePath = 'assets/' + filename;
+
+    // 1. Envío de evento a Google Analytics
+    if (typeof gtag === 'function') {
+        gtag('event', 'engagement_cv_download', {
+            'language': lang,
+            'filename': filename,
+            'page_path': window.location.pathname
+        });
+    }
+
+    // 2. Forzar descarga real
+    const link = document.createElement('a');
+    link.href = filePath;
+    link.setAttribute('download', filename);
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
     </script>
 </body>
 </html>

@@ -4,22 +4,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CV | Esteban Campos Polo</title>
+  <title>CV / Resume | Esteban Campos Polo</title>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
-    gtag('config', 'G-8VMES8F4MN', { anonymize_ip: true });
+
+    gtag('config', 'G-8VMES8F4MN', { 
+        anonymize_ip: true,
+        send_page_view: false,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false });
   </script>
 
     <script>
 (function() {
     // 1. CONFIGURACIÓN Y ESTADO
     const CONFIG = {
-        // Se añade '#cv-content' para detectar la visibilidad del CV generado por JS
-        idsToObserve: ['#cv-content', '#hero', '#proyectos', '#sobre-mi', '#contacto'], 
+        idsToObserve: ['#cv-content', 'footer'], 
         scrollDepths: [25, 50, 75, 90, 100],
         trackedDepths: [],
         clickCount: 0,
@@ -38,10 +42,7 @@
         }
     };
 
-    // 2. INICIALIZACIÓN AL CARGAR DOM
     document.addEventListener("DOMContentLoaded", function() {
-
-        // --- SECCIÓN: SEGURIDAD Y CLICKS ---
         document.addEventListener('contextmenu', (e) => {
             if (e.target.tagName === 'IMG') {
                 sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
@@ -65,7 +66,6 @@
             }
         });
 
-        // --- SECCIÓN: NAVEGACIÓN Y CONTENIDO ---
         window.addEventListener('scroll', () => {
             let h = document.documentElement, b = document.body;
             let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
@@ -107,14 +107,6 @@
             if (e.clientY < 0) sendEvent('behavior_exit_intent');
         });
 
-        document.querySelectorAll('.card-proyecto, .portfolio-item').forEach(item => {
-            let hTimer;
-            item.addEventListener('mouseenter', () => {
-                hTimer = setTimeout(() => sendEvent('engagement_hover_interest', { 'id': item.id }), 3000);
-            });
-            item.addEventListener('mouseleave', () => clearTimeout(hTimer));
-        });
-
         setTimeout(() => {
             const test = document.createElement('div');
             test.className = 'adsbox';
@@ -133,12 +125,10 @@
         const perf = performance.getEntriesByType("navigation")[0];
         if (perf) sendEvent('tech_load_time', { 'ms': Math.round(perf.domComplete) });
     });
-
 })();
     </script>
 
   <style>
-    /* ... (Tu CSS se mantiene igual) ... */
     :root {
       --accent: #0052FF;
       --text-main: #111827;
@@ -168,7 +158,8 @@
       z-index: 1000;
     }
 
-    .branding h2 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; }
+    .branding h2 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; }
+    .branding h3 { font-size: 0.65rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; margin: 0; }
     
     nav { display: flex; align-items: center; }
     nav a {
@@ -177,7 +168,9 @@
       color: var(--text-muted);
       font-weight: 500;
       font-size: 0.9rem;
+      transition: color 0.3s;
     }
+    nav a:hover { color: var(--accent); }
 
     .nav-cv-btn {
       background: var(--accent);
@@ -217,9 +210,7 @@
       align-items: end;
     }
 
-    .cv-header-grid h1 { font-size: 2.5rem; margin: 0; text-transform: uppercase; }
-    .branding h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
-    .branding h3 { font-size: 0.65rem; color: var(--text-muted); font-weight: 800; text-transform: uppercase; }
+    .cv-header-grid h1 { font-size: 2.5rem; margin: 0; text-transform: uppercase; line-height: 1; }
     
     .quick-contact {
       text-align: right;
@@ -315,7 +306,44 @@
       .cv-header-grid { grid-template-columns: 1fr; text-align: center; }
       .quick-contact { text-align: center; }
       .cv-actions { position: relative; bottom: 0; right: 0; padding: 2rem; align-items: center; }
+      header { flex-direction: column; gap: 1rem; text-align: center; }
+      nav { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+      nav a { margin: 0 0.5rem; }
+      .lang-switch { margin-left: 0; margin-top: 0.5rem; }
     }
+.cv-actions-hero { 
+    display: flex; 
+    justify-content: center; 
+    gap: 15px; 
+    padding: 2rem 5% 0; 
+}
+.btn-cv {
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+    border: 2px solid #111827;
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+}
+.btn-es-cv { background: #111827; color: #fff; }
+.btn-en-cv { background: transparent; color: #111827; }
+.btn-cv:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+    border-color: #0052FF; 
+}
+
+@media (max-width: 768px) {
+    .cv-actions-hero { flex-direction: column; width: 100%; }
+    .btn-cv { width: 100%; justify-content: center; }
+}
   </style>
 </head>
 
@@ -323,13 +351,15 @@
 
   <header>
     <div class="branding">
-      <h2>Esteban Campos</h2>
+      <a href="index.html" style="text-decoration: none; color: inherit;">
+        <h2>Esteban Campos</h2>
+      </a>
       <h3 id="nav-sub">Sr. Graphic Packaging and Production Designer</h3>
     </div>
     <nav>
-      <a href="graphic-design.html" class="nav-link" data-key="nav-gd">Graphic Design</a>
-      <a href="photography.html" class="nav-link" data-key="nav-ph">Photography</a>
-      <a href="3d-modeling.html" class="nav-link" data-key="nav-3d">3D Art</a>
+      <a href="graphic-design.html" class="nav-link" data-key="nav-gd">Diseño Gráfico</a>
+      <a href="photography.html" class="nav-link" data-key="nav-ph">Fotografía</a>
+      <a href="3d-modeling.html" class="nav-link" data-key="nav-3d">Arte 3D</a>
       <a href="IA.html">AI</a>
       <a href="cv_resume.html" class="nav-cv-btn">CV / Resume</a>
       <a href="contact.html" class="nav-link" data-key="nav-co">Contacto</a>
@@ -339,24 +369,19 @@
 
   <main class="cv-container" id="cv-content"></main>
 
-  <div class="cv-actions">
-    <a href="assets/Curriculum.pdf" class="btn-download" id="download-es">
-      <span>📄 Descargar CV (ES)</span>
-    </a>
-    <a href="assets/Resume.pdf" class="btn-download" id="download-en" style="background: var(--accent);">
-      <span>📄 Download Resume (EN)</span>
-    </a>
-  </div>
+<div class="cv-actions-hero">
+    <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
+    <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
+</div>
 
   <footer style="padding: 4rem 1rem; background: #111827; color: white; text-align: center; font-size: 0.8rem;">
-    <p>© 2025 Esteban Campos Polo | Sr. Graphic Packaging and Production Designer</p>
+    <p>© 2026 Esteban Campos Polo | Sr. Graphic Packaging and Production Designer. All rights reserved</p>
     <div style="margin-top: 1rem; opacity: 0.5;">
         LinkedIn • ArtStation • Behance • Instagram
     </div>
   </footer>
 
   <script>
-    // ... (Tu lógica de renderizado renderCV() y traducciones se mantienen igual) ...
     let currentLang = 'es';
 
     const translations = {
@@ -375,7 +400,7 @@
         skill3D: "3D & Producción",
         secExp: "Experiencia Profesional",
         exp: [
-          { date: "2023 — 2024", title: "3D Character Artist & Sculptor", company: "Profesional independiente. (Proyectos de Producción)", tasks: ["Modelado High-poly y Low-poly optimizado para producción de cine y videojuegos.", "Workflow completo: Esculpido digital, Retopología técnica, desplegado de UVs y Texturizado PBR.", "Baking de mapas y Shading avanzado para renders de presentación profesional."] },
+          { date: "2023 — 2024", title: "3D Character Artist & Sculptor", company: "Profesional independiente (Proyectos de Producción)", tasks: ["Modelado High-poly y Low-poly optimizado para producción de cine y videojuegos.", "Workflow completo: Esculpido digital, Retopología técnica, desplegado de UVs y Texturizado PBR.", "Baking de mapas y Shading avanzado para renders de presentación profesional."] },
           { date: "2019 — 2022", title: "Diseñador Gráfico & Responsable de Preimpresión y Producción", company: "Sector Decoración y Retail para Franquicias Internacionales", tasks: ["Gestión de Cuentas Internacionales: Ejecución de artes finales para sedes líderes (Telepizza, Pizza Hut) garantizando Brand Guidelines.", "Producción de Gran Formato y Señalética: Gestión integral de flujo de impresión y corte sobre soportes diversos (PVC, metacrilato, vinilos).", "Optimización Técnica: Preparación de trazados técnicos y troqueles complejos para maquinaria CNC y sistemas de corte.", "Control de Calidad y Mantenimiento: Responsable del mantenimiento de maquinaria y reducción de mermas de material.", "Visualización de Proyectos: Creación de fotocomposiciones 2D para pre-visualización de fachadas y locales."] },
           { date: "2015 — 2019", title: "Diseñador Gráfico & Especialista en Producción Textil", company: "Castex Fashion (Sector Textil y Calzado / Sublimación Industrial)", tasks: ["Diseño de Superficies y Rapport: Creación de patrones complejos optimizando el ancho de banda para maximizar eficiencia.", "Simulación Textil Avanzada: Desarrollo de tejidos digitales mediante vectorización de hilos para toma de decisiones cromáticas.", "Gestión de Producción y Sublimación: Responsable de impresión y transferencia en calandra rotatoria industrial.", "Prototipado Virtual (Early 3D Adoption): Implementación de texturas digitales sobre modelos 3D de calzado para catálogo web."] },
           { date: "2013 — 2014", title: "Responsable de Marketing & Producción Gráfica", company: "Grupo Superjuguete (Sector Juguetero)", tasks: ["Gestión de Cuentas y Proveedores: Coordinación directa con cuentas internacionales como Mattel, Famosa y Disney.", "Dirección de Producción Editorial: Liderazgo en creación y arte final de catálogos estacionales de alto volumen.", "Negociación y Control de Costes: Selección técnica de soportes (gramajes, barnices UVI) y gestión de grandes tiradas.", "Fotografía de Producto \"In-situ\": Ejecución técnica para referencias críticas sin material gráfico disponible."] },
@@ -399,7 +424,7 @@
         skill3D: "3D & Production",
         secExp: "Professional Experience",
         exp: [
-          { date: "2023 — 2024", title: "3D Character Artist & Sculptor", company: "Freelance Professional. (Production Projects)", tasks: ["High-poly and Low-poly modeling optimized for film and video game production.", "Full workflow: Digital sculpting, technical Retopology, UV mapping, and PBR Texturing.", "Map baking and advanced Shading for professional presentation renders."] },
+          { date: "2023 — 2024", title: "3D Character Artist & Sculptor", company: "Freelance Professional (Production Projects)", tasks: ["High-poly and Low-poly modeling optimized for film and video game production.", "Full workflow: Digital sculpting, technical Retopology, UV mapping, and PBR Texturing.", "Map baking and advanced Shading for professional presentation renders."] },
           { date: "2019 — 2022", title: "Graphic Designer & Prepress/Production Manager", company: "Retail & Decor Sector for International Franchises", tasks: ["International Account Management: Final artwork for leading brands (Telepizza, Pizza Hut) ensuring Brand Guidelines.", "Large Format & Signage Production: Management of printing and cutting workflow on various substrates (PVC, acrylic, vinyl).", "Technical Optimization: Preparation of technical paths and complex die-cuts for CNC machinery.", "Quality Control & Maintenance: Responsible for machinery maintenance and material waste reduction.", "Project Visualization: 2D photo-compositions for storefront and premises pre-visualization."] },
           { date: "2015 — 2019", title: "Graphic Designer & Textile Production Specialist", company: "Castex Fashion (Textile & Footwear / Industrial Sublimation)", tasks: ["Surface & Pattern Design (Rapport): Creation of complex patterns optimizing bandwidth to maximize efficiency.", "Advanced Textile Simulation: Development of digital fabrics via yarn vectorization for color decision-making.", "Production & Sublimation Management: Responsible for printing and transfer on industrial rotary heat press.", "Virtual Prototyping (Early 3D Adoption): Digital texture implementation on 3D footwear models for web catalogs."] },
           { date: "2013 — 2014", title: "Marketing & Graphic Production Manager", company: "Superjuguete Group (Toy Sector)", tasks: ["Account & Vendor Management: Direct coordination with international accounts like Mattel, Famosa, and Disney.", "Editorial Production Management: Leadership in high-volume seasonal catalog creation and final artwork.", "Negotiation & Cost Control: Technical selection of substrates (weights, UV varnishes) and large run management.", "In-situ Product Photography: Technical execution for critical references lacking available graphic material."] },
@@ -415,10 +440,7 @@
       document.getElementById('nav-sub').innerText = t.navSub;
       document.querySelectorAll('.nav-link').forEach(link => {
         const key = link.getAttribute('data-key');
-        if(key === 'nav-gd') link.innerText = t.navGd;
-        if(key === 'nav-ph') link.innerText = t.navPh;
-        if(key === 'nav-3d') link.innerText = t.nav3d;
-        if(key === 'nav-co') link.innerText = t.navCo;
+        if(t[key]) link.innerText = t[key];
       });
       document.getElementById('langBtn').innerText = currentLang === 'es' ? 'ENGLISH' : 'ESPAÑOL';
 
@@ -438,16 +460,16 @@
           </div>
         </div>
 
-        <section>
+        <section id="sobre-mi">
           <h2 class="section-title">${t.secProfile}</h2>
           <p style="color: var(--text-muted); font-size: 1rem; max-width: 700px;">${t.profileTxt}</p>
         </section>
 
-        <section>
+        <section id="proyectos">
           <h2 class="section-title">${t.secSkills}</h2>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
             <div>
-              <h4 style="margin-bottom: 1rem; font-size: 0.9rem;">${t.skillDesign}</h4>
+              <h4 style="margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase;">${t.skillDesign}</h4>
               <div class="skills-wrapper">
                 <span class="tag software">Adobe Photoshop</span>
                 <span class="tag software">Illustrator</span>
@@ -455,10 +477,12 @@
                 <span class="tag">Branding</span>
                 <span class="tag">Packaging</span>
                 <span class="tag">Editorial</span>
+                <span class="tag">Pre-press</span>
+                <span class="tag">Final Arts</span>
               </div>
             </div>
             <div>
-              <h4 style="margin-bottom: 1rem; font-size: 0.9rem;">${t.skill3D}</h4>
+              <h4 style="margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase;">${t.skill3D}</h4>
               <div class="skills-wrapper">
                 <span class="tag software">Autodesk Maya</span>
                 <span class="tag software">ZBrush</span>
@@ -466,12 +490,13 @@
                 <span class="tag">Retopología</span>
                 <span class="tag">PBR Texturing</span>
                 <span class="tag">Unity 3D</span>
+                <span class="tag">Marmoset</span>
               </div>
             </div>
           </div>
         </section>
 
-        <section>
+        <section id="experiencia">
           <h2 class="section-title">${t.secExp}</h2>
           ${t.exp.map(item => `
             <div class="cv-item">
@@ -499,6 +524,28 @@
     }
 
     window.onload = renderCV;
+
+window.forceDownload = function(lang, filename) {
+    const filePath = 'assets/' + filename;
+
+    // 1. Envío de evento a Google Analytics
+    if (typeof gtag === 'function') {
+        gtag('event', 'engagement_cv_download', {
+            'language': lang,
+            'filename': filename,
+            'page_path': window.location.pathname
+        });
+    }
+
+    // 2. Forzar descarga real
+    const link = document.createElement('a');
+    link.href = filePath;
+    link.setAttribute('download', filename);
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
   </script>
 </body>
 </html>

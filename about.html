@@ -5,159 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About | Esteban Campos Polo</title>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'G-8VMES8F4MN', {
-        anonymize_ip: true,
-        send_page_view: true,
-        allow_google_signals: false,
-        allow_ad_personalization_signals: false
-    });
-  </script>
-
-
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
     <script>
-(function() {
-    // 1. CONFIGURACIÓN Y ESTADO
-    const CONFIG = {
-        idsToObserve: ['#hero', '#proyectos', '#sobre-mi', '#contacto'], // Ajusta estos IDs a tu HTML
-        scrollDepths: [25, 50, 75, 90, 100],
-        trackedDepths: [],
-        clickCount: 0,
-        clickTimer: null,
-        sessionStartTime: Date.now()
-    };
-
-    const sendEvent = (name, params = {}) => {
-        if (typeof gtag === 'function') {
-            gtag('event', name, {
-                ...params,
-                'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                'memory': navigator.deviceMemory || 'unknown',
-                'page_path': window.location.pathname
-            });
-        }
-    };
-
-    // 2. INICIALIZACIÓN AL CARGAR DOM
-    document.addEventListener("DOMContentLoaded", function() {
-
-        // --- SECCIÓN: SEGURIDAD Y CLICKS ---
-        
-        // Clic derecho en imágenes e intento de arrastre
-        document.addEventListener('contextmenu', (e) => {
-            if (e.target.tagName === 'IMG') {
-                sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
-            }
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-8VMES8F4MN', {
+            anonymize_ip: true,
+            send_page_view: false,
+            allow_google_signals: false,
+            allow_ad_personalization_signals: false
         });
-
-        document.addEventListener('dragstart', (e) => {
-            if (e.target.tagName === 'IMG') {
-                sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
-            }
-        });
-
-        // Rage Clicks (Detecta frustración: más de 4 clics en 1 seg)
-        document.addEventListener('click', (e) => {
-            CONFIG.clickCount++;
-            clearTimeout(CONFIG.clickTimer);
-            CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
-            
-            if (CONFIG.clickCount > 4) {
-                sendEvent('ux_rage_click', { 'element': e.target.tagName + (e.target.id ? '#'+e.target.id : '') });
-                CONFIG.clickCount = 0;
-            }
-        });
-
-        // --- SECCIÓN: NAVEGACIÓN Y CONTENIDO ---
-
-        // Scroll Tracking Granular
-        window.addEventListener('scroll', () => {
-            let h = document.documentElement, b = document.body;
-            let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
-            
-            CONFIG.scrollDepths.forEach(depth => {
-                if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
-                    CONFIG.trackedDepths.push(depth);
-                    sendEvent('content_scroll_depth', { 'depth': depth + '%' });
-                }
-            });
-        });
-
-        // Visibilidad Real de Proyectos (Intersection Observer)
-        if ('IntersectionObserver' in window) {
-            let observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            if (entry.isIntersecting) { // Si sigue ahí tras 2 segundos
-                                sendEvent('content_view_confirmed', { 'section_id': entry.target.id });
-                                observer.unobserve(entry.target);
-                            }
-                        }, 2000);
-                    }
-                });
-            }, { threshold: 0.6 });
-
-            CONFIG.idsToObserve.forEach(id => {
-                let el = document.querySelector(id);
-                if (el) observer.observe(el);
-            });
-        }
-
-
-        /
-        document.addEventListener('copy', () => {
-            let text = document.getSelection().toString().substring(0, 50);
-            sendEvent('engagement_text_copy', { 'preview': text + '...' });
-        });
-
-        // Exit Intent (Solo Desktop)
-        document.addEventListener('mouseleave', (e) => {
-            if (e.clientY < 0) sendEvent('behavior_exit_intent');
-        });
-
-        // Hover en proyectos (Interés sin clic)
-        document.querySelectorAll('.card-proyecto, .portfolio-item').forEach(item => {
-            let hTimer;
-            item.addEventListener('mouseenter', () => {
-                hTimer = setTimeout(() => sendEvent('engagement_hover_interest', { 'id': item.id }), 3000);
-            });
-            item.addEventListener('mouseleave', () => clearTimeout(hTimer));
-        });
-
-        // Detección de AdBlock
-        setTimeout(() => {
-            const test = document.createElement('div');
-            test.className = 'adsbox';
-            test.innerHTML = '&nbsp;';
-            document.body.appendChild(test);
-            sendEvent('tech_adblock_status', { 'active': test.offsetHeight === 0 });
-            test.remove();
-        }, 3000);
-    });
-
-
-
-    window.onerror = (msg, url, line) => {
-        sendEvent('tech_js_error', { 'msg': msg, 'line': line });
-    };
-
-    window.addEventListener('load', () => {
-        const perf = performance.getEntriesByType("navigation")[0];
-        if (perf) sendEvent('tech_load_time', { 'ms': Math.round(perf.domComplete) });
-    });
-
-})();
-
     </script>
 
+    <script>
+    (function() {
+        const CONFIG = {
+            idsToObserve: ['.about-layout-container', '.about-content-text', 'footer'],
+            scrollDepths: [25, 50, 75, 90, 100],
+            trackedDepths: [],
+            sessionStartTime: Date.now()
+        };
 
+        const sendEvent = (name, params = {}) => {
+            if (typeof gtag === 'function') {
+                gtag('event', name, {
+                    ...params,
+                    'page_location': window.location.pathname,
+                    'time_since_start': Math.floor((Date.now() - CONFIG.sessionStartTime) / 1000)
+                });
+            }
+        };
 
+        // 1. Carga y Errores
+        window.addEventListener('load', () => {
+            const perf = performance.getEntriesByType("navigation")[0];
+            if (perf) sendEvent('tech_load_complete', { 'load_time_sec': (perf.domComplete / 1000).toFixed(2) });
+        });
+
+        window.onerror = (msg, url, line) => {
+            sendEvent('tech_js_error', { 'msg': msg, 'line': line });
+        };
+
+        // 2. Interés Visual (Secciones)
+        document.addEventListener("DOMContentLoaded", () => {
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                if (entry.isIntersecting) {
+                                    sendEvent('content_focus_confirmed', {
+                                        'section_id': 'about_details',
+                                        'engagement_type': 'reading_biography'
+                                    });
+                                    observer.unobserve(entry.target);
+                                }
+                            }, 3000); // 3 segundos para confirmar lectura
+                        }
+                    });
+                }, { threshold: 0.3 });
+                CONFIG.idsToObserve.forEach(sel => {
+                    document.querySelectorAll(sel).forEach(el => observer.observe(el));
+                });
+            }
+        });
+
+        // 3. Scroll Profundo
+        window.addEventListener('scroll', () => {
+            const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
+            CONFIG.scrollDepths.forEach(depth => {
+                if (scrollPercent >= depth && !CONFIG.trackedDepths.includes(depth)) {
+                    CONFIG.trackedDepths.push(depth);
+                    sendEvent('content_scroll_depth', { 'percent': depth });
+                }
+            });
+        }, { passive: true });
+
+        // 4. Clics en CV y Enlaces Externos
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a');
+            if (link) {
+                const url = link.href.toLowerCase();
+                if (url.includes('.pdf') || url.includes('curriculum') || url.includes('resume')) {
+                    sendEvent('conversion_cv_download', { 
+                        'file_name': url.split('/').pop(),
+                        'location': 'about_page'
+                    });
+                }
+            }
+        });
+
+        // 5. Interacción de copia
+        document.addEventListener('copy', () => {
+            sendEvent('engagement_copy_content', { 'preview': document.getSelection().toString().substring(0, 30) });
+        });
+    })();
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -170,7 +114,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
         /* HEADER */
         header {
@@ -195,16 +139,20 @@
             font-weight: 800; transition: var(--transition);
         }
 
-        /* CV LINKS SECTION */
-        .cv-links { display: flex; justify-content: center; gap: 12px; padding: 2rem 5% 1rem; background: var(--light-bg); }
-        .cv-links a {
+        /* BLOQUE DE BOTONES CV UNIFICADO */
+        .cv-download-container {
+            display: flex; justify-content: center; gap: 12px;
+            padding: 2rem 5% 1rem; max-width: 1200px; margin: 0 auto;
+        }
+        .btn-cv-unified {
             text-decoration: none; padding: 0.7rem 1.2rem; border-radius: var(--radius);
             font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            transition: var(--transition); border: 1.5px solid var(--text);
+            transition: var(--transition); border: 1.5px solid var(--text); text-align: center;
+            display: inline-flex; align-items: center; justify-content: center;
         }
-        #cv-es { background: var(--text); color: #fff; }
-        #cv-en { background: transparent; color: var(--text); }
-        .cv-links a:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn-es-cv { background: var(--text); color: #fff !important; }
+        .btn-en-cv { background: transparent; color: var(--text) !important; }
+        .btn-cv-unified:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: var(--accent); border-color: var(--accent); color: #fff !important; }
 
         /* ABOUT LAYOUT */
         .section { padding: 4rem 5%; max-width: 1100px; margin: 0 auto; }
@@ -212,27 +160,27 @@
 
         .about-layout-container { display: flex; gap: 60px; align-items: flex-start; }
         .about-image-container { flex: 0 0 350px; position: sticky; top: 120px; }
-        .about-image { width: 100%; height: auto; border-radius: var(--radius); filter: grayscale(20%); transition: var(--transition); }
+        .about-image { width: 100%; height: auto; border-radius: var(--radius); filter: grayscale(20%); transition: var(--transition); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
         .about-image:hover { filter: grayscale(0%); }
 
         .about-content-text { flex: 1; }
         .language-content { display: none; }
         .language-content.active { display: block; }
         
-        .about-content-text p { margin-bottom: 1.5rem; font-size: 1rem; color: var(--muted); }
-        .about-content-text p:first-child { font-weight: 800; color: var(--text); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        .about-content-text p { margin-bottom: 1.5rem; font-size: 1.05rem; color: var(--muted); text-align: justify; }
+        .about-content-text p:first-child { font-weight: 800; color: var(--text); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; text-align: left; }
 
         /* CONTACT BUTTON */
         .contact-buttons-wrapper { margin-top: 3rem; }
         .contact-button-style {
-            display: inline-block; text-decoration: none; padding: 1rem 2rem; 
-            background: var(--accent); color: #fff; font-size: 0.8rem; font-weight: 800;
+            display: inline-block; text-decoration: none; padding: 1rem 2.5rem; 
+            background: var(--accent); color: #fff; font-size: 0.85rem; font-weight: 800;
             text-transform: uppercase; border-radius: var(--radius); transition: var(--transition);
         }
         .contact-button-style:hover { transform: scale(1.02); box-shadow: 0 10px 20px rgba(0,82,255,0.2); }
 
         /* FOOTER */
-        footer { background: #111827; color: #fff; padding: 4rem 5%; text-align: center; font-size: 0.75rem; border-top: 1px solid var(--border); }
+        footer { background: #111827; color: #fff; padding: 4rem 5%; text-align: center; font-size: 0.75rem; }
         .footer-social { display: flex; justify-content: center; gap: 1.5rem; margin: 1.5rem 0; }
         .footer-social img { width: 22px; filter: invert(1); opacity: 0.6; transition: var(--transition); }
         .footer-social a:hover img { opacity: 1; transform: translateY(-3px); }
@@ -243,7 +191,43 @@
             header { flex-direction: column; gap: 1rem; }
             nav { flex-wrap: wrap; justify-content: center; }
             nav a { margin: 0.5rem; font-size: 0.6rem; }
+            .cv-download-container { flex-direction: column; }
+            .btn-cv-unified { width: 100%; }
+            .about-content-text p { text-align: center; }
         }
+.cv-actions-hero { 
+    display: flex; 
+    justify-content: center; 
+    gap: 15px; 
+    padding: 2rem 5% 0; 
+}
+.btn-cv {
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+    border: 2px solid #111827;
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+}
+.btn-es-cv { background: #111827; color: #fff; }
+.btn-en-cv { background: transparent; color: #111827; }
+.btn-cv:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+    border-color: #0052FF; 
+}
+
+@media (max-width: 768px) {
+    .cv-actions-hero { flex-direction: column; width: 100%; }
+    .btn-cv { width: 100%; justify-content: center; }
+}
     </style>
 </head>
 
@@ -260,16 +244,16 @@
             <a href="3d-modeling.html" data-key="nav-3d">3D Art</a>
             <a href="IA.html" data-key="nav-ai">AI</a>
             <a href="about.html" class="active" data-key="nav-about">About</a>
-            <a href="cv_resume.html" class="nav-god" data-id="cv" data-es="CV / Resume" data-en="CV / Resume">CV / Resumen</a>
+            <a href="cv_resume.html" data-key="nav-cv">CV/Resume</a>
             <a href="contact.html" data-key="nav-contact">Contact</a>
             <button class="lang-switch" onclick="toggleLanguage()" id="langBtn">ES</button>
         </nav>
     </header>
 
-    <div class="cv-links">
-        <a href="assets/Curriculum.pdf" id="cv-es" download data-key="cv-download-es">Descargar CV</a>
-        <a href="assets/Resume.pdf" id="cv-en" download data-key="cv-download-en">Download Resume</a>
-    </div>
+<div class="cv-actions-hero">
+    <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
+    <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
+</div>
 
     <section class="section">
         <h2 class="about-title" data-key="about-title">About Me</h2>
@@ -280,37 +264,37 @@
             </div>
 
             <div class="about-content-text">
-    <div id="content-es" class="language-content active">
-<p><strong>Esteban Campos Polo | Diseño Gráfico y Producción Creativa</strong></p>
+                <div id="content-es" class="language-content active">
+                    <p><strong>Esteban Campos Polo | Diseño Gráfico y Producción Creativa</strong></p>
 
-        <p>Soy Esteban Campos Polo. Llevo más de 15 años como diseñador gráfico publicitario, pero mi terreno de juego siempre ha sido el mundo real: el packaging, el producto y la producción gráfica. Me he formado en entornos industriales donde las ideas no solo tienen que ser bonitas, sino que tienen que funcionar técnicamente.</p>
+                    <p>Soy Esteban Campos Polo. Llevo más de 15 años como diseñador gráfico publicitario, pero mi terreno de juego siempre ha sido el mundo real: el packaging, el producto y la producción gráfica. Me he formado en entornos industriales donde las ideas no solo tienen que ser bonitas, sino que tienen que funcionar técnicamente.</p>
 
-        <p>He trabajado en el sector del juguete, moda y retail, gestionando lanzamientos donde la imagen de marca, el control de costes y los plazos de entrega no perdonan. Mi fuerte es que controlo el proceso de punta a punta: desde el diseño y la dirección gráfica hasta la preimpresión y el control de calidad a pie de máquina. Entiendo el diseño como una herramienta para el negocio; me anticipo a los problemas técnicos y aseguro que cada pieza llegue a producción con garantías, ya sea en hojalata, cartón, gran formato o digital.</p>
+                    <p>He trabajado en el sector del juguete, moda y retail, gestionando lanzamientos donde la imagen de marca, el control de costes y los plazos de entrega no perdonan. Mi fuerte es que controlo el proceso de punta a punta: desde el diseño y la dirección gráfica hasta la preimpresión y el control de calidad a pie de máquina. Entiendo el diseño como una herramienta para el negocio; me anticipo a los problemas técnicos y aseguro que cada pieza llegue a producción con garantías, ya sea en hojalata, cartón, gran formato o digital.</p>
 
-        <p>En los últimos años he sumado el 3D a mi flujo de trabajo. No solo como algo estético, sino como una herramienta para visualizar conceptos y apoyar el desarrollo gráfico. Me he formado en Animum, en modelado para cine y videojuegos, dominando escultura digital, texturizado PBR y optimización en tiempo real.</p>
+                    <p>En los últimos años he sumado el 3D a mi flujo de trabajo. No solo como algo estético, sino como una herramienta para visualizar conceptos y apoyar el desarrollo gráfico. Me he formado en Animum, en modelado para cine y videojuegos, dominando escultura digital, texturizado PBR y optimización en tiempo real.</p>
 
-        <p>Hoy me defino como un perfil senior híbrido: alguien que une el diseño gráfico y el packaging con la producción visual y el 3D. Aporto criterio, veteranía y, sobre todo, la seguridad de que sé cómo llevar un concepto hasta el producto final minimizando cualquier inconveniente y errores.</p>
+                    <p>Hoy me defino como un perfil senior híbrido: alguien que une el diseño gráfico y el packaging con la producción visual y el 3D. Aporto criterio, veteranía y, sobre todo, la seguridad de que sé cómo llevar un concepto hasta el producto final minimizando cualquier inconveniente y errores.</p>
 
-        <p>Si tienes un proyecto complejo, si necesitas soluciones donde otros ven problemas y has llegado hasta aquí... quizá puedas contratarme.</p>
+                    <p>Si tienes un proyecto complejo, si necesitas soluciones donde otros ven problemas y has llegado hasta aquí... quizá puedas contratarme.</p>
 
-        <p>Gracias por pasarte por mi portfolio. Y no te vayas sin echarle un ojo a mi currículum.</p>
-    </div>
+                    <p>Gracias por pasarte por mi portfolio. Y no te vayas sin echarle un ojo a mi currículum.</p>
+                </div>
 
-    <div id="content-en" class="language-content">
-<p><strong>Esteban Campos Polo | Graphic Design & Creative Production</strong></p>
+                <div id="content-en" class="language-content">
+                    <p><strong>Esteban Campos Polo | Graphic Design & Creative Production</strong></p>
 
-        <p>I am Esteban Campos Polo. I have been a Senior Graphic Designer for over 15 years, but my playground has always been the real world: packaging, product design, and graphic production. I cut my teeth in industrial environments where ideas don't just have to look good—they have to be technically viable.</p>
+                    <p>I am Esteban Campos Polo. I have been a Senior Graphic Designer for over 15 years, but my playground has always been the real world: packaging, product design, and graphic production. I cut my teeth in industrial environments where ideas don't just have to look good—they have to be technically viable.</p>
 
-        <p>Working across the toy, fashion, and retail sectors, I’ve managed launches where brand image, cost control, and deadlines are non-negotiable. My strength lies in my end-to-end control of the process: from initial design and art direction to pre-press and on-site quality control at the printing press. I view design as a business tool; I anticipate technical hurdles and ensure every piece hits production with full guarantees—whether it's on tinplate, cardboard, large format, or digital media.</p>
+                    <p>Working across the toy, fashion, and retail sectors, I’ve managed launches where brand image, cost control, and deadlines are non-negotiable. My strength lies in my end-to-end control of the process: from initial design and art direction to pre-press and on-site quality control at the printing press. I view design as a business tool; I anticipate technical hurdles and ensure every piece hits production with full guarantees—whether it's on tinplate, cardboard, large format, or digital media.</p>
 
-        <p>In recent years, I have integrated 3D into my workflow—not just for aesthetics, but as a powerful tool for concept visualization and supporting graphic development. I trained at Animum Creativity Advanced School in 3D modeling for film and video games, mastering digital sculpting, PBR texturing, and real-time optimization.</p>
+                    <p>In recent years, I have integrated 3D into my workflow—not just for aesthetics, but as a powerful tool for concept visualization and supporting graphic development. I trained at Animum Creativity Advanced School in 3D modeling for film and video games, mastering digital sculpting, PBR texturing, and real-time optimization.</p>
 
-        <p>Today, I define myself as a senior hybrid profile: someone who bridges the gap between graphic design, packaging, visual production, and 3D. I bring judgment, experience, and above all, the peace of mind that comes from knowing how to take a concept to the final product while minimizing any issues or errors.</p>
+                    <p>Today, I define myself as a senior hybrid profile: someone who bridges the gap between graphic design, packaging, visual production, and 3D. I bring judgment, experience, and above all, the peace of mind that comes from knowing how to take a concept to the final product while minimizing any issues or errors.</p>
 
-        <p>If you have a complex project, if you need solutions where others see problems, and you’ve made it this far... maybe you can hire me.</p>
+                    <p>If you have a complex project, if you need solutions where others see problems, and you’ve made it this far... maybe you can hire me.</p>
 
-        <p>Thanks for visiting my portfolio. Don't leave without checking out my resume.</p>
-    </div>
+                    <p>Thanks for visiting my portfolio. Don't leave without checking out my resume.</p>
+                </div>
 
                 <div class="contact-buttons-wrapper">
                     <a href="contact.html" class="contact-button-style" data-key="btn-contact">Contáctame</a>
@@ -320,7 +304,7 @@
     </section>
 
     <footer>
-        <p data-key="footer-copy">© 2025 Esteban Campos Polo. All rights reserved.</p>
+        <p data-key="footer-copy">© 2026 Esteban Campos Polo. All rights reserved.</p>
         <div class="footer-social">
             <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank"><img src="assets/icons/linkedin.svg" alt="LinkedIn"></a>
             <a href="https://estebancampos1.artstation.com/" target="_blank"><img src="assets/icons/artstation.svg" alt="ArtStation"></a>
@@ -337,13 +321,13 @@
                 "nav-home": "Inicio", "nav-graphic": "Diseño Gráfico", "nav-photo": "Fotografía", "nav-3d": "Arte 3D", "nav-ai": "IA", "nav-about": "Sobre mí", "nav-contact": "Contacto",
                 "cv-download-es": "Descargar CV", "cv-download-en": "Download Resume",
                 "about-title": "Sobre mí", "btn-contact": "Contáctame",
-                "footer-copy": "© 2025 Esteban Campos Polo. Todos los derechos reservados."
+                "footer-copy": "© 2026 Esteban Campos Polo. Todos los derechos reservados."
             },
             en: {
                 "nav-home": "Home", "nav-graphic": "Graphic Design", "nav-photo": "Photography", "nav-3d": "3D Art", "nav-ai": "AI", "nav-about": "About", "nav-contact": "Contact",
                 "cv-download-es": "Descargar CV", "cv-download-en": "Download Resume",
                 "about-title": "About Me", "btn-contact": "Contact Me",
-                "footer-copy": "© 2025 Esteban Campos Polo. All rights reserved."
+                "footer-copy": "© 2026 Esteban Campos Polo. All rights reserved."
             }
         };
 
@@ -360,9 +344,33 @@
 
             document.getElementById('content-es').classList.toggle('active', currentLang === 'es');
             document.getElementById('content-en').classList.toggle('active', currentLang === 'en');
-        }
+            
+            // Log de cambio de idioma en Analytics
+            if(typeof gtag === 'function') {
+                gtag('event', 'engagement_language_switch', { 'language': currentLang });
+            }
+window.forceDownload = function(lang, filename) {
+    const filePath = 'assets/' + filename;
 
-        document.addEventListener('contextmenu', e => e.preventDefault());
+    // 1. Envío de evento a Google Analytics
+    if (typeof gtag === 'function') {
+        gtag('event', 'engagement_cv_download', {
+            'language': lang,
+            'filename': filename,
+            'page_path': window.location.pathname
+        });
+    }
+
+    // 2. Forzar descarga real
+    const link = document.createElement('a');
+    link.href = filePath;
+    link.setAttribute('download', filename);
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+        }
     </script>
 </body>
 </html>
