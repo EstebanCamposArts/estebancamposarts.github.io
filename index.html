@@ -450,9 +450,9 @@
     window.onload = () => {
       render();
       const social = [
-        { n: "LinkedIn", i: "assets/icons/linkedin.svg", u: "https://www.linkedin.com/in/esteban-campos-polo-09852771" },
-        { n: "Behance", i: "assets/icons/behance.svg", u: "https://www.behance.net/EstebanDesign3D/projects" },
-        { n: "ArtStation", i: "assets/icons/artstation.svg", u: "https://estebancampos1.artstation.com/" }
+                { i: "assets/icons/linkedin.svg", u: "https://www.linkedin.com/in/esteban-campos-polo-09852771" },
+                { i: "assets/icons/artstation.svg", u: "https://estebancampos1.artstation.com/" },
+                { i: "assets/icons/instagram.svg", u: "https://www.instagram.com/estcampo/" },
       ];
       document.getElementById('footer-social-links').innerHTML = social.map(s => `<a href="${s.u}" target="_blank"><img src="${s.i}" alt="${s.n}"></a>`).join('');
     };
@@ -478,5 +478,20 @@ window.forceDownload = function(lang, filename) {
     document.body.removeChild(link);
 };
   </script>
+<a href="https://wa.me/34625225324?text=Hola%20Esteban,%20he%20visto%20tu%20portfolio%20y%20me%20gustaría%20contactar%20contigo." 
+   target="_blank" 
+   style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-family: sans-serif; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; display: flex; align-items: center; transition: transform 0.3s;">
+   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width: 25px; margin-right: 10px;">
+   <span class="texto-boton">Contactar por WhatsApp</span>
+</a>
+
+<style>
+  /* Para que no moleste en móviles, solo dejamos el icono si la pantalla es pequeña */
+  @media (max-width: 480px) {
+    .texto-boton { display: none; }
+    a { padding: 12px; border-radius: 50%; }
+    img { margin-right: 0; }
+  }
+</style>
 </body>
 </html>

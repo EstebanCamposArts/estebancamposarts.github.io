@@ -40,7 +40,6 @@
         };
 
         document.addEventListener("DOMContentLoaded", () => {
-            // 1. Detección de clics rápidos (posibles bots o usuarios frustrados)
             document.addEventListener('click', () => {
                 CONFIG.clickCount++;
                 clearTimeout(CONFIG.clickTimer);
@@ -50,12 +49,10 @@
                 }, 500);
             });
 
-            // 2. Seguridad: Clic derecho en imágenes
             document.addEventListener('contextmenu', e => {
                 if (e.target.tagName === 'IMG') sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
             });
 
-            // 3. Profundidad de Scroll
             window.addEventListener('scroll', () => {
                 let h = document.documentElement, b = document.body;
                 let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
@@ -67,7 +64,6 @@
                 });
             }, { passive: true });
 
-            // 4. Visibilidad de Secciones (Intersection Observer)
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
@@ -80,14 +76,12 @@
                 if (el) observer.observe(el);
             });
 
-            // 5. Tiempo de permanencia al salir
             window.addEventListener('beforeunload', () => {
                 const duration = Math.round((Date.now() - CONFIG.sessionStartTime) / 1000);
                 sendEvent('engagement_time_on_page', { 'seconds': duration });
             });
         });
 
-        // Función global para capturar descargas de CV
         window.trackDownload = function(fileName, lang) {
             sendEvent('engagement_download_cv', { 'file_name': fileName, 'language': lang });
         };
@@ -136,15 +130,34 @@
         .lang-selector span.active { color: var(--accent); opacity: 1; }
         .lang-selector span { opacity: 0.4; }
 
-        .cv-actions { display: flex; justify-content: center; gap: 15px; padding: 3rem 5% 0; max-width: 1200px; margin: 0 auto; }
-        .btn-cv {
-            text-decoration: none; padding: 0.8rem 1.5rem; border-radius: var(--radius);
-            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; border: 1px solid var(--text); transition: var(--transition);
-            display: inline-flex; align-items: center; gap: 8px;
+        .cv-actions-hero { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            padding: 2rem 5% 0; 
         }
-        .btn-es-cv { background: var(--text); color: #fff; }
-        .btn-en-cv { background: transparent; color: var(--text); }
-        .btn-cv:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .btn-cv {
+            cursor: pointer;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
+            border: 2px solid #111827;
+            display: inline-flex;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-es-cv { background: #111827; color: #fff; }
+        .btn-en-cv { background: transparent; color: #111827; }
+        .btn-cv:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+            border-color: #0052FF; 
+        }
 
         .page-header { padding: 1.5rem 5% 3rem; max-width: 1200px; margin: 0 auto; text-align: center; }
         .page-header h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1.5rem; }
@@ -209,44 +222,9 @@
             nav a { margin: 0 0.5rem; }
             .submenu { top: 115px; flex-wrap: wrap; gap: 8px; padding: 0.5rem; }
             .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .cv-actions { flex-direction: column; padding: 2rem 5% 0; }
-            .btn-cv { width: 100%; text-align: center; justify-content: center; }
+            .cv-actions-hero { flex-direction: column; width: 100%; }
+            .btn-cv { width: 100%; justify-content: center; }
         }
-
-.cv-actions-hero { 
-    display: flex; 
-    justify-content: center; 
-    gap: 15px; 
-    padding: 2rem 5% 0; 
-}
-.btn-cv {
-    cursor: pointer;
-    text-decoration: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.4s ease;
-    border: 2px solid #111827;
-    display: inline-flex;
-    align-items: center;
-    font-family: 'Inter', sans-serif;
-}
-.btn-es-cv { background: #111827; color: #fff; }
-.btn-en-cv { background: transparent; color: #111827; }
-.btn-cv:hover { 
-    transform: translateY(-3px); 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-    border-color: #0052FF; 
-}
-
-@media (max-width: 768px) {
-    .cv-actions-hero { flex-direction: column; width: 100%; }
-    .btn-cv { width: 100%; justify-content: center; }
-}
-
     </style>
 </head>
 <body>
@@ -348,7 +326,7 @@
     </div>
 
     <script>
-        // DATA ARRAYS
+        // DATA ARRAYS CORREGIDOS: SE HAN ELIMINADO LAS ENTRADAS DE ARCHIVO TÉCNICO
         const brandingData = [
             { images: ['assets/images/logotipos/camocream.jpg'], name: 'Camocream Identity' },
             { images: ['assets/images/logotipos/merlot.jpg'], name: 'Merlot Wine Bar' },
@@ -381,11 +359,12 @@
             { images: ['assets/images/graphicdesign/mockups/agri-cultura.jpg'], name: 'Stationery Set' },
             { images: ['assets/images/graphicdesign/heromockup.jpg'], name: 'Mockup Hero Packaging' }
         ];
+
+        // SECCIÓN PACKAGING LIMPIA DE DATOS TÉCNICOS
         const packagingData = [
-            { images: ['assets/images/graphicdesign/jampack.jpg'], name: 'Jam Label Technical' },
-            { images: ['assets/images/graphicdesign/beerpack.jpg'], name: 'Beer Pack Die-cut' },
             { images: ['assets/images/graphicdesign/heropack1.jpg', 'assets/images/graphicdesign/heropack2.jpg', 'assets/images/graphicdesign/heropack3.jpg', 'assets/images/graphicdesign/heropack4.jpg'], name: 'Hero Packaging' }
         ];
+
         const webData = [
             { images: ['assets/images/graphicdesign/appmath.jpg'], name: 'Math App' },
             { images: ['assets/images/graphicdesign/webcfsonil.jpg'], name: 'CFS Onil Website' },
@@ -489,7 +468,6 @@
             updateModalImage();
             document.getElementById('imageModal').style.display = 'flex';
             document.querySelector('.modal-nav').style.display = currentModalImages.length > 1 ? 'flex' : 'none';
-            // Analytics: Ver imagen en HD
             if (typeof gtag === 'function') gtag('event', 'engagement_view_image_hd', { 'image_name': currentModalImages[currentModalIdx].split('/').pop() });
         }
 
@@ -521,27 +499,24 @@
                 if (e.key === "Escape") closeModal();
             }
         });
-window.forceDownload = function(lang, filename) {
-    const filePath = 'assets/' + filename;
 
-    // 1. Envío de evento a Google Analytics
-    if (typeof gtag === 'function') {
-        gtag('event', 'engagement_cv_download', {
-            'language': lang,
-            'filename': filename,
-            'page_path': window.location.pathname
-        });
-    }
-
-    // 2. Forzar descarga real
-    const link = document.createElement('a');
-    link.href = filePath;
-    link.setAttribute('download', filename);
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-};
+        window.forceDownload = function(lang, filename) {
+            const filePath = 'assets/' + filename;
+            if (typeof gtag === 'function') {
+                gtag('event', 'engagement_cv_download', {
+                    'language': lang,
+                    'filename': filename,
+                    'page_path': window.location.pathname
+                });
+            }
+            const link = document.createElement('a');
+            link.href = filePath;
+            link.setAttribute('download', filename);
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
     </script>
 </body>
 </html>
