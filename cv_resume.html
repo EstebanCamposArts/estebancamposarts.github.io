@@ -6,127 +6,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CV / Resume | Esteban Campos Polo</title>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
 
-    gtag('config', 'G-8VMES8F4MN', { 
-        anonymize_ip: true,
-        send_page_view: false,
-        allow_google_signals: false,
-        allow_ad_personalization_signals: false });
-  </script>
+/* ==========================
+   CONFIG BASE
+========================== */
+gtag('config', 'G-8VMES8F4MN', {
+  anonymize_ip: true,
+  allow_google_signals: false,
+  send_page_view: true
+});
 
-    <script>
-(function() {
-    // 1. CONFIGURACIÓN Y ESTADO
-    const CONFIG = {
-        idsToObserve: ['#cv-content', 'footer'], 
-        scrollDepths: [25, 50, 75, 90, 100],
-        trackedDepths: [],
-        clickCount: 0,
-        clickTimer: null,
-        sessionStartTime: Date.now()
-    };
+/* ==========================
+   FUNCIÓN UTILIDAD
+========================== */
+function getCategory(element){
+  const section = element.closest('section');
+  return section ? section.id : 'resume_general';
+}
 
-    const sendEvent = (name, params = {}) => {
-        if (typeof gtag === 'function') {
-            gtag('event', name, {
-                ...params,
-                'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                'memory': navigator.deviceMemory || 'unknown',
-                'page_path': window.location.pathname
-            });
-        }
-    };
+/* ==========================
+   TRACKING UNIFICADO
+========================== */
+document.addEventListener('click', function(e){
 
-    document.addEventListener("DOMContentLoaded", function() {
-        document.addEventListener('contextmenu', (e) => {
-            if (e.target.tagName === 'IMG') {
-                sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
-            }
-        });
+  /* ---------- DESCARGAS DE CV (Métrica de Éxito) ---------- */
+  const downloadLink = e.target.closest('a[href$=".pdf"], a[href$=".zip"]');
+  if(downloadLink){
+    const fileName = downloadLink.getAttribute('href').split('/').pop();
+    // Detectamos idioma por nombre de archivo para tu reporte
+    const lang = fileName.toLowerCase().includes('resume') ? 'EN' : 'ES';
 
-        document.addEventListener('dragstart', (e) => {
-            if (e.target.tagName === 'IMG') {
-                sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
-            }
-        });
-
-        document.addEventListener('click', (e) => {
-            CONFIG.clickCount++;
-            clearTimeout(CONFIG.clickTimer);
-            CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
-            
-            if (CONFIG.clickCount > 4) {
-                sendEvent('ux_rage_click', { 'element': e.target.tagName + (e.target.id ? '#'+e.target.id : '') });
-                CONFIG.clickCount = 0;
-            }
-        });
-
-        window.addEventListener('scroll', () => {
-            let h = document.documentElement, b = document.body;
-            let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
-            
-            CONFIG.scrollDepths.forEach(depth => {
-                if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
-                    CONFIG.trackedDepths.push(depth);
-                    sendEvent('content_scroll_depth', { 'depth': depth + '%' });
-                }
-            });
-        });
-
-        if ('IntersectionObserver' in window) {
-            let observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            if (entry.isIntersecting) { 
-                                sendEvent('content_view_confirmed', { 'section_id': entry.target.id });
-                                observer.unobserve(entry.target);
-                            }
-                        }, 2000);
-                    }
-                });
-            }, { threshold: 0.6 });
-
-            CONFIG.idsToObserve.forEach(id => {
-                let el = document.querySelector(id);
-                if (el) observer.observe(el);
-            });
-        }
-
-        document.addEventListener('copy', () => {
-            let text = document.getSelection().toString().substring(0, 50);
-            sendEvent('engagement_text_copy', { 'preview': text + '...' });
-        });
-
-        document.addEventListener('mouseleave', (e) => {
-            if (e.clientY < 0) sendEvent('behavior_exit_intent');
-        });
-
-        setTimeout(() => {
-            const test = document.createElement('div');
-            test.className = 'adsbox';
-            test.innerHTML = '&nbsp;';
-            document.body.appendChild(test);
-            sendEvent('tech_adblock_status', { 'active': test.offsetHeight === 0 });
-            test.remove();
-        }, 3000);
+    gtag('event', 'cv_download', {
+      file_name: fileName,
+      cv_language: lang,
+      link_url: downloadLink.href,
+      page_location: window.location.href
     });
+    return;
+  }
 
-    window.onerror = (msg, url, line) => {
-        sendEvent('tech_js_error', { 'msg': msg, 'line': line });
-    };
-
-    window.addEventListener('load', () => {
-        const perf = performance.getEntriesByType("navigation")[0];
-        if (perf) sendEvent('tech_load_time', { 'ms': Math.round(perf.domComplete) });
+  /* ---------- CLICK EN EXPERIENCIA / EDUCACIÓN ---------- */
+  const resumeItem = e.target.closest('.experience-item, .education-item, section');
+  if(resumeItem){
+    const title = resumeItem.querySelector('h3, h4');
+    const itemName = title ? title.innerText.trim() : 'resume_section';
+    
+    gtag('event', 'resume_interaction', {
+      section_name: itemName,
+      section_category: getCategory(resumeItem),
+      page_location: window.location.href
     });
-})();
-    </script>
+  }
+
+  /* ---------- CLICK REDES / CONTACTO ---------- */
+  const externalLink = e.target.closest('a[target="_blank"]');
+  if(externalLink){
+    gtag('event', 'external_click', {
+      link_url: externalLink.href,
+      page_location: window.location.href
+    });
+  }
+}, { passive: true });
+
+/* ==========================
+   SCROLL 50% (Lectura completa del CV)
+========================= */
+let scrollSent = false;
+window.addEventListener('scroll', function(){
+  if(scrollSent) return;
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  if(docHeight <= 0) return;
+  const scrollPercent = scrollTop / docHeight;
+  if(scrollPercent >= 0.5){
+    scrollSent = true;
+    gtag('event', 'scroll_50_percent', {
+      page_location: window.location.href
+    });
+  }
+}, { passive: true });
+</script>
 
   <style>
     :root {

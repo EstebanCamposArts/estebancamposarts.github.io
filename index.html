@@ -5,58 +5,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>index | Esteban Campos Polo | Diseño Gráfico y Producción Creativa</title>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
 
-    gtag('config', 'G-8VMES8F4MN', { 
-        'anonymize_ip': true,
-        'send_page_view': true, // Corregido: Ahora sí cuenta las visitas
-        'allow_google_signals': false 
+/* ==========================
+   CONFIG BASE
+========================== */
+gtag('config', 'G-8VMES8F4MN', {
+  anonymize_ip: true,
+  allow_google_signals: false,
+  send_page_view: true
+});
+
+/* ==========================
+   TRACKING MAESTRO (index.html)
+========================== */
+document.addEventListener('click', function(e){
+
+  /* ---------- 1. CLIC EN PROYECTOS (Tarjetas) ---------- */
+  const project = e.target.closest('.project-card');
+  if(project){
+    const title = project.querySelector('h3')?.innerText.trim();
+    const section = project.closest('section')?.id || 'home_portfolio';
+    
+    gtag('event', 'project_click', {
+      project_name: title || 'unknown_project',
+      project_category: section,
+      page_location: window.location.href
     });
+    // No hacemos return aquí para permitir que los eventos de tech/lightbox también se disparen
+  }
 
-    /* ==========================================================
-       TRACKING MAESTRO (Delegación de Eventos)
-       ========================================================== */
-    document.addEventListener('click', function(e) {
-        
-        // 1. TRACKING DE PROYECTOS (Tarjetas)
-        const project = e.target.closest('.project-card');
-        if (project) {
-            const title = project.querySelector('h3')?.innerText.trim();
-            const section = project.closest('section')?.id || 'archive';
-            gtag('event', 'project_click', {
-                'project_name': title,
-                'project_category': section,
-                'page_location': window.location.href
-            });
-        }
+  /* ---------- 2. DESCARGAS DE CV (Botones Hero) ---------- */
+  const downloadLink = e.target.closest('a[href$=".pdf"], .btn-cv');
+  // Nota: Si usas la función forceDownload(), el evento ya se dispara allí, 
+  // pero este bloque asegura capturar cualquier otro link PDF.
+  if(downloadLink && (downloadLink.href || downloadLink.onclick)){
+    const url = downloadLink.href || 'button_click';
+    const fileName = url.split('/').pop() || 'Curriculum.pdf';
+    
+    gtag('event', 'cv_download', {
+      file_name: fileName,
+      cv_language: fileName.toLowerCase().includes('resume') ? 'EN' : 'ES',
+      page_location: window.location.href
+    });
+  }
 
-        // 2. CLICK EN REDES SOCIALES / WHATSAPP
-        const external = e.target.closest('a[target="_blank"]');
-        if (external && !external.href.endsWith('.pdf')) {
-            gtag('event', 'external_click', {
-                'link_url': external.href,
-                'platform': external.href.includes('wa.me') ? 'WhatsApp' : 'Social/Portfolio'
-            });
-        }
-    }, { passive: true });
+  /* ---------- 3. CLICK EXTERNOS / WHATSAPP ---------- */
+  const externalLink = e.target.closest('a[target="_blank"]');
+  if(externalLink && !externalLink.href.endsWith('.pdf')){
+    gtag('event', 'external_click', {
+      link_url: externalLink.href,
+      platform: externalLink.href.includes('wa.me') ? 'WhatsApp' : 'Social/External',
+      page_location: window.location.href
+    });
+  }
 
-    /* ==========================================================
-       SCROLL 50% (Rendimiento Optimizado)
-       ========================================================== */
-    let scrollSent = false;
-    window.addEventListener('scroll', function() {
-        if (scrollSent) return;
-        const scrollPercent = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
-        if (scrollPercent >= 0.5) {
-            scrollSent = true;
-            gtag('event', 'scroll_50_percent', { 'page_path': window.location.pathname });
-        }
-    }, { passive: true });
-  </script>
+}, { passive: true });
+
+/* ==========================
+   EVENTOS DE INTERACCIÓN TÉCNICA
+   (Llamados desde tus funciones toggleTech y openLightbox)
+========================== */
+// Estas funciones se integran con el código que ya tienes en el HTML
+function trackTechExpand(projectId) {
+  gtag('event', 'engagement_tech_expand', {
+    project_id: projectId,
+    page_location: window.location.href
+  });
+}
+
+function trackLightbox(projectId) {
+  gtag('event', 'engagement_lightbox_open', {
+    project_id: projectId,
+    page_location: window.location.href
+  });
+}
+
+/* ==========================
+   SCROLL 50%
+========================= */
+let scrollSent = false;
+window.addEventListener('scroll', function(){
+  if(scrollSent) return;
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  if(docHeight <= 0) return;
+  const scrollPercent = scrollTop / docHeight;
+  
+  if(scrollPercent >= 0.5){
+    scrollSent = true;
+    gtag('event', 'scroll_50_percent', {
+      page_path: window.location.pathname
+    });
+  }
+}, { passive: true });
+</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">

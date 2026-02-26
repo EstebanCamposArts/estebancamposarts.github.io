@@ -5,88 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graphic Design | Esteban Campos Polo</title>
     
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){ dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-8VMES8F4MN', { 
-            anonymize_ip: true, 
-            send_page_view: false,
-            allow_google_signals: false,
-            allow_ad_personalization_signals: false 
-        });
-    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
 
-    <script>
-    (function() {
-        const CONFIG = {
-            idsToObserve: ['#sec-mockups', '#sec-branding', '#sec-packaging', '#sec-web', '#sec-editorial', '#sec-signage'],
-            scrollDepths: [25, 50, 75, 100],
-            trackedDepths: [],
-            clickCount: 0,
-            clickTimer: null,
-            sessionStartTime: Date.now()
-        };
+/* ==========================
+   CONFIG BASE
+========================== */
+gtag('config', 'G-8VMES8F4MN', {
+  anonymize_ip: true,
+  allow_google_signals: false,
+  send_page_view: true
+});
 
-        const sendEvent = (name, params = {}) => {
-            if (typeof gtag === 'function') {
-                gtag('event', name, {
-                    ...params,
-                    'page_location': window.location.href,
-                    'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown'
-                });
-            }
-        };
+/* ==========================
+   FUNCIÓN UTILIDAD
+========================== */
+function getCategory(element){
+  const section = element.closest('section');
+  // Fallback específico para diseño gráfico
+  return section ? section.id : 'graphic_design_general';
+}
 
-        document.addEventListener("DOMContentLoaded", () => {
-            document.addEventListener('click', () => {
-                CONFIG.clickCount++;
-                clearTimeout(CONFIG.clickTimer);
-                CONFIG.clickTimer = setTimeout(() => {
-                    if (CONFIG.clickCount > 8) sendEvent('engagement_rapid_clicks', { 'count': CONFIG.clickCount });
-                    CONFIG.clickCount = 0;
-                }, 500);
-            });
+/* ==========================
+   TRACKING UNIFICADO
+========================== */
+document.addEventListener('click', function(e){
 
-            document.addEventListener('contextmenu', e => {
-                if (e.target.tagName === 'IMG') sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
-            });
+  /* ---------- DESCARGAS (Portfolios PDF) ---------- */
+  const downloadLink = e.target.closest('a[href$=".pdf"], a[href$=".zip"]');
+  if(downloadLink){
+    const fileName = downloadLink.getAttribute('href').split('/').pop();
+    gtag('event', 'file_download', {
+      file_name: fileName,
+      file_extension: fileName.split('.').pop(),
+      link_url: downloadLink.href,
+      page_location: window.location.href
+    });
+    return;
+  }
 
-            window.addEventListener('scroll', () => {
-                let h = document.documentElement, b = document.body;
-                let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
-                CONFIG.scrollDepths.forEach(depth => {
-                    if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
-                        CONFIG.trackedDepths.push(depth);
-                        sendEvent('scroll_depth', { 'depth': depth + '%' });
-                    }
-                });
-            }, { passive: true });
+  /* ---------- CLICK EN PROYECTO DE DISEÑO ---------- */
+  const project = e.target.closest('.item');
+  if(project){
+    const title = project.querySelector('h4, h3');
+    const projectName = title ? title.innerText.trim() : 'unnamed_design_project';
+    
+    gtag('event', 'project_click', {
+      project_name: projectName,
+      project_category: getCategory(project),
+      page_location: window.location.href
+    });
+    return;
+  }
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-                        sendEvent('section_view', { 'section_id': entry.target.id });
-                    }
-                });
-            }, { threshold: 0.5 });
-            CONFIG.idsToObserve.forEach(id => {
-                const el = document.querySelector(id);
-                if (el) observer.observe(el);
-            });
+  /* ---------- CLICK EXTERNOS (Behance, LinkedIn, etc) ---------- */
+  const externalLink = e.target.closest('a[target="_blank"]');
+  if(externalLink){
+    gtag('event', 'external_click', {
+      link_url: externalLink.href,
+      page_location: window.location.href
+    });
+  }
+}, { passive: true });
 
-            window.addEventListener('beforeunload', () => {
-                const duration = Math.round((Date.now() - CONFIG.sessionStartTime) / 1000);
-                sendEvent('engagement_time_on_page', { 'seconds': duration });
-            });
-        });
-
-        window.trackDownload = function(fileName, lang) {
-            sendEvent('engagement_download_cv', { 'file_name': fileName, 'language': lang });
-        };
-    })();
-    </script>
+/* ==========================
+   SCROLL 50%
+========================= */
+let scrollSent = false;
+window.addEventListener('scroll', function(){
+  if(scrollSent) return;
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  if(docHeight <= 0) return;
+  const scrollPercent = scrollTop / docHeight;
+  if(scrollPercent >= 0.5){
+    scrollSent = true;
+    gtag('event', 'scroll_50_percent', {
+      page_location: window.location.href
+    });
+  }
+}, { passive: true });
+</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -326,7 +328,7 @@
     </div>
 
     <script>
-        // DATA ARRAYS CORREGIDOS: SE HAN ELIMINADO LAS ENTRADAS DE ARCHIVO TÉCNICO
+        // DATA ARRAYS
         const brandingData = [
             { images: ['assets/images/logotipos/camocream.jpg'], name: 'Camocream Identity' },
             { images: ['assets/images/logotipos/merlot.jpg'], name: 'Merlot Wine Bar' },
@@ -360,7 +362,6 @@
             { images: ['assets/images/graphicdesign/heromockup.jpg'], name: 'Mockup Hero Packaging' }
         ];
 
-        // SECCIÓN PACKAGING LIMPIA DE DATOS TÉCNICOS
         const packagingData = [
             { images: ['assets/images/graphicdesign/heropack1.jpg', 'assets/images/graphicdesign/heropack2.jpg', 'assets/images/graphicdesign/heropack3.jpg', 'assets/images/graphicdesign/heropack4.jpg'], name: 'Hero Packaging' },
             { images: ['assets/images/graphicdesign/beerpack.jpg'], name: 'Packaging Karhu' },
@@ -471,6 +472,8 @@
             updateModalImage();
             document.getElementById('imageModal').style.display = 'flex';
             document.querySelector('.modal-nav').style.display = currentModalImages.length > 1 ? 'flex' : 'none';
+            
+            // Tracking apertura modal (imagen HD)
             if (typeof gtag === 'function') gtag('event', 'engagement_view_image_hd', { 'image_name': currentModalImages[currentModalIdx].split('/').pop() });
         }
 
@@ -503,15 +506,15 @@
             }
         });
 
+        // Función de descarga que utiliza el sistema de tracking centralizado
         window.forceDownload = function(lang, filename) {
             const filePath = 'assets/' + filename;
-            if (typeof gtag === 'function') {
-                gtag('event', 'engagement_cv_download', {
-                    'language': lang,
-                    'filename': filename,
-                    'page_path': window.location.pathname
-                });
+            
+            // Usar la función de tracking unificada
+            if (typeof window.trackDownload === 'function') {
+                window.trackDownload(lang, filename);
             }
+
             const link = document.createElement('a');
             link.href = filePath;
             link.setAttribute('download', filename);

@@ -5,104 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Modeling | Esteban Campos Polo</title>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){ dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-8VMES8F4MN', {
-            anonymize_ip: true,
-            send_page_view: false,
-            allow_google_signals: false,
-            allow_ad_personalization_signals: false
-        });
-    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
 
-    <script>
-    (function() {
-        const CONFIG = {
-            idsToObserve: ['.hero', '#main-projects', 'section', 'footer', '.logo-grid'],
-            scrollDepths: [25, 50, 75, 90, 100],
-            trackedDepths: [],
-            sessionStartTime: Date.now()
-        };
+/* ==========================
+   CONFIG BASE
+========================== */
+gtag('config', 'G-8VMES8F4MN', {
+  anonymize_ip: true,
+  allow_google_signals: false,
+  send_page_view: true
+});
 
-        const sendEvent = (name, params = {}) => {
-            if (typeof gtag === 'function') {
-                gtag('event', name, {
-                    ...params,
-                    'page_location': window.location.pathname,
-                    'time_since_start': Math.floor((Date.now() - CONFIG.sessionStartTime) / 1000)
-                });
-            }
-        };
+/* ==========================
+   FUNCIÓN UTILIDAD
+========================== */
+function getCategory(element){
+  const section = element.closest('section');
+  // Fallback específico para Arte 3D
+  return section ? section.id : '3d_art_general';
+}
 
-        // 1. Carga y Errores
-        window.addEventListener('load', () => {
-            const perf = performance.getEntriesByType("navigation")[0];
-            if (perf) sendEvent('tech_load_complete', { 'load_time_sec': (perf.domComplete / 1000).toFixed(2) });
-        });
+/* ==========================
+   TRACKING UNIFICADO
+========================== */
+document.addEventListener('click', function(e){
 
-        window.onerror = (msg, url, line) => {
-            sendEvent('tech_js_error', { 'msg': msg, 'line': line });
-        };
+  /* ---------- DESCARGAS ---------- */
+  const downloadLink = e.target.closest('a[href$=".pdf"], a[href$=".zip"]');
+  if(downloadLink){
+    const fileName = downloadLink.getAttribute('href').split('/').pop();
+    gtag('event', 'file_download', {
+      file_name: fileName,
+      file_extension: fileName.split('.').pop(),
+      link_url: downloadLink.href,
+      page_location: window.location.href
+    });
+    return;
+  }
 
-        // 2. Interés Visual (Secciones)
-        document.addEventListener("DOMContentLoaded", () => {
-            if ('IntersectionObserver' in window) {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            setTimeout(() => {
-                                if (entry.isIntersecting) {
-                                    sendEvent('content_focus_confirmed', {
-                                        'section_id': entry.target.id || entry.target.className,
-                                        'engagement_type': 'visual_focus'
-                                    });
-                                    observer.unobserve(entry.target);
-                                }
-                            }, 2000);
-                        }
-                    });
-                }, { threshold: 0.5 });
-                CONFIG.idsToObserve.forEach(sel => {
-                    document.querySelectorAll(sel).forEach(el => observer.observe(el));
-                });
-            }
-        });
+  /* ---------- CLICK EN MODELO / PROYECTO 3D ---------- */
+  const project = e.target.closest('.item');
+  if(project){
+    const title = project.querySelector('h4, h3');
+    const projectName = title ? title.innerText.trim() : 'unnamed_3d_model';
+    
+    gtag('event', 'view_3d_project', {
+      model_name: projectName,
+      model_category: getCategory(project),
+      page_location: window.location.href
+    });
+    return;
+  }
 
-        // 3. Scroll Profundo
-        window.addEventListener('scroll', () => {
-            const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
-            CONFIG.scrollDepths.forEach(depth => {
-                if (scrollPercent >= depth && !CONFIG.trackedDepths.includes(depth)) {
-                    CONFIG.trackedDepths.push(depth);
-                    sendEvent('content_scroll_depth', { 'percent': depth });
-                }
-            });
-        }, { passive: true });
+  /* ---------- CLICK EXTERNOS (ArtStation, Sketchfab, Vimeo) ---------- */
+  const externalLink = e.target.closest('a[target="_blank"]');
+  if(externalLink){
+    gtag('event', 'external_click', {
+      link_url: externalLink.href,
+      page_location: window.location.href
+    });
+  }
+}, { passive: true });
 
-        // 4. Clics en CV y Enlaces Externos
-        document.addEventListener('click', (e) => {
-            const link = e.target.closest('a');
-            if (link) {
-                const url = link.href.toLowerCase();
-                const text = link.innerText.trim();
-                
-                if (url.includes('.pdf') || url.includes('curriculum') || url.includes('resume')) {
-                    sendEvent('conversion_cv_download', { 'file_name': url.split('/').pop(), 'lang': text.includes('ES') ? 'ES' : 'EN' });
-                } else if (!url.includes(window.location.hostname) && url.startsWith('http')) {
-                    sendEvent('click_external_link', { 'destination': url });
-                }
-            }
-        });
-
-        // 5. Interacción de copia
-        document.addEventListener('copy', () => {
-            sendEvent('engagement_copy_content', { 'preview': document.getSelection().toString().substring(0, 30) });
-        });
-    })();
-    </script>
+/* ==========================
+   SCROLL 50%
+========================= */
+let scrollSent = false;
+window.addEventListener('scroll', function(){
+  if(scrollSent) return;
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  if(docHeight <= 0) return;
+  const scrollPercent = scrollTop / docHeight;
+  if(scrollPercent >= 0.5){
+    scrollSent = true;
+    gtag('event', 'scroll_50_percent', {
+      page_location: window.location.href
+    });
+  }
+}, { passive: true });
+</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -110,7 +96,7 @@
     <style>
         :root {
             --bg: #ffffff; --text: #1f2937; --accent: #0052FF; --muted: #64748b;
-            --light-bg: #f8fafc; --border: #e2e8f0; --radius: 4px;
+            --light-bg: #f8fafc; --border: #e2e8f0; --radius: 8px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -133,20 +119,16 @@
         }
         nav a:hover, nav a.active { color: var(--accent); }
 
-        /* BLOQUE DE BOTONES CV UNIFICADO */
-        .cv-download-container {
-            display: flex; justify-content: center; gap: 12px;
-            padding: 2rem 5% 1rem; max-width: 1200px; margin: 0 auto;
+        /* CV BUTTONS */
+        .cv-actions-hero { display: flex; justify-content: center; gap: 15px; padding: 2rem 5% 0; }
+        .btn-cv {
+            cursor: pointer; text-decoration: none; padding: 0.8rem 1.5rem; border-radius: 12px;
+            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            transition: all 0.4s ease; border: 2px solid #111827; display: inline-flex; align-items: center;
         }
-        .btn-cv-unified {
-            text-decoration: none; padding: 0.7rem 1.2rem; border-radius: var(--radius);
-            font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            transition: var(--transition); border: 1.5px solid var(--text); text-align: center;
-            display: inline-flex; align-items: center; justify-content: center;
-        }
-        .btn-es-cv { background: var(--text); color: #fff !important; }
-        .btn-en-cv { background: transparent; color: var(--text) !important; }
-        .btn-cv-unified:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: var(--accent); border-color: var(--accent); color: #fff !important; }
+        .btn-es-cv { background: #111827; color: #fff; }
+        .btn-en-cv { background: transparent; color: #111827; }
+        .btn-cv:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--accent); }
 
         /* SECCIONES */
         .section { padding: 3rem 5%; max-width: 1200px; margin: 0 auto; }
@@ -156,79 +138,42 @@
         .dual-media { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 2rem; }
         .media-item { background: var(--light-bg); padding: 10px; border-radius: var(--radius); border: 1px solid var(--border); }
         .media-item video, .media-item img { 
-            width: 100%; height: 340px; object-fit: cover; border-radius: 2px; display: block;
+            width: 100%; height: 340px; object-fit: cover; border-radius: 4px; display: block;
         }
         .media-caption { font-size: 0.85rem; color: var(--muted); margin-top: 1rem; text-align: center; font-weight: 500; }
 
-        .logo-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
-            gap: 20px; margin-top: 2rem;
-        }
+        /* GALERÍA */
+        .logo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; margin-top: 2rem; }
         .logo-grid figure { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); transition: var(--transition); background: #fff; }
         .logo-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; filter: grayscale(100%); transition: var(--transition); cursor: pointer; display: block; }
         .logo-grid figure:hover { transform: translateY(-5px); border-color: var(--accent); }
         .logo-grid figure:hover img { filter: grayscale(0%); }
         .logo-grid figcaption { padding: 0.8rem; font-size: 0.75rem; font-weight: 700; text-align: center; background: #fff; }
 
-        .video-gallery-mini { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 20px; margin-top: 2rem;
-        }
-        .video-item-embed { border-radius: var(--radius); overflow: hidden; background: #000; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        /* TURNTABLES */
+        .video-gallery-mini { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 2rem; }
+        .video-item-embed { border-radius: var(--radius); overflow: hidden; background: #000; }
         .video-responsive-embed { position: relative; padding-bottom: 56.25%; height: 0; }
-        .video-responsive-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-        .video-caption-mini { padding: 12px; background: #1a1a1a; color: #fff; font-size: 0.8rem; text-align: center; font-weight: 600; }
+        .video-responsive-embed video { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+        .video-caption-mini { padding: 12px; background: #111827; color: #fff; font-size: 0.8rem; text-align: center; font-weight: 600; }
 
         footer { background: #111827; color: #fff; padding: 4rem 5%; text-align: center; margin-top: 4rem; }
         .footer-social { display: flex; justify-content: center; gap: 1.5rem; margin: 1.5rem 0; }
         .footer-social img { width: 22px; filter: invert(1); opacity: 0.6; transition: 0.3s; }
         .footer-social a:hover img { opacity: 1; transform: translateY(-3px); }
 
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { max-width: 100%; max-height: 90vh; object-fit: contain; }
-        .close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; cursor: pointer; }
+        /* MODAL */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; padding: 20px; cursor: zoom-out; }
+        .modal-content { max-width: 95%; max-height: 90vh; object-fit: contain; border-radius: 4px; }
+        .close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; cursor: pointer; font-weight: bold; }
 
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 1rem; padding: 1.5rem; }
             nav { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
             nav a { margin: 0 0.5rem; font-size: 0.65rem; }
-            .cv-download-container { flex-direction: column; }
-            .btn-cv-unified { width: 100%; }
+            .cv-actions-hero { flex-direction: column; width: 100%; }
+            .btn-cv { width: 100%; justify-content: center; }
         }
-
-.cv-actions-hero { 
-    display: flex; 
-    justify-content: center; 
-    gap: 15px; 
-    padding: 2rem 5% 0; 
-}
-.btn-cv {
-    cursor: pointer;
-    text-decoration: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.4s ease;
-    border: 2px solid #111827;
-    display: inline-flex;
-    align-items: center;
-    font-family: 'Inter', sans-serif;
-}
-.btn-es-cv { background: #111827; color: #fff; }
-.btn-en-cv { background: transparent; color: #111827; }
-.btn-cv:hover { 
-    transform: translateY(-3px); 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-    border-color: #0052FF; 
-}
-
-@media (max-width: 768px) {
-    .cv-actions-hero { flex-direction: column; width: 100%; }
-    .btn-cv { width: 100%; justify-content: center; }
-}
     </style>
 </head>
 <body>
@@ -245,25 +190,25 @@
             <a href="3d-modeling.html" class="active">3D Art</a>
             <a href="IA.html">AI</a>
             <a href="about.html">About</a>
-            <a href="cv_resume.html" data-key="nav-cv">CV/Resume</a>
+            <a href="cv_resume.html">CV/Resume</a>
             <a href="contact.html">Contact</a>
         </nav>
     </header>
 
-<div class="cv-actions-hero">
-    <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
-    <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
-</div>
+    <div class="cv-actions-hero">
+        <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
+        <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
+    </div>
 
     <section class="section">
         <h3>LATEST PROJECT</h3>
         <div class="dual-media">
             <div class="media-item">
-                <video controls src="assets/video/demoportfolio.mp4"></video>
+                <video controls preload="metadata" src="assets/video/demoportfolio.mp4"></video>
                 <p class="media-caption">Demo reel - creative process</p>
             </div>
             <div class="media-item">
-                <img src="assets/images/3dmodeling/lia/liawiphd.jpg" alt="WIP - Lia del viento">
+                <img src="assets/images/3dmodeling/lia/liawiphd.jpg" alt="WIP - Lia del viento" loading="lazy">
                 <p class="media-caption">WIP - Lia del viento</p>
             </div>
         </div>
@@ -271,26 +216,26 @@
 
     <section class="section">
         <a href="https://estebancampos1.artstation.com/" target="_blank" style="text-decoration:none; color:inherit;">
-            <h3>VISIT MY ARTSTATION - Click here</h3>
+            <h3 style="cursor: pointer;">VISIT MY ARTSTATION ↗</h3>
         </a>
-        <p style="margin-bottom: 2rem; color: var(--muted);">
+        <p style="margin-bottom: 2rem; color: var(--muted); max-width: 800px;">
             I work from the initial reference research, once I have the concept art, to the final render, adapting to the feedback received.
         </p>
 
         <h3>3D MODELING<br><small>Models & Renderings</small></h3>
         <div class="logo-grid">
-            <figure><img src="assets/images/3dmodeling/golem/golem.jpg" alt="Golem"><figcaption>Golem</figcaption></figure>
-            <figure><img src="assets/images/3dmodeling/ashora/ashora.jpg" alt="Ashora"><figcaption>Ashora</figcaption></figure>
-            <figure><img src="assets/images/3dmodeling/ayara/ayara.jpg" alt="Ayara"><figcaption>Ayara</figcaption></figure>
-            <figure><img src="assets/images/3dmodeling/bust/bust.jpg" alt="Bust"><figcaption>Bust</figcaption></figure>
-            <figure><img src="assets/images/3dmodeling/cleo/cleo.jpg" alt="Cleo"><figcaption>Cleo</figcaption></figure>
-            <figure><img src="assets/images/3dmodeling/jack/jack.jpg" alt="Jack"><figcaption>Jack</figcaption></figure>
-            <figure><img src="assets/images/3dmodeling/ogi/ogi.jpg" alt="Ogi"><figcaption>Ogi</figcaption></figure>
-            <figure><img src="assets/images/3dmodeling/pichon/pichon.jpg" alt="Pichon"><figcaption>Pichon</figcaption></figure>
-            <figure><img src="assets/images/3dmodeling/rob/rob.jpg" alt="Rob"><figcaption>Rob</figcaption></figure>
-            <figure><img src="assets/images/3dmodeling/tubos.jpg" alt="Tubos"><figcaption>Tubos</figcaption></figure>
-            <figure><img src="assets/images/3dmodeling/escalas.jpg" alt="Escalas"><figcaption>Escalas</figcaption></figure>
-            <figure><img src="assets/images/3dmodeling/machine.jpg" alt="Machine"><figcaption>Machine</figcaption></figure>
+            <figure><img src="assets/images/3dmodeling/golem/golem.jpg" alt="Golem" loading="lazy"><figcaption>Golem</figcaption></figure>
+            <figure><img src="assets/images/3dmodeling/ashora/ashora.jpg" alt="Ashora" loading="lazy"><figcaption>Ashora</figcaption></figure>
+            <figure><img src="assets/images/3dmodeling/ayara/ayara.jpg" alt="Ayara" loading="lazy"><figcaption>Ayara</figcaption></figure>
+            <figure><img src="assets/images/3dmodeling/bust/bust.jpg" alt="Bust" loading="lazy"><figcaption>Bust</figcaption></figure>
+            <figure><img src="assets/images/3dmodeling/cleo/cleo.jpg" alt="Cleo" loading="lazy"><figcaption>Cleo</figcaption></figure>
+            <figure><img src="assets/images/3dmodeling/jack/jack.jpg" alt="Jack" loading="lazy"><figcaption>Jack</figcaption></figure>
+            <figure><img src="assets/images/3dmodeling/ogi/ogi.jpg" alt="Ogi" loading="lazy"><figcaption>Ogi</figcaption></figure>
+            <figure><img src="assets/images/3dmodeling/pichon/pichon.jpg" alt="Pichon" loading="lazy"><figcaption>Pichon</figcaption></figure>
+            <figure><img src="assets/images/3dmodeling/rob/rob.jpg" alt="Rob" loading="lazy"><figcaption>Rob</figcaption></figure>
+            <figure><img src="assets/images/3dmodeling/tubos.jpg" alt="Tubos" loading="lazy"><figcaption>Tubos</figcaption></figure>
+            <figure><img src="assets/images/3dmodeling/escalas.jpg" alt="Escalas" loading="lazy"><figcaption>Escalas</figcaption></figure>
+            <figure><img src="assets/images/3dmodeling/machine.jpg" alt="Machine" loading="lazy"><figcaption>Machine</figcaption></figure>
         </div>
     </section>
 
@@ -299,21 +244,21 @@
         <div class="video-gallery-mini">
             <div class="video-item-embed">
                 <div class="video-responsive-embed">
-                    <iframe src="assets/videos/ayara_1.mp4" title="Ayara" allowfullscreen></iframe>
+                    <video controls muted loop src="assets/video/ayara_1.mp4"></video>
                 </div>
                 <p class="video-caption-mini">Ayara Turntable</p>
             </div>
             <div class="video-item-embed">
                 <div class="video-responsive-embed">
-                    <iframe src="assets/videos/rob_1.mp4" title="Hard Surface" allowfullscreen></iframe>
+                    <video controls muted loop src="assets/video/rob_1.mp4"></video>
                 </div>
-                <p class="video-caption-mini">Hard Surface Modeling Head</p>
+                <p class="video-caption-mini">Hard Surface Head</p>
             </div>
             <div class="video-item-embed">
                 <div class="video-responsive-embed">
-                    <iframe src="assets/videos/rob_2.mp4" title="Rob" allowfullscreen></iframe>
+                    <video controls muted loop src="assets/video/rob_2.mp4"></video>
                 </div>
-                <p class="video-caption-mini">Rob</p>
+                <p class="video-caption-mini">Rob Full Body</p>
             </div>
         </div>
     </section>
@@ -345,32 +290,19 @@
                 e.stopPropagation();
                 modal.style.display = "flex";
                 modalImg.src = this.src;
+                // Tracking de apertura de imagen
+                if(typeof gtag === 'function') {
+                    gtag('event', 'engagement_view_image', { 'image_name': this.alt });
+                }
             });
         });
 
         function closeModal() { modal.style.display = "none"; }
-
-window.forceDownload = function(lang, filename) {
-    const filePath = 'assets/' + filename;
-
-    // 1. Envío de evento a Google Analytics
-    if (typeof gtag === 'function') {
-        gtag('event', 'engagement_cv_download', {
-            'language': lang,
-            'filename': filename,
-            'page_path': window.location.pathname
+        
+        // Cerrar modal con la tecla Esc
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") closeModal();
         });
-    }
-
-    // 2. Forzar descarga real
-    const link = document.createElement('a');
-    link.href = filePath;
-    link.setAttribute('download', filename);
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-};
     </script>
 </body>
 </html>

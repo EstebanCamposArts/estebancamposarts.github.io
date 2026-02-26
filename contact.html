@@ -6,105 +6,101 @@
     <title>Contact | Esteban Campos Polo</title>
     <meta name="description" content="Contact page of Esteban Campos Polo, Graphic Designer & 3D Artist. Get in touch for design, 3D modeling, photography and visual projects.">
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
 
-    gtag('config', 'G-8VMES8F4MN', {
-        anonymize_ip: true,
-        send_page_view: false,
-        allow_google_signals: false,
-        allow_ad_personalization_signals: false
+/* ==========================
+   CONFIG BASE
+========================== */
+gtag('config', 'G-8VMES8F4MN', {
+  anonymize_ip: true,
+  allow_google_signals: false,
+  send_page_view: true
+});
+
+/* ==========================
+   FUNCIÓN UTILIDAD
+========================== */
+function getCategory(element){
+  const section = element.closest('section');
+  return section ? section.id : 'unknown_category';
+}
+
+/* ==========================
+   TRACKING UNIFICADO
+========================== */
+document.addEventListener('click', function(e){
+
+  /* ---------- DESCARGAS (CV en Contact) ---------- */
+  const downloadLink = e.target.closest('a[href$=".pdf"], a[href$=".zip"]');
+  if(downloadLink){
+    const fileName = downloadLink.getAttribute('href').split('/').pop();
+    gtag('event', 'file_download', {
+      file_name: fileName,
+      file_extension: fileName.split('.').pop(),
+      link_url: downloadLink.href,
+      page_location: window.location.href
     });
-  </script>
-    <script>
-    (function() {
-        const CONFIG = {
-            idsToObserve: ['.contact-container', '#footer'],
-            scrollDepths: [25, 50, 75, 90, 100],
-            trackedDepths: [],
-            clickCount: 0,
-            clickTimer: null,
-            sessionStartTime: Date.now()
-        };
+    return;
+  }
 
-        const sendEvent = (name, params = {}) => {
-            if (typeof gtag === 'function') {
-                gtag('event', name, {
-                    ...params,
-                    'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                    'page_path': window.location.pathname
-                });
-            }
-        };
+  /* ---------- CLICK PROYECTO ---------- */
+  const project = e.target.closest('.item');
+  if(project){
+    const title = project.querySelector('h4, h3');
+    const projectName = title ? title.innerText.trim() : 'unknown_project';
+    gtag('event', 'project_click', {
+      project_name: projectName,
+      project_category: getCategory(project),
+      page_location: window.location.href
+    });
+    return;
+  }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            // --- SEGURIDAD Y CLICS ---
-            document.addEventListener('contextmenu', (e) => {
-                if (e.target.tagName === 'IMG') {
-                    sendEvent('security_image_right_click', { 
-                        'src': e.target.src.split('/').pop()
-                    });
-                }
-            });
+  /* ---------- CLICK SOCIAL (Footer Contact) ---------- */
+  const externalLink = e.target.closest('a[target="_blank"]');
+  if(externalLink){
+    gtag('event', 'external_click', {
+      link_url: externalLink.href,
+      page_location: window.location.href
+    });
+  }
+}, { passive: true });
 
-            document.addEventListener('click', (e) => {
-                const target = e.target;
-                
-                // Track Descarga CV/Resume
-                if (target.classList.contains('btn-cv')) {
-                    sendEvent('engagement_cv_download', {
-                        'language': target.getAttribute('data-lang'),
-                        'filename': target.href.split('/').pop()
-                    });
-                }
+/* ==========================
+   ENVÍO DE FORMULARIO (Específico para Contact)
+========================== */
+document.addEventListener('submit', function(e){
+  const form = e.target.closest('form');
+  if(form && form.action.includes('formspree.io')){
+    gtag('event', 'generate_lead', {
+      form_id: form.id || 'contact_form',
+      page_location: window.location.href
+    });
+  }
+});
 
-                // Rage Clicks
-                CONFIG.clickCount++;
-                clearTimeout(CONFIG.clickTimer);
-                CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
-                if (CONFIG.clickCount > 4) {
-                    sendEvent('ux_rage_click', { 'element': target.tagName + (target.id ? '#'+target.id : '') });
-                    CONFIG.clickCount = 0;
-                }
-            });
-
-            // --- SCROLL & VISIBILIDAD ---
-            window.addEventListener('scroll', () => {
-                let h = document.documentElement, b = document.body;
-                let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
-                CONFIG.scrollDepths.forEach(depth => {
-                    if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
-                        CONFIG.trackedDepths.push(depth);
-                        sendEvent('content_scroll_depth', { 'depth': depth + '%' });
-                    }
-                });
-            });
-
-            if ('IntersectionObserver' in window) {
-                let observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            setTimeout(() => {
-                                if (entry.isIntersecting) {
-                                    sendEvent('content_view_confirmed', { 'section': entry.target.id || 'gallery' });
-                                    observer.unobserve(entry.target);
-                                }
-                            }, 2000);
-                        }
-                    });
-                }, { threshold: 0.5 });
-
-                CONFIG.idsToObserve.forEach(selector => {
-                    let el = document.querySelector(selector);
-                    if (el) observer.observe(el);
-                });
-            }
-        });
-    })();
-    </script>
+/* ==========================
+   SCROLL 50%
+========================= */
+let scrollSent = false;
+window.addEventListener('scroll', function(){
+  if(scrollSent) return;
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  if(docHeight <= 0) return;
+  const scrollPercent = scrollTop / docHeight;
+  if(scrollPercent >= 0.5){
+    scrollSent = true;
+    gtag('event', 'scroll_50_percent', {
+      page_location: window.location.href
+    });
+  }
+}, { passive: true });
+</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -256,39 +252,39 @@
             nav a { margin: 0.5rem; font-size: 0.6rem; }
         }
 
-.cv-actions-hero { 
-    display: flex; 
-    justify-content: center; 
-    gap: 15px; 
-    padding: 2rem 5% 0; 
-}
-.btn-cv {
-    cursor: pointer;
-    text-decoration: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.4s ease;
-    border: 2px solid #111827;
-    display: inline-flex;
-    align-items: center;
-    font-family: 'Inter', sans-serif;
-}
-.btn-es-cv { background: #111827; color: #fff; }
-.btn-en-cv { background: transparent; color: #111827; }
-.btn-cv:hover { 
-    transform: translateY(-3px); 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-    border-color: #0052FF; 
-}
+        .cv-actions-hero { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            padding: 2rem 5% 0; 
+        }
+        .btn-cv {
+            cursor: pointer;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
+            border: 2px solid #111827;
+            display: inline-flex;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-es-cv { background: #111827; color: #fff; }
+        .btn-en-cv { background: transparent; color: #111827; }
+        .btn-cv:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+            border-color: #0052FF; 
+        }
 
-@media (max-width: 768px) {
-    .cv-actions-hero { flex-direction: column; width: 100%; }
-    .btn-cv { width: 100%; justify-content: center; }
-}
+        @media (max-width: 768px) {
+            .cv-actions-hero { flex-direction: column; width: 100%; }
+            .btn-cv { width: 100%; justify-content: center; }
+        }
     </style>
 </head>
 <body>
@@ -312,8 +308,8 @@
     </header>
 
 <div class="cv-actions-hero">
-    <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
-    <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
+    <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv" data-lang="es">Descargar CV (ES)</button>
+    <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv" data-lang="en">Download Resume (EN)</button>
 </div>
 
     <main>
@@ -394,7 +390,7 @@
     </section>
 
     <footer>
-        <div class="footer-wrapper">
+        <div class="footer-wrapper" id="footer">
             <div class="footer-contact">
                 <h4>Contact</h4>
                 <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>

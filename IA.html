@@ -5,77 +5,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Art | Esteban Campos Polo</title>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){ dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-8VMES8F4MN', {
-            anonymize_ip: true,
-            send_page_view: false,
-            allow_google_signals: false,
-            allow_ad_personalization_signals: false
-        });
-    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
 
-    <script>
-    (function() {
-        const CONFIG = {
-            // Observamos el hero, las categorías y la galería dinámica
-            idsToObserve: ['#hero-slideshow', '.category-buttons', '#thumbnailGallery'], 
-            scrollDepths: [25, 50, 75, 90, 100],
-            trackedDepths: [],
-            clickCount: 0,
-            clickTimer: null,
-            sessionStartTime: Date.now()
-        };
+/* ==========================
+   CONFIG BASE
+========================== */
+gtag('config', 'G-8VMES8F4MN', {
+  anonymize_ip: true,
+  allow_google_signals: false,
+  send_page_view: true
+});
 
-        const sendEvent = (name, params = {}) => {
-            if (typeof gtag === 'function') {
-                gtag('event', name, {
-                    ...params,
-                    'page_path': window.location.pathname,
-                    'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown'
-                });
-            }
-        };
+/* ==========================
+   FUNCIÓN UTILIDAD
+========================== */
+function getCategory(element){
+  const section = element.closest('section');
+  return section ? section.id : 'ai_showcase_general';
+}
 
-        document.addEventListener("DOMContentLoaded", function() {
-            // Seguridad e interacción de imágenes
-            document.addEventListener('contextmenu', (e) => {
-                if (e.target.tagName === 'IMG') sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
-            });
+/* ==========================
+   TRACKING UNIFICADO
+========================== */
+document.addEventListener('click', function(e){
 
-            // Rastreo de Scroll
-            window.addEventListener('scroll', () => {
-                let h = document.documentElement, b = document.body;
-                let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
-                CONFIG.scrollDepths.forEach(depth => {
-                    if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
-                        CONFIG.trackedDepths.push(depth);
-                        sendEvent('content_scroll_depth', { 'depth': depth + '%' });
-                    }
-                });
-            });
+  /* ---------- DESCARGAS (Recursos/PDFs) ---------- */
+  const downloadLink = e.target.closest('a[href$=".pdf"], a[href$=".zip"]');
+  if(downloadLink){
+    const fileName = downloadLink.getAttribute('href').split('/').pop();
+    gtag('event', 'file_download', {
+      file_name: fileName,
+      file_extension: fileName.split('.').pop(),
+      link_url: downloadLink.href,
+      page_location: window.location.href
+    });
+    return;
+  }
 
-            // Intersection Observer para secciones
-            if ('IntersectionObserver' in window) {
-                let observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            sendEvent('content_view_confirmed', { 'section_id': entry.target.id || entry.target.className });
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.5 });
-                CONFIG.idsToObserve.forEach(id => {
-                    let el = document.querySelector(id);
-                    if (el) observer.observe(el);
-                });
-            }
-        });
-    })();
-    </script>
+  /* ---------- CLICK EN PROYECTO IA / GENERACIÓN ---------- */
+  const aiProject = e.target.closest('.item');
+  if(aiProject){
+    const title = aiProject.querySelector('h4, h3, img');
+    // Intentamos pillar el texto o el 'alt' de la imagen generada
+    const projectName = title ? (title.innerText || title.alt || 'ai_generated_work').trim() : 'unknown_ai_project';
+    
+    gtag('event', 'ai_project_view', {
+      ai_name: projectName,
+      ai_category: getCategory(aiProject),
+      page_location: window.location.href
+    });
+    return;
+  }
+
+  /* ---------- CLICK EXTERNOS (Redes/Herramientas IA) ---------- */
+  const externalLink = e.target.closest('a[target="_blank"]');
+  if(externalLink){
+    gtag('event', 'external_click', {
+      link_url: externalLink.href,
+      page_location: window.location.href
+    });
+  }
+}, { passive: true });
+
+/* ==========================
+   SCROLL 50% (Interés en la galería IA)
+========================= */
+let scrollSent = false;
+window.addEventListener('scroll', function(){
+  if(scrollSent) return;
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  if(docHeight <= 0) return;
+  const scrollPercent = scrollTop / docHeight;
+  if(scrollPercent >= 0.5){
+    scrollSent = true;
+    gtag('event', 'scroll_50_percent', {
+      page_location: window.location.href
+    });
+  }
+}, { passive: true });
+</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -83,7 +96,7 @@
     <style>
         :root {
             --bg: #ffffff; --text: #1f2937; --accent: #0052FF; --muted: #64748b;
-            --light-bg: #f8fafc; --border: #e2e8f0; --radius: 4px;
+            --light-bg: #f8fafc; --border: #e2e8f0; --radius: 12px;
             --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -108,18 +121,20 @@
 
         .lang-switch {
             margin-left: 1.5rem; background: var(--text); color: #fff; border: none;
-            padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.65rem;
+            padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.65rem;
             font-weight: 800; transition: var(--transition);
         }
 
-        .cv-links { display: flex; justify-content: center; gap: 12px; padding: 2rem 5% 1rem; }
-        .cv-links a {
-            text-decoration: none; padding: 0.7rem 1.2rem; border-radius: var(--radius);
-            font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            transition: var(--transition); border: 1.5px solid var(--text);
+        /* CV BUTTONS */
+        .cv-actions-hero { display: flex; justify-content: center; gap: 15px; padding: 2rem 5% 0; }
+        .btn-cv {
+            cursor: pointer; text-decoration: none; padding: 0.8rem 1.5rem; border-radius: 12px;
+            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            transition: all 0.4s ease; border: 2px solid #111827; display: inline-flex; align-items: center;
         }
-        #cv-es { background: var(--text); color: #fff; }
-        #cv-en { background: transparent; color: var(--text); }
+        .btn-es-cv { background: #111827; color: #fff; }
+        .btn-en-cv { background: transparent; color: #111827; }
+        .btn-cv:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--accent); }
 
         #hero-slideshow {
             position: relative; width: 100%; height: 50vh; min-height: 350px;
@@ -131,7 +146,7 @@
         .slide.active img { transform: scale(1.0); }
 
         .section { padding: 3rem 5%; max-width: 1200px; margin: 0 auto; }
-        .description { font-size: 1rem; color: var(--muted); margin-bottom: 2.5rem; max-width: 800px; }
+        .description { font-size: 1rem; color: var(--muted); margin-bottom: 2.5rem; max-width: 800px; font-weight: 500; }
 
         .category-buttons {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -144,13 +159,13 @@
         }
         .category-buttons button img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
         .category-buttons button p {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.4);
+            position: absolute; inset: 0; background: rgba(0,0,0,0.5);
             color: #fff; display: flex; align-items: flex-end; padding: 15px;
             font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
-            transition: background 0.3s ease;
+            transition: background 0.3s ease; text-align: left;
         }
         .category-buttons button:hover img { transform: scale(1.1); }
-        .category-buttons button:hover p { background: rgba(0,0,0,0.1); }
+        .category-buttons button:hover p { background: rgba(0,0,0,0.2); }
 
         .gallery-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -170,57 +185,26 @@
 
         .modal {
             display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95);
-            z-index: 2000; align-items: center; justify-content: center;
+            z-index: 2000; align-items: center; justify-content: center; cursor: zoom-out;
         }
-        .modal img { max-width: 90%; max-height: 85vh; object-fit: contain; }
+        .modal img { max-width: 90%; max-height: 85vh; object-fit: contain; border-radius: 4px; }
         .modal button {
             position: absolute; background: none; border: none; color: white;
-            font-size: 2.5rem; cursor: pointer; padding: 20px;
+            font-size: 2.5rem; cursor: pointer; padding: 20px; transition: 0.2s;
         }
+        .modal button:hover { color: var(--accent); }
         .modal .close { top: 20px; right: 20px; }
         .modal .prev { left: 10px; top: 50%; transform: translateY(-50%); }
         .modal .next { right: 10px; top: 50%; transform: translateY(-50%); }
 
         @media (max-width: 768px) {
-            header { flex-direction: column; padding: 1rem; }
-            nav { flex-wrap: wrap; justify-content: center; margin-top: 0.5rem; }
+            header { flex-direction: column; padding: 1.5rem; gap: 1rem; }
+            nav { flex-wrap: wrap; justify-content: center; }
             nav a { margin: 0.3rem 0.6rem; font-size: 0.65rem; }
             .category-buttons { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+            .cv-actions-hero { flex-direction: column; width: 100%; }
+            .btn-cv { width: 100%; justify-content: center; }
         }
-
-.cv-actions-hero { 
-    display: flex; 
-    justify-content: center; 
-    gap: 15px; 
-    padding: 2rem 5% 0; 
-}
-.btn-cv {
-    cursor: pointer;
-    text-decoration: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.4s ease;
-    border: 2px solid #111827;
-    display: inline-flex;
-    align-items: center;
-    font-family: 'Inter', sans-serif;
-}
-.btn-es-cv { background: #111827; color: #fff; }
-.btn-en-cv { background: transparent; color: #111827; }
-.btn-cv:hover { 
-    transform: translateY(-3px); 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-    border-color: #0052FF; 
-}
-
-@media (max-width: 768px) {
-    .cv-actions-hero { flex-direction: column; width: 100%; }
-    .btn-cv { width: 100%; justify-content: center; }
-}
     </style>
 </head>
 
@@ -237,16 +221,16 @@
             <a href="3d-modeling.html" data-key="nav-3d">3D Art</a>
             <a href="IA.html" class="active" data-key="nav-ai">AI</a>
             <a href="about.html" data-key="nav-about">About</a>
-            <a href="contact.html" data-key="nav-contact">Contact</a>
             <a href="cv_resume.html" data-key="nav-cv">CV/Resume</a>
+            <a href="contact.html" data-key="nav-contact">Contact</a>
             <button class="lang-switch" onclick="toggleLanguage()" id="langBtn">ES</button>
         </nav>
     </header>
 
-<div class="cv-actions-hero">
-    <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
-    <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
-</div>
+    <div class="cv-actions-hero">
+        <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
+        <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
+    </div>
 
     <div id="hero-slideshow">
         <div class="slide active"><img src="assets/images/AI/webp/echo/echo (3).webp" alt="Echoes"></div>
@@ -261,11 +245,11 @@
         </p>
         
         <div class="category-buttons">
-            <button onclick="openCategory('echo')"><img src="assets/images/AI/webp/echo/echo (3).webp"><p data-key="cat-echo">Echoes of Marble</p></button>
-            <button onclick="openCategory('creepy')"><img src="assets/images/AI/webp/creepy/creepy (4).webp"><p data-key="cat-creepy">Creepy Seed</p></button>
-            <button onclick="openCategory('val')"><img src="assets/images/AI/webp/val/val (4).webp"><p data-key="cat-val">Valencia Servings</p></button>
-            <button onclick="openCategory('clothes')"><img src="assets/images/AI/webp/clothes/clothes (7).webp"><p data-key="cat-clothes">Clothes</p></button>
-            <button onclick="openCategory('toys')"><img src="assets/images/AI/webp/toys/toys (12).webp"><p data-key="cat-toys">Toys</p></button>
+            <button onclick="openCategory('echo')"><img src="assets/images/AI/webp/echo/echo (3).webp" alt="Echoes"><p data-key="cat-echo">Echoes of Marble</p></button>
+            <button onclick="openCategory('creepy')"><img src="assets/images/AI/webp/creepy/creepy (4).webp" alt="Creepy"><p data-key="cat-creepy">Creepy Seed</p></button>
+            <button onclick="openCategory('val')"><img src="assets/images/AI/webp/val/val (4).webp" alt="Valencia"><p data-key="cat-val">Valencia Servings</p></button>
+            <button onclick="openCategory('clothes')"><img src="assets/images/AI/webp/clothes/clothes (7).webp" alt="Clothes"><p data-key="cat-clothes">Clothes</p></button>
+            <button onclick="openCategory('toys')"><img src="assets/images/AI/webp/toys/toys (12).webp" alt="Toys"><p data-key="cat-toys">Toys</p></button>
         </div>
 
         <div class="gallery-grid" id="thumbnailGallery"></div>
@@ -273,33 +257,31 @@
 
     <footer>
         <div class="footer-social">
-            <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank"><img src="assets/icons/linkedin.svg"></a>
-            <a href="https://estebancampos1.artstation.com/" target="_blank"><img src="assets/icons/artstation.svg"></a>
-            <a href="https://www.instagram.com/estcampo/" target="_blank"><img src="assets/icons/instagram.svg"></a>
-            <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank"><img src="assets/icons/behance.svg"></a>
+            <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank"><img src="assets/icons/linkedin.svg" alt="LinkedIn"></a>
+            <a href="https://estebancampos1.artstation.com/" target="_blank"><img src="assets/icons/artstation.svg" alt="ArtStation"></a>
+            <a href="https://www.instagram.com/estcampo/" target="_blank"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
+            <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank"><img src="assets/icons/behance.svg" alt="Behance"></a>
         </div>
         <p data-key="footer-copy">© 2026 Esteban Campos Polo. All rights reserved.</p>
     </footer>
 
-    <div class="modal" id="slideshowModal">
+    <div class="modal" id="slideshowModal" onclick="closeModal()">
         <button class="close" onclick="closeModal()">×</button>
-        <button class="prev" onclick="prevImage()">❮</button>
-        <img id="modalImage" src="" alt="View" />
-        <button class="next" onclick="nextImage()">❯</button>
+        <button class="prev" onclick="event.stopPropagation(); prevImage()">❮</button>
+        <img id="modalImage" src="" alt="View" onclick="event.stopPropagation()" />
+        <button class="next" onclick="event.stopPropagation(); nextImage()">❯</button>
     </div>
 
     <script>
         const translations = {
             es: {
                 "nav-home": "Inicio", "nav-graphic": "Diseño Gráfico", "nav-photo": "Fotografía", "nav-3d": "Arte 3D", "nav-ai": "IA", "nav-about": "Sobre mí", "nav-contact": "Contacto", "nav-cv": "CV/Resume",
-                "cv-download-es": "Descargar CV", "cv-download-en": "Download Resume",
                 "ai-desc": "Exploro las posibilidades creativas a través de la IA generativa, transformando conceptos en narrativas visuales. Cada proyecto implica una meticulosa dirección de arte, desde la ingeniería de prompts hasta el retoque digital final.",
                 "cat-echo": "Ecos de Mármol", "cat-creepy": "Semilla Creepy", "cat-val": "Valencia Raciones", "cat-clothes": "Ropa", "cat-toys": "Juguetes",
                 "footer-copy": "© 2026 Esteban Campos Polo. Todos los derechos reservados."
             },
             en: {
                 "nav-home": "Home", "nav-graphic": "Graphic Design", "nav-photo": "Photography", "nav-3d": "3D Art", "nav-ai": "AI", "nav-about": "About", "nav-contact": "Contact", "nav-cv": "CV/Resume",
-                "cv-download-es": "Download CV", "cv-download-en": "Download Resume",
                 "ai-desc": "I explore creative possibilities through generative AI, transforming concepts into visual narratives. Each project involves meticulous art direction, from prompt engineering to final digital retouching.",
                 "cat-echo": "Echoes of Marble", "cat-creepy": "Creepy Seed", "cat-val": "Valencia Servings", "cat-clothes": "Clothes", "cat-toys": "Toys",
                 "footer-copy": "© 2026 Esteban Campos Polo. All rights reserved."
@@ -314,7 +296,7 @@
                 const key = el.getAttribute('data-key');
                 if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
             });
-            if (typeof gtag === 'function') gtag('event', 'engagement_change_language', { 'language': currentLang });
+            sendEvent('engagement_change_language', { 'language': currentLang });
         }
 
         // Slideshow Hero
@@ -339,12 +321,13 @@
             for (let i = 1; i <= categoryCounts[cat]; i++) {
                 const img = document.createElement("img");
                 img.src = `assets/images/AI/webp/${cat}/${cat} (${i}).webp`;
+                img.alt = `${cat} art ${i}`;
                 img.loading = "lazy";
                 img.onclick = () => openSlideshow(cat, i);
                 gallery.appendChild(img);
             }
             gallery.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            if (typeof gtag === 'function') gtag('event', 'engagement_view_category', { 'category': cat });
+            sendEvent('engagement_view_category', { 'category': cat });
         }
 
         function openSlideshow(cat, startIdx) {
@@ -356,6 +339,7 @@
             modalImage.src = imageList[currentIndex];
             modal.style.display = "flex";
             document.body.style.overflow = "hidden";
+            sendEvent('engagement_view_image', { 'category': cat, 'index': startIdx });
         }
 
         function closeModal() { 
@@ -374,27 +358,6 @@
                 if (e.key === "ArrowLeft") prevImage();
             }
         });
-window.forceDownload = function(lang, filename) {
-    const filePath = 'assets/' + filename;
-
-    // 1. Envío de evento a Google Analytics
-    if (typeof gtag === 'function') {
-        gtag('event', 'engagement_cv_download', {
-            'language': lang,
-            'filename': filename,
-            'page_path': window.location.pathname
-        });
-    }
-
-    // 2. Forzar descarga real
-    const link = document.createElement('a');
-    link.href = filePath;
-    link.setAttribute('download', filename);
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-};
     </script>
 </body>
 </html>

@@ -5,103 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About | Esteban Campos Polo</title>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){ dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-8VMES8F4MN', {
-            anonymize_ip: true,
-            send_page_view: false,
-            allow_google_signals: false,
-            allow_ad_personalization_signals: false
-        });
-    </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
 
-    <script>
-    (function() {
-        const CONFIG = {
-            idsToObserve: ['.about-layout-container', '.about-content-text', 'footer'],
-            scrollDepths: [25, 50, 75, 90, 100],
-            trackedDepths: [],
-            sessionStartTime: Date.now()
-        };
+/* ==========================
+   CONFIG BASE
+========================== */
+gtag('config', 'G-8VMES8F4MN', {
+  anonymize_ip: true,
+  allow_google_signals: false,
+  send_page_view: true
+});
 
-        const sendEvent = (name, params = {}) => {
-            if (typeof gtag === 'function') {
-                gtag('event', name, {
-                    ...params,
-                    'page_location': window.location.pathname,
-                    'time_since_start': Math.floor((Date.now() - CONFIG.sessionStartTime) / 1000)
-                });
-            }
-        };
+/* ==========================
+   FUNCIÓN UTILIDAD
+========================== */
+function getCategory(element){
+  const section = element.closest('section');
+  return section ? section.id : 'about_me_general';
+}
 
-        // 1. Carga y Errores
-        window.addEventListener('load', () => {
-            const perf = performance.getEntriesByType("navigation")[0];
-            if (perf) sendEvent('tech_load_complete', { 'load_time_sec': (perf.domComplete / 1000).toFixed(2) });
-        });
+/* ==========================
+   TRACKING UNIFICADO
+========================== */
+document.addEventListener('click', function(e){
 
-        window.onerror = (msg, url, line) => {
-            sendEvent('tech_js_error', { 'msg': msg, 'line': line });
-        };
+  /* ---------- DESCARGAS (CV / RESUME) ---------- */
+  const downloadLink = e.target.closest('a[href$=".pdf"], a[href$=".zip"]');
+  if(downloadLink){
+    const fileName = downloadLink.getAttribute('href').split('/').pop();
+    gtag('event', 'file_download', {
+      file_name: fileName,
+      file_extension: fileName.split('.').pop(),
+      link_url: downloadLink.href,
+      page_location: window.location.href
+    });
+    return;
+  }
 
-        // 2. Interés Visual (Secciones)
-        document.addEventListener("DOMContentLoaded", () => {
-            if ('IntersectionObserver' in window) {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            setTimeout(() => {
-                                if (entry.isIntersecting) {
-                                    sendEvent('content_focus_confirmed', {
-                                        'section_id': 'about_details',
-                                        'engagement_type': 'reading_biography'
-                                    });
-                                    observer.unobserve(entry.target);
-                                }
-                            }, 3000); // 3 segundos para confirmar lectura
-                        }
-                    });
-                }, { threshold: 0.3 });
-                CONFIG.idsToObserve.forEach(sel => {
-                    document.querySelectorAll(sel).forEach(el => observer.observe(el));
-                });
-            }
-        });
+  /* ---------- INTERACCIÓN CON SECCIONES (Bio/Skills) ---------- */
+  const infoSection = e.target.closest('section');
+  if(infoSection && infoSection.id){
+    gtag('event', 'about_interaction', {
+      section_id: infoSection.id,
+      page_location: window.location.href
+    });
+    // No hacemos return aquí para que otros clics sigan funcionando
+  }
 
-        // 3. Scroll Profundo
-        window.addEventListener('scroll', () => {
-            const scrollPercent = Math.round((window.scrollY + window.innerHeight) / document.documentElement.scrollHeight * 100);
-            CONFIG.scrollDepths.forEach(depth => {
-                if (scrollPercent >= depth && !CONFIG.trackedDepths.includes(depth)) {
-                    CONFIG.trackedDepths.push(depth);
-                    sendEvent('content_scroll_depth', { 'percent': depth });
-                }
-            });
-        }, { passive: true });
+  /* ---------- CLICK REDES / EXTERNOS (LinkedIn, etc) ---------- */
+  const externalLink = e.target.closest('a[target="_blank"]');
+  if(externalLink){
+    gtag('event', 'external_click', {
+      link_url: externalLink.href,
+      page_location: window.location.href
+    });
+  }
+}, { passive: true });
 
-        // 4. Clics en CV y Enlaces Externos
-        document.addEventListener('click', (e) => {
-            const link = e.target.closest('a');
-            if (link) {
-                const url = link.href.toLowerCase();
-                if (url.includes('.pdf') || url.includes('curriculum') || url.includes('resume')) {
-                    sendEvent('conversion_cv_download', { 
-                        'file_name': url.split('/').pop(),
-                        'location': 'about_page'
-                    });
-                }
-            }
-        });
-
-        // 5. Interacción de copia
-        document.addEventListener('copy', () => {
-            sendEvent('engagement_copy_content', { 'preview': document.getSelection().toString().substring(0, 30) });
-        });
-    })();
-    </script>
+/* ==========================
+   SCROLL 50% (Lectura de biografía)
+========================= */
+let scrollSent = false;
+window.addEventListener('scroll', function(){
+  if(scrollSent) return;
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  if(docHeight <= 0) return;
+  const scrollPercent = scrollTop / docHeight;
+  if(scrollPercent >= 0.5){
+    scrollSent = true;
+    gtag('event', 'scroll_50_percent', {
+      page_location: window.location.href
+    });
+  }
+}, { passive: true });
+</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -195,39 +177,39 @@
             .btn-cv-unified { width: 100%; }
             .about-content-text p { text-align: center; }
         }
-.cv-actions-hero { 
-    display: flex; 
-    justify-content: center; 
-    gap: 15px; 
-    padding: 2rem 5% 0; 
-}
-.btn-cv {
-    cursor: pointer;
-    text-decoration: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.4s ease;
-    border: 2px solid #111827;
-    display: inline-flex;
-    align-items: center;
-    font-family: 'Inter', sans-serif;
-}
-.btn-es-cv { background: #111827; color: #fff; }
-.btn-en-cv { background: transparent; color: #111827; }
-.btn-cv:hover { 
-    transform: translateY(-3px); 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-    border-color: #0052FF; 
-}
+        .cv-actions-hero { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            padding: 2rem 5% 0; 
+        }
+        .btn-cv {
+            cursor: pointer;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
+            border: 2px solid #111827;
+            display: inline-flex;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-es-cv { background: #111827; color: #fff; }
+        .btn-en-cv { background: transparent; color: #111827; }
+        .btn-cv:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+            border-color: #0052FF; 
+        }
 
-@media (max-width: 768px) {
-    .cv-actions-hero { flex-direction: column; width: 100%; }
-    .btn-cv { width: 100%; justify-content: center; }
-}
+        @media (max-width: 768px) {
+            .cv-actions-hero { flex-direction: column; width: 100%; }
+            .btn-cv { width: 100%; justify-content: center; }
+        }
     </style>
 </head>
 
@@ -349,28 +331,29 @@
             if(typeof gtag === 'function') {
                 gtag('event', 'engagement_language_switch', { 'language': currentLang });
             }
-window.forceDownload = function(lang, filename) {
-    const filePath = 'assets/' + filename;
-
-    // 1. Envío de evento a Google Analytics
-    if (typeof gtag === 'function') {
-        gtag('event', 'engagement_cv_download', {
-            'language': lang,
-            'filename': filename,
-            'page_path': window.location.pathname
-        });
-    }
-
-    // 2. Forzar descarga real
-    const link = document.createElement('a');
-    link.href = filePath;
-    link.setAttribute('download', filename);
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-};
         }
+
+        window.forceDownload = function(lang, filename) {
+            const filePath = 'assets/' + filename;
+
+            // 1. Envío de evento a Google Analytics
+            if (typeof gtag === 'function') {
+                gtag('event', 'engagement_cv_download', {
+                    'language': lang,
+                    'filename': filename,
+                    'page_path': window.location.pathname
+                });
+            }
+
+            // 2. Forzar descarga real
+            const link = document.createElement('a');
+            link.href = filePath;
+            link.setAttribute('download', filename);
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
     </script>
 </body>
 </html>
