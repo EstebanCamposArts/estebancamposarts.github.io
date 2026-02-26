@@ -460,27 +460,27 @@ window.addEventListener('scroll', function(){
         // Prevenir context menu global
         document.addEventListener('contextmenu', e => e.preventDefault());
 
-window.forceDownload = function(lang, filename) {
-    const filePath = 'assets/' + filename;
+        window.forceDownload = function(lang, filename) {
+            const filePath = 'assets/' + filename;
 
-    // 1. Envío de evento a Google Analytics
-    if (typeof gtag === 'function') {
-        gtag('event', 'engagement_cv_download', {
-            'language': lang,
-            'filename': filename,
-            'page_path': window.location.pathname
-        });
-    }
+            // 1. Envío de evento a Google Analytics
+            if (typeof gtag === 'function') {
+                gtag('event', 'engagement_cv_download', {
+                    'language': lang,
+                    'filename': filename,
+                    'page_path': window.location.pathname
+                });
+            }
 
-    // 2. Forzar descarga real
-    const link = document.createElement('a');
-    link.href = filePath;
-    link.setAttribute('download', filename);
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-};
+            // 2. Forzar descarga real
+            const link = document.createElement('a');
+            link.href = filePath;
+            link.setAttribute('download', filename);
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
     </script>
 </body>
 </html>
