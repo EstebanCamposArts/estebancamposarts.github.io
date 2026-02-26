@@ -1,292 +1,445 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esteban Campos Polo | Senior Visual Specialist & Packaging</title>
-    <style>
-        :root {
-            --bg-color: #0a0a0a;
-            --text-color: #ffffff;
-            --accent-color: #00a8ff;
-            --card-bg: #121212;
-            --border-color: #2d2d2d;
-        }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-        }
-        
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
-        
-        /* --- HEADER --- */
-        header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 0; border-bottom: 1px solid var(--border-color);
-        }
-        
-        .logo h1 { font-size: 1.8rem; font-weight: 700; }
-        .logo p { font-size: 0.9rem; color: var(--accent-color); letter-spacing: 1px; font-weight: bold; }
-        
-        .nav-container { display: flex; align-items: center; gap: 20px; }
-        nav ul { display: flex; list-style: none; gap: 20px; }
-        nav a {
-            color: var(--text-color); text-decoration: none;
-            font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
-        }
-        nav a:hover { color: var(--accent-color); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .controls { display: flex; gap: 10px; align-items: center; }
+<title>Esteban Campos Polo | Senior Packaging & Visual Production Specialist</title>
 
-        .btn-action {
-            background: none; border: 1px solid var(--accent-color);
-            color: var(--accent-color); padding: 6px 12px; border-radius: 4px;
-            cursor: pointer; font-size: 0.75rem; font-weight: bold;
-            text-decoration: none; transition: 0.3s;
-        }
-        .btn-action:hover { background: var(--accent-color); color: white; }
-        .btn-download { background: var(--accent-color); color: white; }
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-8VMES8F4MN', {
+    anonymize_ip: true,
+    allow_google_signals: false,
+    send_page_view: true
+});
+</script>
 
-        /* --- HERO --- */
-        .hero { display: flex; gap: 40px; padding: 60px 0; align-items: center; }
-        .hero-content { flex: 1.2; }
-        .hero-content h1 { font-size: 3rem; color: var(--text-color); margin-bottom: 5px; }
-        .hero-content h2 { font-size: 1.6rem; color: var(--accent-color); font-weight: 600; margin-bottom: 15px; }
-        .hero-content p { font-size: 1.1rem; color: #ccc; max-width: 600px; }
-        
-        .hero-images { flex: 0.8; display: flex; gap: 15px; height: 350px; }
-        .hero-image { flex: 1; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); filter: grayscale(20%); transition: 0.5s; }
-        .hero-image:hover { filter: grayscale(0%); border-color: var(--accent-color); }
-        .hero-image img { width: 100%; height: 100%; object-fit: cover; }
+<style>
+:root{
+--bg:#0b0c0e;
+--bg-soft:#121417;
+--text:#ffffff;
+--text-soft:#b8bcc2;
+--accent:#1ea7ff;
+--accent-soft:#0f6ea8;
+--border:#23262b;
+--radius:14px;
+}
 
-        /* --- PORTFOLIO VISUAL --- */
-        .section-title { font-size: 1.8rem; margin: 40px 0 20px; border-left: 4px solid var(--accent-color); padding-left: 15px; }
-        
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            margin-bottom: 50px;
-        }
-        
-        .portfolio-item {
-            display: block;
-            aspect-ratio: 1 / 1;
-            background: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            position: relative;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-        }
-        
-        .portfolio-item:hover { 
-            transform: translateY(-8px); 
-            border-color: var(--accent-color);
-            box-shadow: 0 10px 20px rgba(0, 168, 255, 0.2);
-        }
-        
-        .portfolio-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .portfolio-item:hover img { transform: scale(1.1); }
-        
-        .portfolio-label {
-            position: absolute; bottom: 0; width: 100%;
-            background: rgba(0,0,0,0.85); padding: 10px;
-            font-size: 0.7rem; text-align: center; font-weight: bold;
-            color: white; letter-spacing: 1px; text-transform: uppercase;
-        }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-        /* --- SECCIÓN RECLUTADORES (RRHH) --- */
-        .recruiter-info {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 80px;
-        }
-        
-        .recruiter-card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            transition: 0.3s;
-        }
-        
-        .recruiter-card:hover { border-color: var(--accent-color); background: #161616; }
+body{
+background:var(--bg);
+color:var(--text);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+line-height:1.65;
+letter-spacing:.2px;
+}
 
-        .recruiter-card h3 {
-            color: var(--accent-color);
-            font-size: 0.95rem;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-        }
+.container{
+max-width:1400px;
+margin:auto;
+padding:0 30px;
+}
 
-        .recruiter-card ul { list-style: none; font-size: 0.85rem; color: #ddd; }
-        .recruiter-card ul li {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: flex-start;
-        }
-        .recruiter-card ul li::before {
-            content: "→";
-            color: var(--accent-color);
-            font-weight: bold;
-            margin-right: 10px;
-        }
+/* HEADER */
 
-        @media (max-width: 1100px) {
-            .portfolio-grid { grid-template-columns: repeat(3, 1fr); }
-            .recruiter-info { grid-template-columns: 1fr; }
-            .hero { flex-direction: column; text-align: center; }
-            .hero-content p { margin: 0 auto; }
-        }
-    </style>
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:28px 0;
+border-bottom:1px solid var(--border);
+}
+
+.logo h1{
+font-size:1.55rem;
+font-weight:800;
+letter-spacing:.5px;
+}
+
+.logo p{
+font-size:.72rem;
+color:var(--accent);
+letter-spacing:2px;
+font-weight:700;
+text-transform:uppercase;
+margin-top:4px;
+}
+
+.nav-container{
+display:flex;
+align-items:center;
+gap:30px;
+}
+
+nav ul{
+display:flex;
+gap:25px;
+list-style:none;
+}
+
+nav a{
+color:var(--text);
+text-decoration:none;
+font-size:.72rem;
+font-weight:700;
+text-transform:uppercase;
+opacity:.65;
+transition:.25s ease;
+letter-spacing:.6px;
+}
+
+nav a:hover{
+opacity:1;
+color:var(--accent);
+}
+
+.controls{
+display:flex;
+gap:12px;
+}
+
+.btn-action{
+border:1px solid var(--accent);
+color:var(--accent);
+padding:9px 18px;
+font-size:.68rem;
+font-weight:800;
+text-transform:uppercase;
+border-radius:6px;
+text-decoration:none;
+transition:.25s ease;
+}
+
+.btn-action:hover{
+background:var(--accent);
+color:white;
+}
+
+.btn-download{
+background:var(--accent);
+color:white;
+}
+
+/* HERO */
+
+.hero{
+display:flex;
+gap:70px;
+padding:110px 0 100px;
+align-items:center;
+}
+
+.hero-content h1{
+font-size:3.3rem;
+font-weight:800;
+line-height:1.05;
+letter-spacing:-1px;
+margin-bottom:18px;
+}
+
+.hero-content h2{
+color:var(--accent);
+font-size:1.25rem;
+font-weight:600;
+margin-bottom:28px;
+}
+
+.hero-content p{
+color:var(--text-soft);
+font-size:1.05rem;
+max-width:680px;
+}
+
+.hero-images{
+display:flex;
+gap:18px;
+height:400px;
+}
+
+.hero-image{
+flex:1;
+border-radius:var(--radius);
+overflow:hidden;
+border:1px solid var(--border);
+box-shadow:0 25px 50px rgba(0,0,0,.35);
+transition:.4s ease;
+}
+
+.hero-image:hover{
+transform:translateY(-6px);
+box-shadow:0 35px 70px rgba(0,0,0,.5);
+}
+
+.hero-image img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* TRUST */
+
+.trust-stack{
+padding:55px 0;
+text-align:center;
+border-top:1px solid var(--border);
+border-bottom:1px solid var(--border);
+margin-bottom:90px;
+}
+
+.trust-stack p{
+font-size:.75rem;
+letter-spacing:1px;
+opacity:.6;
+margin-bottom:25px;
+}
+
+.stack-grid{
+display:flex;
+justify-content:center;
+gap:50px;
+flex-wrap:wrap;
+font-size:.82rem;
+font-weight:700;
+letter-spacing:.5px;
+opacity:.8;
+}
+
+/* SECTION */
+
+.section-title{
+font-size:1.6rem;
+margin-bottom:40px;
+border-left:5px solid var(--accent);
+padding-left:18px;
+font-weight:800;
+text-transform:uppercase;
+letter-spacing:.8px;
+}
+
+.portfolio-grid{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:20px;
+margin-bottom:100px;
+}
+
+.portfolio-item{
+aspect-ratio:1;
+border-radius:var(--radius);
+overflow:hidden;
+border:1px solid var(--border);
+position:relative;
+transition:.35s ease;
+}
+
+.portfolio-item:hover{
+transform:translateY(-6px);
+border-color:var(--accent-soft);
+}
+
+.portfolio-item img{
+width:100%;
+height:100%;
+object-fit:cover;
+transition:.5s ease;
+}
+
+.portfolio-item:hover img{
+transform:scale(1.05);
+}
+
+.portfolio-label{
+position:absolute;
+bottom:0;
+width:100%;
+background:linear-gradient(transparent,rgba(0,0,0,.9));
+padding:25px 10px 12px;
+font-size:.65rem;
+text-align:center;
+font-weight:800;
+letter-spacing:1.5px;
+text-transform:uppercase;
+}
+
+/* RECRUITER INFO */
+
+.recruiter-info{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:30px;
+margin-bottom:110px;
+}
+
+.recruiter-card{
+background:var(--bg-soft);
+padding:40px;
+border-radius:var(--radius);
+border:1px solid var(--border);
+box-shadow:0 15px 40px rgba(0,0,0,.25);
+transition:.35s ease;
+}
+
+.recruiter-card:hover{
+transform:translateY(-5px);
+border-color:var(--accent-soft);
+}
+
+.recruiter-card h3{
+color:var(--accent);
+margin-bottom:20px;
+font-size:.82rem;
+text-transform:uppercase;
+letter-spacing:1.4px;
+}
+
+.recruiter-card ul{
+list-style:none;
+font-size:.88rem;
+color:var(--text-soft);
+}
+
+.recruiter-card li{
+margin-bottom:12px;
+}
+
+/* FOOTER */
+
+footer{
+text-align:center;
+padding:45px 0;
+border-top:1px solid var(--border);
+opacity:.45;
+font-size:.75rem;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1200px){
+.portfolio-grid{grid-template-columns:repeat(3,1fr);}
+.hero{flex-direction:column;text-align:center;}
+.hero-images{height:300px;}
+.recruiter-info{grid-template-columns:1fr;}
+}
+</style>
 </head>
+
 <body>
-
 <div class="container">
-    <header>
-        <div class="logo">
-            <h1>ESTEBAN CAMPOS POLO</h1>
-            <p id="tagline">ESPECIALISTA SENIOR EN PACKAGING Y PRODUCCIÓN</p>
-        </div>
-        <div class="nav-container">
-            <nav>
-                <ul>
-                    <li><a href="graphic-design.html">Producción Gráfica</a></li>
-                    <li><a href="photography.html">Fotografía Pro</a></li>
-                    <li><a href="3d-modeling.html">Visualización 3D</a></li>
-                    <li><a href="IA.html">IA Aplicada</a></li>
-                    <li><a href="about.html">Perfil</a></li>
-                    <li><a href="contact.html">Contacto</a></li>
-                </ul>
-            </nav>
-            <div class="controls">
-                <button class="btn-action" id="langBtn">ES / EN</button>
-                <a href="assets/CV_Esteban_Campos_ES.pdf" class="btn-action btn-download" download>DESCARGAR CV</a>
-            </div>
-        </div>
-    </header>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1 id="heroTitle">ESTEBAN CAMPOS POLO</h1>
-            <h2 id="heroSub">VISUAL SOLUTIONS SPECIALIST</h2>
-            <p id="heroDesc">15 años de oficio transformando conceptos industriales en productos finales. Especialista en evitar errores de preimpresión y reducir costes mediante prototipado virtual 3D.</p>
-        </div>
-        <div class="hero-images">
-            <div class="hero-image"><img src="assets/images/3dmodeling/rookies.JPG"></div>
-            <div class="hero-image"><img src="assets/images/graphicdesign/mockups/merlot.jpg"></div>
-        </div>
-    </section>
+<header>
+<div class="logo">
+<h1>ESTEBAN CAMPOS POLO</h1>
+<p>Senior Packaging & Visual Production Specialist</p>
+</div>
 
-    <section>
-        <h2 class="section-title" id="portTitle">SOLUCIONES INDUSTRIALES Y CREATIVAS</h2>
-        <div class="portfolio-grid" id="portfolioGrid"></div>
-    </section>
+<div class="nav-container">
+<nav>
+<ul>
+<li><a href="graphic-design.html">Producción</a></li>
+<li><a href="3d-modeling.html">3D</a></li>
+<li><a href="IA.html">AI</a></li>
+<li><a href="about.html">Perfil</a></li>
+<li><a href="contact.html">Contacto</a></li>
+</ul>
+</nav>
+<div class="controls">
+<button class="btn-action">ES / EN</button>
+<a href="assets/CV_Esteban_Campos_ES.pdf" class="btn-action btn-download">Download CV & Portfolio</a>
+</div>
+</div>
+</header>
 
-    <section class="recruiter-info">
-        <div class="recruiter-card">
-            <h3 id="skillTitle1">SOFTWARE & PRODUCCIÓN</h3>
-            <ul id="skillList1"></ul>
-        </div>
+<section class="hero">
+<div class="hero-content">
+<h1>Industrial Packaging & Production Workflow Expert</h1>
+<h2>Preventing costly print errors & optimizing production efficiency</h2>
+<p>
+Más de 20 años optimizando procesos de packaging industrial, reduciendo errores de preimpresión,
+acelerando tiempos de producción y asegurando consistencia en tiradas industriales internacionales.
+</p>
+</div>
+<div class="hero-images">
+<div class="hero-image"><img src="assets/images/3dmodeling/rookies.JPG"></div>
+<div class="hero-image"><img src="assets/images/graphicdesign/mockups/merlot.jpg"></div>
+</div>
+</section>
 
-        <div class="recruiter-card">
-            <h3 id="skillTitle2">VALOR PARA LA EMPRESA</h3>
-            <ul id="skillList2"></ul>
-        </div>
+<div class="trust-stack">
+<p>EXPERIENCE WITH INDUSTRIAL WORKFLOWS & PRODUCTION</p>
+<div class="stack-grid">
+<span>PREPRESS & PRINT PRODUCTION</span>
+<span>PACKAGING WORKFLOW OPTIMIZATION</span>
+<span>3D PROTOTYPING</span>
+<span>INTERNATIONAL PRODUCTION STANDARDS</span>
+<span>AI WORKFLOWS</span>
+</div>
+</div>
 
-        <div class="recruiter-card">
-            <h3 id="skillTitle3">DISPONIBILIDAD</h3>
-            <ul id="skillList3"></ul>
-        </div>
-    </section>
+<section>
+<h2 class="section-title">Technical Solutions & Case Studies</h2>
+<div class="portfolio-grid" id="portfolioGrid"></div>
+</section>
+
+<section class="recruiter-info">
+<div class="recruiter-card">
+<h3>SOFTWARE & PRODUCTION</h3>
+<ul>
+<li>High-volume catalog production (+5,000 refs)</li>
+<li>Technical dielines & print-ready artwork</li>
+<li>3D product prototyping & visualization</li>
+<li>Advanced retouching & post-production</li>
+</ul>
+</div>
+
+<div class="recruiter-card">
+<h3>BUSINESS VALUE</h3>
+<ul>
+<li>Reduction of costly prepress errors</li>
+<li>Optimization of production workflows</li>
+<li>Reduction of prototyping & print costs</li>
+<li>Autonomous management of complex projects</li>
+</ul>
+</div>
+
+<div class="recruiter-card">
+<h3>WORKFLOW & AVAILABILITY</h3>
+<ul>
+<li>On-site & remote collaboration</li>
+<li>Cross-functional teamwork with production & marketing</li>
+<li>Immediate availability / freelance & full-time</li>
+<li>Reliable execution in industrial environments</li>
+</ul>
+</div>
+</section>
+
+<footer>
+© 2026 ESTEBAN CAMPOS POLO | Senior Packaging & Production Specialist
+</footer>
+
 </div>
 
 <script>
-    // --- IMÁGENES DEL PORTFOLIO (ETIQUETAS RE-ENFOCADAS) ---
-    const myImages = [
-        { src: 'assets/images/graphicdesign/mockups/merlot.jpg', label: 'PACKAGING & DIELINES', url: 'graphic-design.html' },
-        { src: 'assets/images/graphicdesign/mockups/goalkeeper.jpg', label: 'TECHNICAL PRODUCTION', url: 'graphic-design.html' },
-        { src: 'assets/images/3dmodeling/rookies.JPG', label: '3D VIRTUAL PROTOTYPING', url: '3d-modeling.html' },
-        { src: 'assets/images/fotografia/Animals/DSC_6743 (1).jpg', label: 'PRODUCT PHOTOGRAPHY', url: 'photography.html' },
-        { src: 'assets/images/AI/webp/val/val (1).webp', label: 'AI WORKFLOWS', url: 'IA.html' }
-    ];
+const myImages=[
+{src:'assets/images/graphicdesign/mockups/merlot.jpg',label:'Packaging & Dielines',url:'graphic-design.html'},
+{src:'assets/images/graphicdesign/mockups/goalkeeper.jpg',label:'Technical Production',url:'graphic-design.html'},
+{src:'assets/images/3dmodeling/rookies.JPG',label:'3D Virtual Prototyping',url:'3d-modeling.html'},
+{src:'assets/images/fotografia/Animals/DSC_6743 (1).jpg',label:'Product Photography',url:'photography.html'},
+{src:'assets/images/AI/webp/val/val (1).webp',label:'AI Workflows',url:'IA.html'}
+];
 
-    function loadPortfolio() {
-        const grid = document.getElementById('portfolioGrid');
-        grid.innerHTML = myImages.map(img => `
-            <a href="${img.url}" class="portfolio-item">
-                <img src="${img.src}" alt="${img.label}">
-                <div class="portfolio-label">${img.label}</div>
-            </a>
-        `).join('');
-    }
+const grid=document.getElementById('portfolioGrid');
 
-    // --- TRADUCCIONES (LENGUAJE SENIOR DE OFICIO) ---
-    const langBtn = document.getElementById('langBtn');
-    let currentLang = 'es';
-
-    const translations = {
-        es: {
-            tagline: "ESPECIALISTA SENIOR EN PACKAGING Y PRODUCCIÓN",
-            heroSub: "VISUAL SOLUTIONS SPECIALIST",
-            heroDesc: "15 años de oficio transformando conceptos industriales en productos finales. Especialista en evitar errores de preimpresión y reducir costes mediante prototipado virtual 3D.",
-            portTitle: "CASOS DE ÉXITO Y SOLUCIONES TÉCNICAS",
-            skillTitle1: "SOFTWARE & PRODUCCIÓN",
-            skillTitle2: "VALOR PARA LA EMPRESA",
-            skillTitle3: "LOGÍSTICA Y ESTADO",
-            list1: ["InDesign: Catálogos de gran volumen (+5.000 refs)", "Illustrator: Troqueles técnicos y preimpresión", "Maya/ZBrush: Renders de producto para marketing", "Photoshop: Retoque avanzado y post-producción"],
-            list2: ["Cero errores en artes finales para imprenta", "Reducción de costes en prototipado físico", "Gestión autónoma de ciclos de producción", "Experiencia en sectores Juguete, Textil y Metal"],
-            list3: ["Residencia en Alicante (Disponibilidad Presencial)", "Capacidad de Teletrabajo (Flujo Remoto)", "Incorporación inmediata / Proyectos Freelance", "Mentalidad resolutiva: 'Hacer que ocurra'"]
-        },
-        en: {
-            tagline: "SENIOR PACKAGING & PRODUCTION SPECIALIST",
-            heroSub: "VISUAL SOLUTIONS SPECIALIST",
-            heroDesc: "15 years of trade turning industrial concepts into final products. Expert in preventing pre-print errors and cutting costs through 3D virtual prototyping.",
-            portTitle: "TECHNICAL SOLUTIONS & CASE STUDIES",
-            skillTitle1: "SOFTWARE & PRODUCTION",
-            skillTitle2: "BUSINESS VALUE",
-            skillTitle3: "WORK STATUS",
-            list1: ["InDesign: High-volume catalogs (+5,000 refs)", "Illustrator: Technical dies and pre-printing", "Maya/ZBrush: Marketing-ready product renders", "Photoshop: Advanced retouching and post-production"],
-            list2: ["Zero errors in final print-ready files", "Drastic reduction in physical prototyping costs", "Autonomous production cycle management", "Experience in Toy, Textile, and Metal sectors"],
-            list3: ["Based in Alicante (On-site availability)", "Remote Workflow Capacity", "Immediate Availability / Freelance Projects", "Problem-solving mindset: 'Get it done'"]
-        }
-    };
-
-    function updateInterface() {
-        const t = translations[currentLang];
-        document.getElementById('tagline').innerText = t.tagline;
-        document.getElementById('heroSub').innerText = t.heroSub;
-        document.getElementById('heroDesc').innerText = t.heroDesc;
-        document.getElementById('portTitle').innerText = t.portTitle;
-        document.getElementById('skillTitle1').innerText = t.skillTitle1;
-        document.getElementById('skillTitle2').innerText = t.skillTitle2;
-        document.getElementById('skillTitle3').innerText = t.skillTitle3;
-
-        for(let i=1; i<=3; i++) {
-            document.getElementById(`skillList${i}`).innerHTML = t[`list${i}`].map(item => `<li>${item}</li>`).join('');
-        }
-
-        langBtn.innerText = currentLang === 'es' ? 'ES / EN' : 'EN / ES';
-    }
-
-    langBtn.addEventListener('click', () => {
-        currentLang = currentLang === 'es' ? 'en' : 'es';
-        updateInterface();
-    });
-
-    loadPortfolio();
-    updateInterface();
+grid.innerHTML=myImages.map(img=>`
+<a href="${img.url}" class="portfolio-item">
+<img src="${img.src}">
+<div class="portfolio-label">${img.label}</div>
+</a>`).join('');
 </script>
 
 </body>
