@@ -12,109 +12,51 @@
     gtag('js', new Date());
 
     gtag('config', 'G-8VMES8F4MN', { 
-        anonymize_ip: true,
-        send_page_view: false,
-        allow_google_signals: false,
-        allow_ad_personalization_signals: false 
+        'anonymize_ip': true,
+        'send_page_view': true, // Corregido: Ahora sí cuenta las visitas
+        'allow_google_signals': false 
     });
-  </script>
 
-  <script>
-(function() {
-    const CONFIG = {
-        idsToObserve: ['.hero', '#main-projects', '#archive-projects', 'footer'], 
-        scrollDepths: [25, 50, 75, 90, 100],
-        trackedDepths: [],
-        clickCount: 0,
-        clickTimer: null,
-        sessionStartTime: Date.now()
-    };
-
-    const sendEvent = (name, params = {}) => {
-        if (typeof gtag === 'function') {
-            gtag('event', name, {
-                ...params,
-                'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                'page_path': window.location.pathname,
-                'is_mobile': /Mobi|Android/i.test(navigator.userAgent)
-            });
-        }
-    };
-
-    document.addEventListener("DOMContentLoaded", function() {
+    /* ==========================================================
+       TRACKING MAESTRO (Delegación de Eventos)
+       ========================================================== */
+    document.addEventListener('click', function(e) {
         
-        // --- 1. TRACKING DE CONVERSIÓN (CV/RESUME) ---
-        document.querySelectorAll('.btn-cv-track').forEach(btn => {
-            btn.addEventListener('click', function() {
-                sendEvent('engagement_cv_download', {
-                    'language': this.getAttribute('data-lang'),
-                    'filename': this.href.split('/').pop(),
-                    'location': 'hero_actions'
-                });
-            });
-        });
-
-        // --- 2. SEGURIDAD Y UX ---
-        document.addEventListener('contextmenu', (e) => {
-            if (e.target.tagName === 'IMG') {
-                sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
-            }
-        });
-
-        document.addEventListener('click', (e) => {
-            // Rage Click Detection
-            CONFIG.clickCount++;
-            clearTimeout(CONFIG.clickTimer);
-            CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
-            if (CONFIG.clickCount > 4) {
-                sendEvent('ux_rage_click', { 'element': e.target.tagName + (e.target.id ? '#'+e.target.id : '') });
-                CONFIG.clickCount = 0;
-            }
-        });
-
-        // --- 3. VISIBILIDAD DE PROYECTOS (Intersection Observer) ---
-        if ('IntersectionObserver' in window) {
-            let observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // Confirmamos que el usuario realmente lo vio (2 seg de dwell time)
-                        setTimeout(() => {
-                            if (entry.isIntersecting) {
-                                sendEvent('content_view_confirmed', { 
-                                    'section_id': entry.target.id || entry.target.className 
-                                });
-                                observer.unobserve(entry.target);
-                            }
-                        }, 2000);
-                    }
-                });
-            }, { threshold: 0.5 });
-
-            CONFIG.idsToObserve.forEach(selector => {
-                let el = document.querySelector(selector);
-                if (el) observer.observe(el);
+        // 1. TRACKING DE PROYECTOS (Tarjetas)
+        const project = e.target.closest('.project-card');
+        if (project) {
+            const title = project.querySelector('h3')?.innerText.trim();
+            const section = project.closest('section')?.id || 'archive';
+            gtag('event', 'project_click', {
+                'project_name': title,
+                'project_category': section,
+                'page_location': window.location.href
             });
         }
 
-        // --- 4. INTERACCIÓN CON TARJETAS (Hover e Intención) ---
-        document.addEventListener('mouseover', (e) => {
-            let card = e.target.closest('.project-card');
-            if (card) {
-                let hTimer = setTimeout(() => {
-                    sendEvent('engagement_project_interest', { 'project_id': card.id });
-                }, 3000);
-                card.addEventListener('mouseleave', () => clearTimeout(hTimer), { once: true });
-            }
-        });
-    });
+        // 2. CLICK EN REDES SOCIALES / WHATSAPP
+        const external = e.target.closest('a[target="_blank"]');
+        if (external && !external.href.endsWith('.pdf')) {
+            gtag('event', 'external_click', {
+                'link_url': external.href,
+                'platform': external.href.includes('wa.me') ? 'WhatsApp' : 'Social/Portfolio'
+            });
+        }
+    }, { passive: true });
 
-    // Tracking de Rendimiento
-    window.addEventListener('load', () => {
-        const perf = performance.getEntriesByType("navigation")[0];
-        if (perf) sendEvent('tech_load_performance', { 'load_ms': Math.round(perf.domComplete) });
-    });
-})();
-</script>
+    /* ==========================================================
+       SCROLL 50% (Rendimiento Optimizado)
+       ========================================================== */
+    let scrollSent = false;
+    window.addEventListener('scroll', function() {
+        if (scrollSent) return;
+        const scrollPercent = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
+        if (scrollPercent >= 0.5) {
+            scrollSent = true;
+            gtag('event', 'scroll_50_percent', { 'page_path': window.location.pathname });
+        }
+    }, { passive: true });
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -137,22 +79,19 @@
     .branding h2 { font-size: 1rem; text-transform: uppercase; font-weight: 800; }
     .branding h3 { font-size: 0.6rem; color: var(--muted); font-weight: 700; }
 
-    /* Estilo Botones CV Unificado */
     .cv-actions-hero { display: flex; justify-content: center; gap: 15px; padding: 2rem 5% 0; }
     .btn-cv {
-        text-decoration: none; padding: 0.8rem 1.5rem; border-radius: var(--radius);
+        cursor: pointer; text-decoration: none; padding: 0.8rem 1.5rem; border-radius: var(--radius);
         font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
         transition: var(--transition); border: 2px solid var(--text); display: inline-flex; align-items: center;
     }
     .btn-es-cv { background: var(--text); color: #fff; }
     .btn-en-cv { background: transparent; color: var(--text); }
     .btn-cv:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--accent); }
-    .btn-en-cv:hover { color: var(--accent); }
 
     nav a { margin-left: 1.2rem; text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.7rem; text-transform: uppercase; transition: 0.3s; }
     nav a:hover { color: var(--accent); }
     .lang-switch { margin-left: 1.5rem; padding: 8px 14px; border: none; font-size: 0.7rem; font-weight: 800; cursor: pointer; background: var(--text); color: #fff; border-radius: 6px; transition: 0.3s; }
-    .lang-switch:hover { background: var(--accent); }
 
     .hero { padding: 4rem 5% 2rem; max-width: 1200px; margin: 0 auto; text-align: center; }
     .hero h1 { font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 1rem; line-height: 1.1; }
@@ -174,32 +113,20 @@
     .slides { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; cursor: zoom-in; }
     .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
     
-    .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.95); border: none; width: 36px; height: 36px; cursor: pointer; z-index: 10; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    .slider-btn:hover { background: var(--accent); color: white; }
-    .prev { left: 12px; } .next { right: 12px; }
-
-    .slider-nav { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 11; }
-    .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; transition: 0.3s; backdrop-filter: blur(4px); }
-    .dot.active { background: #fff; width: 18px; border-radius: 4px; }
-
+    .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.95); border: none; width: 36px; height: 36px; cursor: pointer; z-index: 10; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    
     .project-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
     .project-info h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
     .project-info p.desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
 
-    .tech-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.8rem 1rem; background: var(--light-bg); border-radius: 8px; border: 1px solid var(--border); margin-top: auto; transition: 0.3s; }
-    .tech-header:hover { background: #fff; border-color: var(--accent); }
+    .tech-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.8rem 1rem; background: var(--light-bg); border-radius: 8px; border: 1px solid var(--border); margin-top: auto; }
     .tech-header span { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; }
 
     .tech-content { max-height: 0; opacity: 0; overflow: hidden; transition: var(--transition); }
     .project-card.active .tech-content { max-height: 600px; opacity: 1; padding-top: 1.2rem; }
     
-    .tech-specs { border-left: 3px solid var(--accent); padding-left: 1rem; font-size: 0.85rem; }
-    .tech-specs b { font-size: 0.65rem; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 0.4rem; letter-spacing: 1px; }
-    .result-tag { margin-top: 1rem; font-weight: 800; color: #059669; font-size: 0.85rem; display: flex; align-items: center; gap: 5px; }
-    .result-tag::before { content: '✓'; }
-
     #lightbox { position: fixed; inset: 0; background: rgba(10,10,15,0.98); z-index: 2000; display: none; align-items: center; justify-content: center; cursor: zoom-out; backdrop-filter: blur(8px); }
-    #lightbox img { max-width: 95%; max-height: 92%; object-fit: contain; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+    #lightbox img { max-width: 95%; max-height: 92%; object-fit: contain; }
 
     footer { background: #0a0a0f; color: #fff; padding: 5rem 5% 3rem; text-align: center; margin-top: 6rem; }
     .footer-social { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2.5rem; }
@@ -207,46 +134,10 @@
     .footer-social a:hover img { opacity: 1; transform: translateY(-5px); }
 
     @media (max-width: 768px) {
-      header { flex-direction: column; gap: 1rem; padding: 1.5rem; text-align: center; }
-      nav { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
-      nav a { margin: 0 0.5rem; font-size: 0.65rem; }
+      header { flex-direction: column; gap: 1rem; padding: 1.5rem; }
       .cv-actions-hero { flex-direction: column; width: 100%; }
       .btn-cv { width: 100%; justify-content: center; }
       .grid-main { grid-template-columns: 1fr; }
-
-.cv-actions-hero { 
-    display: flex; 
-    justify-content: center; 
-    gap: 15px; 
-    padding: 2rem 5% 0; 
-}
-.btn-cv {
-    cursor: pointer;
-    text-decoration: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.4s ease;
-    border: 2px solid #111827;
-    display: inline-flex;
-    align-items: center;
-    font-family: 'Inter', sans-serif;
-}
-.btn-es-cv { background: #111827; color: #fff; }
-.btn-en-cv { background: transparent; color: #111827; }
-.btn-cv:hover { 
-    transform: translateY(-3px); 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-    border-color: #0052FF; 
-}
-
-@media (max-width: 768px) {
-    .cv-actions-hero { flex-direction: column; width: 100%; }
-    .btn-cv { width: 100%; justify-content: center; }
-}
     }
   </style>
 </head>
@@ -263,21 +154,21 @@
       <a href="3d-modeling.html">3D Art</a>
       <a href="IA.html">AI</a>
       <a href="about.html">About</a>
-      <a href="cv_resume.html" data-key="nav-cv">CV/Resume</a>
+      <a href="cv_resume.html">CV/Resume</a>
       <button class="lang-switch" onclick="toggleLang()" id="langBtn">ENGLISH</button>
     </nav>
   </header>
 
   <main>
-    <section class="hero">
+    <section class="hero" id="hero-section">
       <div class="nda-tag">Portfolio 2026 | Production & Industrial Design</div>
       <h1 id="hero-title">Sr. Graphic Packaging and Production Designer.</h1>
       <p id="hero-desc">Más de 20 años dominando el flujo completo de artes finales y procesos industriales.</p>
       
- <div class="cv-actions-hero">
-    <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
-    <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
-</div>
+      <div class="cv-actions-hero">
+          <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
+          <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
+      </div>
     </section>
 
     <div class="section-title"><h2 id="title-solutions">PROYECTOS DESTACADOS</h2><div class="line"></div></div>
@@ -295,7 +186,6 @@
   </footer>
 
   <script>
-    // Lógica de Renderizado e Idioma (Manteniendo la estructura de datos pero mejorando la inyección)
     let currentLang = 'es';
     const sliderState = {};
 
@@ -324,81 +214,21 @@
         techBtn: "Especificaciones Técnicas",
         apply: "Criterios de Producción",
         main: [
-{ 
-  title: "Diseño de Identidad y Packaging Vintage — La Campana", 
-  desc: "Vectorizado integral, adaptación a troquel y producción de packaging en hojalata para pasteleria tradicional.", 
-  insight: "Reconstrucción gráfica manual con illustrator y gestión avanzada de acabados metálicos (barnices y tintas especiales).", 
-  result: "Preservación de la esencia histórica con estándares de producción industrial de alta fidelidad." 
-},
-{ 
-  title: "Diseño Técnico y Cosmético — Camocream", 
-  desc: "Desarrollo de identidad aplicada a soportes de difentes materiales para el sector de cuidado personal.", 
-  insight: "Dirección técnica de color cmbinando sistemas Pantone con CMYK para asegurar una estabilidad cromática absoluta en producciones masivas.", 
-  result: "Garantía de consistencia de marca global en soportes industriales." 
-},
-{ 
-  title: "Arquitectura Gráfica de Packaging — Gran Consumo", 
-  desc: "Diseño y desarrollo de artes finales de alta complejidad para el sector de alimentación y retail.", 
-  insight: "Optimización de flujos de producción industrial mediante el control riguroso de perfiles CMYK y sobreimpresiones.", 
-  result: "Reducción de incidencias técnicas y optimización de tiempos en procesos de imprenta a gran escala." 
-},
-{ 
-  title: "Producción Visual y Branding Espacial — Café París", 
-  desc: "Rediseño de marca y adaptación y preparación de archivos para aplicaciones de gran formato para fachada de comercio.", 
-  insight: "Gráfica aplicada a la señalética mediante escalado vectorial de alta precisión, optimizado para procesos de corte láser y produccion de vinilos.", 
-  result: "Solución estructural duradera con una ejecución visual de alta fidelidad en el punto de venta con elección de materiales de alta calidad." 
-}
+            { title: "Diseño de Identidad y Packaging Vintage — La Campana", desc: "Vectorizado integral, adaptación a troquel y producción en hojalata.", insight: "Reconstrucción gráfica manual y gestión de barnices metálicos.", result: "Esencia histórica con estándares industriales." },
+            { title: "Diseño Técnico y Cosmético — Camocream", desc: "Desarrollo de identidad aplicada a multi-soportes cosméticos.", insight: "Dirección técnica Pantone vs CMYK para estabilidad cromática.", result: "Consistencia de marca global en producción masiva." },
+            { title: "Arquitectura Gráfica de Packaging — Gran Consumo", desc: "Artes finales de alta complejidad para sector alimentación.", insight: "Control riguroso de perfiles de color y sobreimpresiones.", result: "Optimización de tiempos y reducción de mermas en imprenta." },
+            { title: "Producción Visual — Café París", desc: "Branding espacial y artes finales de gran formato.", insight: "Escalado vectorial de alta precisión para corte láser y vinilos.", result: "Ejecución visual de alta fidelidad en punto de venta." }
         ],
         archive: [
-  { 
-    title: "Branding & Packaging — Canephora", 
-    desc: "Desarrollo de identidad visual y adaptación a packaging flexible para sector café de especialidad.", 
-    insight: "Estudio de materiales y acabados para garantizar la protección del producto y la coherencia de marca.", 
-    result: "Posicionamiento premium mediante una estética visual cohesiva." 
-  },
-  { 
-    title: "Interfaz Educativa — Math App", 
-    desc: "Diseño de interfaz (UI) para aplicación móvil educativa enfocada en el aprendizaje matemático.", 
-    insight: "Optimización de activos visuales y diseño modular para facilitar la navegación y el aprendizaje lúdico.", 
-    result: "Experiencia de usuario intuitiva con alta retención visual." 
-  },
-  { 
-    title: "Diseño Estructural — Packaging Juguetes", 
-    desc: "Desarrollo gráfico y estructural de packaging para licencias internacionales (Marvel/DC).", 
-    insight: "Preparación técnica de troqueles complejos y optimización de líneas de corte para montaje industrial.", 
-    result: "Eficiencia en cadena de montaje y alto impacto visual en el punto de venta." 
-  },
-  { 
-    title: "Etiquetado Vinícola — Selección Merlot", 
-    desc: "Desarrollo de artes finales y dirección técnica para etiquetado de alta gama.", 
-    insight: "Gestión de soportes papeleros técnicos y acabados especiales resistentes a la humedad.", 
-    result: "Durabilidad estética y acabado de alta fidelidad en condiciones de frío y humedad." 
-  },
-  { 
-    title: "Identidad Corporativa — Bodegas Merlot", 
-    desc: "Diseño de identidad visual integral y aplicación en entornos físicos y digitales.", 
-    insight: "Estudio cromático avanzado para asegurar la legibilidad y el impacto en estantería (shelf impact).", 
-    result: "Reconocimiento de marca inmediato y diferenciación en el sector vitivinícola." 
-  },
-  { 
-    title: "Packaging Sostenible — Caja Fresh", 
-    desc: "Diseño de packaging para productos frescos con enfoque en impresión flexográfica.", 
-    insight: "Optimización de diseños para flexografía de alta velocidad, reduciendo mermas de tinta y material.", 
-    result: "Impresión limpia y sostenible con máxima eficiencia de costes de producción." 
-  },
-  { 
-    title: "Branding Artesanal — Mermelaida", 
-    desc: "Creación de marca y sistema de etiquetado para productos de elaboración tradicional.", 
-    insight: "Uso de tipografía personalizada y composición clásica para transmitir valores de origen y calidad.", 
-    result: "Diferenciación competitiva en el mercado de productos gourmet." 
-  },
-  { 
-    title: "Plataforma Digital — Web CFS Onil", 
-    desc: "Diseño web y optimización de la presencia digital para entidad deportiva local.", 
-    insight: "Arquitectura de información y optimización de assets visuales para garantizar tiempos de carga mínimos.", 
-    result: "Interfaz funcional, rápida y totalmente adaptada a la identidad del club." 
-  }
-]
+            { title: "Branding — Canephora", desc: "Packaging flexible para café de especialidad.", insight: "Estudio de materiales para protección de barrera.", result: "Posicionamiento premium cohesivo." },
+            { title: "Interfaz — Math App", desc: "UI para aplicación móvil educativa.", insight: "Diseño modular y optimización de assets visuales.", result: "UX intuitiva y alta retención visual." },
+            { title: "Estructural — Juguetes", desc: "Packaging para licencias internacionales.", insight: "Troqueles complejos y optimización de líneas de corte.", result: "Eficiencia en cadena de montaje industrial." },
+            { title: "Etiquetado — Selección Merlot", desc: "Artes finales para etiquetado vinícola de alta gama.", insight: "Gestión de acabados especiales resistentes a humedad.", result: "Acabado de alta fidelidad en frío." },
+            { title: "Identidad — Bodegas Merlot", desc: "Identidad visual y aplicación física/digital.", insight: "Estudio cromático avanzado para impacto en lineal.", result: "Diferenciación inmediata en el sector." },
+            { title: "Sostenible — Caja Fresh", desc: "Packaging para productos frescos en flexografía.", insight: "Optimización de tramas para alta velocidad.", result: "Impresión limpia con máxima eficiencia de costes." },
+            { title: "Artesanal — Mermelaida", desc: "Branding y sistema de etiquetado tradicional.", insight: "Tipografía personalizada para valores de origen.", result: "Diferenciación competitiva en sector gourmet." },
+            { title: "Digital — Web CFS Onil", desc: "Diseño web y optimización de assets digitales.", insight: "Arquitectura de información para carga mínima.", result: "Interfaz funcional adaptada a la identidad del club." }
+        ]
       },
       en: {
         heroTitle: "Packaging & Visual Product Graphic Designer.",
@@ -406,81 +236,21 @@
         techBtn: "Technical Specs",
         apply: "Production Criteria",
         main: [
-{ 
-  title: "Vintage Identity & Packaging Design — La Campana", 
-  desc: "Comprehensive vectorization, die-cut adaptation, and tinplate packaging production for traditional bakeries.", 
-  insight: "Manual graphic reconstruction using Illustrator and advanced management of metallic finishes (spot varnishes and special inks).", 
-  result: "Preservation of historical brand essence with high-fidelity industrial production standards." 
-},
-{ 
-  title: "Technical & Cosmetic Design — Camocream", 
-  desc: "Identity development applied to multi-material substrates for the personal care sector.", 
-  insight: "Technical color direction combining Pantone and CMYK systems to ensure absolute chromatic stability in mass production.", 
-  result: "Guaranteed global brand consistency across industrial substrates." 
-},
-{ 
-  title: "Packaging Graphic Architecture — FMCG", 
-  desc: "Design and development of high-complexity print-ready files for the food and retail industry.", 
-  insight: "Optimization of industrial production workflows through rigorous control of CMYK profiles and overprints.", 
-  result: "Reduction of technical incidents and streamlined processing times in large-scale printing." 
-},
-{ 
-  title: "Visual Production & Spatial Branding — Café París", 
-  desc: "Brand redesign and file preparation for large-format storefront applications.", 
-  insight: "Signage graphics through high-precision vector scaling, optimized for laser cutting and vinyl production processes.", 
-  result: "Durable structural solution with high-fidelity visual execution at the point of sale using high-quality materials." 
-}
+            { title: "Vintage Identity — La Campana", desc: "Full vectorization and tinplate packaging production.", insight: "Manual reconstruction and spot varnish management.", result: "Historical essence with industrial standards." },
+            { title: "Cosmetic Technical Design — Camocream", desc: "Identity development for cosmetic substrates.", insight: "Technical color direction for mass production.", result: "Guaranteed global brand consistency." },
+            { title: "Packaging Architecture — FMCG", desc: "High-complexity print-ready files for food industry.", insight: "Rigorous control of CMYK profiles and overprints.", result: "Streamlined processing times in large-scale printing." },
+            { title: "Visual Production — Café París", desc: "Spatial branding and large-format storefront apps.", insight: "Precision vector scaling for laser cutting.", result: "High-fidelity visual execution at point of sale." }
         ],
         archive: [
-  { 
-    title: "Branding & Packaging — Canephora", 
-    desc: "Visual identity development and flexible packaging adaptation for the specialty coffee sector.", 
-    insight: "Material and finish study to ensure product protection and brand consistency.", 
-    result: "Premium positioning through a cohesive visual aesthetic." 
-  },
-  { 
-    title: "Educational Interface — Math App", 
-    desc: "UI design for an educational mobile application focused on mathematical learning.", 
-    insight: "Visual asset optimization and modular design to facilitate navigation and playful engagement.", 
-    result: "Intuitive user experience with high visual retention." 
-  },
-  { 
-    title: "Structural Design — Toy Packaging", 
-    desc: "Graphic and structural packaging development for international licenses (Marvel/DC).", 
-    insight: "Technical preparation of complex die-cuts and optimization of cut lines for industrial assembly.", 
-    result: "Assembly line efficiency and high visual impact at the point of sale." 
-  },
-  { 
-    title: "Wine Labeling — Merlot Selection", 
-    desc: "Final artwork development and technical direction for high-end labeling.", 
-    insight: "Management of technical paper substrates and special moisture-resistant finishes.", 
-    result: "Aesthetic durability and high-fidelity finish under cold and humid conditions." 
-  },
-  { 
-    title: "Corporate Identity — Merlot Wineries", 
-    desc: "Comprehensive visual identity design and application across physical and digital environments.", 
-    insight: "Advanced chromatic study to ensure legibility and shelf impact.", 
-    result: "Immediate brand recognition and differentiation in the wine sector." 
-  },
-  { 
-    title: "Sustainable Packaging — Fresh Box", 
-    desc: "Packaging design for fresh produce with a focus on flexographic printing.", 
-    insight: "Design optimization for high-speed flexography, reducing ink and material waste.", 
-    result: "Clean, sustainable printing with maximum production cost efficiency." 
-  },
-  { 
-    title: "Artisan Branding — Mermelaida", 
-    desc: "Brand creation and labeling system for traditionally crafted products.", 
-    insight: "Use of custom typography and classic composition to convey heritage and quality values.", 
-    result: "Competitive differentiation in the gourmet product market." 
-  },
-  { 
-    title: "Digital Platform — Web CFS Onil", 
-    desc: "Web design and digital presence optimization for a local sports entity.", 
-    insight: "Information architecture and visual asset optimization to guarantee minimum loading times.", 
-    result: "Functional, fast interface fully adapted to the club's identity." 
-  }
-]
+            { title: "Branding — Canephora", desc: "Flexible packaging for specialty coffee.", insight: "Material study for barrier protection.", result: "Cohesive premium positioning." },
+            { title: "Interface — Math App", desc: "UI design for educational mobile app.", insight: "Modular design and visual asset optimization.", result: "Intuitive user experience." },
+            { title: "Structural — Toy Packaging", desc: "Packaging for international licenses.", insight: "Complex die-cuts and industrial assembly optimization.", result: "High impact at point of sale." },
+            { title: "Labeling — Merlot Selection", desc: "Final artwork for high-end wine labeling.", insight: "Moisture-resistant special finishes management.", result: "Aesthetic durability in cold conditions." },
+            { title: "Identity — Merlot Wineries", desc: "Comprehensive visual identity design.", insight: "Advanced chromatic study for shelf impact.", result: "Immediate brand recognition." },
+            { title: "Sustainable — Fresh Box", desc: "Fresh produce packaging for flexography.", insight: "Optimization for high-speed printing.", result: "Maximum production cost efficiency." },
+            { title: "Artisan — Mermelaida", desc: "Brand creation for traditionally crafted products.", insight: "Custom typography to convey quality values.", result: "Competitive differentiation." },
+            { title: "Digital — Web CFS Onil", desc: "Web design and digital presence optimization.", insight: "Minimum loading times architecture.", result: "Functional interface." }
+        ]
       }
     };
 
@@ -497,7 +267,6 @@
                   return `<img src="${thumbSrc}" data-full="${img}" loading="lazy" alt="${trans.title}">`;
               }).join('')}
             </div>
-            ${data.imgs.length > 1 ? `<div class="slider-nav">${data.imgs.map((_, idx) => `<div class="dot ${idx===0?'active':''}" onclick="moveSlide(${idx}, '${data.id}')"></div>`).join('')}</div>` : ''}
           </div>
           <div class="project-info">
             <h3>${trans.title}</h3>
@@ -534,12 +303,7 @@
 
     function moveSlide(idx, pId) {
       const slider = document.getElementById(`sl-${pId}`);
-      const dots = document.querySelectorAll(`#${pId} .dot`);
       if (slider) slider.style.transform = `translateX(-${idx * 100}%)`;
-      if (dots.length) {
-        dots.forEach(d => d.classList.remove('active'));
-        dots[idx].classList.add('active');
-      }
       sliderState[pId] = idx;
     }
 
@@ -567,51 +331,46 @@
       render();
     }
 
+    function forceDownload(lang, filename) {
+        const filePath = 'assets/' + filename;
+        if (typeof gtag === 'function') {
+            gtag('event', 'engagement_cv_download', {
+                'language': lang,
+                'filename': filename
+            });
+        }
+        const link = document.createElement('a');
+        link.href = filePath;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     window.onload = () => {
       render();
       const social = [
-                { i: "assets/icons/linkedin.svg", u: "https://www.linkedin.com/in/esteban-campos-polo-09852771" },
-                { i: "assets/icons/artstation.svg", u: "https://estebancampos1.artstation.com/" },
-                { i: "assets/icons/instagram.svg", u: "https://www.instagram.com/estcampo/" },
+          { i: "assets/icons/linkedin.svg", u: "https://www.linkedin.com/in/esteban-campos-polo-09852771" },
+          { i: "assets/icons/artstation.svg", u: "https://estebancampos1.artstation.com/" },
+          { i: "assets/icons/instagram.svg", u: "https://www.instagram.com/estcampo/" },
       ];
-      document.getElementById('footer-social-links').innerHTML = social.map(s => `<a href="${s.u}" target="_blank"><img src="${s.i}" alt="${s.n}"></a>`).join('');
+      document.getElementById('footer-social-links').innerHTML = social.map(s => `<a href="${s.u}" target="_blank"><img src="${s.i}" alt="Social"></a>`).join('');
     };
-window.forceDownload = function(lang, filename) {
-    const filePath = 'assets/' + filename;
-
-    // 1. Envío de evento a Google Analytics
-    if (typeof gtag === 'function') {
-        gtag('event', 'engagement_cv_download', {
-            'language': lang,
-            'filename': filename,
-            'page_path': window.location.pathname
-        });
-    }
-
-    // 2. Forzar descarga real
-    const link = document.createElement('a');
-    link.href = filePath;
-    link.setAttribute('download', filename);
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-};
   </script>
-<a href="https://wa.me/34625225324?text=Hola%20Esteban,%20he%20visto%20tu%20portfolio%20y%20me%20gustaría%20contactar%20contigo." 
-   target="_blank" 
-   style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-family: sans-serif; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; display: flex; align-items: center; transition: transform 0.3s;">
-   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width: 25px; margin-right: 10px;">
-   <span class="texto-boton">Contactar por WhatsApp</span>
-</a>
 
-<style>
-  /* Para que no moleste en móviles, solo dejamos el icono si la pantalla es pequeña */
-  @media (max-width: 480px) {
-    .texto-boton { display: none; }
-    a { padding: 12px; border-radius: 50%; }
-    img { margin-right: 0; }
-  }
-</style>
+  <a href="https://wa.me/34625225324?text=Hola%20Esteban,%20he%20visto%20tu%20portfolio%20y%20me%20gustaría%20contactar%20contigo." 
+     target="_blank" 
+     style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-family: sans-serif; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; display: flex; align-items: center; transition: transform 0.3s;">
+     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width: 25px; margin-right: 10px;">
+     <span class="texto-boton">Contactar por WhatsApp</span>
+  </a>
+
+  <style>
+    @media (max-width: 480px) {
+      .texto-boton { display: none; }
+      a { padding: 12px; border-radius: 50%; }
+      img { margin-right: 0; }
+    }
+  </style>
 </body>
 </html>
