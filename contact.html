@@ -1,486 +1,283 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact | Esteban Campos Polo</title>
-    <meta name="description" content="Contact page of Esteban Campos Polo, Graphic Designer & 3D Artist. Get in touch for design, 3D modeling, photography and visual projects.">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Esteban Campos Polo</title>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-/* ==========================
-   CONFIG BASE
-========================== */
-gtag('config', 'G-8VMES8F4MN', {
-  anonymize_ip: true,
-  allow_google_signals: false,
-  send_page_view: true
-});
-
-/* ==========================
-   FUNCIÓN UTILIDAD
-========================== */
-function getCategory(element){
-  const section = element.closest('section');
-  return section ? section.id : 'unknown_category';
-}
-
-/* ==========================
-   TRACKING UNIFICADO
-========================== */
-document.addEventListener('click', function(e){
-
-  /* ---------- DESCARGAS (CV en Contact) ---------- */
-  const downloadLink = e.target.closest('a[href$=".pdf"], a[href$=".zip"]');
-  if(downloadLink){
-    const fileName = downloadLink.getAttribute('href').split('/').pop();
-    gtag('event', 'file_download', {
-      file_name: fileName,
-      file_extension: fileName.split('.').pop(),
-      link_url: downloadLink.href,
-      page_location: window.location.href
+    gtag('config', 'G-8VMES8F4MN', {
+      anonymize_ip: true,
+      allow_google_signals: false,
+      send_page_view: true
     });
-    return;
-  }
 
-  /* ---------- CLICK PROYECTO ---------- */
-  const project = e.target.closest('.item');
-  if(project){
-    const title = project.querySelector('h4, h3');
-    const projectName = title ? title.innerText.trim() : 'unknown_project';
-    gtag('event', 'project_click', {
-      project_name: projectName,
-      project_category: getCategory(project),
-      page_location: window.location.href
-    });
-    return;
-  }
+    /* Tracking de clics en redes o mail */
+    document.addEventListener('click', function(e){
+      const externalLink = e.target.closest('a[href^="mailto:"], a[target="_blank"]');
+      if(externalLink){
+        gtag('event', 'contact_interaction', {
+          link_url: externalLink.href,
+          page_location: window.location.href
+        });
+      }
+    }, { passive: true });
+  </script>
 
-  /* ---------- CLICK SOCIAL (Footer Contact) ---------- */
-  const externalLink = e.target.closest('a[target="_blank"]');
-  if(externalLink){
-    gtag('event', 'external_click', {
-      link_url: externalLink.href,
-      page_location: window.location.href
-    });
-  }
-}, { passive: true });
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
-/* ==========================
-   ENVÍO DE FORMULARIO (Específico para Contact)
-========================== */
-document.addEventListener('submit', function(e){
-  const form = e.target.closest('form');
-  if(form && form.action.includes('formspree.io')){
-    gtag('event', 'generate_lead', {
-      form_id: form.id || 'contact_form',
-      page_location: window.location.href
-    });
-  }
-});
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --text: #f5f5f5;
+      --muted: #9a9a9a;
+      --border: rgba(255, 255, 255, 0.08);
+      --transition: all 0.6s cubic-bezier(.19,1,.22,1);
+    }
 
-/* ==========================
-   SCROLL 50%
-========================= */
-let scrollSent = false;
-window.addEventListener('scroll', function(){
-  if(scrollSent) return;
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  if(docHeight <= 0) return;
-  const scrollPercent = scrollTop / docHeight;
-  if(scrollPercent >= 0.5){
-    scrollSent = true;
-    gtag('event', 'scroll_50_percent', {
-      page_location: window.location.href
-    });
-  }
-}, { passive: true });
-</script>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background: var(--bg); }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.015;
+      background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+      z-index: 9999;
+    }
 
-    <style>
-        :root {
-            --bg: #ffffff; 
-            --text: #1f2937; 
-            --accent: #0052FF; 
-            --muted: #64748b;
-            --light-bg: #f8fafc; 
-            --border: #e2e8f0; 
-            --radius: 4px;
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    /* Cabecera unificada */
+    .main-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 48px;
+      backdrop-filter: blur(10px);
+      background: rgba(10, 10, 10, 0.75);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo-block { display: flex; flex-direction: column; text-decoration: none; }
+    .logo-name { font-size: 0.8rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text); }
+    .logo-role { color: var(--muted); font-size: 0.65rem; letter-spacing: 0.12em; margin-top: 3px; text-transform: uppercase; }
+    
+    nav { display: flex; align-items: center; gap: 24px; }
+    nav a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      transition: opacity 0.3s ease;
+      opacity: 0.6;
+    }
+    nav a:hover, nav a.active { opacity: 1; }
 
-        body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-        }
+    .lang-switch {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 12px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: var(--transition);
+    }
+    .lang-switch:hover { background: var(--text); color: var(--bg); border-color: var(--text); }
 
-        /* HEADER & NAV */
-        header {
-            position: sticky; top: 0; z-index: 1000; 
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px); 
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 5%; 
-            border-bottom: 1px solid var(--border);
-        }
+    /* Contenedor de Contacto */
+    .contact-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 200px 8% 120px 8%;
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-        .branding h2 { margin: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; color: var(--text); }
-        .branding h3 { margin: 0; font-size: 0.65rem; color: var(--muted); font-weight: 800; text-transform: uppercase; }
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 24px;
+    }
 
-        nav { display: flex; align-items: center; }
-        nav a {
-            margin-left: 1.2rem; text-decoration: none; color: var(--text);
-            font-weight: 700; font-size: 0.7rem; text-transform: uppercase;
-            transition: var(--transition); letter-spacing: 0.5px;
-        }
-        nav a:hover, nav a.active { color: var(--accent); }
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 600px;
+      line-height: 1.6;
+      margin-bottom: 64px;
+    }
 
-        .lang-switch {
-            margin-left: 1.5rem; background: var(--text); color: #fff; border: none;
-            padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.65rem;
-            font-weight: 800; transition: var(--transition);
-        }
+    .email-link {
+      font-size: clamp(1.2rem, 3.5vw, 2.5rem);
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 12px;
+      display: inline-block;
+      transition: var(--transition);
+      width: fit-content;
+    }
+    .email-link:hover {
+      border-color: var(--text);
+      color: #ffffff;
+    }
 
-        /* CV LINKS */
-        .cv-links {
-            display: flex; justify-content: center; gap: 12px; 
-            padding: 2rem 5% 1rem; background: var(--light-bg);
-        }
-        .cv-links a {
-            text-decoration: none; padding: 0.7rem 1.2rem; border-radius: var(--radius);
-            font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            transition: var(--transition); border: 1.5px solid var(--text);
-        }
-        #download-cv-es { background: var(--text); color: #fff; }
-        #download-cv-en { background: transparent; color: var(--text); }
-        .cv-links a:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .social-grid {
+      display: flex;
+      gap: 32px;
+      margin-top: 48px;
+    }
+    .social-item {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+    .social-item:hover { color: var(--text); }
 
-        /* MAIN & FORM */
-        main { max-width: 800px; margin: 4rem auto; padding: 0 5%; }
+    footer {
+      padding: 40px 8%;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: center;
+    }
 
-        form {
-            display: flex; flex-direction: column; gap: 1.5rem;
-            background: #fff; padding: 0; border: none; box-shadow: none;
-        }
-
-        label {
-            display: flex; flex-direction: column; gap: 0.5rem;
-            font-size: 0.7rem; font-weight: 800; text-transform: uppercase; 
-            letter-spacing: 1px; color: var(--text);
-        }
-
-        input, textarea {
-            width: 100%; padding: 1rem; 
-            border: 1px solid var(--border); border-radius: var(--radius);
-            font-family: 'Inter', sans-serif; font-size: 0.9rem; 
-            transition: var(--transition); background: var(--light-bg);
-            color: var(--text);
-        }
-
-        input:focus, textarea:focus {
-            outline: none; border-color: var(--accent); 
-            background: #fff; box-shadow: 0 0 0 4px rgba(0,82,255,0.05);
-        }
-        textarea { min-height: 150px; resize: vertical; }
-
-        button[type="submit"] {
-            background-color: var(--accent); color: #fff; font-weight: 800;
-            padding: 1rem; border: none; border-radius: var(--radius);
-            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
-            cursor: pointer; transition: var(--transition); width: 100%;
-        }
-
-        button[type="submit"]:hover {
-            transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,82,255,0.2); opacity: 0.9;
-        }
-
-        /* TEXT SECTIONS (Thank you & Privacy) */
-        .text-section { 
-            text-align: center; margin-top: 4rem; 
-            font-size: 1rem; color: var(--muted); 
-        }
-        .text-section a { color: var(--accent); text-decoration: none; font-weight: 700; }
-
-        .privacy-section {
-            max-width: 800px; margin: 4rem auto; padding: 2rem;
-            background: var(--light-bg); border-radius: var(--radius);
-            font-size: 0.7rem; color: var(--muted); text-align: left;
-        }
-        .privacy-section h4 {
-            margin-top: 0; margin-bottom: 1rem; color: var(--text);
-            text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;
-        }
-        .privacy-section a { color: var(--accent); text-decoration: none; font-weight: 700; }
-
-        /* FOOTER */
-        footer {
-            background: #111827; color: #fff; padding: 4rem 5%; 
-            text-align: center; font-size: 0.75rem; border-top: 1px solid var(--border);
-        }
-        .footer-wrapper { max-width: 1200px; margin: 0 auto; }
-        
-        .footer-contact h4, .footer-social h4 { 
-            text-transform: uppercase; font-weight: 800; letter-spacing: 1px; margin-bottom: 1rem; 
-        }
-        .footer-contact a { color: #fff; text-decoration: none; opacity: 0.8; transition: var(--transition); }
-        .footer-contact a:hover { opacity: 1; color: var(--accent); }
-
-        .footer-social .social-icons { display: flex; justify-content: center; gap: 1.5rem; margin: 1.5rem 0; }
-        .footer-social img { width: 22px; filter: invert(1); opacity: 0.6; transition: var(--transition); }
-        .footer-social a:hover img { opacity: 1; transform: translateY(-3px); }
-
-        .copyright { color: #9ca3af; margin-top: 2rem; line-height: 1.8; }
-
-        /* CONTROL DE IDIOMA (Ocultar/Mostrar) */
-        .lang-content { display: none; }
-        .lang-content.active { display: block; }
-
-        @media (max-width: 900px) {
-            header { flex-direction: column; gap: 1rem; }
-            nav { flex-wrap: wrap; justify-content: center; }
-            nav a { margin: 0.5rem; font-size: 0.6rem; }
-        }
-
-        .cv-actions-hero { 
-            display: flex; 
-            justify-content: center; 
-            gap: 15px; 
-            padding: 2rem 5% 0; 
-        }
-        .btn-cv {
-            cursor: pointer;
-            text-decoration: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.4s ease;
-            border: 2px solid #111827;
-            display: inline-flex;
-            align-items: center;
-            font-family: 'Inter', sans-serif;
-        }
-        .btn-es-cv { background: #111827; color: #fff; }
-        .btn-en-cv { background: transparent; color: #111827; }
-        .btn-cv:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-            border-color: #0052FF; 
-        }
-
-        @media (max-width: 768px) {
-            .cv-actions-hero { flex-direction: column; width: 100%; }
-            .btn-cv { width: 100%; justify-content: center; }
-        }
-    </style>
+    @media (max-width: 768px) {
+      .main-header { padding: 16px 24px; flex-direction: column; gap: 12px; text-align: center; }
+      nav { flex-wrap: wrap; justify-content: center; gap: 12px; }
+      .contact-container { padding-top: 220px; text-align: center; }
+      .hero-subtitle { margin-left: auto; margin-right: auto; }
+      .email-link { margin: 0 auto; font-size: 1.1rem; }
+      .social-grid { justify-content: center; flex-wrap: wrap; gap: 16px; }
+    }
+  </style>
 </head>
+
 <body>
 
-    <header>
-        <div class="branding">
-            <h2>Esteban Campos Polo</h2>
-            <h3>Sr. Graphic Packaging and Production Designer</h3>
+  <div class="noise"></div>
+
+  <header class="main-header">
+    <a href="index.html" class="logo-block">
+      <span class="logo-name">Esteban Campos Polo</span>
+      <span class="logo-role">Character Modeler & Visual Designer</span>
+    </a>
+    <nav>
+      <a href="index.html">HOME</a>
+      <a href="graphic-design.html" class="nav-link" data-key="nav-gd">GRAPHIC DESIGN</a>
+      <a href="3d-modeling.html" class="nav-link" data-key="nav-3d">3D</a>
+      <a href="about.html" class="nav-link" data-key="nav-ab">ABOUT</a>
+      <a href="cv_resume.html" class="nav-link" data-key="nav-cv">CV / RESUME</a>
+      <a href="contact.html" class="active">CONTACT</a>
+      <button class="lang-switch" onclick="toggleLang()" id="langBtn">ENGLISH</button>
+    </nav>
+  </header>
+
+  <main class="contact-container" id="contact-content"></main>
+
+  <footer>
+    &copy; 2026 Esteban Campos Polo | Senior Profile
+  </footer>
+
+  <script>
+    let currentLang = 'es';
+
+    const translations = {
+      es: {
+        navGd: "GRAPHIC DESIGN",
+        navPh: "PHOTOGRAPHY",
+        nav3d: "3D ART",
+        navAb: "ABOUT",
+        navCv: "CV / RESUME",
+        title: "Contacto",
+        subtitle: "¿Tienes un proyecto en mente, una oferta de colaboración o buscas integrar un perfil técnico senior en tu equipo? Hablemos.",
+        footerText: "Responderé lo antes posible."
+      },
+      en: {
+        navGd: "GRAPHIC DESIGN",
+        navPh: "PHOTOGRAPHY",
+        nav3d: "3D ART",
+        navAb: "ABOUT",
+        navCv: "CV / RESUME",
+        title: "Contact",
+        subtitle: "Have a project in mind, a collaboration proposal, or looking to add a senior technical profile to your team? Let's talk.",
+        footerText: "I will get back to you as soon as possible."
+      }
+    };
+
+    function renderContact() {
+      const t = translations[currentLang];
+      
+      document.querySelectorAll('.nav-link').forEach(link => {
+        const key = link.getAttribute('data-key');
+        if(t[key]) link.innerText = t[key];
+      });
+      document.getElementById('langBtn').innerText = currentLang === 'es' ? 'ENGLISH' : 'ESPAÑOL';
+
+      const content = `
+        <h1 class="hero-title">${t.title}</h1>
+        <p class="hero-subtitle">${t.subtitle}</p>
+        
+        <a href="mailto:estebancampospolo@gmail.com" class="email-link">
+          estebancampospolo@gmail.com
+        </a>
+
+        <div class="social-grid">
+          <a href="https://linkedin.com/in/esteban-campos-polo-09852771" target="_blank" class="social-item">LinkedIn</a>
+          <a href="https://estebancampos1.artstation.com" target="_blank" class="social-item">ArtStation</a>
+          <a href="https://instagram.com/estebancampos3D" target="_blank" class="social-item">Instagram</a>
         </div>
-        <nav aria-label="Main navigation">
-            <a href="index.html" data-key="nav-home">Home</a>
-            <a href="graphic-design.html" data-key="nav-graphic">Graphic Design</a>
-            <a href="photography.html" data-key="nav-photo">Photography</a>
-            <a href="3d-modeling.html" data-key="nav-3d">3D Art</a>
-            <a href="IA.html" data-key="nav-ai">AI</a>
-            <a href="about.html" data-key="nav-about">About</a>
-            <a href="cv_resume.html" data-id="cv">CV / Resume</a>
-            <a href="contact.html" class="active" data-key="nav-contact">Contact</a>
-            <button class="lang-switch" onclick="toggleLanguage()" id="langBtn">ES</button>
-        </nav>
-    </header>
+        
+        <p style="color: var(--muted); font-size: 0.85rem; font-weight: 300; margin-top: 40px;">
+          ${t.footerText}
+        </p>
+      `;
+      
+      document.getElementById('contact-content').innerHTML = content;
+    }
 
-<div class="cv-actions-hero">
-    <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv" data-lang="es">Descargar CV (ES)</button>
-    <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv" data-lang="en">Download Resume (EN)</button>
-</div>
+    function toggleLang() {
+      currentLang = currentLang === 'es' ? 'en' : 'es';
+      renderContact();
+    }
 
-    <main>
-        <form action="https://formspree.io/f/manaljaa" method="POST">
-            <label>
-                <span data-key="form-name">Tu Nombre:</span>
-                <input type="text" name="name" required>
-            </label>
-
-            <label>
-                <span data-key="form-email">Tu email:</span>
-                <input type="email" name="email" required>
-            </label>
-
-            <label>
-                <span data-key="form-subject">Asunto:</span>
-                <input type="text" name="subject">
-            </label>
-
-            <label>
-                <span data-key="form-message">Tu mensaje:</span>
-                <textarea name="message" required></textarea>
-            </label>
-
-            <button type="submit" data-key="form-btn">Enviar</button>
-
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="https://estebancamposarts.github.io/index.html">
-            <input type="hidden" name="_template" value="box">
-        </form>
-
-        <section class="text-section">
-            <div id="thanks-es" class="lang-content active">
-                <p>
-                    Si has llegado hasta aquí, probablemente algo en mi trabajo ha llamado tu atención y eso me encanta.<br><br>
-                    Estoy abierto a nuevas oportunidades profesionales, colaboraciones o proyectos donde crear algo auténtico y con personalidad.<br><br>
-                    Puedes escribirme directamente a través del formulario o, si prefieres, contactar por correo en <a href="mailto:estebancampospolo@gmail.com"><strong>estebancampospolo@gmail.com</strong></a>.<br><br>
-                    También puedes descargar mi CV completo para más detalles sobre mi trayectoria.<br><br>
-                    Te agradezco mucho que hayas visitado mi portfolio, también puedes seguirme en redes sociales.<br><br>
-                    Si me dejas un me gusta o un comentario me ayudarías a crecer y a mejorar.<br><br>
-                    Gracias de nuevo, un saludo.
-                </p>
-            </div>
-            <div id="thanks-en" class="lang-content">
-                <p>
-                    If you’ve made it this far, something in my work probably caught your attention — and I love that.<br><br>
-                    I’m open to new professional opportunities, collaborations, or projects where we can create something authentic and full of personality.<br><br>
-                    You can reach out directly through the form, or if you prefer, contact me by email at <a href="mailto:estebancampospolo@gmail.com"><strong>estebancampospolo@gmail.com</strong></a>.<br><br>
-                    You can also download my full CV for more details about my background.<br><br>
-                    I truly appreciate you taking the time to visit my portfolio. You can also follow me on social media.<br><br>
-                    If you leave a like or a comment, you’d really help me grow and improve.<br><br>
-                    Thanks again, and best regards.
-                </p>
-            </div>
-        </section>
-    </main>
-
-    <section class="privacy-section">
-        <h4 data-key="priv-title">Política de Privacidad / Privacy Policy</h4>
-        <div id="priv-es" class="lang-content active">
-            <p>
-                Yo, Esteban Campos Polo, valoro tu privacidad y me comprometo a proteger tus datos personales. La información que me proporciones a través del formulario de contacto será utilizada únicamente para responder a tus consultas o solicitudes profesionales.  
-                <br><br>
-                No comparto, vendo ni transfiero tus datos a terceros. Todos los mensajes que reciba se almacenan de manera segura y se eliminan cuando ya no son necesarios para los fines mencionados.  
-                <br><br>
-                Al enviar este formulario, aceptas que tus datos sean procesados conforme a esta política de privacidad. Si tienes alguna duda sobre tus datos personales, puedes escribirme directamente a <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>.
-            </p>
-        </div>
-        <div id="priv-en" class="lang-content">
-            <p>
-                I, Esteban Campos Polo, value your privacy and am committed to protecting your personal data. The information you provide through the contact form will only be used to respond to your professional inquiries or requests.  
-                <br><br>
-                I do not share, sell, or transfer your data to third parties. All messages I receive are stored securely and deleted when no longer necessary for the purposes stated.  
-                <br><br>
-                By submitting this form, you agree that your data will be processed in accordance with this privacy policy. If you have any questions about your personal data, you can contact me directly at <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>.
-            </p>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-wrapper" id="footer">
-            <div class="footer-contact">
-                <h4>Contact</h4>
-                <a href="mailto:estebancampospolo@gmail.com">estebancampospolo@gmail.com</a>
-            </div>
-            <div class="footer-social">
-                <h4>Follow me</h4>
-                <div class="social-icons">
-                    <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener noreferrer"><img src="assets/icons/linkedin.svg" alt="LinkedIn"></a>
-                    <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener noreferrer"><img src="assets/icons/artstation.svg" alt="ArtStation"></a>
-                    <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener noreferrer"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
-                    <a href="https://vimeo.com/827034828" target="_blank" rel="noopener noreferrer"><img src="assets/icons/vimeo.svg" alt="Vimeo"></a>
-                    <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener noreferrer"><img src="assets/icons/behance.svg" alt="Behance"></a>
-                    <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener noreferrer"><img src="assets/icons/x.svg" alt="X"></a>
-                </div>
-            </div>
-            <div class="copyright">
-                <span id="copy-es" class="lang-content active">© 2026 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.</span>
-                <span id="copy-en" class="lang-content">© 2026 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.</span>
-            </div>
-        </div>
-        <div style="margin-top: 2rem;">
-            <a href="https://hits.sh/estebancamposarts.github.io/contact.html"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/contact.html.svg?color=9f9f9f" loading="lazy"/></a>
-        </div>
-    </footer>
-
-    <script>
-        // Bloque de protección ligero
-        document.addEventListener('dragstart', event => event.preventDefault());
-
-        // Script de traducción
-        const translations = {
-            es: {
-                "nav-home": "Inicio", "nav-graphic": "Diseño", "nav-photo": "Fotos", "nav-3d": "3D", "nav-ai": "IA", "nav-about": "Sobre mí", "nav-contact": "Contacto",
-                "cv-download-es": "Descargar CV Español", "cv-download-en": "Download CV English",
-                "form-name": "Tu Nombre:", "form-email": "Tu email:", "form-subject": "Asunto:", "form-message": "Tu mensaje:", "form-btn": "Enviar",
-                "priv-title": "Política de Privacidad / Privacy Policy"
-            },
-            en: {
-                "nav-home": "Home", "nav-graphic": "Graphic Design", "nav-photo": "Photography", "nav-3d": "3D Art", "nav-ai": "AI", "nav-about": "About", "nav-contact": "Contact",
-                "cv-download-es": "Descargar CV Español", "cv-download-en": "Download CV English",
-                "form-name": "Your Name:", "form-email": "Your email:", "form-subject": "Subject:", "form-message": "Your message:", "form-btn": "Send",
-                "priv-title": "Política de Privacidad / Privacy Policy"
-            }
-        };
-
-        let currentLang = 'es';
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'es' ? 'en' : 'es';
-            document.getElementById('langBtn').innerText = currentLang === 'es' ? 'EN' : 'ES';
-            
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
-            });
-
-            document.getElementById('thanks-es').classList.toggle('active', currentLang === 'es');
-            document.getElementById('thanks-en').classList.toggle('active', currentLang === 'en');
-            
-            document.getElementById('priv-es').classList.toggle('active', currentLang === 'es');
-            document.getElementById('priv-en').classList.toggle('active', currentLang === 'en');
-            
-            document.getElementById('copy-es').classList.toggle('active', currentLang === 'es');
-            document.getElementById('copy-en').classList.toggle('active', currentLang === 'en');
-        }
-
-        // Prevenir context menu global
-        document.addEventListener('contextmenu', e => e.preventDefault());
-
-        window.forceDownload = function(lang, filename) {
-            const filePath = 'assets/' + filename;
-
-            // 1. Envío de evento a Google Analytics
-            if (typeof gtag === 'function') {
-                gtag('event', 'engagement_cv_download', {
-                    'language': lang,
-                    'filename': filename,
-                    'page_path': window.location.pathname
-                });
-            }
-
-            // 2. Forzar descarga real
-            const link = document.createElement('a');
-            link.href = filePath;
-            link.setAttribute('download', filename);
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
-    </script>
+    window.onload = renderContact;
+  </script>
 </body>
 </html>

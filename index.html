@@ -1,381 +1,352 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>index | Esteban Campos Polo | Diseño Gráfico y Producción Creativa</title>
-
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-8VMES8F4MN', {
-      anonymize_ip: true,
-      allow_google_signals: false,
-      send_page_view: true
-    });
-
-    /* ==========================
-       TRACKING OPTIMIZADO
-    ========================== */
-    document.addEventListener('click', function(e){
-      
-      // 1. CLIC EN PROYECTOS (Solo si no es un control interno)
-      const project = e.target.closest('.project-card');
-      const isInternalControl = e.target.closest('.tech-header') || e.target.closest('.slider-btn');
-      
-      if(project && !isInternalControl){
-        const title = project.querySelector('h3')?.innerText.trim();
-        gtag('event', 'project_view_detail', {
-          project_name: title || 'unknown',
-          page_location: window.location.href
-        });
-      }
-
-      // 2. CLICKS EXTERNOS / WHATSAPP
-      const externalLink = e.target.closest('a[target="_blank"]');
-      if(externalLink && !externalLink.href.endsWith('.pdf')){
-        gtag('event', 'external_click', {
-          link_url: externalLink.href,
-          platform: externalLink.href.includes('wa.me') ? 'WhatsApp' : 'Social/External'
-        });
-      }
-    }, { passive: true });
-
-    // 3. SEGUIMIENTO DE SCROLL (50%) - Optimizado
-    let scrollSent = false;
-    window.addEventListener('scroll', function(){
-      if(scrollSent) return;
-      const scrollPercent = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
-      if(scrollPercent >= 0.5){
-        scrollSent = true;
-        gtag('event', 'scroll_50_percent', { page_path: window.location.pathname });
-      }
-    }, { passive: true });
-  </script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <title>Esteban Campos Polo — Portfolio</title>
   
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+
   <style>
+    /* Estilos estructurales críticos para garantizar que la pantalla dividida funcione de forma independiente e inmediata */
     :root {
-      --bg: #ffffff; --text: #111827; --accent: #0052FF; --muted: #6b7280;
-      --light-bg: #f9fafb; --border: #e5e7eb; --radius: 12px;
-      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --bg-dark: #0a0a0a;
+      --bg-card-left: #121315;
+      --bg-card-right: #161412;
+      --text-light: #f5f5f5;
+      --accent-left: #70757a;
+      --accent-right: #d49a6a;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+    }
+
+    /* Sistema nativo de control de idiomas por clases CSS */
+    body.lang-en .lang-es { display: none !important; }
+    body.lang-es .lang-en { display: none !important; }
+
+    /* Cabecera flotante minimalista */
+    .split-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 30px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      box-sizing: border-box;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.8), rgba(10,10,10,0));
+      backdrop-filter: blur(5px);
+    }
+
+    .split-header .logo-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .split-header .logo-title {
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .split-header .logo-sub {
+      font-size: 0.7rem;
+      color: #888;
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+    }
+
+    .split-header nav {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .split-header nav a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
+    }
+
+    .split-header nav a:hover, .split-header nav a.active {
+      opacity: 1;
+    }
+
+    /* Selector de idiomas EN / ES */
+    .lang-switcher {
+      display: inline-flex;
+      gap: 6px;
+      margin-left: 15px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+
+    .lang-btn {
+      cursor: pointer;
+      transition: opacity 0.3s ease;
     }
     
-    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.5; }
-
-    header {
-      position: sticky; top: 0; z-index: 1001; background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px); display: flex; justify-content: space-between; align-items: center;
-      padding: 1rem 5%; border-bottom: 1px solid var(--border);
+    .lang-btn:hover {
+      opacity: 1 !important;
     }
-    .branding h2 { font-size: 1rem; text-transform: uppercase; font-weight: 800; }
-    .branding h3 { font-size: 0.6rem; color: var(--muted); font-weight: 700; }
 
-    .cv-actions-hero { display: flex; justify-content: center; gap: 15px; padding: 2rem 5% 0; }
-    .btn-cv {
-        cursor: pointer; text-decoration: none; padding: 0.8rem 1.5rem; border-radius: var(--radius);
-        font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-        transition: var(--transition); border: 2px solid var(--text); display: inline-flex; align-items: center;
+    /* Contenedor principal de pantalla dividida */
+    .split-container {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      position: relative;
     }
-    .btn-es-cv { background: var(--text); color: #fff; }
-    .btn-en-cv { background: transparent; color: var(--text); }
-    .btn-cv:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--accent); }
 
-    nav a { margin-left: 1.2rem; text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.7rem; text-transform: uppercase; transition: 0.3s; }
-    nav a:hover { color: var(--accent); }
-    .lang-switch { margin-left: 1.5rem; padding: 8px 14px; border: none; font-size: 0.7rem; font-weight: 800; cursor: pointer; background: var(--text); color: #fff; border-radius: 6px; transition: 0.3s; }
+    /* Bloques individuales con fusión de fondo */
+    .split-side {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 10% 6%;
+      box-sizing: border-box;
+      transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
+      text-decoration: none;
+      color: var(--text-light);
+      overflow: hidden;
+      
+      /* Propiedades de fondo para fusión global */
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      
+      /* Modo de mezcla para fusionar la imagen con el color degradado */
+      background-blend-mode: overlay;
+    }
 
-    .hero { padding: 4rem 5% 2rem; max-width: 1200px; margin: 0 auto; text-align: center; }
-    .hero h1 { font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 1rem; line-height: 1.1; }
-    .hero p { font-size: 1.1rem; color: var(--muted); max-width: 800px; margin: 0 auto; }
-    .nda-tag { display: inline-block; background: var(--light-bg); padding: 6px 14px; border-radius: 20px; font-size: 0.65rem; font-weight: 800; border: 1px solid var(--border); text-transform: uppercase; margin-bottom: 1.5rem; color: var(--accent); }
+    /* LADO IZQUIERDO: Diseño Gráfico y Producto (Gris de imprenta técnico profundo) */
+    .side-left {
+      background-image:
+        linear-gradient(135deg, rgba(25, 27, 30, 0.8), rgba(45, 49, 55, 0.8)), 
+        url('assets/images/graphicdesign/mockups/canephora.jpg'); 
+      
+      border-right: 1px solid rgba(255, 255, 255, 0.03);
+    }
 
-    .section-title { padding: 0 5%; max-width: 1200px; margin: 4rem auto 2rem; display: flex; align-items: center; gap: 20px; }
-    .section-title h2 { font-size: 0.75rem; letter-spacing: 3px; color: var(--muted); font-weight: 800; text-transform: uppercase; }
-    .section-title .line { height: 1px; background: var(--border); flex-grow: 1; }
+    /* LADO DERECHO: Arte 3D y Escultura (Marrón arcilla/orco texturizado premium) */
+    .side-right {
+      /* ¡SINTAXIS CORREGIDA COMPLETAMENTE AQUÍ! Sin espacios, sin atributo src extraño */
+      background-image:
+        linear-gradient(135deg, rgba(40, 35, 30, 0.8), rgba(65, 58, 50, 0.8)), 
+        url('assets/images/3dmodeling/golem/golem.jpg');
+    }
 
-    .work-grid { display: grid; gap: 2.5rem; max-width: 1200px; margin: 0 auto; padding: 0 5%; }
-    .grid-main { grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); }
-    .grid-archive { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    /* Efectos de interacción (Hover inteligente estilo Adham Dannaway) */
+    .split-container:hover .split-side {
+      flex: 0.8;
+      filter: grayscale(40%) brightness(0.5);
+    }
 
-    .project-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: var(--transition); display: flex; flex-direction: column; }
-    .project-card:hover { border-color: var(--accent); box-shadow: 0 30px 60px -15px rgba(0,0,0,0.1); transform: translateY(-5px); }
+    .split-container .split-side:hover {
+      flex: 1.2;
+      filter: grayscale(0%) brightness(1);
+    }
 
-    .slider-container { position: relative; aspect-ratio: 16/10; overflow: hidden; background: #f3f4f6; }
-    .slides { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; cursor: zoom-in; }
-    .slides img { width: 100%; flex-shrink: 0; object-fit: cover; }
-    
-    .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.95); border: none; width: 36px; height: 36px; cursor: pointer; z-index: 10; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    .prev { left: 10px; } .next { right: 10px; }
-    
-    .project-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
-    .project-info h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
-    .project-info p.desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
+    /* Contenido interno de los bloques */
+    .side-content {
+      position: relative;
+      z-index: 2;
+      max-width: 500px;
+      pointer-events: none; 
+    }
 
-    .tech-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.8rem 1rem; background: var(--light-bg); border-radius: 8px; border: 1px solid var(--border); margin-top: auto; }
-    .tech-header span { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; }
+    .side-num {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      opacity: 0.3;
+      margin-bottom: 20px;
+      display: block;
+    }
 
-    .tech-content { max-height: 0; opacity: 0; overflow: hidden; transition: var(--transition); }
-    .project-card.active .tech-content { max-height: 600px; opacity: 1; padding-top: 1.2rem; }
-    
-    #lightbox { position: fixed; inset: 0; background: rgba(10,10,15,0.98); z-index: 2000; display: none; align-items: center; justify-content: center; cursor: zoom-out; backdrop-filter: blur(8px); }
-    #lightbox img { max-width: 95%; max-height: 92%; object-fit: contain; }
+    .split-side h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin: 0 0 20px 0;
+      text-transform: uppercase;
+    }
 
-    footer { background: #0a0a0f; color: #fff; padding: 5rem 5% 3rem; text-align: center; margin-top: 6rem; }
-    .footer-social { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2.5rem; }
-    .footer-social img { width: 22px; filter: invert(1); opacity: 0.5; transition: 0.3s; }
-    .footer-social a:hover img { opacity: 1; transform: translateY(-5px); }
+    .split-side p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #aaa;
+      margin-bottom: 35px;
+      font-weight: 300;
+    }
 
-    @media (max-width: 768px) {
-      header { flex-direction: column; gap: 1rem; padding: 1.5rem; }
-      .cv-actions-hero { flex-direction: column; width: 100%; }
-      .btn-cv { width: 100%; justify-content: center; }
-      .grid-main { grid-template-columns: 1fr; }
+    /* Botón de acción integrado */
+    .action-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      border-bottom: 2px solid rgba(255,255,255,0.1);
+      padding-bottom: 6px;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .split-side:hover .action-link {
+      border-color: var(--text-light);
+      transform: translateX(5px);
+    }
+
+    /* Capa sutil de viñeteado para dar profundidad cinematográfica */
+    .vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.7) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Responsividad absoluta para dispositivos móviles */
+    @media (max-width: 900px) {
+      .split-container {
+        flex-direction: column;
+      }
+      .split-container:hover .split-side,
+      .split-container .split-side:hover {
+        flex: 1;
+        filter: none;
+      }
+      .split-side {
+        padding: 25% 8% 10% 8%;
+      }
+      .split-header {
+        padding: 20px;
+      }
+      .split-header nav {
+        gap: 15px;
+      }
+      .split-header nav a {
+        font-size: 0.65rem;
+      }
     }
   </style>
 </head>
-<body>
-
-  <header>
-    <div class="branding">
-      <h2>Esteban Campos Polo</h2>
-      <h3>Sr. Graphic Packaging and Production Designer</h3>
+<body class="lang-en"> <header class="split-header">
+    <div class="logo-group">
+      <span class="logo-title">Esteban Campos Polo</span>
+      <span class="logo-sub lang-en">Visual Production Studio</span>
+      <span class="logo-sub lang-es">Estudio de Producción Visual</span>
     </div>
     <nav>
-      <a href="graphic-design.html">Design</a>
-      <a href="photography.html">Photography</a>
-      <a href="3d-modeling.html">3D Art</a>
-      <a href="IA.html">AI</a>
-      <a href="about.html">About</a>
-      <a href="cv_resume.html">CV/Resume</a>
-      <button class="lang-switch" onclick="toggleLang()" id="langBtn">ENGLISH</button>
+      <a href="index.html" class="active">
+        <span class="lang-en">HOME</span>
+        <span class="lang-es">INICIO</span>
+      </a>
+      <a href="graphic-design.html">GRAPHIC DESIGN</a>
+      <a href="3d-modeling.html">3D</a>
+      <a href="about.html">ABOUT</a>
+      <a href="cv_resume.html" class="nav-link">CV / RESUME</a>
+      <a href="contact.html">CONTACT</a>
+      
+      <div class="lang-switcher">
+        <span class="lang-btn" id="btn-en" onclick="setLanguage('en')" style="opacity: 1;">EN</span>
+        <span style="opacity: 0.3;">/</span>
+        <span class="lang-btn" id="btn-es" onclick="setLanguage('es')" style="opacity: 0.4;">ES</span>
+      </div>
     </nav>
   </header>
 
-  <main>
-    <section class="hero" id="hero-section">
-      <div class="nda-tag">Portfolio 2026 | Production & Industrial Design</div>
-      <h1 id="hero-title">Sr. Graphic Packaging and Production Designer.</h1>
-      <p id="hero-desc">Más de 20 años dominando el flujo completo de artes finales y procesos industriales.</p>
-      
-      <div class="cv-actions-hero">
-          <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
-          <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
+  <main class="split-container">
+    
+    <a href="graphic-design.html" class="split-side side-left">
+      <div class="vignette"></div>
+      <div class="side-content">
+        <span class="side-num">01 / PRODUCTION LAB</span>
+        <h2>
+          <span class="lang-en">Graphic Design &<br>Product Packaging</span>
+          <span class="lang-es">Diseño Gráfico y<br>Packaging de Producto</span>
+        </h2>
+        <p>
+          <span class="lang-en">Over 15 years leading technical pre-printing workflows, brand architecture, and structural product development. Graphic design driven by absolute industrial feasibility.</span>
+          <span class="lang-es">Más de 15 años liderando flujos de preimpresión técnica, arquitectura de marca y desarrollo estructural de producto. El diseño gráfico concebido desde la viabilidad industrial absoluta.</span>
+        </p>
+        <div class="action-link">
+          <span class="lang-en">View Graphic Projects &rarr;</span>
+          <span class="lang-es">Ver Proyectos Gráficos &rarr;</span>
+        </div>
       </div>
-    </section>
+    </a>
 
-    <div class="section-title"><h2 id="title-solutions">PROYECTOS DESTACADOS</h2><div class="line"></div></div>
-    <section class="work-grid grid-main" id="main-projects"></section>
+    <a href="3d-modeling.html" class="split-side side-right">
+      <div class="vignette"></div>
+      <div class="side-content">
+        <span class="side-num">02 / DIGITAL PIPELINE</span>
+        <h2>
+          <span class="lang-en">3D Visuals &<br>Character Art</span>
+          <span class="lang-es">Visualización 3D y<br>Character Art</span>
+        </h2>
+        <p>
+          <span class="lang-en">Advanced digital sculpting, clean retopology, and rigorous PBR lookdev/lighting pipelines for commercial environments, advertising assets, and optimized anatomical models.</span>
+          <span class="lang-es">Escultura digital avanzada, retopología limpia y flujos estrictos de lookdev e iluminación PBR para entornos comerciales, activos publicitarios y modelos anatómicos optimizados.</span>
+        </p>
+        <div class="action-link">
+          <span class="lang-en">View 3D Gallery &rarr;</span>
+          <span class="lang-es">Ver Galería 3D &rarr;</span>
+        </div>
+      </div>
+    </a>
 
-    <div class="section-title"><h2 id="title-archive">ARCHIVO TÉCNICO</h2><div class="line"></div></div>
-    <section class="work-grid grid-archive" id="archive-projects"></section>
   </main>
 
-  <div id="lightbox" onclick="this.style.display='none'"><img src="" id="lightbox-img"></div>
-
-  <footer>
-    <div class="footer-social" id="footer-social-links"></div>
-    <p style="opacity:0.4; font-size:0.7rem; letter-spacing: 1px;">© 2026 Esteban Campos Polo. All rights reserved.</p>
-  </footer>
-
   <script>
-    let currentLang = 'es';
-    const sliderState = {};
-
-    const mainProjects = [
-      { id: "p0", imgs: ["assets/images/graphicdesign/lacampana.jpg"] },
-      { id: "p1", imgs: ["assets/images/graphicdesign/cream.jpg", "assets/images/graphicdesign/mockups/camocream.jpg"] },
-      { id: "p2", imgs: ["assets/images/graphicdesign/beerpack.jpg", "assets/images/graphicdesign/salmonpack.jpg"] },
-      { id: "p3", imgs: ["assets/images/graphicdesign/mockups/cafeparis.jpg", "assets/images/graphicdesign/rotulocafeparis.jpg"] }
-    ];
-
-    const archiveProjects = [
-      { id: "a1", imgs: ["assets/images/graphicdesign/mockups/canephora.jpg"] },
-      { id: "a2", imgs: ["assets/images/graphicdesign/appmath.jpg"] },
-      { id: "a3", imgs: ["assets/images/graphicdesign/heromockup.jpg"] },
-      { id: "a4", imgs: ["assets/images/graphicdesign/wine.jpg"] },
-      { id: "a5", imgs: ["assets/images/graphicdesign/mockups/merlot.jpg"] },
-      { id: "a6", imgs: ["assets/images/graphicdesign/mockups/pleurotus.jpg"] },
-      { id: "a7", imgs: ["assets/images/graphicdesign/mockupjampack.jpg", "assets/images/graphicdesign/mockups/mermelaida.jpg"] },
-      { id: "a8", imgs: ["assets/images/graphicdesign/webcfsonil.jpg"] }
-    ];
-
-    const translations = {
-      es: {
-        heroTitle: "Diseñador Gráfico de Packaging y Producto Visual.",
-        heroDesc: "Dominio integral del flujo de trabajo: desde el briefing conceptual hasta la salida de máquina y control de calidad.",
-        techBtn: "Especificaciones Técnicas",
-        apply: "Criterios de Producción",
-        main: [
-            { title: "Diseño de Identidad y Packaging Vintage — La Campana", desc: "Vectorizado integral, adaptación a troquel y producción en hojalata.", insight: "Reconstrucción gráfica manual y gestión de barnices metálicos.", result: "Esencia histórica con estándares industriales." },
-            { title: "Diseño Técnico y Cosmético — Camocream", desc: "Desarrollo de identidad aplicada a multi-soportes cosméticos.", insight: "Dirección técnica Pantone vs CMYK para estabilidad cromática.", result: "Consistencia de marca global en producción masiva." },
-            { title: "Arquitectura Gráfica de Packaging — Gran Consumo", desc: "Artes finales de alta complejidad para sector alimentación.", insight: "Control riguroso de perfiles de color y sobreimpresiones.", result: "Optimización de tiempos y reducción de mermas en imprenta." },
-            { title: "Producción Visual — Café París", desc: "Branding espacial y artes finales de gran formato.", insight: "Escalado vectorial de alta precisión para corte láser y vinilos.", result: "Ejecución visual de alta fidelidad en punto de venta." }
-        ],
-        archive: [
-            { title: "Branding — Canephora", desc: "Packaging flexible para café de especialidad.", insight: "Estudio de materiales para protección de barrera.", result: "Posicionamiento premium cohesivo." },
-            { title: "Interfaz — Math App", desc: "UI para aplicación móvil educativa.", insight: "Diseño modular y optimización de assets visuales.", result: "UX intuitiva y alta retención visual." },
-            { title: "Estructural — Juguetes", desc: "Packaging para licencias internacionales.", insight: "Troqueles complejos y optimización de líneas de corte.", result: "Eficiencia en cadena de montaje industrial." },
-            { title: "Etiquetado — Selección Merlot", desc: "Artes finales para etiquetado vinícola de alta gama.", insight: "Gestión de acabados especiales resistentes a humedad.", result: "Acabado de alta fidelidad en frío." },
-            { title: "Identidad — Bodegas Merlot", desc: "Identidad visual y aplicación física/digital.", insight: "Estudio cromático avanzado para impacto en lineal.", result: "Diferenciación inmediata en el sector." },
-            { title: "Sostenible — Caja Fresh", desc: "Packaging para productos frescos en flexografía.", insight: "Optimización de tramas para alta velocidad.", result: "Impresión limpia con máxima eficiencia de costes." },
-            { title: "Artesanal — Mermelaida", desc: "Branding y sistema de etiquetado tradicional.", insight: "Tipografía personalizada para valores de origen.", result: "Diferenciación competitiva en sector gourmet." },
-            { title: "Digital — Web CFS Onil", desc: "Diseño web y optimización de assets digitales.", insight: "Arquitectura de información para carga mínima.", result: "Interfaz funcional adaptada a la identidad del club." }
-        ]
-      },
-      en: {
-        heroTitle: "Packaging & Visual Product Graphic Designer.",
-        heroDesc: "Full workflow mastery: from conceptual briefing to machine output and quality control.",
-        techBtn: "Technical Specs",
-        apply: "Production Criteria",
-        main: [
-            { title: "Vintage Identity — La Campana", desc: "Full vectorization and tinplate packaging production.", insight: "Manual reconstruction and spot varnish management.", result: "Historical essence with industrial standards." },
-            { title: "Cosmetic Technical Design — Camocream", desc: "Identity development for cosmetic substrates.", insight: "Technical color direction for mass production.", result: "Guaranteed global brand consistency." },
-            { title: "Packaging Architecture — FMCG", desc: "High-complexity print-ready files for food industry.", insight: "Rigorous control of CMYK profiles and overprints.", result: "Streamlined processing times in large-scale printing." },
-            { title: "Visual Production — Café París", desc: "Spatial branding and large-format storefront apps.", insight: "Precision vector scaling for laser cutting.", result: "High-fidelity visual execution at point of sale." }
-        ],
-        archive: [
-            { title: "Branding — Canephora", desc: "Flexible packaging for specialty coffee.", insight: "Material study for banner protection.", result: "Cohesive premium positioning." },
-            { title: "Interface — Math App", desc: "UI design for educational mobile app.", insight: "Modular design and visual asset optimization.", result: "Intuitive user experience." },
-            { title: "Structural — Toy Packaging", desc: "Packaging for international licenses.", insight: "Complex die-cuts and industrial assembly optimization.", result: "High impact at point of sale." },
-            { title: "Labeling — Merlot Selection", desc: "Final artwork for high-end wine labeling.", insight: "Moisture-resistant special finishes management.", result: "Aesthetic durability in cold conditions." },
-            { title: "Identity — Merlot Wineries", desc: "Comprehensive visual identity design.", insight: "Advanced chromatic study for shelf impact.", result: "Immediate brand recognition." },
-            { title: "Sustainable — Fresh Box", desc: "Fresh produce packaging for flexography.", insight: "Optimization for high-speed printing.", result: "Maximum production cost efficiency." },
-            { title: "Artisan — Mermelaida", desc: "Brand creation for traditionally crafted products.", insight: "Custom typography to convey quality values.", result: "Competitive differentiation." },
-            { title: "Digital — Web CFS Onil", desc: "Web design and digital presence optimization.", insight: "Minimum loading times architecture.", result: "Functional interface." }
-        ]
-      }
-    };
-
-    function createCard(data, trans) {
-      return `
-        <article class="project-card" id="${data.id}">
-          <div class="slider-container">
-            ${data.imgs.length > 1 ? `<button class="slider-btn prev" onclick="changeS('${data.id}', -1)">&#10094;</button><button class="slider-btn next" onclick="changeS('${data.id}', 1)">&#10095;</button>` : ''}
-            <div class="slides" id="sl-${data.id}" onclick="openLightbox(this)">
-              ${data.imgs.map(img => {
-                  let filename = img.split('/').pop();
-                  let nameOnly = filename.substring(0, filename.lastIndexOf('.'));
-                  let thumbSrc = `assets/images/webp/${nameOnly}.webp`;
-                  return `<img src="${thumbSrc}" data-full="${img}" loading="lazy" alt="${trans.title}">`;
-              }).join('')}
-            </div>
-          </div>
-          <div class="project-info">
-            <h3>${trans.title}</h3>
-            <p class="desc">${trans.desc}</p>
-            <div class="tech-header" onclick="toggleTech('${data.id}')">
-              <span>${translations[currentLang].techBtn}</span>
-              <span>▼</span>
-            </div>
-            <div class="tech-content">
-              <div class="tech-specs">
-                <b>${translations[currentLang].apply}</b>
-                <p>${trans.insight}</p>
-                <div class="result-tag">${trans.result}</div>
-              </div>
-            </div>
-          </div>
-        </article>
-      `;
-    }
-
-    function render() {
-      const t = translations[currentLang];
-      document.getElementById('hero-title').innerText = t.heroTitle;
-      document.getElementById('hero-desc').innerText = t.heroDesc;
-      document.getElementById('langBtn').innerText = currentLang === 'es' ? 'ENGLISH' : 'ESPAÑOL';
-      document.getElementById('main-projects').innerHTML = mainProjects.map((p, i) => createCard(p, t.main[i])).join('');
-      document.getElementById('archive-projects').innerHTML = archiveProjects.map((p, i) => createCard(p, t.archive[i])).join('');
-    }
-
-    // INTERACCIONES CON TRACKING INCORPORADO
-    function toggleTech(id) { 
-        document.getElementById(id).classList.toggle('active'); 
-        if(typeof gtag === 'function') {
-            gtag('event', 'engagement_tech_expand', { 'project_id': id });
-        }
-    }
-
-    function moveSlide(idx, pId) {
-      const slider = document.getElementById(`sl-${pId}`);
-      if (slider) slider.style.transform = `translateX(-${idx * 100}%)`;
-      sliderState[pId] = idx;
-    }
-
-    function changeS(pId, dir) {
-      const list = [...mainProjects, ...archiveProjects];
-      const project = list.find(p => p.id === pId);
-      const total = project.imgs.length;
-      let current = sliderState[pId] || 0;
-      current = (current + dir + total) % total;
-      moveSlide(current, pId);
-    }
-
-    function openLightbox(el) {
-      const pId = el.id.replace('sl-', '');
-      const currentIdx = sliderState[pId] || 0;
-      const imgObj = el.querySelectorAll('img')[currentIdx];
-      const src = imgObj.getAttribute('data-full');
-      document.getElementById('lightbox-img').src = src;
-      document.getElementById('lightbox').style.display = 'flex';
+    function setLanguage(lang) {
+      const body = document.body;
+      const btnEn = document.getElementById('btn-en');
+      const btnEs = document.getElementById('btn-es');
       
-      if(typeof gtag === 'function') {
-          gtag('event', 'engagement_lightbox_open', { 'project_id': pId });
+      if (lang === 'en') {
+        body.classList.remove('lang-es');
+        body.classList.add('lang-en');
+        btnEn.style.opacity = '1';
+        btnEs.style.opacity = '0.4';
+        document.documentElement.lang = 'en';
+      } else {
+        body.classList.remove('lang-en');
+        body.classList.add('lang-es');
+        btnEn.style.opacity = '0.4';
+        btnEs.style.opacity = '1';
+        document.documentElement.lang = 'es';
       }
     }
-
-    function toggleLang() {
-      currentLang = currentLang === 'es' ? 'en' : 'es';
-      render();
-    }
-
-    function forceDownload(lang, filename) {
-        const filePath = 'assets/' + filename;
-        if (typeof gtag === 'function') {
-            gtag('event', 'engagement_cv_download', {
-                'language': lang.toUpperCase(),
-                'file_name': filename
-            });
-        }
-        const link = document.createElement('a');
-        link.href = filePath;
-        link.setAttribute('download', filename);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    window.onload = () => {
-      render();
-      const social = [
-          { i: "assets/icons/linkedin.svg", u: "https://www.linkedin.com/in/esteban-campos-polo-09852771" },
-          { i: "assets/icons/artstation.svg", u: "https://estebancampos1.artstation.com/" },
-          { i: "assets/icons/instagram.svg", u: "https://www.instagram.com/estcampo/" },
-      ];
-      document.getElementById('footer-social-links').innerHTML = social.map(s => `<a href="${s.u}" target="_blank"><img src="${s.i}" alt="Social"></a>`).join('');
-    };
   </script>
-
-  <a href="https://wa.me/34625225324?text=Hola%20Esteban,%20he%20visto%20tu%20portfolio%20y%20me%20gustaría%20contactar%20contigo." 
-     target="_blank" 
-     style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-family: sans-serif; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; display: flex; align-items: center; transition: transform 0.3s;">
-     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width: 25px; margin-right: 10px;">
-     <span class="texto-boton">Contactar por WhatsApp</span>
-  </a>
-
-  <style>
-    @media (max-width: 480px) {
-      .texto-boton { display: none; }
-      a { padding: 12px; border-radius: 50%; }
-      img { margin-right: 0; }
-    }
-  </style>
 </body>
 </html>

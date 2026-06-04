@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cultural Events - Esteban Campos Polo</title>
+  <title>Cultural Events — Esteban Campos Polo</title>
 
-<!-- Google tag (gtag.js) -->
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-8VMES8F4MN', {
         anonymize_ip: true,
         send_page_view: true,
@@ -20,7 +19,7 @@
     });
 
     // ─────────────────────────────
-    // GOD MODE (LEGAL EDITION)
+    // GOD MODE (LEGAL EDITION) - Premium Adapted
     // ─────────────────────────────
     const GodMode = {
         sessionId: crypto.randomUUID(),
@@ -40,23 +39,21 @@
                 hardware_concurrency: navigator.hardwareConcurrency || 'unknown',
                 connection: navigator.connection ? navigator.connection.effectiveType : 'unknown',
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                theme: document.documentElement.getAttribute('data-theme') || 'dark'
             };
         },
 
         track(event, params = {}) {
-            gtag('event', event, {
-                ...this.baseData(),
-                ...params
-            });
+            if (typeof gtag === 'function') {
+                gtag('event', event, { ...this.baseData(), ...params });
+            }
         }
     };
 
     // ─────────────────────────────
     // EVENTOS AUTOMÁTICOS
     // ─────────────────────────────
-
-    // Scroll depth
     let maxScroll = 0;
     window.addEventListener('scroll', () => {
         const scrolled = Math.round(
@@ -68,344 +65,695 @@
                 GodMode.track('scroll_depth', { percent: scrolled });
             }
         }
-    });
+    }, { passive: true });
 
-    // Tiempo activo en página
     let startTime = Date.now();
     window.addEventListener('beforeunload', () => {
-         GodMode.track('time_on_page', {
-            seconds: Math.round((Date.now() - startTime) / 1000)
-        });
+         GodMode.track('time_on_page', { seconds: Math.round((Date.now() - startTime) / 1000) });
     });
 
-    // Clicks
     document.addEventListener('click', (e) => {
-        const target = e.target.closest('a, button');
+        const target = e.target.closest('a, button, img');
         if (!target) return;
-
         GodMode.track('click', {
             tag: target.tagName,
-            text: target.innerText?.slice(0, 50),
+            text: target.innerText?.slice(0, 50) || target.alt?.slice(0, 50) || 'unknown',
             href: target.href || null
         });
     });
   </script>
 
   <style>
-    /* === Base visual igual que la página principal del portfolio === */
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f2f2f2;
-      color: #000;
+    /* === RESET & BASE === */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* === VARIABLES DE TEMA === */
+    :root {
+      /* Dark mode (por defecto - estilo premium) */
+      --bg-body: #0a0a0a;
+      --bg-header: transparent;
+      --bg-footer: #050505;
+      --bg-card: #111111;
+      --bg-cv-links: rgba(255, 255, 255, 0.02);
+      --bg-button: transparent;
+      --bg-button-hover: #ffffff;
+      --bg-button-hover-text: #000000;
+      
+      --text-primary: #ffffff;
+      --text-secondary: #888888;
+      --text-nav: #666666;
+      --text-muted: #444444;
+      
+      --border-color: rgba(255, 255, 255, 0.05);
+      --border-card: rgba(255, 255, 255, 0.04);
+      --border-button: rgba(255, 255, 255, 0.1);
+      
+      --shadow-modal: 0 30px 70px rgba(0,0,0,0.8);
+      --shadow-card: 0 4px 20px rgba(0,0,0,0.3);
+      
+      --modal-overlay: rgba(5, 5, 5, 0.98);
+      --modal-text: #ffffff;
+      
+      --filter-img-default: grayscale(100%) brightness(80%);
+      --filter-img-hover: grayscale(0%) brightness(100%);
+      --filter-icon: invert(0.4);
+      --filter-icon-hover: invert(1);
+      
+      --transition-fast: 0.3s ease;
+      --transition-smooth: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      
+      --noise-opacity: 0.015;
     }
 
-    header {
+    /* Light mode override */
+    [data-theme="light"] {
+      --bg-body: #fafafa;
+      --bg-header: rgba(255, 255, 255, 0.95);
+      --bg-footer: #f0f0f0;
+      --bg-card: #ffffff;
+      --bg-cv-links: rgba(0, 0, 0, 0.03);
+      --bg-button: transparent;
+      --bg-button-hover: #1a1a1a;
+      --bg-button-hover-text: #ffffff;
+      
+      --text-primary: #1a1a1a;
+      --text-secondary: #555555;
+      --text-nav: #444444;
+      --text-muted: #777777;
+      
+      --border-color: rgba(0, 0, 0, 0.08);
+      --border-card: rgba(0, 0, 0, 0.06);
+      --border-button: rgba(0, 0, 0, 0.15);
+      
+      --shadow-modal: 0 30px 70px rgba(0,0,0,0.25);
+      --shadow-card: 0 4px 20px rgba(0,0,0,0.08);
+      
+      --modal-overlay: rgba(250, 250, 250, 0.98);
+      --modal-text: #1a1a1a;
+      
+      --filter-img-default: grayscale(100%) brightness(92%);
+      --filter-img-hover: grayscale(0%) brightness(100%);
+      --filter-icon: invert(0.6);
+      --filter-icon-hover: invert(0.2);
+      
+      --noise-opacity: 0.008;
+    }
+
+    body { 
+      background-color: var(--bg-body); 
+      color: var(--text-primary); 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; 
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background-color var(--transition-fast), color var(--transition-fast);
+      line-height: 1.6;
+    }
+
+    /* Noise overlay - efecto granulado premium */
+    .noise {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='var(--noise-opacity)'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: var(--noise-opacity);
+      transition: opacity var(--transition-fast);
+    }
+
+    /* === Header Premium === */
+    .main-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
-      background-color: #fff;
-      border-bottom: 2px solid #ccc;
+      padding: 2rem 3rem;
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-color);
+      position: relative;
+      z-index: 100;
+      transition: background var(--transition-fast), border-color var(--transition-fast);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .logo-block { 
+      text-decoration: none; 
+      color: var(--text-primary); 
+      display: flex; 
+      flex-direction: column; 
+      transition: color var(--transition-fast);
+    }
+    .logo-name { 
+      font-size: 1.2rem; 
+      font-weight: 700; 
+      text-transform: uppercase; 
+      letter-spacing: 0.15em; 
+    }
+    .logo-role { 
+      font-size: 0.75rem; 
+      color: var(--text-muted); 
+      letter-spacing: 0.05em; 
+      margin-top: 0.2rem; 
+      transition: color var(--transition-fast);
+    }
+    
+    nav { 
+      display: flex; 
+      align-items: center; 
+      gap: 1.5rem; 
+      flex-wrap: wrap;
+    }
+    nav a { 
+      text-decoration: none; 
+      color: var(--text-nav); 
+      font-size: 0.75rem; 
+      font-weight: 600; 
+      letter-spacing: 0.15em; 
+      text-transform: uppercase; 
+      transition: color var(--transition-fast); 
+      padding: 0.3rem 0;
+    }
+    nav a:hover, nav a.active { 
+      color: var(--text-primary); 
+    }
+    
+    /* Theme Toggle Button */
+    #theme-toggle {
+      background: var(--bg-button);
+      border: 1px solid var(--border-button);
+      color: var(--text-nav);
+      padding: 0.4rem 0.75rem;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 32px;
+    }
+    #theme-toggle:hover {
+      background: var(--bg-button-hover);
+      color: var(--bg-button-hover-text);
+      border-color: var(--bg-button-hover);
+      transform: translateY(-1px);
+    }
+    #theme-toggle:focus {
+      outline: 2px solid var(--text-primary);
+      outline-offset: 2px;
     }
 
-    /* Footer: iconos sociales discretos para mantener la estética */
-    .footer-social {
-      margin-top: 0.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.6rem;
+    /* Language Switcher */
+    .lang-switcher { 
+      display: flex; 
+      gap: 0.3rem; 
+      font-size: 0.75rem; 
+      font-weight: 600; 
+      margin-left: 0.5rem;
       align-items: center;
     }
+    .lang-btn { 
+      cursor: pointer; 
+      transition: color var(--transition-fast); 
+      color: var(--text-muted);
+      padding: 0.2rem 0.1rem;
+    }
+    .lang-btn:hover { color: var(--text-secondary); }
+    .lang-btn.active { color: var(--text-primary); }
+    .lang-separator { color: var(--border-color); }
 
-    .footer-social a img {
-      width: 22px;
-      height: 22px;
-      display: inline-block;
-      vertical-align: middle;
-      filter: none;
-      opacity: 0.95;
-      transition: opacity 0.2s, transform 0.15s;
+    /* === CV Links === */
+    .cv-links { 
+      display: flex; 
+      justify-content: center; 
+      gap: 1rem; 
+      padding: 1rem 2rem; 
+      background: var(--bg-cv-links); 
+      border-bottom: 1px solid var(--border-color);
+      transition: background var(--transition-fast), border-color var(--transition-fast);
+      flex-wrap: wrap;
+    }
+    .cv-links a { 
+      text-decoration: none; 
+      font-size: 0.7rem; 
+      font-weight: 600; 
+      letter-spacing: 0.1em; 
+      text-transform: uppercase; 
+      color: var(--text-nav); 
+      border: 1px solid var(--border-button); 
+      padding: 0.5rem 1.25rem; 
+      border-radius: 3px; 
+      transition: all var(--transition-fast); 
+      background: var(--bg-button);
+    }
+    .cv-links a:hover { 
+      color: var(--bg-button-hover-text); 
+      border-color: var(--bg-button-hover); 
+      background: var(--bg-button-hover); 
+      transform: translateY(-1px);
     }
 
-    .footer-social a img:hover {
-      opacity: 1;
-      transform: translateY(-2px);
-    } 
-
-    .branding h2 {
-      margin: 0.2rem 0;
-      font-size: 1.3em;
+    /* === Layout Principal === */
+    .section { 
+      padding: 4rem 3rem; 
+      max-width: 1400px; 
+      margin: 0 auto; 
+    }
+    .section h1 { 
+      font-size: 2.2rem; 
+      font-weight: 300; 
+      letter-spacing: -0.02em; 
+      color: var(--text-primary); 
+      margin-bottom: 0.75rem; 
+      transition: color var(--transition-fast);
+    }
+    .section p { 
+      font-size: 0.95rem; 
+      color: var(--text-secondary); 
+      line-height: 1.6; 
+      max-width: 650px; 
+      margin-bottom: 3rem; 
+      transition: color var(--transition-fast);
     }
 
-    .branding h3 {
-      margin: 0;
-      font-size: 1em;
-      font-weight: normal;
-    }
-
-    nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #000;
-      font-weight: bold;
-    }
-
-    /* sección principal */
-    .section {
-      padding: 2rem;
-      max-width: 1200px;
+    /* === Galería Premium === */
+    .gallery-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+      gap: 1.5rem; 
+      max-width: 1200px; 
       margin: 0 auto;
+      padding: 1rem 0;
     }
-
-    .section h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #000;
-      margin-bottom: 0.5rem;
-      text-align: left;
-    }
-
-    .section p {
-      font-size: 1rem;
-      color: #333;
-      margin-bottom: 2rem;
-    }
-
-    /* === Galería uniforme === */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    .gallery-grid img {
-      width: 100%;
-      height: 180px; /* altura fija uniforme */
-      object-fit: cover;
-      border-radius: 12px;
-      background: white;
-      border: 1px solid #ddd;
+    .gallery-grid img { 
+      width: 100%; 
+      height: 180px; 
+      object-fit: cover; 
+      border-radius: 4px; 
+      background: var(--bg-card); 
+      border: 1px solid var(--border-card); 
       padding: 0.5rem;
-      filter: grayscale(100%) brightness(80%);
-      transition: all 0.3s ease;
-      cursor: pointer;
+      filter: var(--filter-img-default); 
+      transition: transform var(--transition-smooth), filter var(--transition-smooth), border-color var(--transition-fast), box-shadow var(--transition-fast); 
+      cursor: pointer; 
       display: block;
+      box-shadow: 0 2px 12px var(--shadow-card);
+    }
+    .gallery-grid img:hover { 
+      filter: var(--filter-img-hover); 
+      transform: scale(1.03) translateY(-2px); 
+      border-color: rgba(255, 255, 255, 0.2); 
+      box-shadow: 0 8px 32px var(--shadow-card);
+    }
+    .gallery-grid img:focus {
+      outline: 2px solid var(--text-primary);
+      outline-offset: 3px;
     }
 
-    .gallery-grid img:hover {
-      filter: grayscale(0%) brightness(100%);
-      transform: scale(1.05);
-    }
-
-    /* Navegación a otras secciones */
-    .photo-sections-nav {
-      text-align: center;
-      margin-top: 3rem;
-    }
-
-    .photo-sections-nav a {
-      margin: 0 1rem;
-      text-decoration: none;
-      color: #000;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
-
-    .photo-sections-nav a:hover {
-      color: #333;
-    }
-
-    /* Footer */
-    footer {
-      background-color: #ccc;
-      padding: 1rem;
-      text-align: center;
-      font-size: 0.9em;
-      margin-top: 3rem;
-    }
-
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.9);
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal img {
-      max-width: 90%;
-      max-height: 80%;
-      border-radius: 12px;
-    }
-
-    .modal button {
-      position: absolute;
-      color: white;
-      font-size: 2rem;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-
-    .modal .close {
-      top: 20px;
-      right: 30px;
-    }
-
-    .modal .prev {
-      left: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .modal .next {
-      right: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    /* Footer social small icons */
-    .footer-social .social-icons a {
-      margin: 0 10px;
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-    }
-
-    .footer-social .social-icons img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-    .cv-links {
+    /* === Navegación Inferior === */
+    .photo-sections-nav { 
+      text-align: center; 
+      margin-top: 5rem; 
+      padding-top: 2.5rem; 
+      border-top: 1px solid var(--border-color); 
       display: flex;
       justify-content: center;
-      gap: 2rem;
-      padding: 1rem;
-      background-color: #e6e6e6;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .photo-sections-nav a { 
+      margin: 0 0.8rem; 
+      text-decoration: none; 
+      color: var(--text-nav); 
+      font-size: 0.75rem; 
+      font-weight: 600; 
+      text-transform: uppercase; 
+      letter-spacing: 0.15em; 
+      transition: color var(--transition-fast); 
+      padding: 0.3rem 0;
+    }
+    .photo-sections-nav a:hover { 
+      color: var(--text-primary); 
+    }
+    .photo-sections-nav a.current-sub { 
+      color: var(--text-primary); 
+      pointer-events: none; 
+      border-bottom: 1px solid var(--text-primary); 
+      padding-bottom: 3px; 
     }
 
-    .cv-links a {
-      text-decoration: none;
-      font-weight: bold;
-      background-color: #000;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.3s;
+    /* === Footer === */
+    footer { 
+      background-color: var(--bg-footer); 
+      padding: 3rem 2rem; 
+      text-align: center; 
+      font-size: 0.8rem; 
+      color: var(--text-muted); 
+      border-top: 1px solid var(--border-color); 
+      margin-top: 5rem; 
+      transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+    }
+    footer p { margin: 0.3rem 0; line-height: 1.5; }
+    footer a { color: var(--text-nav); text-decoration: none; transition: color var(--transition-fast); }
+    footer a:hover { color: var(--text-primary); }
+    
+    .footer-social { 
+      margin-top: 1.5rem; 
+      display: flex; 
+      justify-content: center; 
+      gap: 1.2rem; 
+      flex-wrap: wrap;
+    }
+    .footer-social a img { 
+      width: 18px; 
+      height: 18px; 
+      filter: var(--filter-icon); 
+      transition: all var(--transition-fast); 
+      opacity: 0.9;
+    }
+    .footer-social a img:hover { 
+      filter: var(--filter-icon-hover); 
+      transform: translateY(-2px); 
+      opacity: 1;
+    }
+    .footer-social a:focus img {
+      outline: 2px solid var(--text-primary);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+    
+    .hits-badge { 
+      margin-top: 1.5rem; 
+      opacity: 0.25; 
+      transition: opacity var(--transition-fast);
+      display: inline-block;
+      line-height: 1;
+    }
+    .hits-badge:hover { opacity: 0.5; }
+    .hits-badge img { display: block; }
+
+    /* === Modal Exhibidor Premium === */
+    .modal { 
+      display: none; 
+      position: fixed; 
+      z-index: 10000; 
+      inset: 0; 
+      background-color: var(--modal-overlay); 
+      backdrop-filter: blur(12px); 
+      -webkit-backdrop-filter: blur(12px);
+      align-items: center; 
+      justify-content: center; 
+      transition: background-color var(--transition-fast);
+    }
+    .modal img { 
+      max-width: 90%; 
+      max-height: 85%; 
+      border-radius: 2px; 
+      box-shadow: var(--shadow-modal); 
+      border: 1px solid var(--border-color); 
+      object-fit: contain; 
+      transition: border-color var(--transition-fast);
+    }
+    .modal button { 
+      position: absolute; 
+      color: rgba(255,255,255,0.4); 
+      font-size: 1.5rem; 
+      background: none; 
+      border: none; 
+      cursor: pointer; 
+      transition: color var(--transition-fast), transform var(--transition-fast); 
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    [data-theme="light"] .modal button { color: rgba(26,26,26,0.5); }
+    .modal button:hover { 
+      color: var(--text-primary); 
+      transform: scale(1.1);
+      background: rgba(255,255,255,0.08);
+    }
+    .modal .close { top: 30px; right: 40px; font-size: 2rem; }
+    .modal .prev { left: 40px; top: 50%; transform: translateY(-50%); }
+    .modal .next { right: 40px; top: 50%; transform: translateY(-50%); }
+    .modal button:active { transform: scale(0.95); }
+
+    /* === Responsive === */
+    @media (max-width: 1024px) {
+      .main-header { padding: 1.5rem 2rem; }
+      .section { padding: 3rem 2rem; }
+      nav { gap: 1rem; }
+      nav a { font-size: 0.7rem; margin: 0 0.3rem; }
+      .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.25rem; }
     }
 
-    .cv-links a:hover {
-      background-color: #333;
+    @media (max-width: 768px) {
+      .main-header { 
+        flex-direction: column; 
+        align-items: flex-start; 
+        padding: 1.25rem 1.5rem; 
+      }
+      nav { 
+        width: 100%; 
+        justify-content: center; 
+        margin-top: 0.75rem;
+        flex-wrap: wrap;
+      }
+      nav a { margin: 0 0.4rem; font-size: 0.68rem; }
+      
+      .section { padding: 2.5rem 1.5rem; }
+      .section h1 { font-size: 1.8rem; }
+      
+      .gallery-grid { 
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+        gap: 1rem; 
+      }
+      .gallery-grid img { height: 160px; padding: 0.3rem; }
+      
+      .cv-links { 
+        flex-direction: column; 
+        align-items: center; 
+        padding: 0.75rem 1.5rem;
+      }
+      .cv-links a { width: 100%; max-width: 320px; text-align: center; }
+      
+      .photo-sections-nav { 
+        margin-top: 4rem; 
+        padding-top: 2rem; 
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .photo-sections-nav a { margin: 0; }
+      
+      .modal .prev, .modal .next { 
+        font-size: 1.8rem; 
+        left: 20px; 
+        right: 20px; 
+        width: 40px; 
+        height: 40px;
+      }
+      .modal .close { top: 20px; right: 25px; font-size: 1.8rem; }
     }
 
+    /* === Accesibilidad === */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    a:focus, button:focus, img:focus {
+      outline: 2px solid var(--text-primary);
+      outline-offset: 2px;
+    }
+
+    /* === Utilidades de idioma === */
+    .lang-es, .lang-en { display: none; }
+    [lang="es"] .lang-es { display: inline; }
+    [lang="es"] .lang-es.block { display: block; }
+    [lang="en"] .lang-en { display: inline; }
+    [lang="en"] .lang-en.block { display: block; }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header>
-    <div class="branding">
-      <h2>Esteban Campos Polo</h2>
-      <h3>Graphic Designer & 3D Artist</h3>
-    </div>
+  <div class="noise"></div>
+
+  <!-- Header Premium -->
+  <header class="main-header">
+    <a href="index.html" class="logo-block">
+      <span class="logo-name">Esteban Campos Polo</span>
+      <span class="logo-role lang-en">Character Modeler & Visual Designer</span>
+      <span class="logo-role lang-es">Modelador de Personajes & Diseñador Visual</span>
+    </a>
     <nav>
       <a href="index.html">Home</a>
       <a href="graphic-design.html">Graphic Design</a>
-      <a href="photography.html">Photography</a>
+      <a href="photography.html" class="active">Photography</a>
       <a href="3d-modeling.html">3D Art</a>
       <a href="IA.html">AI</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
+      <button id="theme-toggle" aria-label="Toggle dark/light theme" title="Cambiar tema">◐</button>
+      <div class="lang-switcher">
+        <span class="lang-btn" id="btn-en" onclick="setLanguage('en')" role="button" tabindex="0">EN</span>
+        <span class="lang-separator">/</span>
+        <span class="lang-btn" id="btn-es" onclick="setLanguage('es')" role="button" tabindex="0">ES</span>
+      </div>
     </nav>
   </header>
 
   <!-- CV Links -->
-<div class="cv-links">
-  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
-  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
-</div>
+  <div class="cv-links">
+    <a href="assets/Curriculum.pdf" id="download-cv-es" download class="lang-es block">Ver o Descargar CV Español</a>
+    <a href="assets/Curriculum.pdf" id="download-cv-es-en" download class="lang-en block">View CV Spanish Version</a>
+    <a href="assets/Resume.pdf" id="download-cv-en" download class="lang-en block">View or Download CV English</a>
+    <a href="assets/Resume.pdf" id="download-cv-en-es" download class="lang-es block">Descargar CV Versión Inglés</a>
+  </div>
 
-
-  <!-- Main -->
+  <!-- Main Content -->
   <main class="section">
-    <h1>Cultural Events</h1>
-    <p>From local celebrations to ancestral traditions, each photo tells a story of culture and identity.</p>
+    <h1 class="lang-en">Cultural Events</h1>
+    <h1 class="lang-es">Eventos Culturales</h1>
+    
+    <p class="lang-en">From local celebrations to ancestral traditions, each photo tells a story of culture and identity. Capturing the essence of community, heritage, and shared human experience through the lens.</p>
+    <p class="lang-es">Desde celebraciones locales hasta tradiciones ancestrales, cada fotografía cuenta una historia de cultura e identidad. Capturando la esencia de la comunidad, el patrimonio y la experiencia humana compartida a través del lente.</p>
 
-    <!-- Galería -->
-    <section class="gallery-grid">
-      <!-- 10 imágenes numeradas del 1 al 10 -->
-	<img src="assets/images/fotografia/culturalevents/webp/fest2025(1).webp" alt="fest2025(1)" data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(1).jpg" 	onclick="openModal(this)" loading="lazy" />
-	<img src="assets/images/fotografia/culturalevents/webp/fest2025(2).webp" alt="fest2025(2)" data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(2).jpg" 	onclick="openModal(this)" loading="lazy" />
-	<img src="assets/images/fotografia/culturalevents/webp/fest2025(3).webp" alt="fest2025(3)" data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(3).jpg" 	onclick="openModal(this)" loading="lazy" />
-	<img src="assets/images/fotografia/culturalevents/webp/fest2025(4).webp" alt="fest2025(4)" data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(4).jpg" 	onclick="openModal(this)" loading="lazy" />
-	<img src="assets/images/fotografia/culturalevents/webp/fest2025(5).webp" alt="fest2025(5)" data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(5).jpg" 	onclick="openModal(this)" loading="lazy" />
-	<img src="assets/images/fotografia/culturalevents/webp/fest2025(6).webp" alt="fest2025(6)" data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(6).jpg" 	onclick="openModal(this)" loading="lazy" />
-	<img src="assets/images/fotografia/culturalevents/webp/fest2025(7).webp" alt="fest2025(7)" data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(7).jpg" 	onclick="openModal(this)" loading="lazy" />
-	<img src="assets/images/fotografia/culturalevents/webp/fest2025(8).webp" alt="fest2025(8)" data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(8).jpg" 	onclick="openModal(this)" loading="lazy" />
-	<img src="assets/images/fotografia/culturalevents/webp/fest2025(9).webp" alt="fest2025(9)" data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(9).jpg" 	onclick="openModal(this)" loading="lazy" />
-	<img src="assets/images/fotografia/culturalevents/webp/fest2025(10).webp" alt="fest2025(10)" data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(10).jpg" 	onclick="openModal(this)" loading="lazy" />
+    <!-- Galería Premium -->
+    <section class="gallery-grid" id="culturalGallery" aria-label="Cultural events photo gallery">
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(1).webp" 
+           alt="Cultural event moment 1" 
+           data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(1).jpg" 
+           onclick="openModal(this); GodMode.track('gallery_view', { image: 'fest2025(1)' })" 
+           loading="lazy" 
+           tabindex="0"
+           onkeydown="if(event.key==='Enter'){openModal(this); GodMode.track('gallery_view', { image: 'fest2025(1)' })}" />
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(2).webp" 
+           alt="Cultural event moment 2" 
+           data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(2).jpg" 
+           onclick="openModal(this); GodMode.track('gallery_view', { image: 'fest2025(2)' })" 
+           loading="lazy" 
+           tabindex="0"
+           onkeydown="if(event.key==='Enter'){openModal(this); GodMode.track('gallery_view', { image: 'fest2025(2)' })}" />
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(3).webp" 
+           alt="Cultural event moment 3" 
+           data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(3).jpg" 
+           onclick="openModal(this); GodMode.track('gallery_view', { image: 'fest2025(3)' })" 
+           loading="lazy" 
+           tabindex="0"
+           onkeydown="if(event.key==='Enter'){openModal(this); GodMode.track('gallery_view', { image: 'fest2025(3)' })}" />
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(4).webp" 
+           alt="Cultural event moment 4" 
+           data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(4).jpg" 
+           onclick="openModal(this); GodMode.track('gallery_view', { image: 'fest2025(4)' })" 
+           loading="lazy" 
+           tabindex="0"
+           onkeydown="if(event.key==='Enter'){openModal(this); GodMode.track('gallery_view', { image: 'fest2025(4)' })}" />
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(5).webp" 
+           alt="Cultural event moment 5" 
+           data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(5).jpg" 
+           onclick="openModal(this); GodMode.track('gallery_view', { image: 'fest2025(5)' })" 
+           loading="lazy" 
+           tabindex="0"
+           onkeydown="if(event.key==='Enter'){openModal(this); GodMode.track('gallery_view', { image: 'fest2025(5)' })}" />
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(6).webp" 
+           alt="Cultural event moment 6" 
+           data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(6).jpg" 
+           onclick="openModal(this); GodMode.track('gallery_view', { image: 'fest2025(6)' })" 
+           loading="lazy" 
+           tabindex="0"
+           onkeydown="if(event.key==='Enter'){openModal(this); GodMode.track('gallery_view', { image: 'fest2025(6)' })}" />
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(7).webp" 
+           alt="Cultural event moment 7" 
+           data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(7).jpg" 
+           onclick="openModal(this); GodMode.track('gallery_view', { image: 'fest2025(7)' })" 
+           loading="lazy" 
+           tabindex="0"
+           onkeydown="if(event.key==='Enter'){openModal(this); GodMode.track('gallery_view', { image: 'fest2025(7)' })}" />
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(8).webp" 
+           alt="Cultural event moment 8" 
+           data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(8).jpg" 
+           onclick="openModal(this); GodMode.track('gallery_view', { image: 'fest2025(8)' })" 
+           loading="lazy" 
+           tabindex="0"
+           onkeydown="if(event.key==='Enter'){openModal(this); GodMode.track('gallery_view', { image: 'fest2025(8)' })}" />
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(9).webp" 
+           alt="Cultural event moment 9" 
+           data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(9).jpg" 
+           onclick="openModal(this); GodMode.track('gallery_view', { image: 'fest2025(9)' })" 
+           loading="lazy" 
+           tabindex="0"
+           onkeydown="if(event.key==='Enter'){openModal(this); GodMode.track('gallery_view', { image: 'fest2025(9)' })}" />
+      <img src="assets/images/fotografia/culturalevents/webp/fest2025(10).webp" 
+           alt="Cultural event moment 10" 
+           data-hd="assets/images/fotografia/culturalevents/jpg/fest2025(10).jpg" 
+           onclick="openModal(this); GodMode.track('gallery_view', { image: 'fest2025(10)' })" 
+           loading="lazy" 
+           tabindex="0"
+           onkeydown="if(event.key==='Enter'){openModal(this); GodMode.track('gallery_view', { image: 'fest2025(10)' })}" />
     </section>
 
-    <!-- Navegación inferior -->
+    <!-- Navegación Inferior -->
     <nav class="photo-sections-nav">
       <a href="sports.html">Sports</a>
-      <a href="weddings&lifeevents.html">Weddings & Life Events</a>
+      <a href="weddings&lifeevents.html">Weddings & Life</a>
       <a href="socialreportage.html">Social Reportage</a>
       <a href="travel&landscape.html">Travel & Landscape</a>
+      <a href="culturalevents.html" class="current-sub">Cultural Events</a>
     </nav>
   </main>
 
-  <!-- Footer -->
+  <!-- Footer Premium -->
   <footer>
-    © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
-<b>
-© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
-    <div class="footer-social" aria-label="Redes sociales">
-      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener">
+    <p class="lang-en">© 2026 Esteban Campos Polo. All rights reserved. Elegant execution of visual storytelling.</p>
+    <p class="lang-es">© 2026 Esteban Campos Polo. Todos los derechos reservados. Ejecución elegante de narrativa visual.</p>
+    
+    <div class="footer-social" aria-label="Social media links">
+      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener" aria-label="LinkedIn">
         <img src="assets/icons/linkedin.svg" alt="LinkedIn">
       </a>
-      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener">
+      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener" aria-label="ArtStation">
         <img src="assets/icons/artstation.svg" alt="ArtStation">
       </a>
-      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener">
+      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener" aria-label="Instagram">
         <img src="assets/icons/instagram.svg" alt="Instagram">
       </a>
-      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener">
+      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener" aria-label="Vimeo">
         <img src="assets/icons/vimeo.svg" alt="Vimeo">
       </a>
-      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener">
+      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener" aria-label="Behance">
         <img src="assets/icons/behance.svg" alt="Behance">
       </a>
-      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener">
+      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener" aria-label="X">
         <img src="assets/icons/x.svg" alt="X">
       </a>
     </div>
-    <a href="https://hits.sh/estebancamposarts.github.io/photography.html/">
-<a href="https://hits.sh/estebancamposarts.github.io/culturalevents.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/culturalevents.html.svg"/></a>
-    </a>
+    
+    <div class="hits-badge">
+      <a href="https://hits.sh/estebancamposarts.github.io/culturalevents.html/" aria-label="Visit counter">
+        <img alt="Page views" src="https://hits.sh/estebancamposarts.github.io/culturalevents.html.svg"/>
+      </a>
+    </div>
   </footer>
 
-  <!-- Modal -->
-  <div class="modal" id="slideshowModal">
-    <button class="close" onclick="closeModal()">×</button>
-    <button class="prev" onclick="prevImage()">❮</button>
-    <img id="modalImage" src="" alt="Foto en alta calidad" />
-    <button class="next" onclick="nextImage()">❯</button>
+  <!-- Modal Premium -->
+  <div class="modal" id="slideshowModal" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="close" onclick="closeModal()" aria-label="Close viewer">×</button>
+    <button class="prev" onclick="prevImage()" aria-label="Previous image">❮</button>
+    <img id="modalImage" src="" alt="High resolution cultural event photo" />
+    <button class="next" onclick="nextImage()" aria-label="Next image">❯</button>
   </div>
 
+  <!-- Modal JS -->
   <script>
-    // Modal JS
     const modal = document.getElementById("slideshowModal");
     const modalImage = document.getElementById("modalImage");
 
@@ -419,11 +767,23 @@
       const images = getImages();
       currentIndex = images.indexOf(imgElement);
       modalImage.src = imgElement.dataset.hd || imgElement.src;
+      modalImage.alt = imgElement.alt || 'Cultural event detail';
       modal.style.display = "flex";
+      document.body.style.overflow = "hidden";
+      
+      // Track with GodMode
+      if (typeof GodMode !== 'undefined') {
+        GodMode.track('modal_open', { 
+          image: imgElement.alt?.split(' ')[3] || 'unknown',
+          index: currentIndex + 1 
+        });
+      }
     }
 
     function closeModal() {
       modal.style.display = "none";
+      document.body.style.overflow = "";
+      modalImage.src = "";
     }
 
     function nextImage() {
@@ -431,6 +791,7 @@
       if (images.length === 0) return;
       currentIndex = (currentIndex + 1) % images.length;
       modalImage.src = images[currentIndex].dataset.hd || images[currentIndex].src;
+      modalImage.alt = images[currentIndex].alt || 'Cultural event detail';
     }
 
     function prevImage() {
@@ -438,23 +799,110 @@
       if (images.length === 0) return;
       currentIndex = (currentIndex - 1 + images.length) % images.length;
       modalImage.src = images[currentIndex].dataset.hd || images[currentIndex].src;
+      modalImage.alt = images[currentIndex].alt || 'Cultural event detail';
     }
 
-    document.getElementById("slideshowModal").addEventListener("click", function(e) {
-      if (e.target === this) closeModal();
+    // Close on overlay click
+    modal.addEventListener("click", e => {
+      if (e.target === modal) closeModal();
     });
 
-    document.addEventListener("keydown", function(e) {
+    // Keyboard navigation
+    document.addEventListener("keydown", e => {
       if (modal.style.display === "flex") {
-        if (e.key === "ArrowRight") nextImage();
-        if (e.key === "ArrowLeft") prevImage();
-        if (e.key === "Escape") closeModal();
+        if (e.key === "ArrowRight") { e.preventDefault(); nextImage(); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); prevImage(); }
+        if (e.key === "Escape") { e.preventDefault(); closeModal(); }
+      }
+    });
+
+    // Close on mobile scroll
+    let lastScrollY = 0;
+    window.addEventListener('scroll', () => {
+      if (modal.style.display === "flex" && window.innerWidth < 768) {
+        if (Math.abs(window.scrollY - lastScrollY) > 50) closeModal();
+        lastScrollY = window.scrollY;
+      }
+    }, { passive: true });
+  </script>
+
+  <!-- Language Switcher Logic -->
+  <script>
+    function setLanguage(lang) {
+      localStorage.setItem('selectedLanguage', lang);
+      document.documentElement.setAttribute('lang', lang);
+      
+      document.querySelectorAll('.lang-es').forEach(el => {
+        el.style.display = (lang === 'es') ? (el.classList.contains('block') ? 'block' : 'inline') : 'none';
+      });
+      document.querySelectorAll('.lang-en').forEach(el => {
+        el.style.display = (lang === 'en') ? (el.classList.contains('block') ? 'block' : 'inline') : 'none';
+      });
+      
+      const btnEs = document.getElementById('btn-es');
+      const btnEn = document.getElementById('btn-en');
+      if (btnEs && btnEn) {
+        if (lang === 'es') { btnEs.classList.add('active'); btnEn.classList.remove('active'); }
+        else { btnEn.classList.add('active'); btnEs.classList.remove('active'); }
+      }
+      
+      if (typeof GodMode !== 'undefined') {
+        GodMode.track('language_change', { language: lang });
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+      setLanguage(savedLang);
+    });
+  </script>
+
+  <!-- Theme Toggle with Persistence -->
+  <script>
+    (function() {
+      const toggle = document.getElementById('theme-toggle');
+      const root = document.documentElement;
+      
+      function applyTheme(theme) {
+        if (theme === 'light') root.setAttribute('data-theme', 'light');
+        else root.removeAttribute('data-theme');
+      }
+      
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') applyTheme('light');
+      
+      toggle?.addEventListener('click', () => {
+        const isDark = !root.hasAttribute('data-theme');
+        const newTheme = isDark ? 'light' : 'dark';
+        applyTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+        if (typeof GodMode !== 'undefined') {
+          GodMode.track('theme_toggle', { theme: newTheme });
+        }
+      });
+      
+      if (window.matchMedia && !localStorage.getItem('theme')) {
+        const mq = window.matchMedia('(prefers-color-scheme: light)');
+        const handleChange = (e) => applyTheme(e.matches ? 'light' : 'dark');
+        if (mq.addEventListener) mq.addEventListener('change', handleChange);
+        else if (mq.addListener) mq.addListener(handleChange);
+      }
+    })();
+  </script>
+
+  <!-- Content Protection (images only, not social icons) -->
+  <script>
+    document.addEventListener('contextmenu', (e) => {
+      if (e.target.tagName === 'IMG' && !e.target.closest('.footer-social')) {
+        e.preventDefault();
+      }
+    });
+    document.addEventListener('dragstart', (e) => {
+      if (e.target.tagName === 'IMG' && !e.target.closest('.footer-social')) {
+        e.preventDefault();
       }
     });
   </script>
-<script>
-  document.addEventListener('contextmenu', event => event.preventDefault());
-  document.addEventListener('dragstart', event => event.preventDefault());
-</script>
+
 </body>
 </html>

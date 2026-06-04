@@ -1,235 +1,415 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Art | Esteban Campos Polo</title>
+    <title>AI Art — Esteban Campos Polo</title>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-/* ==========================
-   CONFIG BASE
-========================== */
-gtag('config', 'G-8VMES8F4MN', {
-  anonymize_ip: true,
-  allow_google_signals: false,
-  send_page_view: true
-});
-
-/* ==========================
-   FUNCIÓN UTILIDAD
-========================== */
-function getCategory(element){
-  const section = element.closest('section');
-  return section ? section.id : 'ai_showcase_general';
-}
-
-/* ==========================
-   TRACKING UNIFICADO
-========================== */
-document.addEventListener('click', function(e){
-
-  /* ---------- DESCARGAS (Recursos/PDFs) ---------- */
-  const downloadLink = e.target.closest('a[href$=".pdf"], a[href$=".zip"]');
-  if(downloadLink){
-    const fileName = downloadLink.getAttribute('href').split('/').pop();
-    gtag('event', 'file_download', {
-      file_name: fileName,
-      file_extension: fileName.split('.').pop(),
-      link_url: downloadLink.href,
-      page_location: window.location.href
+    /* ==========================
+       CONFIG BASE
+    ========================== */
+    gtag('config', 'G-8VMES8F4MN', {
+      anonymize_ip: true,
+      allow_google_signals: false,
+      send_page_view: true
     });
-    return;
-  }
 
-  /* ---------- CLICK EN PROYECTO IA / GENERACIÓN ---------- */
-  const aiProject = e.target.closest('.item');
-  if(aiProject){
-    const title = aiProject.querySelector('h4, h3, img');
-    // Intentamos pillar el texto o el 'alt' de la imagen generada
-    const projectName = title ? (title.innerText || title.alt || 'ai_generated_work').trim() : 'unknown_ai_project';
-    
-    gtag('event', 'ai_project_view', {
-      ai_name: projectName,
-      ai_category: getCategory(aiProject),
-      page_location: window.location.href
-    });
-    return;
-  }
+    /* ==========================
+       FUNCIÓN UTILIDAD
+    ========================== */
+    function getCategory(element){
+      const section = element.closest('section');
+      return section ? section.id : 'ai_showcase_general';
+    }
 
-  /* ---------- CLICK EXTERNOS (Redes/Herramientas IA) ---------- */
-  const externalLink = e.target.closest('a[target="_blank"]');
-  if(externalLink){
-    gtag('event', 'external_click', {
-      link_url: externalLink.href,
-      page_location: window.location.href
-    });
-  }
-}, { passive: true });
+    /* ==========================
+       TRACKING UNIFICADO
+    ========================== */
+    document.addEventListener('click', function(e){
 
-/* ==========================
-   SCROLL 50% (Interés en la galería IA)
-========================= */
-let scrollSent = false;
-window.addEventListener('scroll', function(){
-  if(scrollSent) return;
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  if(docHeight <= 0) return;
-  const scrollPercent = scrollTop / docHeight;
-  if(scrollPercent >= 0.5){
-    scrollSent = true;
-    gtag('event', 'scroll_50_percent', {
-      page_location: window.location.href
-    });
-  }
-}, { passive: true });
-</script>
+      /* ---------- DESCARGAS (Recursos/PDFs) ---------- */
+      const downloadLink = e.target.closest('a[href$=".pdf"], a[href$=".zip"]');
+      if(downloadLink){
+        const fileName = downloadLink.getAttribute('href').split('/').pop();
+        gtag('event', 'file_download', {
+          file_name: fileName,
+          file_extension: fileName.split('.').pop(),
+          link_url: downloadLink.href,
+          page_location: window.location.href
+        });
+        return;
+      }
+
+      /* ---------- CLICK EN PROYECTO IA / GENERACIÓN ---------- */
+      const aiProject = e.target.closest('.item');
+      if(aiProject){
+        const title = aiProject.querySelector('h4, h3, img');
+        const projectName = title ? (title.innerText || title.alt || 'ai_generated_work').trim() : 'unknown_ai_project';
+        
+        gtag('event', 'ai_project_view', {
+          ai_name: projectName,
+          ai_category: getCategory(aiProject),
+          page_location: window.location.href
+        });
+        return;
+      }
+
+      /* ---------- CLICK EXTERNOS (Redes/Herramientas IA) ---------- */
+      const externalLink = e.target.closest('a[target="_blank"]');
+      if(externalLink){
+        gtag('event', 'external_click', {
+          link_url: externalLink.href,
+          page_location: window.location.href
+        });
+      }
+    }, { passive: true });
+
+    /* ==========================
+       SCROLL 50% (Interés en la galería IA)
+    ========================= */
+    let scrollSent = false;
+    window.addEventListener('scroll', function(){
+      if(scrollSent) return;
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if(docHeight <= 0) return;
+      const scrollPercent = scrollTop / docHeight;
+      if(scrollPercent >= 0.5){
+        scrollSent = true;
+        gtag('event', 'scroll_50_percent', {
+          page_location: window.location.href
+        });
+      }
+    }, { passive: true });
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg: #ffffff; --text: #1f2937; --accent: #0052FF; --muted: #64748b;
-            --light-bg: #f8fafc; --border: #e2e8f0; --radius: 12px;
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg: #0a0a0a;
+            --surface: #141414;
+            --surface-card: #1c1c1c;
+            --text: #f5f5f5;
+            --muted: #9a9a9a;
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: #ffffff;
+            --transition: all 0.6s cubic-bezier(.19,1,.22,1);
+            --radius: 4px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; overflow-x: hidden; }
-
-        header {
-            position: sticky; top: 0; z-index: 1000; background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px); display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 5%; border-bottom: 1px solid var(--border);
-        }
-        .branding h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
-        .branding h3 { font-size: 0.65rem; color: var(--muted); font-weight: 800; text-transform: uppercase; }
-        
-        nav { display: flex; align-items: center; }
-        nav a { 
-            margin-left: 1.2rem; text-decoration: none; color: var(--text); 
-            font-weight: 700; font-size: 0.7rem; text-transform: uppercase; 
-            transition: var(--transition); letter-spacing: 0.5px;
-        }
-        nav a:hover, nav a.active { color: var(--accent); }
-
-        .lang-switch {
-            margin-left: 1.5rem; background: var(--text); color: #fff; border: none;
-            padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.65rem;
-            font-weight: 800; transition: var(--transition);
+        html { scroll-behavior: smooth; background: var(--bg); }
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased; 
         }
 
-        /* CV BUTTONS */
-        .cv-actions-hero { display: flex; justify-content: center; gap: 15px; padding: 2rem 5% 0; }
+        /* Sistema de Idiomas */
+        body.lang-en .lang-es { display: none !important; }
+        body.lang-es .lang-en { display: none !important; }
+
+        /* Grano sutil premium */
+        .noise {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.015;
+            background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+            z-index: 9999;
+        }
+
+        /* Cabecera unificada Premium */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 48px;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 10, 0.75);
+            border-bottom: 1px solid var(--border);
+        }
+        .logo-block { display: flex; flex-direction: column; text-decoration: none; }
+        .logo-name { font-size: 0.8rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text); }
+        .logo-role { color: var(--muted); font-size: 0.65rem; letter-spacing: 0.12em; margin-top: 3px; text-transform: uppercase; }
+        nav { display: flex; align-items: center; gap: 28px; }
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            font-weight: 700;
+            transition: opacity 0.3s ease;
+            opacity: 0.6;
+        }
+        nav a:hover, nav a.active { opacity: 1; }
+
+        .lang-switcher { display: inline-flex; gap: 6px; margin-left: 10px; font-size: 0.72rem; font-weight: 900; letter-spacing: 0.1em; color: var(--muted); }
+        .lang-btn { cursor: pointer; transition: color 0.3s ease; }
+        .lang-btn:hover { color: var(--text); }
+
+        /* Bloque descargas de CV */
+        .cv-actions-hero { 
+            display: flex; 
+            justify-content: center; 
+            gap: 16px; 
+            padding: 160px 8% 0; 
+            max-width: 1400px;
+            margin: 0 auto;
+        }
         .btn-cv {
-            cursor: pointer; text-decoration: none; padding: 0.8rem 1.5rem; border-radius: 12px;
-            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            transition: all 0.4s ease; border: 2px solid #111827; display: inline-flex; align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 14px 24px;
+            border: 1px solid var(--border);
+            color: var(--text);
+            background: transparent;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
         }
-        .btn-es-cv { background: #111827; color: #fff; }
-        .btn-en-cv { background: transparent; color: #111827; }
-        .btn-cv:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--accent); }
+        .btn-cv:hover { 
+            background: var(--text); 
+            color: var(--bg); 
+            border-color: var(--text);
+            transform: translateY(-3px); 
+        }
 
+        /* Slideshow Premium */
         #hero-slideshow {
-            position: relative; width: 100%; height: 50vh; min-height: 350px;
-            overflow: hidden; background: #000;
+            position: relative; 
+            width: 84%; 
+            max-width: 1400px;
+            height: 480px; 
+            overflow: hidden; 
+            background: #050505; 
+            margin: 40px auto 0;
+            border-radius: 4px;
+            border: 1px solid var(--border);
         }
-        .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.5s ease-in-out; }
-        .slide.active { opacity: 1; z-index: 10; }
-        .slide img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); transition: transform 4s linear; }
-        .slide.active img { transform: scale(1.0); }
+        .slide {
+            position: absolute; inset: 0; opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+        .slide.active { opacity: 0.65; z-index: 10; }
+        .slide img {
+            width: 100%; height: 100%; object-fit: cover;
+            transform: scale(1.08); transition: transform 6s linear;
+        }
+        .slide.active img { transform: scale(1); }
 
-        .section { padding: 3rem 5%; max-width: 1200px; margin: 0 auto; }
-        .description { font-size: 1rem; color: var(--muted); margin-bottom: 2.5rem; max-width: 800px; font-weight: 500; }
+        /* Contenido de la Sección */
+        .section { padding: 60px 8% 40px; max-width: 1400px; margin: 0 auto; }
+        .description { 
+            font-size: 1.05rem; 
+            font-weight: 300;
+            line-height: 1.7;
+            color: var(--muted); 
+            margin-bottom: 48px;
+            max-width: 900px;
+        }
 
+        /* Botones de Categorías Premium */
         .category-buttons {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.5rem; margin-bottom: 4rem;
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 24px; 
+            margin-bottom: 4rem;
         }
         .category-buttons button {
-            position: relative; border: none; background: none; cursor: pointer;
-            border-radius: var(--radius); overflow: hidden; aspect-ratio: 1/1;
-            transition: var(--transition); box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            position: relative; 
+            border: 1px solid var(--border); 
+            background: none; 
+            cursor: pointer;
+            border-radius: var(--radius); 
+            overflow: hidden; 
+            aspect-ratio: 1/1;
+            transition: var(--transition);
         }
-        .category-buttons button img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+        .category-buttons button img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            filter: grayscale(20%) brightness(0.8);
+            transition: var(--transition); 
+        }
         .category-buttons button p {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.5);
-            color: #fff; display: flex; align-items: flex-end; padding: 15px;
-            font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
-            transition: background 0.3s ease; text-align: left;
+            position: absolute; 
+            inset: 0; 
+            background: rgba(10, 10, 10, 0.45);
+            color: var(--text); 
+            display: flex; 
+            align-items: flex-end; 
+            padding: 20px;
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: var(--transition); 
+            text-align: left;
         }
-        .category-buttons button:hover img { transform: scale(1.1); }
-        .category-buttons button:hover p { background: rgba(0,0,0,0.2); }
+        .category-buttons button:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .category-buttons button:hover img { 
+            transform: scale(1.04); 
+            filter: grayscale(0%) brightness(1);
+        }
+        .category-buttons button:hover p { 
+            background: rgba(10, 10, 10, 0.15); 
+            color: #ffffff;
+        }
 
+        /* Rejilla de la Galería Dinámica */
         .gallery-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 1.5rem; margin-top: 2rem;
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px; 
+            margin-top: 2rem;
         }
         .gallery-grid img {
-            width: 100%; aspect-ratio: 1/1; object-fit: cover;
-            border-radius: var(--radius); cursor: pointer; transition: var(--transition);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            width: 100%; 
+            aspect-ratio: 1/1; 
+            object-fit: cover;
+            border-radius: var(--radius); 
+            cursor: pointer; 
+            transition: var(--transition);
+            border: 1px solid var(--border);
+            filter: brightness(0.9);
         }
-        .gallery-grid img:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); }
+        .gallery-grid img:hover { 
+            transform: translateY(-4px); 
+            border-color: rgba(255, 255, 255, 0.25);
+            filter: brightness(1);
+        }
 
-        footer { background: #111827; color: #fff; padding: 4rem 5%; text-align: center; }
-        .footer-social { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; }
-        .footer-social img { width: 22px; filter: invert(1); opacity: 0.6; transition: 0.3s; }
-        .footer-social a:hover img { opacity: 1; transform: translateY(-3px); }
+        /* Footer de la página */
+        footer {
+            padding: 40px 8%;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.72rem;
+            color: var(--muted);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .footer-social { display: flex; gap: 1.5rem; }
+        .footer-social img { width: 20px; filter: invert(1); opacity: 0.4; transition: var(--transition); }
+        .footer-social a:hover img { opacity: 0.9; transform: translateY(-2px); }
 
+        /* Lightbox Modal Premium */
         .modal {
-            display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95);
-            z-index: 2000; align-items: center; justify-content: center; cursor: zoom-out;
+            display: none; 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(5, 5, 5, 0.98);
+            z-index: 2000; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: zoom-out;
+            backdrop-filter: blur(15px);
         }
-        .modal img { max-width: 90%; max-height: 85vh; object-fit: contain; border-radius: 4px; }
+        .modal img { 
+            max-width: 90%; 
+            max-height: 85vh; 
+            object-fit: contain; 
+            border-radius: 4px; 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
         .modal button {
-            position: absolute; background: none; border: none; color: white;
-            font-size: 2.5rem; cursor: pointer; padding: 20px; transition: 0.2s;
+            position: absolute; 
+            background: none; 
+            border: none; 
+            color: white;
+            font-size: 2rem; 
+            cursor: pointer; 
+            padding: 20px; 
+            transition: var(--transition);
+            opacity: 0.5;
         }
-        .modal button:hover { color: var(--accent); }
-        .modal .close { top: 20px; right: 20px; }
-        .modal .prev { left: 10px; top: 50%; transform: translateY(-50%); }
-        .modal .next { right: 10px; top: 50%; transform: translateY(-50%); }
+        .modal button:hover { color: #ffffff; opacity: 1; }
+        .modal .close { top: 24px; right: 48px; }
+        .modal .prev { left: 24px; top: 50%; transform: translateY(-50%); }
+        .modal .next { right: 24px; top: 50%; transform: translateY(-50%); }
 
+        /* Media Queries Responsivas */
+        @media (max-width: 992px) {
+            .cv-actions-hero { padding-top: 130px; }
+            #hero-slideshow { width: 92%; height: 360px; }
+        }
         @media (max-width: 768px) {
-            header { flex-direction: column; padding: 1.5rem; gap: 1rem; }
-            nav { flex-wrap: wrap; justify-content: center; }
-            nav a { margin: 0.3rem 0.6rem; font-size: 0.65rem; }
-            .category-buttons { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-            .cv-actions-hero { flex-direction: column; width: 100%; }
+            .cv-actions-hero { flex-direction: column; gap: 12px; }
             .btn-cv { width: 100%; justify-content: center; }
+            #hero-slideshow { height: 280px; margin-top: 24px; }
+            .category-buttons { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            footer { flex-direction: column; gap: 24px; text-align: center; }
+            .modal .close { right: 24px; top: 16px; }
+            .modal .prev { left: 12px; }
+            .modal .next { right: 12px; }
         }
     </style>
 </head>
 
-<body>
-    <header>
-        <div class="branding">
-            <h2>Esteban Campos Polo</h2>
-            <h3>Sr. Graphic Packaging and Production Designer</h3>
-        </div>
+<body class="lang-en">
+
+    <div class="noise"></div>
+
+    <header class="main-header">
+        <a href="index.html" class="logo-block">
+            <span class="logo-name">Esteban Campos Polo</span>
+            <span class="logo-role lang-en">Character Modeler & Visual Designer</span>
+            <span class="logo-role lang-es">Modelador de Personajes & Diseñador Visual</span>
+        </a>
         <nav>
-            <a href="index.html" data-key="nav-home">Home</a>
-            <a href="graphic-design.html" data-key="nav-graphic">Graphic Design</a>
-            <a href="photography.html" data-key="nav-photo">Photography</a>
-            <a href="3d-modeling.html" data-key="nav-3d">3D Art</a>
-            <a href="IA.html" class="active" data-key="nav-ai">AI</a>
-            <a href="about.html" data-key="nav-about">About</a>
-            <a href="cv_resume.html" data-key="nav-cv">CV/Resume</a>
-            <a href="contact.html" data-key="nav-contact">Contact</a>
-            <button class="lang-switch" onclick="toggleLanguage()" id="langBtn">ES</button>
+            <a href="index.html">HOME</a>
+            <a href="graphic-design.html">GRAPHIC DESIGN</a>
+            <a href="3d-modeling.html">3D ART</a>
+            <a href="about.html" class="active">ABOUT</a>
+            <a href="cv_resume.html">CV / RESUME</a>
+            <a href="contact.html">CONTACT</a>
+           
+            <div class="lang-switcher">
+                <span class="lang-btn" id="btn-en" onclick="setLanguage('en')" style="color: #fff;">EN</span>
+                <span>/</span>
+                <span class="lang-btn" id="btn-es" onclick="setLanguage('es')">ES</span>
+            </div>
         </nav>
     </header>
 
     <div class="cv-actions-hero">
-        <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
-        <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
+        <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv">
+            <span class="lang-en">Download CV (ES)</span>
+            <span class="lang-es">Descargar CV (ES)</span>
+        </button>
+        <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv">
+            <span class="lang-en">Download Resume (EN)</span>
+            <span class="lang-es">Descargar Resume (EN)</span>
+        </button>
     </div>
 
     <div id="hero-slideshow">
@@ -239,17 +419,50 @@ window.addEventListener('scroll', function(){
         <div class="slide"><img src="assets/images/AI/webp/clothes/clothes (7).webp" alt="Clothes"></div>
     </div>
 
-    <section class="section">
-        <p class="description" data-key="ai-desc">
+    <section class="section" id="ai-showcase-section">
+        <p class="description lang-en">
             I explore creative possibilities through generative AI, transforming concepts into visual narratives. Each project involves meticulous art direction, from prompt engineering to final digital retouching.
+        </p>
+        <p class="description lang-es">
+            Exploro las posibilidades creativas a través de la IA generativa, transformando conceptos en narrativas visuales. Cada proyecto implica una meticulosa dirección de arte, desde la ingeniería de prompts hasta el retoque digital final.
         </p>
         
         <div class="category-buttons">
-            <button onclick="openCategory('echo')"><img src="assets/images/AI/webp/echo/echo (3).webp" alt="Echoes"><p data-key="cat-echo">Echoes of Marble</p></button>
-            <button onclick="openCategory('creepy')"><img src="assets/images/AI/webp/creepy/creepy (4).webp" alt="Creepy"><p data-key="cat-creepy">Creepy Seed</p></button>
-            <button onclick="openCategory('val')"><img src="assets/images/AI/webp/val/val (4).webp" alt="Valencia"><p data-key="cat-val">Valencia Servings</p></button>
-            <button onclick="openCategory('clothes')"><img src="assets/images/AI/webp/clothes/clothes (7).webp" alt="Clothes"><p data-key="cat-clothes">Clothes</p></button>
-            <button onclick="openCategory('toys')"><img src="assets/images/AI/webp/toys/toys (12).webp" alt="Toys"><p data-key="cat-toys">Toys</p></button>
+            <button onclick="openCategory('echo')">
+                <img src="assets/images/AI/webp/echo/echo (3).webp" alt="Echoes">
+                <p>
+                    <span class="lang-en">Echoes of Marble</span>
+                    <span class="lang-es">Ecos de Mármol</span>
+                </p>
+            </button>
+            <button onclick="openCategory('creepy')">
+                <img src="assets/images/AI/webp/creepy/creepy (4).webp" alt="Creepy">
+                <p>
+                    <span class="lang-en">Creepy Seed</span>
+                    <span class="lang-es">Semilla Creepy</span>
+                </p>
+            </button>
+            <button onclick="openCategory('val')">
+                <img src="assets/images/AI/webp/val/val (4).webp" alt="Valencia">
+                <p>
+                    <span class="lang-en">Valencia Servings</span>
+                    <span class="lang-es">Valencia Raciones</span>
+                </p>
+            </button>
+            <button onclick="openCategory('clothes')">
+                <img src="assets/images/AI/webp/clothes/clothes (7).webp" alt="Clothes">
+                <p>
+                    <span class="lang-en">Clothes</span>
+                    <span class="lang-es">Ropa</span>
+                </p>
+            </button>
+            <button onclick="openCategory('toys')">
+                <img src="assets/images/AI/webp/toys/toys (12).webp" alt="Toys">
+                <p>
+                    <span class="lang-en">Toys</span>
+                    <span class="lang-es">Juguetes</span>
+                </p>
+            </button>
         </div>
 
         <div class="gallery-grid" id="thumbnailGallery"></div>
@@ -262,7 +475,7 @@ window.addEventListener('scroll', function(){
             <a href="https://www.instagram.com/estcampo/" target="_blank"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
             <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank"><img src="assets/icons/behance.svg" alt="Behance"></a>
         </div>
-        <p data-key="footer-copy">© 2026 Esteban Campos Polo. All rights reserved.</p>
+        <p>© 2026 Esteban Campos Polo. All rights reserved.</p>
     </footer>
 
     <div class="modal" id="slideshowModal" onclick="closeModal()">
@@ -273,32 +486,6 @@ window.addEventListener('scroll', function(){
     </div>
 
     <script>
-        const translations = {
-            es: {
-                "nav-home": "Inicio", "nav-graphic": "Diseño Gráfico", "nav-photo": "Fotografía", "nav-3d": "Arte 3D", "nav-ai": "IA", "nav-about": "Sobre mí", "nav-contact": "Contacto", "nav-cv": "CV/Resume",
-                "ai-desc": "Exploro las posibilidades creativas a través de la IA generativa, transformando conceptos en narrativas visuales. Cada proyecto implica una meticulosa dirección de arte, desde la ingeniería de prompts hasta el retoque digital final.",
-                "cat-echo": "Ecos de Mármol", "cat-creepy": "Semilla Creepy", "cat-val": "Valencia Raciones", "cat-clothes": "Ropa", "cat-toys": "Juguetes",
-                "footer-copy": "© 2026 Esteban Campos Polo. Todos los derechos reservados."
-            },
-            en: {
-                "nav-home": "Home", "nav-graphic": "Graphic Design", "nav-photo": "Photography", "nav-3d": "3D Art", "nav-ai": "AI", "nav-about": "About", "nav-contact": "Contact", "nav-cv": "CV/Resume",
-                "ai-desc": "I explore creative possibilities through generative AI, transforming concepts into visual narratives. Each project involves meticulous art direction, from prompt engineering to final digital retouching.",
-                "cat-echo": "Echoes of Marble", "cat-creepy": "Creepy Seed", "cat-val": "Valencia Servings", "cat-clothes": "Clothes", "cat-toys": "Toys",
-                "footer-copy": "© 2026 Esteban Campos Polo. All rights reserved."
-            }
-        };
-
-        let currentLang = 'en';
-        function toggleLanguage() {
-            currentLang = currentLang === 'es' ? 'en' : 'es';
-            document.getElementById('langBtn').innerText = currentLang === 'es' ? 'EN' : 'ES';
-            document.querySelectorAll('[data-key]').forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
-            });
-            sendEvent('engagement_change_language', { 'language': currentLang });
-        }
-
         // Slideshow Hero
         const heroSlides = document.querySelectorAll("#hero-slideshow .slide");
         let heroIdx = 0;
@@ -308,7 +495,10 @@ window.addEventListener('scroll', function(){
             heroSlides[heroIdx].classList.add('active');
         }, 5000);
 
-        // Galería Lógica
+        // Seguridad: Prevenir menú contextual en toda la página
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Galería Lógica Nata e Inyecciones
         const categoryCounts = { echo: 55, creepy: 9, val: 4, clothes: 12, toys: 20 };
         let imageList = [];
         let currentIndex = 0;
@@ -323,11 +513,15 @@ window.addEventListener('scroll', function(){
                 img.src = `assets/images/AI/webp/${cat}/${cat} (${i}).webp`;
                 img.alt = `${cat} art ${i}`;
                 img.loading = "lazy";
+                img.className = "item"; // Clase 'item' inyectada para el correcto tracking de Google Analytics
                 img.onclick = () => openSlideshow(cat, i);
                 gallery.appendChild(img);
             }
             gallery.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            sendEvent('engagement_view_category', { 'category': cat });
+            
+            if (typeof gtag === 'function') {
+                gtag('event', 'engagement_view_category', { 'category': cat });
+            }
         }
 
         function openSlideshow(cat, startIdx) {
@@ -339,7 +533,10 @@ window.addEventListener('scroll', function(){
             modalImage.src = imageList[currentIndex];
             modal.style.display = "flex";
             document.body.style.overflow = "hidden";
-            sendEvent('engagement_view_image', { 'category': cat, 'index': startIdx });
+            
+            if (typeof gtag === 'function') {
+                gtag('event', 'engagement_view_image', { 'category': cat, 'index': startIdx });
+            }
         }
 
         function closeModal() { 
@@ -358,6 +555,52 @@ window.addEventListener('scroll', function(){
                 if (e.key === "ArrowLeft") prevImage();
             }
         });
+
+        // Forzar descarga de archivos
+        window.forceDownload = function(lang, filename) {
+            const filePath = 'assets/' + filename;
+
+            if (typeof gtag === 'function') {
+                gtag('event', 'engagement_cv_download', {
+                    'language': lang,
+                    'filename': filename,
+                    'page_path': window.location.pathname
+                });
+            }
+
+            const link = document.createElement('a');
+            link.href = filePath;
+            link.setAttribute('download', filename);
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // Controlador unificado del idioma
+        function setLanguage(lang) {
+            const body = document.body;
+            const btnEn = document.getElementById('btn-en');
+            const btnEs = document.getElementById('btn-es');
+               
+            if (lang === 'en') {
+                body.classList.remove('lang-es');
+                body.classList.add('lang-en');
+                if(btnEn) btnEn.style.color = '#fff';
+                if(btnEs) btnEs.style.color = 'var(--muted)';
+                document.documentElement.lang = 'en';
+            } else {
+                body.classList.remove('lang-en');
+                body.classList.add('lang-es');
+                if(btnEn) btnEn.style.color = 'var(--muted)';
+                if(btnEs) btnEs.style.color = '#fff';
+                document.documentElement.lang = 'es';
+            }
+
+            if (typeof gtag === 'function') {
+                gtag('event', 'engagement_change_language', { 'language': lang });
+            }
+        }
     </script>
 </body>
 </html>

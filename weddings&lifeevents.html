@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Weddings & Life Events - Esteban Campos Polo</title>
+  <title>Weddings & Life Events — Esteban Campos Polo</title>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-8VMES8F4MN', {
         anonymize_ip: true,
         send_page_view: true,
@@ -19,487 +18,897 @@
     });
   </script>
 
+  <script>
+  (function() {
+      const CONFIG = {
+          idsToObserve: ['.section', '#thumbnailGallery'],
+          scrollDepths: [25, 50, 75, 90, 100],
+          trackedDepths: [],
+          clickCount: 0,
+          clickTimer: null
+      };
 
-    <script>
-(function() {
-    // 1. CONFIGURACIÓN Y ESTADO
-    const CONFIG = {
-        idsToObserve: ['#hero', '#proyectos', '#sobre-mi', '#contacto'], // Ajusta estos IDs a tu HTML
-        scrollDepths: [25, 50, 75, 90, 100],
-        trackedDepths: [],
-        clickCount: 0,
-        clickTimer: null,
-        sessionStartTime: Date.now()
-    };
+      const sendEvent = (name, params = {}) => {
+          if (typeof gtag === 'function') {
+              gtag('event', name, {
+                  ...params,
+                  'page_path': window.location.pathname,
+                  'section_type': 'weddings_premium'
+              });
+          }
+      };
 
-    const sendEvent = (name, params = {}) => {
-        if (typeof gtag === 'function') {
-            gtag('event', name, {
-                ...params,
-                'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                'memory': navigator.deviceMemory || 'unknown',
-                'page_path': window.location.pathname
-            });
-        }
-    };
+      document.addEventListener("DOMContentLoaded", function() {
+          document.addEventListener('contextmenu', (e) => {
+              if (e.target.tagName === 'IMG' && !e.target.closest('.footer-social')) {
+                  sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
+              }
+          });
 
-    // 2. INICIALIZACIÓN AL CARGAR DOM
-    document.addEventListener("DOMContentLoaded", function() {
+          document.addEventListener('dragstart', (e) => {
+              if (e.target.tagName === 'IMG' && !e.target.closest('.footer-social')) {
+                  sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
+              }
+          });
 
-        // --- SECCIÓN: SEGURIDAD Y CLICKS ---
-        
-        // Clic derecho en imágenes e intento de arrastre
-        document.addEventListener('contextmenu', (e) => {
-            if (e.target.tagName === 'IMG') {
-                sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
-            }
-        });
+          document.addEventListener('click', (e) => {
+              CONFIG.clickCount++;
+              clearTimeout(CONFIG.clickTimer);
+              CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
+              if (CONFIG.clickCount > 4) {
+                  sendEvent('ux_rage_click', { 'element': e.target.tagName + (e.target.id ? '#'+e.target.id : '') });
+                  CONFIG.clickCount = 0;
+              }
+          });
 
-        document.addEventListener('dragstart', (e) => {
-            if (e.target.tagName === 'IMG') {
-                sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
-            }
-        });
+          window.addEventListener('scroll', () => {
+              let h = document.documentElement, b = document.body;
+              let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
+              CONFIG.scrollDepths.forEach(depth => {
+                  if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
+                      CONFIG.trackedDepths.push(depth);
+                      sendEvent('content_scroll_depth', { 'depth': depth + '%' });
+                  }
+              });
+          });
 
-        // Rage Clicks (Detecta frustración: más de 4 clics en 1 seg)
-        document.addEventListener('click', (e) => {
-            CONFIG.clickCount++;
-            clearTimeout(CONFIG.clickTimer);
-            CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
-            
-            if (CONFIG.clickCount > 4) {
-                sendEvent('ux_rage_click', { 'element': e.target.tagName + (e.target.id ? '#'+e.target.id : '') });
-                CONFIG.clickCount = 0;
-            }
-        });
-
-        // --- SECCIÓN: NAVEGACIÓN Y CONTENIDO ---
-
-        // Scroll Tracking Granular
-        window.addEventListener('scroll', () => {
-            let h = document.documentElement, b = document.body;
-            let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
-            
-            CONFIG.scrollDepths.forEach(depth => {
-                if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
-                    CONFIG.trackedDepths.push(depth);
-                    sendEvent('content_scroll_depth', { 'depth': depth + '%' });
-                }
-            });
-        });
-
-        // Visibilidad Real de Proyectos (Intersection Observer)
-        if ('IntersectionObserver' in window) {
-            let observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            if (entry.isIntersecting) { // Si sigue ahí tras 2 segundos
-                                sendEvent('content_view_confirmed', { 'section_id': entry.target.id });
-                                observer.unobserve(entry.target);
-                            }
-                        }, 2000);
-                    }
-                });
-            }, { threshold: 0.6 });
-
-            CONFIG.idsToObserve.forEach(id => {
-                let el = document.querySelector(id);
-                if (el) observer.observe(el);
-            });
-        }
-
-
-        /
-        document.addEventListener('copy', () => {
-            let text = document.getSelection().toString().substring(0, 50);
-            sendEvent('engagement_text_copy', { 'preview': text + '...' });
-        });
-
-        // Exit Intent (Solo Desktop)
-        document.addEventListener('mouseleave', (e) => {
-            if (e.clientY < 0) sendEvent('behavior_exit_intent');
-        });
-
-        // Hover en proyectos (Interés sin clic)
-        document.querySelectorAll('.card-proyecto, .portfolio-item').forEach(item => {
-            let hTimer;
-            item.addEventListener('mouseenter', () => {
-                hTimer = setTimeout(() => sendEvent('engagement_hover_interest', { 'id': item.id }), 3000);
-            });
-            item.addEventListener('mouseleave', () => clearTimeout(hTimer));
-        });
-
-        // Detección de AdBlock
-        setTimeout(() => {
-            const test = document.createElement('div');
-            test.className = 'adsbox';
-            test.innerHTML = '&nbsp;';
-            document.body.appendChild(test);
-            sendEvent('tech_adblock_status', { 'active': test.offsetHeight === 0 });
-            test.remove();
-        }, 3000);
-    });
-
-
-
-    window.onerror = (msg, url, line) => {
-        sendEvent('tech_js_error', { 'msg': msg, 'line': line });
-    };
-
-    window.addEventListener('load', () => {
-        const perf = performance.getEntriesByType("navigation")[0];
-        if (perf) sendEvent('tech_load_time', { 'ms': Math.round(perf.domComplete) });
-    });
-
-})();
-
-    </script>
-
-
-
-
+          // Hover tracking para imágenes de galería
+          document.querySelectorAll('.gallery-grid img').forEach(img => {
+              let hTimer;
+              img.addEventListener('mouseenter', () => {
+                  hTimer = setTimeout(() => {
+                      sendEvent('engagement_hover_interest', { 'src': img.src.split('/').pop() });
+                  }, 2000);
+              });
+              img.addEventListener('mouseleave', () => clearTimeout(hTimer));
+          });
+      });
+  })();
+  </script>
 
   <style>
-    /* === Base visual (igual al portfolio principal) === */
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f2f2f2;
-      color: #000;
+    /* === RESET & BASE === */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* === VARIABLES DE TEMA === */
+    :root {
+      /* Dark mode (por defecto - estilo premium) */
+      --bg-body: #0a0a0a;
+      --bg-header: transparent;
+      --bg-footer: #050505;
+      --bg-card: #111111;
+      --bg-cv-links: rgba(255, 255, 255, 0.02);
+      --bg-button: transparent;
+      --bg-button-hover: #ffffff;
+      --bg-button-hover-text: #000000;
+      
+      --text-primary: #ffffff;
+      --text-secondary: #888888;
+      --text-nav: #666666;
+      --text-muted: #444444;
+      
+      --border-color: rgba(255, 255, 255, 0.05);
+      --border-card: rgba(255, 255, 255, 0.04);
+      --border-button: rgba(255, 255, 255, 0.1);
+      
+      --shadow-modal: 0 30px 70px rgba(0,0,0,0.8);
+      --shadow-card: 0 4px 20px rgba(0,0,0,0.3);
+      
+      --modal-overlay: rgba(5, 5, 5, 0.98);
+      --modal-text: #ffffff;
+      
+      --filter-img-default: grayscale(40%) brightness(85%);
+      --filter-img-hover: grayscale(0%) brightness(100%);
+      --filter-icon: invert(0.4);
+      --filter-icon-hover: invert(1);
+      
+      --transition-fast: 0.3s ease;
+      --transition-smooth: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      
+      --noise-opacity: 0.015;
     }
 
-    header {
+    /* Light mode override */
+    [data-theme="light"] {
+      --bg-body: #fafafa;
+      --bg-header: rgba(255, 255, 255, 0.95);
+      --bg-footer: #f0f0f0;
+      --bg-card: #ffffff;
+      --bg-cv-links: rgba(0, 0, 0, 0.03);
+      --bg-button: transparent;
+      --bg-button-hover: #1a1a1a;
+      --bg-button-hover-text: #ffffff;
+      
+      --text-primary: #1a1a1a;
+      --text-secondary: #555555;
+      --text-nav: #444444;
+      --text-muted: #777777;
+      
+      --border-color: rgba(0, 0, 0, 0.08);
+      --border-card: rgba(0, 0, 0, 0.06);
+      --border-button: rgba(0, 0, 0, 0.15);
+      
+      --shadow-modal: 0 30px 70px rgba(0,0,0,0.25);
+      --shadow-card: 0 4px 20px rgba(0,0,0,0.08);
+      
+      --modal-overlay: rgba(250, 250, 250, 0.98);
+      --modal-text: #1a1a1a;
+      
+      --filter-img-default: grayscale(30%) brightness(92%);
+      --filter-img-hover: grayscale(0%) brightness(100%);
+      --filter-icon: invert(0.6);
+      --filter-icon-hover: invert(0.2);
+      
+      --noise-opacity: 0.008;
+    }
+
+    body { 
+      background-color: var(--bg-body); 
+      color: var(--text-primary); 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; 
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background-color var(--transition-fast), color var(--transition-fast);
+      line-height: 1.6;
+    }
+
+    /* Noise overlay - efecto granulado premium */
+    .noise {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='var(--noise-opacity)'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: var(--noise-opacity);
+      transition: opacity var(--transition-fast);
+    }
+
+    /* === Header Premium === */
+    .main-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
-      background-color: #fff;
-      border-bottom: 2px solid #ccc;
+      padding: 2rem 3rem;
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-color);
+      position: relative;
+      z-index: 100;
+      transition: background var(--transition-fast), border-color var(--transition-fast);
+      flex-wrap: wrap;
+      gap: 1rem;
     }
-
-    .branding h2 {
-      margin: 0.2rem 0;
-      font-size: 1.3em;
+    
+    .logo-block { 
+      text-decoration: none; 
+      color: var(--text-primary); 
+      display: flex; 
+      flex-direction: column; 
+      transition: color var(--transition-fast);
     }
-
-    .branding h3 {
-      margin: 0;
-      font-size: 1em;
-      font-weight: normal;
+    .logo-name { 
+      font-size: 1.2rem; 
+      font-weight: 700; 
+      text-transform: uppercase; 
+      letter-spacing: 0.15em; 
     }
-
-    nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #000;
-      font-weight: bold;
+    .logo-role { 
+      font-size: 0.75rem; 
+      color: var(--text-muted); 
+      letter-spacing: 0.05em; 
+      margin-top: 0.2rem; 
+      transition: color var(--transition-fast);
     }
-
-    nav a:hover {
-      color: #555;
+    
+    nav { 
+      display: flex; 
+      align-items: center; 
+      gap: 1.5rem; 
+      flex-wrap: wrap;
     }
-
-    /* === Contenido principal === */
-    .section {
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
+    nav a { 
+      text-decoration: none; 
+      color: var(--text-nav); 
+      font-size: 0.75rem; 
+      font-weight: 600; 
+      letter-spacing: 0.15em; 
+      text-transform: uppercase; 
+      transition: color var(--transition-fast); 
+      padding: 0.3rem 0;
     }
-
-    .section h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #000;
-      margin-bottom: 0.5rem;
-      text-align: left;
+    nav a:hover, nav a.active { 
+      color: var(--text-primary); 
     }
-
-    /* Footer: iconos sociales discretos para mantener la estética */
-    .footer-social {
-      margin-top: 0.5rem;
+    
+    /* Theme Toggle Button - integrado en nav */
+    #theme-toggle {
+      background: var(--bg-button);
+      border: 1px solid var(--border-button);
+      color: var(--text-nav);
+      padding: 0.4rem 0.75rem;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      transition: all var(--transition-fast);
       display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 0.6rem;
+      min-width: 44px;
+      height: 32px;
+    }
+    #theme-toggle:hover {
+      background: var(--bg-button-hover);
+      color: var(--bg-button-hover-text);
+      border-color: var(--bg-button-hover);
+      transform: translateY(-1px);
+    }
+    #theme-toggle:focus {
+      outline: 2px solid var(--text-primary);
+      outline-offset: 2px;
+    }
+
+    /* Language Switcher */
+    .lang-switcher { 
+      display: flex; 
+      gap: 0.3rem; 
+      font-size: 0.75rem; 
+      font-weight: 600; 
+      margin-left: 0.5rem;
       align-items: center;
     }
+    .lang-btn { 
+      cursor: pointer; 
+      transition: color var(--transition-fast); 
+      color: var(--text-muted);
+      padding: 0.2rem 0.1rem;
+    }
+    .lang-btn:hover { color: var(--text-secondary); }
+    .lang-btn.active { color: var(--text-primary); }
+    .lang-separator { color: var(--border-color); }
 
-    .footer-social a img {
-      width: 22px;
-      height: 22px;
-      display: inline-block;
-      vertical-align: middle;
-      filter: none;
-      opacity: 0.95;
-      transition: opacity 0.2s, transform 0.15s;
+    /* === CV Links === */
+    .cv-links { 
+      display: flex; 
+      justify-content: center; 
+      gap: 1rem; 
+      padding: 1rem 2rem; 
+      background: var(--bg-cv-links); 
+      border-bottom: 1px solid var(--border-color);
+      transition: background var(--transition-fast), border-color var(--transition-fast);
+      flex-wrap: wrap;
+    }
+    .cv-links a { 
+      text-decoration: none; 
+      font-size: 0.7rem; 
+      font-weight: 600; 
+      letter-spacing: 0.1em; 
+      text-transform: uppercase; 
+      color: var(--text-nav); 
+      border: 1px solid var(--border-button); 
+      padding: 0.5rem 1.25rem; 
+      border-radius: 3px; 
+      transition: all var(--transition-fast); 
+      background: var(--bg-button);
+    }
+    .cv-links a:hover { 
+      color: var(--bg-button-hover-text); 
+      border-color: var(--bg-button-hover); 
+      background: var(--bg-button-hover); 
+      transform: translateY(-1px);
     }
 
-    .footer-social a img:hover {
-      opacity: 1;
-      transform: translateY(-2px);
+    /* === Layout Principal === */
+    .section { 
+      padding: 4rem 3rem; 
+      max-width: 1400px; 
+      margin: 0 auto; 
     }
-    .section p {
-      font-size: 1rem;
-      color: #333;
-      margin-bottom: 2rem;
+    .section h1 { 
+      font-size: 2.2rem; 
+      font-weight: 300; 
+      letter-spacing: -0.02em; 
+      color: var(--text-primary); 
+      margin-bottom: 0.75rem; 
+      transition: color var(--transition-fast);
     }
-
-    /* === Galería: todas las imágenes iguales === */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .gallery-grid img {
-      width: 100%;
-      height: 220px; /* altura fija uniforme */
-      object-fit: cover; /* recorta sin deformar */
-      border-radius: 12px;
-      background: #fff;
-      border: 1px solid #ddd;
-      padding: 0.5rem;
-      filter: grayscale(100%) brightness(80%);
-      transition: all 0.3s ease;
-      cursor: pointer;
-      display: block;
+    .section p { 
+      font-size: 0.95rem; 
+      color: var(--text-secondary); 
+      line-height: 1.6; 
+      max-width: 650px; 
+      margin-bottom: 3rem; 
+      transition: color var(--transition-fast);
     }
 
-    .gallery-grid img:hover {
-      filter: grayscale(0%) brightness(100%);
-      transform: scale(1.05);
+    /* === Galería Premium === */
+    .gallery-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+      gap: 1.75rem; 
+      min-height: 300px; 
+    }
+    .gallery-grid img { 
+      width: 100%; 
+      height: 240px; 
+      object-fit: cover; 
+      border-radius: 4px; 
+      background: var(--bg-card); 
+      border: 1px solid var(--border-card); 
+      filter: var(--filter-img-default); 
+      transition: transform var(--transition-smooth), filter var(--transition-smooth), border-color var(--transition-fast), box-shadow var(--transition-fast); 
+      cursor: pointer; 
+      box-shadow: 0 2px 12px var(--shadow-card);
+    }
+    .gallery-grid img:hover { 
+      filter: var(--filter-img-hover); 
+      transform: scale(1.025) translateY(-3px); 
+      border-color: rgba(255, 255, 255, 0.2); 
+      box-shadow: 0 8px 32px var(--shadow-card);
+    }
+    .gallery-grid img:focus {
+      outline: 2px solid var(--text-primary);
+      outline-offset: 3px;
     }
 
-    /* === Navegación entre secciones === */
-    .photo-sections-nav {
-      text-align: center;
-      margin-top: 3rem;
+    /* === Navegación Inferior === */
+    .photo-sections-nav { 
+      text-align: center; 
+      margin-top: 6rem; 
+      padding-top: 3rem; 
+      border-top: 1px solid var(--border-color); 
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
-
-    .photo-sections-nav a {
-      margin: 0 1rem;
-      text-decoration: none;
-      color: #000;
-      font-weight: bold;
-      transition: color 0.3s;
+    .photo-sections-nav a { 
+      margin: 0 0.8rem; 
+      text-decoration: none; 
+      color: var(--text-nav); 
+      font-size: 0.75rem; 
+      font-weight: 600; 
+      text-transform: uppercase; 
+      letter-spacing: 0.15em; 
+      transition: color var(--transition-fast); 
+      padding: 0.3rem 0;
     }
-
-    .photo-sections-nav a:hover {
-      color: #333;
+    .photo-sections-nav a:hover { 
+      color: var(--text-primary); 
+    }
+    .photo-sections-nav a.current-sub { 
+      color: var(--text-primary); 
+      pointer-events: none; 
+      border-bottom: 1px solid var(--text-primary); 
+      padding-bottom: 3px; 
     }
 
     /* === Footer === */
-    footer {
-      background-color: #ccc;
-      padding: 1rem;
-      text-align: center;
-      font-size: 0.9em;
-      margin-top: 3rem;
+    footer { 
+      background-color: var(--bg-footer); 
+      padding: 3rem 2rem; 
+      text-align: center; 
+      font-size: 0.8rem; 
+      color: var(--text-muted); 
+      border-top: 1px solid var(--border-color); 
+      margin-top: 6rem; 
+      transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
     }
+    footer p { margin: 0.3rem 0; }
+    footer a { color: var(--text-nav); text-decoration: none; transition: color var(--transition-fast); }
+    footer a:hover { color: var(--text-primary); }
+    
+    .footer-social { 
+      margin-top: 1.5rem; 
+      display: flex; 
+      justify-content: center; 
+      gap: 1.2rem; 
+      flex-wrap: wrap;
+    }
+    .footer-social a img { 
+      width: 18px; 
+      height: 18px; 
+      filter: var(--filter-icon); 
+      transition: all var(--transition-fast); 
+      opacity: 0.9;
+    }
+    .footer-social a img:hover { 
+      filter: var(--filter-icon-hover); 
+      transform: translateY(-2px); 
+      opacity: 1;
+    }
+    .footer-social a:focus img {
+      outline: 2px solid var(--text-primary);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+    
+    .hits-badge { 
+      margin-top: 1.5rem; 
+      opacity: 0.25; 
+      transition: opacity var(--transition-fast);
+      display: inline-block;
+    }
+    .hits-badge:hover { opacity: 0.5; }
 
-    /* === Modal === */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.9);
+    /* === Modal Exhibidor Premium === */
+    .modal { 
+      display: none; 
+      position: fixed; 
+      z-index: 10000; 
+      inset: 0; 
+      background-color: var(--modal-overlay); 
+      backdrop-filter: blur(12px); 
+      -webkit-backdrop-filter: blur(12px);
+      align-items: center; 
+      justify-content: center; 
+      transition: background-color var(--transition-fast);
+    }
+    .modal img { 
+      max-width: 90%; 
+      max-height: 85%; 
+      border-radius: 2px; 
+      box-shadow: var(--shadow-modal); 
+      border: 1px solid var(--border-color); 
+      object-fit: contain; 
+      transition: border-color var(--transition-fast);
+    }
+    .modal button { 
+      position: absolute; 
+      color: rgba(255,255,255,0.4); 
+      font-size: 1.5rem; 
+      background: none; 
+      border: none; 
+      cursor: pointer; 
+      transition: color var(--transition-fast), transform var(--transition-fast); 
+      width: 44px;
+      height: 44px;
+      display: flex;
       align-items: center;
       justify-content: center;
+      border-radius: 50%;
+    }
+    [data-theme="light"] .modal button {
+      color: rgba(26,26,26,0.5);
+    }
+    .modal button:hover { 
+      color: var(--text-primary); 
+      transform: scale(1.1);
+      background: rgba(255,255,255,0.08);
+    }
+    .modal .close { top: 30px; right: 40px; font-size: 2rem; }
+    .modal .prev { left: 40px; top: 50%; transform: translateY(-50%); }
+    .modal .next { right: 40px; top: 50%; transform: translateY(-50%); }
+    
+    .modal button:active { transform: scale(0.95); }
+
+    /* === Responsive === */
+    @media (max-width: 1024px) {
+      .main-header { padding: 1.5rem 2rem; }
+      .section { padding: 3rem 2rem; }
+      nav { gap: 1rem; }
+      nav a { font-size: 0.7rem; margin: 0 0.3rem; }
     }
 
-    .modal img {
-      max-width: 90%;
-      max-height: 80%;
-      border-radius: 12px;
+    @media (max-width: 768px) {
+      .main-header { 
+        flex-direction: column; 
+        align-items: flex-start; 
+        padding: 1.25rem 1.5rem; 
+      }
+      nav { 
+        width: 100%; 
+        justify-content: center; 
+        margin-top: 0.75rem;
+        flex-wrap: wrap;
+      }
+      nav a { margin: 0 0.4rem; font-size: 0.68rem; }
+      
+      .section { padding: 2.5rem 1.5rem; }
+      .section h1 { font-size: 1.8rem; }
+      
+      .gallery-grid { 
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+        gap: 1.25rem; 
+      }
+      .gallery-grid img { height: 200px; }
+      
+      .cv-links { 
+        flex-direction: column; 
+        align-items: center; 
+        padding: 0.75rem 1.5rem;
+      }
+      .cv-links a { width: 100%; max-width: 320px; text-align: center; }
+      
+      .photo-sections-nav { 
+        margin-top: 4rem; 
+        padding-top: 2rem; 
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .photo-sections-nav a { margin: 0; }
+      
+      .modal .prev, .modal .next { 
+        font-size: 1.8rem; 
+        left: 20px; 
+        right: 20px; 
+        width: 40px; 
+        height: 40px;
+      }
+      .modal .close { top: 20px; right: 25px; font-size: 1.8rem; }
     }
 
-    .modal button {
-      position: absolute;
-      color: white;
-      font-size: 2rem;
-      background: none;
-      border: none;
-      cursor: pointer;
+    /* === Accesibilidad === */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
 
-    .modal .close {
-      top: 20px;
-      right: 30px;
+    a:focus, button:focus, img:focus {
+      outline: 2px solid var(--text-primary);
+      outline-offset: 2px;
     }
 
-    .modal .prev {
-      left: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .modal .next {
-      right: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .cv-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      padding: 1rem;
-      background-color: #e6e6e6;
-    }
-
-    .cv-links a {
-      text-decoration: none;
-      font-weight: bold;
-      background-color: #000;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.3s;
-    }
-
-    .cv-links a:hover {
-      background-color: #333;
-    }
+    /* === Utilidades de idioma === */
+    .lang-es, .lang-en { display: none; }
+    [lang="es"] .lang-es { display: inline; }
+    [lang="es"] .lang-es.block { display: block; }
+    [lang="en"] .lang-en { display: inline; }
+    [lang="en"] .lang-en.block { display: block; }
   </style>
 </head>
 <body>
-  <header>
-    <div class="branding">
-      <h2>Esteban Campos Polo</h2>
-      <h3>Graphic Designer & 3D Artist</h3>
-    </div>
+
+  <div class="noise"></div>
+
+  <header class="main-header">
+    <a href="index.html" class="logo-block">
+      <span class="logo-name">Esteban Campos Polo</span>
+      <span class="logo-role lang-en">Character Modeler & Visual Designer</span>
+      <span class="logo-role lang-es">Modelador de Personajes & Diseñador Visual</span>
+    </a>
     <nav>
-      <a href="index.html" onclick="trackEvent('nav_click', 'Menu', 'Home')">Home</a>
-      <a href="graphic-design.html" onclick="trackEvent('nav_click', 'Menu', 'Graphic Design')">Graphic Design</a>
-      <a href="photography.html" onclick="trackEvent('nav_click', 'Menu', 'Photography')">Photography</a>
-      <a href="3d-modeling.html" onclick="trackEvent('nav_click', 'Menu', '3D Art')">3D Art</a>
-      <a href="IA.html" onclick="trackEvent('nav_click', 'Menu', 'AI')">AI</a>
-      <a href="about.html" onclick="trackEvent('nav_click', 'Menu', 'About')">About</a>
-      <a href="contact.html" onclick="trackEvent('nav_click', 'Menu', 'Contact')">Contact</a>
-      <a href="cv_resume.html" onclick="trackEvent('nav_click', 'Menu', 'CV/Resume')">CV/Resume</a>
+      <a href="index.html">Home</a>
+      <a href="graphic-design.html">Graphic Design</a>
+      <a href="photography.html" class="active">Photography</a>
+      <a href="3d-modeling.html">3D</a>
+      <a href="IA.html">AI</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <button id="theme-toggle" aria-label="Toggle dark/light theme" title="Cambiar tema">◐</button>
+      <div class="lang-switcher">
+        <span class="lang-btn" id="btn-en" onclick="setLanguage('en')" role="button" tabindex="0">EN</span>
+        <span class="lang-separator">/</span>
+        <span class="lang-btn" id="btn-es" onclick="setLanguage('es')" role="button" tabindex="0">ES</span>
+      </div>
     </nav>
   </header>
 
   <div class="cv-links">
-  <a href="assets/Curriculum.pdf" id="download-cv-es" download onclick="trackEvent('download', 'CV', 'Spanish')">Ver o Descargar CV Español</a>
-  <a href="assets/Resume.pdf" id="download-cv-en" download onclick="trackEvent('download', 'CV', 'English')">View or Download CV English</a>
-</div>
+    <a href="assets/Curriculum.pdf" id="download-cv-es" download class="lang-es block">Ver o Descargar CV Español</a>
+    <a href="assets/Curriculum.pdf" id="download-cv-es-en" download class="lang-en block">View CV Spanish Version</a>
+    <a href="assets/Resume.pdf" id="download-cv-en" download class="lang-en block">View or Download CV English</a>
+    <a href="assets/Resume.pdf" id="download-cv-en-es" download class="lang-es block">Descargar CV Versión Inglés</a>
+  </div>
 
   <main class="section">
-    <h1>Weddings & Ceremonies</h1>
-    <p>Unforgettable moments filled with love and emotion, preserved forever through timeless photography.</p>
+    <h1 class="lang-en">Weddings & Ceremonies</h1>
+    <h1 class="lang-es">Bodas y Ceremonias</h1>
+    
+    <p class="lang-en">Unforgettable moments filled with love and emotion, preserved forever through timeless photography. Each frame tells a story of connection, joy, and authentic human connection.</p>
+    <p class="lang-es">Momentos inolvidables llenos de amor y emoción, preservados para siempre a través de una fotografía atemporal. Cada encuadre cuenta una historia de conexión, alegría y autenticidad humana.</p>
 
-    <section class="gallery-grid">
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (1).webp" alt="weddings&lifeevents(1)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (1).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 1')" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (2).webp" alt="weddings&lifeevents(2)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (2).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 2')" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (3).webp" alt="weddings&lifeevents(3)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (3).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 3')" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (4).webp" alt="weddings&lifeevents(4)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (4).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 4')" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (5).webp" alt="weddings&lifeevents(5)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (5).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 5')" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (6).webp" alt="weddings&lifeevents(6)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (6).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 6')" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (7).webp" alt="weddings&lifeevents(7)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (7).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 7')" loading="lazy" />
-      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (8).webp" alt="weddings&lifeevents(8)" data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (8).jpg" onclick="openModal(this); trackEvent('photo_view', 'Wedding_Gallery', 'Life 8')" loading="lazy" />
+    <section class="gallery-grid" id="thumbnailGallery">
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (1).webp" 
+           alt="Wedding moment 1" 
+           data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (1).jpg" 
+           onclick="openModal(this); trackPhotoView('Life 1')" 
+           loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (2).webp" 
+           alt="Wedding moment 2" 
+           data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (2).jpg" 
+           onclick="openModal(this); trackPhotoView('Life 2')" 
+           loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (3).webp" 
+           alt="Wedding moment 3" 
+           data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (3).jpg" 
+           onclick="openModal(this); trackPhotoView('Life 3')" 
+           loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (4).webp" 
+           alt="Wedding moment 4" 
+           data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (4).jpg" 
+           onclick="openModal(this); trackPhotoView('Life 4')" 
+           loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (5).webp" 
+           alt="Wedding moment 5" 
+           data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (5).jpg" 
+           onclick="openModal(this); trackPhotoView('Life 5')" 
+           loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (6).webp" 
+           alt="Wedding moment 6" 
+           data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (6).jpg" 
+           onclick="openModal(this); trackPhotoView('Life 6')" 
+           loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (7).webp" 
+           alt="Wedding moment 7" 
+           data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (7).jpg" 
+           onclick="openModal(this); trackPhotoView('Life 7')" 
+           loading="lazy" />
+      <img src="assets/images/fotografia/weddings&lifeevents/webp/life (8).webp" 
+           alt="Wedding moment 8" 
+           data-hd="assets/images/fotografia/weddings&lifeevents/jpg/life (8).jpg" 
+           onclick="openModal(this); trackPhotoView('Life 8')" 
+           loading="lazy" />
     </section>
 
     <nav class="photo-sections-nav">
-      <a href="sports.html" onclick="trackEvent('nav_click', 'Photo_Submenu', 'Sports')">Sports</a>
-      <a href="socialreportage.html" onclick="trackEvent('nav_click', 'Photo_Submenu', 'Social')">Social Reportage</a>
-      <a href="travel&landscape.html" onclick="trackEvent('nav_click', 'Photo_Submenu', 'Travel')">Travel & Landscape</a>
-      <a href="culturalevents.html" onclick="trackEvent('nav_click', 'Photo_Submenu', 'Cultural')">Cultural Events</a>
+      <a href="sports.html">Sports</a>
+      <a href="socialreportage.html">Social Reportage</a>
+      <a href="travel&landscape.html">Travel & Landscape</a>
+      <a href="culturalevents.html">Cultural Events</a>
+      <a href="weddings&lifeevents.html" class="current-sub">Weddings & Life</a>
     </nav>
   </main>
 
   <footer>
-    © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
-<br>
-© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
-
-    <div class="footer-social" aria-label="Redes sociales">
-      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'LinkedIn', 'Footer')">
+    <p class="lang-en">© 2026 Esteban Campos Polo. All rights reserved. Elegant execution of visual storytelling.</p>
+    <p class="lang-es">© 2026 Esteban Campos Polo. Todos los derechos reservados. Ejecución elegante de narrativa visual.</p>
+    
+    <div class="footer-social" aria-label="Social media links">
+      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener" aria-label="LinkedIn">
         <img src="assets/icons/linkedin.svg" alt="LinkedIn">
       </a>
-      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'ArtStation', 'Footer')">
+      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener" aria-label="ArtStation">
         <img src="assets/icons/artstation.svg" alt="ArtStation">
       </a>
-      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'Instagram', 'Footer')">
+      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener" aria-label="Instagram">
         <img src="assets/icons/instagram.svg" alt="Instagram">
       </a>
-      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'Vimeo', 'Footer')">
+      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener" aria-label="Vimeo">
         <img src="assets/icons/vimeo.svg" alt="Vimeo">
       </a>
-      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'Behance', 'Footer')">
-        <img src="assets/icons/behance.svg" alt="Behance">
-      </a>
-      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener" onclick="trackEvent('social_click', 'X', 'Footer')">
+      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener" aria-label="X">
         <img src="assets/icons/x.svg" alt="X">
       </a>
     </div>
-
-<a href="https://hits.sh/estebancamposarts.github.io/weddings&lifeevents.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/weddings&lifeevents.html.svg"/></a>
+    
+    <div class="hits-badge">
+      <a href="https://hits.sh/estebancamposarts.github.io/weddings&lifeevents.html/" aria-label="Visit counter">
+        <img alt="Page views" src="https://hits.sh/estebancamposarts.github.io/weddings&lifeevents.html.svg"/>
+      </a>
+    </div>
   </footer>
 
-  <div class="modal" id="slideshowModal">
-    <button class="close" onclick="closeModal()">×</button>
-    <button class="prev" onclick="prevImage()">❮</button>
-    <img id="modalImage" src="" alt="Foto en alta calidad" />
-    <button class="next" onclick="nextImage()">❯</button>
+  <!-- Modal Gallery -->
+  <div class="modal" id="slideshowModal" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="close" onclick="closeModal()" aria-label="Close viewer">×</button>
+    <button class="prev" onclick="prevImage()" aria-label="Previous image">❮</button>
+    <img id="modalImage" src="" alt="High resolution photo" />
+    <button class="next" onclick="nextImage()" aria-label="Next image">❯</button>
   </div>
 
+  <!-- Scripts de Funcionalidad -->
   <script>
+    // === Wrapper para trackEvent (compatibilidad con analytics) ===
+    function trackEvent(name, category, action, label = '', value = null) {
+      if (typeof gtag === 'function') {
+        gtag('event', name, {
+          'event_category': category,
+          'event_action': action,
+          'event_label': label,
+          'value': value,
+          'page_path': window.location.pathname
+        });
+      }
+    }
+
+    function trackPhotoView(photoName) {
+      if (typeof gtag === 'function') {
+        gtag('event', 'photo_view', {
+          'event_category': 'Wedding_Gallery',
+          'event_action': 'click',
+          'event_label': photoName,
+          'page_path': window.location.pathname
+        });
+      }
+    }
+
+    // === Modal Gallery Logic ===
     const modal = document.getElementById("slideshowModal");
     const modalImage = document.getElementById("modalImage");
 
-    function getImages() {
+    function getGalleryImages() {
       return Array.from(document.querySelectorAll(".gallery-grid img"));
     }
 
     let currentIndex = 0;
 
     function openModal(imgElement) {
-      const images = getImages();
+      const images = getGalleryImages();
       currentIndex = images.indexOf(imgElement);
       modalImage.src = imgElement.dataset.hd || imgElement.src;
+      modalImage.alt = imgElement.alt || 'Photo detail';
       modal.style.display = "flex";
+      document.body.style.overflow = "hidden";
+      
+      // Track view
+      trackPhotoView(`Image ${currentIndex + 1}`);
     }
 
     function closeModal() {
       modal.style.display = "none";
+      document.body.style.overflow = "";
+      modalImage.src = "";
     }
 
     function nextImage() {
-      const images = getImages();
+      const images = getGalleryImages();
       if (images.length === 0) return;
       currentIndex = (currentIndex + 1) % images.length;
       modalImage.src = images[currentIndex].dataset.hd || images[currentIndex].src;
+      modalImage.alt = images[currentIndex].alt || 'Photo detail';
     }
 
     function prevImage() {
-      const images = getImages();
+      const images = getGalleryImages();
       if (images.length === 0) return;
       currentIndex = (currentIndex - 1 + images.length) % images.length;
       modalImage.src = images[currentIndex].dataset.hd || images[currentIndex].src;
+      modalImage.alt = images[currentIndex].alt || 'Photo detail';
     }
 
+    // Close modal on overlay click
     modal.addEventListener("click", e => {
       if (e.target === modal) closeModal();
     });
 
+    // Keyboard navigation
     document.addEventListener("keydown", e => {
       if (modal.style.display === "flex") {
-        if (e.key === "ArrowRight") nextImage();
-        if (e.key === "ArrowLeft") prevImage();
-        if (e.key === "Escape") closeModal();
+        if (e.key === "ArrowRight") { e.preventDefault(); nextImage(); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); prevImage(); }
+        if (e.key === "Escape") { e.preventDefault(); closeModal(); }
+      }
+    });
+
+    // Close on mobile scroll
+    let lastScrollY = 0;
+    window.addEventListener('scroll', () => {
+      if (modal.style.display === "flex" && window.innerWidth < 768) {
+        if (Math.abs(window.scrollY - lastScrollY) > 50) closeModal();
+        lastScrollY = window.scrollY;
+      }
+    }, { passive: true });
+  </script>
+
+  <!-- Language Switcher Logic -->
+  <script>
+    function setLanguage(lang) {
+      localStorage.setItem('selectedLanguage', lang);
+      document.documentElement.setAttribute('lang', lang);
+      
+      // Toggle language elements
+      document.querySelectorAll('.lang-es').forEach(el => {
+        el.style.display = (lang === 'es') ? (el.classList.contains('block') ? 'block' : 'inline') : 'none';
+      });
+      document.querySelectorAll('.lang-en').forEach(el => {
+        el.style.display = (lang === 'en') ? (el.classList.contains('block') ? 'block' : 'inline') : 'none';
+      });
+      
+      // Update button states
+      const btnEs = document.getElementById('btn-es');
+      const btnEn = document.getElementById('btn-en');
+      if (btnEs && btnEn) {
+        if (lang === 'es') { 
+          btnEs.classList.add('active'); 
+          btnEn.classList.remove('active'); 
+        } else { 
+          btnEn.classList.add('active'); 
+          btnEs.classList.remove('active'); 
+        }
+      }
+      
+      // Track language change
+      if (typeof gtag === 'function') {
+        gtag('event', 'language_change', { 'language': lang, 'page_path': window.location.pathname });
+      }
+    }
+
+    // Initialize language on load
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+      setLanguage(savedLang);
+    });
+  </script>
+
+  <!-- Theme Toggle with Persistence -->
+  <script>
+    (function() {
+      const toggle = document.getElementById('theme-toggle');
+      const root = document.documentElement;
+      
+      function applyTheme(theme) {
+        if (theme === 'light') {
+          root.setAttribute('data-theme', 'light');
+        } else {
+          root.removeAttribute('data-theme'); // defaults to dark
+        }
+      }
+      
+      // Load saved preference
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        applyTheme('light');
+      }
+      
+      // Toggle handler
+      toggle?.addEventListener('click', () => {
+        const isDark = !root.hasAttribute('data-theme');
+        const newTheme = isDark ? 'light' : 'dark';
+        
+        applyTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        // Analytics
+        if (typeof gtag === 'function') {
+          gtag('event', 'theme_toggle', { 
+            'theme': newTheme,
+            'event_category': 'UI',
+            'page_path': window.location.pathname
+          });
+        }
+      });
+      
+      // Respect system preference if no manual choice
+      if (window.matchMedia && !localStorage.getItem('theme')) {
+        const mq = window.matchMedia('(prefers-color-scheme: light)');
+        const handleChange = (e) => applyTheme(e.matches ? 'light' : 'dark');
+        
+        if (mq.addEventListener) mq.addEventListener('change', handleChange);
+        else if (mq.addListener) mq.addListener(handleChange);
+      }
+    })();
+  </script>
+
+  <!-- Content Protection (images only, not social icons) -->
+  <script>
+    document.addEventListener('contextmenu', (e) => {
+      if (e.target.tagName === 'IMG' && !e.target.closest('.footer-social')) {
+        e.preventDefault();
+      }
+    });
+    
+    document.addEventListener('dragstart', (e) => {
+      if (e.target.tagName === 'IMG' && !e.target.closest('.footer-social')) {
+        e.preventDefault();
       }
     });
   </script>
-<script>
-  document.addEventListener('contextmenu', event => event.preventDefault());
-  document.addEventListener('dragstart', event => event.preventDefault());
-</script>
+
 </body>
 </html>

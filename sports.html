@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sports Photography - Esteban Campos Polo</title>
+  <title>Sports Photography — Esteban Campos Polo</title>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-8VMES8F4MN', {
         anonymize_ip: true,
         send_page_view: true,
@@ -34,18 +33,15 @@
               gtag('event', name, {
                   ...params,
                   'page_path': window.location.pathname,
-                  'section_type': 'sports_photography'
+                  'section_type': 'sports_premium'
               });
           }
       };
 
       document.addEventListener("DOMContentLoaded", function() {
-
-          // --- SEGURIDAD Y CLICKS ---
           document.addEventListener('contextmenu', (e) => {
               if (e.target.tagName === 'IMG') {
-                  const context = e.target.closest('#slideshowModal') ? 'modal_view' : 'gallery_grid';
-                  sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop(), 'context': context });
+                  sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
               }
           });
 
@@ -55,26 +51,20 @@
               }
           });
 
-          // Rage Clicks y Tracking de apertura de imágenes
           document.addEventListener('click', (e) => {
-              const target = e.target;
-              
-              // Tracking de clics en categorías
-              if (target.tagName === 'BUTTON' && target.closest('.category-buttons')) {
-                  sendEvent('engagement_category_filter', { 'category': target.innerText });
+              if (e.target.tagName === 'BUTTON' && e.target.closest('.category-buttons')) {
+                  sendEvent('engagement_category_filter', { 'category': e.target.innerText });
               }
 
-              // Rage Clicks
               CONFIG.clickCount++;
               clearTimeout(CONFIG.clickTimer);
               CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
               if (CONFIG.clickCount > 4) {
-                  sendEvent('ux_rage_click', { 'element': target.tagName + (target.id ? '#'+target.id : '') });
+                  sendEvent('ux_rage_click', { 'element': e.target.tagName });
                   CONFIG.clickCount = 0;
               }
           });
 
-          // --- SCROLL Y VISIBILIDAD ---
           window.addEventListener('scroll', () => {
               let h = document.documentElement, b = document.body;
               let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
@@ -85,129 +75,197 @@
                   }
               });
           });
-
-          if ('IntersectionObserver' in window) {
-              let observer = new IntersectionObserver((entries) => {
-                  entries.forEach(entry => {
-                      if (entry.isIntersecting) {
-                          setTimeout(() => {
-                              if (entry.isIntersecting) {
-                                  sendEvent('content_view_confirmed', { 'section': 'sports_gallery' });
-                                  observer.unobserve(entry.target);
-                              }
-                          }, 2000);
-                      }
-                  });
-              }, { threshold: 0.5 });
-              CONFIG.idsToObserve.forEach(sel => {
-                  let el = document.querySelector(sel);
-                  if (el) observer.observe(el);
-              });
-          }
       });
-
-      window.onerror = (msg, url, line) => {
-          sendEvent('tech_js_error', { 'msg': msg, 'line': line });
-      };
   })();
   </script>
 
   <style>
-    body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f2f2f2; color: #000; }
-    header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: #fff; border-bottom: 2px solid #ccc; }
-    .branding h2 { margin: 0.2rem 0; font-size: 1.3em; }
-    .branding h3 { margin: 0; font-size: 1em; font-weight: normal; }
-    nav a { margin-left: 1.5rem; text-decoration: none; color: #000; font-weight: bold; }
-    .section { padding: 2rem; max-width: 1200px; margin: 0 auto; }
-    .section h1 { font-size: 1.8rem; font-weight: 700; color: #000; margin-bottom: 0.5rem; text-align: left; }
-    .section p { font-size: 1rem; color: #333; margin-bottom: 2rem; }
-    .category-buttons { text-align: center; margin-bottom: 2rem; }
-    .category-buttons button { background-color: #000; color: white; border: none; padding: 10px 20px; margin: 0 10px; font-size: 1rem; border-radius: 6px; cursor: pointer; transition: background 0.3s ease; }
-    .category-buttons button:hover { background-color: #333; }
-    .footer-social { margin-top: 0.5rem; display: flex; justify-content: center; gap: 0.6rem; align-items: center; }
-    .footer-social a img { width: 22px; height: 22px; opacity: 0.95; transition: opacity 0.2s, transform 0.15s; }
-    .footer-social a img:hover { opacity: 1; transform: translateY(-2px); }
-    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-    .gallery-grid img { width: 100%; height: 180px; object-fit: cover; border: 1px solid #ddd; border-radius: 6px; background: white; filter: grayscale(100%); transition: all 0.3s ease; cursor: pointer; }
-    .gallery-grid img:hover { filter: grayscale(0%); transform: scale(1.03); }
-    .photo-sections-nav { text-align: center; margin-top: 3rem; }
-    .photo-sections-nav a { margin: 0 1rem; text-decoration: none; color: #000; font-weight: bold; transition: color 0.3s; }
-    .photo-sections-nav a:hover { color: #333; }
-    footer { background-color: #ccc; padding: 1rem; text-align: center; font-size: 0.9em; margin-top: 3rem; }
-    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9); align-items: center; justify-content: center; }
-    .modal img { max-width: 90%; max-height: 80%; border-radius: 6px; }
-    .modal button { position: absolute; color: white; font-size: 2rem; background: none; border: none; cursor: pointer; }
-    .modal .close { top: 20px; right: 30px; }
-    .modal .prev { left: 30px; top: 50%; transform: translateY(-50%); }
-    .modal .next { right: 30px; top: 50%; transform: translateY(-50%); }
-    .cv-links { display: flex; justify-content: center; gap: 2rem; padding: 1rem; background-color: #e6e6e6; }
-    .cv-links a { text-decoration: none; font-weight: bold; background-color: #000; color: white; padding: 0.5rem 1rem; border-radius: 6px; transition: background-color 0.3s; }
-    .cv-links a:hover { background-color: #333; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      background-color: #0a0a0a; 
+      color: #ffffff; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .noise {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Header */
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 3rem;
+      background: transparent;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      z-index: 100;
+    }
+    .logo-block { text-decoration: none; color: #fff; display: flex; flex-direction: column; }
+    .logo-name { font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; }
+    .logo-role { font-size: 0.75rem; color: #666; letter-spacing: 0.05em; margin-top: 0.2rem; }
+    
+    nav { display: flex; align-items: center; gap: 2rem; }
+    nav a { text-decoration: none; color: #666; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.3s; }
+    nav a:hover, nav a.active { color: #fff; }
+    
+    .lang-switcher { display: flex; gap: 0.4rem; font-size: 0.75rem; font-weight: 600; color: #333; margin-left: 1rem; }
+    .lang-btn { cursor: pointer; transition: color 0.3s; color: #555; }
+    .lang-btn.active { color: #fff; }
+
+    /* CV Enlaces */
+    .cv-links { display: flex; justify-content: center; gap: 1.5rem; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+    .cv-links a { text-decoration: none; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #666; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.5rem 1.25rem; border-radius: 3px; transition: all 0.3s; }
+    .cv-links a:hover { color: #fff; border-color: #fff; background: rgba(255, 255, 255, 0.03); }
+
+    /* Layout */
+    .section { padding: 4rem 3rem; max-width: 1400px; margin: 0 auto; }
+    .section h1 { font-size: 2.2rem; font-weight: 300; letter-spacing: -0.02em; color: #fff; margin-bottom: 0.75rem; }
+    .section p { font-size: 0.95rem; color: #888; line-height: 1.6; max-width: 600px; margin-bottom: 3rem; }
+
+    /* Filtros minimalistas de alta costura */
+    .category-buttons { text-align: left; margin-bottom: 3rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .category-buttons button { 
+      background-color: transparent; 
+      color: #777; 
+      border: 1px solid rgba(255, 255, 255, 0.1); 
+      padding: 0.6rem 1.5rem; 
+      font-size: 0.75rem; 
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-radius: 3px; 
+      cursor: pointer; 
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+    }
+    .category-buttons button:hover, .category-buttons button.active-filter { 
+      background-color: #ffffff; 
+      color: #000000; 
+      border-color: #ffffff;
+    }
+
+    /* Galería */
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.75rem; min-height: 300px; }
+    .gallery-grid img { 
+      width: 100%; 
+      height: 240px; 
+      object-fit: cover; 
+      border-radius: 4px; 
+      background: #111; 
+      border: 1px solid rgba(255, 255, 255, 0.04); 
+      filter: grayscale(40%) brightness(85%); 
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease, border-color 0.6s ease; 
+      cursor: pointer; 
+    }
+    .gallery-grid img:hover { filter: grayscale(0%) brightness(100%); transform: scale(1.025) translateY(-3px); border-color: rgba(255, 255, 255, 0.2); }
+
+    /* Navegación Inferior */
+    .photo-sections-nav { text-align: center; margin-top: 6rem; padding-top: 3rem; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+    .photo-sections-nav a { margin: 0 1.2rem; text-decoration: none; color: #555; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; transition: color 0.3s; }
+    .photo-sections-nav a:hover { color: #fff; }
+    .photo-sections-nav a.current-sub { color: #fff; pointer-events: none; border-bottom: 1px solid #fff; padding-bottom: 3px; }
+
+    /* Footer */
+    footer { background-color: #050505; padding: 3rem 2rem; text-align: center; font-size: 0.8rem; color: #444; border-top: 1px solid rgba(255, 255, 255, 0.03); margin-top: 6rem; }
+    .footer-social { margin-top: 1.5rem; display: flex; justify-content: center; gap: 1.2rem; }
+    .footer-social a img { width: 18px; height: 18px; filter: invert(0.4); transition: all 0.3s; }
+    .footer-social a img:hover { filter: invert(1); transform: translateY(-2px); }
+    .hits-badge { margin-top: 1.5rem; opacity: 0.3; }
+
+    /* Modal Exhibidor */
+    .modal { display: none; position: fixed; z-index: 10000; inset: 0; background-color: rgba(5, 5, 5, 0.98); backdrop-filter: blur(12px); align-items: center; justify-content: center; }
+    .modal img { max-width: 90%; max-height: 85%; border-radius: 2px; box-shadow: 0 30px 70px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.05); object-fit: contain; }
+    .modal button { position: absolute; color: rgba(255,255,255,0.4); font-size: 1.5rem; background: none; border: none; cursor: pointer; transition: color 0.3s; }
+    .modal button:hover { color: #fff; }
+    .modal .close { top: 30px; right: 40px; font-size: 2rem; }
+    .modal .prev { left: 40px; top: 50%; transform: translateY(-50%); }
+    .modal .next { right: 40px; top: 50%; transform: translateY(-50%); }
   </style>
 </head>
-
 <body>
-  <header>
-    <div class="branding">
-      <h2>Esteban Campos Polo</h2>
-      <h3>Graphic Designer & 3D Artist</h3>
-    </div>
+
+  <div class="noise"></div>
+
+  <header class="main-header">
+    <a href="index.html" class="logo-block">
+      <span class="logo-name">Esteban Campos Polo</span>
+      <span class="logo-role lang-en">Character Modeler & Visual Designer</span>
+      <span class="logo-role lang-es">Modelador de Personajes & Diseñador Visual</span>
+    </a>
     <nav>
       <a href="index.html">Home</a>
       <a href="graphic-design.html">Graphic Design</a>
-      <a href="photography.html">Photography</a>
+      <a href="photography.html" class="active">Photography</a>
       <a href="3d-modeling.html">3D Art</a>
       <a href="IA.html">AI</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
-      <a href="cv_resume.html" class="nav-track" id="nav-cv">CV/Resume</a>
+      <div class="lang-switcher">
+        <span class="lang-btn" id="btn-en" onclick="setLanguage('en')">EN</span>
+        <span>/</span>
+        <span class="lang-btn" id="btn-es" onclick="setLanguage('es')">ES</span>
+      </div>
     </nav>
   </header>
 
   <div class="cv-links">
-    <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
-    <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
+    <a href="assets/Curriculum.pdf" id="download-cv-es" download class="lang-es">Ver o Descargar CV Español</a>
+    <a href="assets/Curriculum.pdf" id="download-cv-es-en" download class="lang-en">View CV Spanish Version</a>
+    <a href="assets/Resume.pdf" id="download-cv-en" download class="lang-en">View or Download CV English</a>
+    <a href="assets/Resume.pdf" id="download-cv-en-es" download class="lang-es">Descargar CV Versión Inglés</a>
   </div>
 
   <section class="section">
-    <h1>Sports Photography</h1>
-    <p>Capturing the energy, emotion, and intensity of athletic moments—this is where action meets artistry.</p>
+    <h1 class="lang-en">Sports Photography</h1>
+    <h1 class="lang-es">Fotografía Deportiva</h1>
+    
+    <p class="lang-en">Capturing the raw energy, kinematics, and core intensity of athletic drive—where tactical speed meets aesthetic freezing.</p>
+    <p class="lang-es">Capturando la energía pura, la cinemática y la intensidad del esfuerzo atlético: donde la velocidad táctica se encuentra con la congelación estética.</p>
 
-    <div class="category-buttons">
-      <button onclick="openCategory('pilota')">Pilota Valenciana</button>
-      <button onclick="openCategory('mtb')">MTB</button>
-      <button onclick="openCategory('futsal')">Fútsal</button>
-      <button onclick="openCategory('otros')">Otros</button>
+    <div class="category-buttons" id="filterContainer">
+      <button onclick="openCategory('pilota', this)" id="defaultBtn">Pilota Valenciana</button>
+      <button onclick="openCategory('mtb', this)">MTB</button>
+      <button onclick="openCategory('futsal', this)">Fútsal</button>
+      <button onclick="openCategory('otros', this)">Otros / Others</button>
     </div>
 
     <div class="gallery-grid" id="thumbnailGallery"></div>
 
     <nav class="photo-sections-nav">
-      <a href="weddings&lifeevents.html">Weddings & Life Events</a>
       <a href="socialreportage.html">Social Reportage</a>
+      <a href="sports.html" class="current-sub">Sports</a>
+      <a href="weddings&lifeevents.html">Weddings & Life Events</a>
       <a href="travel&landscape.html">Travel & Landscape</a>
       <a href="culturalevents.html">Cultural Events</a>
     </nav>
   </section>
 
   <footer>
-    <p>© 2025 Esteban Campos Polo. All rights reserved.</p>
+    <p class="lang-en">© 2026 Esteban Campos Polo. All rights reserved. Elegant execution of graphic physics.</p>
+    <p class="lang-es">© 2026 Esteban Campos Polo. Todos los derechos reservados. Ejecución elegante de física gráfica.</p>
     <div class="footer-social">
       <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank"><img src="assets/icons/linkedin.svg" alt="LinkedIn"></a>
       <a href="https://estebancampos1.artstation.com/" target="_blank"><img src="assets/icons/artstation.svg" alt="ArtStation"></a>
       <a href="https://www.instagram.com/estcampo/" target="_blank"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
       <a href="https://vimeo.com/827034828" target="_blank"><img src="assets/icons/vimeo.svg" alt="Vimeo"></a>
-      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank"><img src="assets/icons/behance.svg" alt="Behance"></a>
       <a href="https://x.com/EstebanCampos3D" target="_blank"><img src="assets/icons/x.svg" alt="X"></a>
     </div>
-    <br>
-    <a href="https://hits.sh/estebancamposarts.github.io/sports.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/sports.html.svg"/></a>
+    <div class="hits-badge">
+      <a href="https://hits.sh/estebancamposarts.github.io/sports.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/sports.html.svg"/></a>
+    </div>
   </footer>
 
   <div class="modal" id="slideshowModal">
     <button class="close" onclick="closeModal()">×</button>
     <button class="prev" onclick="prevImage()">❮</button>
-    <img id="modalImage" src="" alt="Foto en alta calidad" />
+    <img id="modalImage" src="" alt="Alta Calidad" />
     <button class="next" onclick="nextImage()">❯</button>
   </div>
 
@@ -218,18 +276,27 @@
 
     let imageList = [];
     let currentIndex = 0;
+    let currentActiveCategory = 'pilota';
 
+    // Conteos originales preservados exactamente
     const categoryCounts = { pilota: 24, mtb: 9, futsal: 6, otros: 7 };
 
-    function openCategory(category) {
+    function openCategory(category, element) {
+      currentActiveCategory = category;
       thumbnailGallery.innerHTML = "";
+      
+      // Manejo estético del estado activo en filtros
+      document.querySelectorAll('.category-buttons button').forEach(btn => btn.classList.remove('active-filter'));
+      if(element) element.classList.add('active-filter');
+
       const count = categoryCounts[category] || 0;
       for (let i = 1; i <= count; i++) {
         const thumbPath = `assets/images/fotografia/sports/${category}/webp/${category}_${i}.webp`;
         const img = document.createElement("img");
         img.src = thumbPath;
-        img.alt = `${category}(${i})`;
+        img.alt = `${category} visual statement (${i})`;
         img.dataset.hd = `assets/images/fotografia/sports/${category}/jpg/${category}_${i}.jpg`;
+        img.loading = "lazy";
         img.onclick = () => openSlideshow(category, i);
         thumbnailGallery.appendChild(img);
       }
@@ -245,31 +312,16 @@
       modalImage.src = imageList[currentIndex];
       modal.style.display = "flex";
       
-      // Tracking GA4
       if (typeof gtag === 'function') {
           gtag('event', 'engagement_image_open', { 'src': imageList[currentIndex].split('/').pop(), 'category': category });
       }
     }
 
-    function closeModal() {
-      modal.style.display = "none";
-      modalImage.src = "";
-    }
-
-    function nextImage() {
-      if (imageList.length === 0) return;
-      currentIndex = (currentIndex + 1) % imageList.length;
-      modalImage.src = imageList[currentIndex];
-    }
-
-    function prevImage() {
-      if (imageList.length === 0) return;
-      currentIndex = (currentIndex - 1 + imageList.length) % imageList.length;
-      modalImage.src = imageList[currentIndex];
-    }
+    function closeModal() { modal.style.display = "none"; modalImage.src = ""; }
+    function nextImage() { if (imageList.length === 0) return; currentIndex = (currentIndex + 1) % imageList.length; modalImage.src = imageList[currentIndex]; }
+    function prevImage() { if (imageList.length === 0) return; currentIndex = (currentIndex - 1 + imageList.length) % imageList.length; modalImage.src = imageList[currentIndex]; }
 
     modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
-
     document.addEventListener("keydown", function (e) {
       if (modal.style.display === "flex") {
         if (e.key === "ArrowRight") nextImage();
@@ -278,7 +330,26 @@
       }
     });
 
-    // Desactivar comportamientos por defecto para seguridad de imágenes
+    function setLanguage(lang) {
+        localStorage.setItem('selectedLanguage', lang);
+        document.documentElement.setAttribute('lang', lang);
+        document.querySelectorAll('.lang-es').forEach(el => el.style.display = (lang === 'es') ? 'block' : 'none');
+        document.querySelectorAll('.lang-en').forEach(el => el.style.display = (lang === 'en') ? 'block' : 'none');
+        const btnEs = document.getElementById('btn-es');
+        const btnEn = document.getElementById('btn-en');
+        if (btnEs && btnEn) {
+            if (lang === 'es') { btnEs.classList.add('active'); btnEn.classList.remove('active'); }
+            else { btnEn.classList.add('active'); btnEs.classList.remove('active'); }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+        setLanguage(savedLang);
+        // Carga inicial premium por defecto
+        openCategory('pilota', document.getElementById('defaultBtn'));
+    });
+
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('dragstart', e => e.preventDefault());
   </script>

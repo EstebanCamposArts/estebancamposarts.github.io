@@ -1,528 +1,679 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graphic Design | Esteban Campos Polo</title>
-    
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graphic Design & Visual Communication — Esteban Campos Polo</title>
 
-/* ==========================
-   CONFIG BASE
-========================== */
-gtag('config', 'G-8VMES8F4MN', {
-  anonymize_ip: true,
-  allow_google_signals: false,
-  send_page_view: true
-});
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-/* ==========================
-   FUNCIÓN UTILIDAD
-========================== */
-function getCategory(element){
-  const section = element.closest('section');
-  // Fallback específico para diseño gráfico
-  return section ? section.id : 'graphic_design_general';
-}
-
-/* ==========================
-   TRACKING UNIFICADO
-========================== */
-document.addEventListener('click', function(e){
-
-  /* ---------- DESCARGAS (Portfolios PDF) ---------- */
-  const downloadLink = e.target.closest('a[href$=".pdf"], a[href$=".zip"]');
-  if(downloadLink){
-    const fileName = downloadLink.getAttribute('href').split('/').pop();
-    gtag('event', 'file_download', {
-      file_name: fileName,
-      file_extension: fileName.split('.').pop(),
-      link_url: downloadLink.href,
-      page_location: window.location.href
+    gtag('config', 'G-8VMES8F4MN', {
+      anonymize_ip: true,
+      allow_google_signals: false,
+      send_page_view: true
     });
-    return;
-  }
 
-  /* ---------- CLICK EN PROYECTO DE DISEÑO ---------- */
-  const project = e.target.closest('.item');
-  if(project){
-    const title = project.querySelector('h4, h3');
-    const projectName = title ? title.innerText.trim() : 'unnamed_design_project';
-    
-    gtag('event', 'project_click', {
-      project_name: projectName,
-      project_category: getCategory(project),
-      page_location: window.location.href
-    });
-    return;
-  }
+    function getCategory(element){
+      const card = element.closest('.design-card');
+      return card ? card.getAttribute('data-category') : 'graphic_design_general';
+    }
 
-  /* ---------- CLICK EXTERNOS (Behance, LinkedIn, etc) ---------- */
-  const externalLink = e.target.closest('a[target="_blank"]');
-  if(externalLink){
-    gtag('event', 'external_click', {
-      link_url: externalLink.href,
-      page_location: window.location.href
-    });
-  }
-}, { passive: true });
-
-/* ==========================
-   SCROLL 50%
-========================= */
-let scrollSent = false;
-window.addEventListener('scroll', function(){
-  if(scrollSent) return;
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  if(docHeight <= 0) return;
-  const scrollPercent = scrollTop / docHeight;
-  if(scrollPercent >= 0.5){
-    scrollSent = true;
-    gtag('event', 'scroll_50_percent', {
-      page_location: window.location.href
-    });
-  }
-}, { passive: true });
-</script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #ffffff; --text: #1f2937; --accent: #0052FF; --muted: #64748b;
-            --light-bg: #f8fafc; --border: #e2e8f0; --radius: 4px;
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; overflow-x: hidden; }
-        
-        header {
-            position: sticky; top: 0; z-index: 1001; background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px); display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 5%; border-bottom: 1px solid var(--border);
-        }
-        .branding h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
-        .branding h3 { font-size: 0.65rem; color: var(--muted); font-weight: 800; text-transform: uppercase; }
-        nav { display: flex; align-items: center; }
-        nav a { 
-            margin-left: 1.5rem; text-decoration: none; color: var(--text); 
-            font-weight: 700; font-size: 0.75rem; text-transform: uppercase; 
-            transition: var(--transition); letter-spacing: 0.5px;
-        }
-        nav a:hover, nav a.active { color: var(--accent); }
-        .submenu {
-            position: sticky; top: 68px; z-index: 1000; background: var(--light-bg); 
-            border-bottom: 1px solid var(--border); display: flex; justify-content: center; gap: 20px; padding: 0.8rem 5%;
-        }
-        .submenu a {
-            text-decoration: none; color: var(--muted); font-size: 0.65rem; 
-            font-weight: 800; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition);
-        }
-        .submenu a:hover { color: var(--accent); }
-        
-        .lang-selector {
-            margin-left: 1.5rem; display: flex; gap: 5px; font-size: 0.75rem; font-weight: 800; 
-            cursor: pointer; color: var(--muted); border-left: 1px solid var(--border); padding-left: 1.2rem;
-        }
-        .lang-selector span.active { color: var(--accent); opacity: 1; }
-        .lang-selector span { opacity: 0.4; }
-
-        .cv-actions-hero { 
-            display: flex; 
-            justify-content: center; 
-            gap: 15px; 
-            padding: 2rem 5% 0; 
-        }
-        .btn-cv {
-            cursor: pointer;
-            text-decoration: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.4s ease;
-            border: 2px solid #111827;
-            display: inline-flex;
-            align-items: center;
-            font-family: 'Inter', sans-serif;
-        }
-        .btn-es-cv { background: #111827; color: #fff; }
-        .btn-en-cv { background: transparent; color: #111827; }
-        .btn-cv:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-            border-color: #0052FF; 
-        }
-
-        .page-header { padding: 1.5rem 5% 3rem; max-width: 1200px; margin: 0 auto; text-align: center; }
-        .page-header h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1.5rem; }
-        .mission-box { 
-            background: var(--light-bg); padding: 2rem; border-radius: var(--radius); 
-            border-left: 4px solid var(--accent); margin: 0 auto 3rem; max-width: 800px; text-align: left;
-        }
-
-        .section-wrapper { border-bottom: 1px solid var(--border); max-width: 1200px; margin: 0 auto; }
-        .section-title { 
-            padding: 1.5rem 5%; cursor: pointer; display: flex; align-items: center; 
-            justify-content: space-between; background: #fff; transition: background 0.3s;
-        }
-        .section-title:hover { background: var(--light-bg); }
-        .section-title h2 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; display: flex; align-items: center; gap: 15px; }
-        
-        .arrow-icon {
-            width: 12px; height: 12px; border-right: 2px solid var(--text); border-bottom: 2px solid var(--text);
-            transform: rotate(45deg); transition: var(--transition); margin-right: 10px;
-        }
-        
-        .section-wrapper.active .arrow-icon { transform: rotate(-135deg); border-color: var(--accent); }
-        .section-wrapper.active h2 { color: var(--accent); }
-
-        .collapsible-content {
-            max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; background: #fff;
-        }
-        .section-wrapper.active .collapsible-content { max-height: 4500px; } 
-
-        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 20px; padding: 2rem 5%; }
-        .grid-item { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); background: #fff; transition: var(--transition); position: relative; cursor: pointer; }
-        .grid-item:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.06); }
-        .slideshow-container { position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #eee; }
-        .slideshow-container img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s; pointer-events: none; }
-        .slideshow-container img.active { opacity: 1; pointer-events: auto; }
-        
-        .nav-btn {
-            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9);
-            border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 12px; transition: 0.3s;
-        }
-        .nav-btn:hover { background: var(--accent); color: white; }
-        .prev-btn { left: 5px; } .next-btn { right: 5px; }
-        .grid-info { padding: 0.8rem; border-top: 1px solid var(--border); }
-        .grid-info h4 { font-size: 0.75rem; font-weight: 700; }
-
-        footer { background: #111827; color: #fff; padding: 4rem 5%; text-align: center; margin-top: 6rem; }
-        .footer-social { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; }
-        .footer-social img { width: 22px; height: 22px; filter: invert(1); opacity: 0.6; transition: 0.3s; }
-        .footer-social img:hover { opacity: 1; transform: translateY(-3px); }
-
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; }
-        .modal img { max-width: 90%; max-height: 85vh; object-fit: contain; user-select: none; }
-        .modal-nav { position: absolute; inset: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; pointer-events: none; }
-        .modal-nav button { pointer-events: auto; background: rgba(255,255,255,0.1); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; transition: 0.3s; }
-        .modal-nav button:hover { background: var(--accent); }
-        .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 40px; cursor: pointer; line-height: 1; z-index: 2100; }
-
-        @media (max-width: 768px) {
-            header { flex-direction: column; padding: 1rem; }
-            header .branding { margin-bottom: 1rem; text-align: center; }
-            nav { flex-wrap: wrap; justify-content: center; gap: 10px; }
-            nav a { margin: 0 0.5rem; }
-            .submenu { top: 115px; flex-wrap: wrap; gap: 8px; padding: 0.5rem; }
-            .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .cv-actions-hero { flex-direction: column; width: 100%; }
-            .btn-cv { width: 100%; justify-content: center; }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="branding">
-            <h2>Esteban Campos Polo</h2>
-            <h3 data-es="Sr. Graphic Packaging and Production Designer" data-en="Sr. Graphic Packaging and Production Designer">Diseño Gráfico y Producción</h3>
-        </div>
-        <nav>
-            <a href="index.html" data-es="Inicio" data-en="Home">Inicio</a>
-            <a href="graphic-design.html" class="active" data-es="Diseño" data-en="Design">Diseño</a>
-            <a href="photography.html" data-es="Fotografía" data-en="Photography">Fotografía</a>
-            <a href="3d-modeling.html" data-es="Arte 3D" data-en="3D Art">Arte 3D</a>
-            <a href="IA.html" data-es="IA" data-en="AI">IA</a>
-            <a href="cv_resume.html" data-key="nav-cv">CV/Resume</a>
-            <a href="contact.html" data-es="Contacto" data-en="Contact">Contacto</a>
-            <div class="lang-selector" onclick="toggleLanguage()"><span id="btn-es">ES</span>/<span id="btn-en">EN</span></div>
-        </nav>
-    </header>
-    
-<nav class="submenu">
-    <a href="#sec-branding" onclick="openSection('sec-branding')" data-es="Branding" data-en="Branding">Branding</a>
-    <a href="#sec-mockups" onclick="openSection('sec-mockups')" data-es="Mockups" data-en="Mockups">Mockups</a>
-    <a href="#sec-packaging" onclick="openSection('sec-packaging')" data-es="Packaging" data-en="Packaging">Packaging</a>
-    <a href="#sec-web" onclick="openSection('sec-web')" data-es="Web/UI" data-en="Web/UI">Web/UI</a>
-    <a href="#sec-editorial" onclick="openSection('sec-editorial')" data-es="Editorial" data-en="Editorial">Editorial</a>
-    <a href="#sec-signage" onclick="openSection('sec-signage')" data-es="Señalética" data-en="Signage">Señalética</a>
-</nav>
-
-    <main>
-<div class="cv-actions-hero">
-    <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
-    <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
-</div>
-        
-        <section class="page-header">
-            <h1 data-es="Portfolio de Diseño Gráfico" data-en="Graphic Design Portfolio">Portafolio de Diseño Gráfico</h1>
-            <div class="mission-box"><p data-es="Diseñador gráfico senior especializado en **identidad de marca, packaging y diseño para producción**." data-en="Senior graphic designer specializing in **brand identity, packaging, and production design**."></p></div>
-        </section>
-
-        <div class="section-wrapper active" id="sec-mockups">
-            <div class="section-title" onclick="toggleSection(this)">
-                <h2 data-es="Aplicaciones y Mockups" data-en="Applications & Mockups">Aplicaciones y Mockups</h2>
-                <div class="arrow-icon"></div>
-            </div>
-            <div class="collapsible-content"><div class="portfolio-grid" id="grid-mockups"></div></div>
-        </div>
-
-        <div class="section-wrapper" id="sec-branding">
-            <div class="section-title" onclick="toggleSection(this)">
-                <h2 data-es="Branding e Identidad" data-en="Branding & Identity">Branding e Identidad</h2>
-                <div class="arrow-icon"></div>
-            </div>
-            <div class="collapsible-content"><div class="portfolio-grid" id="grid-branding"></div></div>
-        </div>
-
-        <div class="section-wrapper" id="sec-packaging">
-            <div class="section-title" onclick="toggleSection(this)">
-                <h2 data-es="Diseño de Packaging" data-en="Packaging Design">Diseño de Packaging</h2>
-                <div class="arrow-icon"></div>
-            </div>
-            <div class="collapsible-content"><div class="portfolio-grid" id="grid-packaging"></div></div>
-        </div>
-
-        <div class="section-wrapper" id="sec-web">
-            <div class="section-title" onclick="toggleSection(this)">
-                <h2 data-es="Diseño Web y UI" data-en="Web & UI Design">Diseño Web y UI</h2>
-                <div class="arrow-icon"></div>
-            </div>
-            <div class="collapsible-content"><div class="portfolio-grid" id="grid-web"></div></div>
-        </div>
-
-        <div class="section-wrapper" id="sec-editorial">
-            <div class="section-title" onclick="toggleSection(this)">
-                <h2 data-es="Editorial y Textil" data-en="Editorial & Textile">Editorial y Textil</h2>
-                <div class="arrow-icon"></div>
-            </div>
-            <div class="collapsible-content"><div class="portfolio-grid" id="grid-editorial"></div></div>
-        </div>
-
-        <div class="section-wrapper" id="sec-signage">
-            <div class="section-title" onclick="toggleSection(this)">
-                <h2 data-es="Señalética y Gran Formato" data-en="Signage & Large Format">Señalética y Gran Formato</h2>
-                <div class="arrow-icon"></div>
-            </div>
-            <div class="collapsible-content"><div class="portfolio-grid" id="grid-signage"></div></div>
-        </div>
-    </main>
-
-    <footer>
-        <div class="footer-social" id="footer-social"></div>
-        <p>© 2026 Esteban Campos Polo · <span data-es="Todos los derechos reservados." data-en="All rights reserved.">Todos los derechos reservados.</span></p>
-    </footer>
-
-    <div id="imageModal" class="modal">
-        <span class="close-modal" onclick="closeModal()">&times;</span>
-        <div class="modal-nav"><button onclick="changeModalSlide(-1)">&#10094;</button><button onclick="changeModalSlide(1)">&#10095;</button></div>
-        <img id="modalImg" src="" onclick="event.stopPropagation()">
-    </div>
-
-    <script>
-        // DATA ARRAYS
-        const brandingData = [
-            { images: ['assets/images/logotipos/camocream.jpg'], name: 'Camocream Identity' },
-            { images: ['assets/images/logotipos/merlot.jpg'], name: 'Merlot Wine Bar' },
-            { images: ['assets/images/logotipos/silverfish.jpg'], name: 'Silverfish Brand' },
-            { images: ['assets/images/logotipos/canephora.jpg'], name: 'Canephora Coffee' },
-            { images: ['assets/images/logotipos/pleurotus.jpg'], name: 'Pleurotus Organic' },
-            { images: ['assets/images/logotipos/agri-cultura.jpg'], name: 'Agri-Cultura Logo' },
-            { images: ['assets/images/logotipos/mermelaida.jpg'], name: 'Mermelaida Brand' },
-            { images: ['assets/images/logotipos/cascosymasoutlet.jpg'], name: 'Cascos y Más' },
-            { images: ['assets/images/logotipos/goalkeeper.jpg'], name: 'Goalkeeper Sport' },
-            { images: ['assets/images/logotipos/24futsal.jpg'], name: '24h Futsal' },
-            { images: ['assets/images/logotipos/creamania.jpg'], name: 'Creamania' },
-            { images: ['assets/images/logotipos/cafeparis.jpg'], name: 'Café París' },
-            { images: ['assets/images/logotipos/airforguns.jpg'], name: 'Air for Guns' }
-        ];
-        const mockupsData = [
-            { images: ['assets/images/graphicdesign/valen2.png', 'assets/images/graphicdesign/tshirtvalenciabasket.jpg', 'assets/images/graphicdesign/valen3.png', 'assets/images/graphicdesign/valen1.png'], name: 'Design sport shirts' },
-            { images: ['assets/images/graphicdesign/mockups/silverfish.jpg', 'assets/images/graphicdesign/packsalmon.jpg', 'assets/images/graphicdesign/salmonpack.jpg'], name: 'Salmon Pack 3D' },
-            { images: ['assets/images/graphicdesign/packcoffe.jpg'], name: 'Coffee Bag Mockup' },
-            { images: ['assets/images/graphicdesign/oilpremium.png', 'assets/images/graphicdesign/oil.jpg'], name: 'Premium Olive Oil' },
-            { images: ['assets/images/graphicdesign/packthamar.jpg'], name: 'Thamar Cosmetics' },
-            { images: ['assets/images/graphicdesign/cream.jpg', 'assets/images/graphicdesign/mockups/camocream.jpg'], name: 'Cream Jar Render' },
-            { images: ['assets/images/graphicdesign/wine.jpg'], name: 'Wine Bottle Design' },
-            { images: ['assets/images/graphicdesign/mockupjampack.jpg', 'assets/images/graphicdesign/mockups/mermelaida.jpg'], name: 'Jam Jar Mockup' },
-            { images: ['assets/images/graphicdesign/mockupwine.jpg'], name: 'Wine Collection' },
-            { images: ['assets/images/graphicdesign/mockups/pleurotus.jpg'], name: 'Organic Box' },
-            { images: ['assets/images/graphicdesign/mockups/merlot.jpg', 'assets/images/graphicdesign/mockupmerlot.jpg'], name: 'Merlot Bottle' },
-            { images: ['assets/images/graphicdesign/mockups/creamania.jpg'], name: 'Branding Kit' },
-            { images: ['assets/images/graphicdesign/mockups/canephora.jpg'], name: 'Coffee Packaging' },
-            { images: ['assets/images/graphicdesign/mockups/agri-cultura.jpg'], name: 'Stationery Set' },
-            { images: ['assets/images/graphicdesign/heromockup.jpg'], name: 'Mockup Hero Packaging' }
-        ];
-
-        const packagingData = [
-            { images: ['assets/images/graphicdesign/heropack1.jpg', 'assets/images/graphicdesign/heropack2.jpg', 'assets/images/graphicdesign/heropack3.jpg', 'assets/images/graphicdesign/heropack4.jpg'], name: 'Hero Packaging' },
-            { images: ['assets/images/graphicdesign/beerpack.jpg'], name: 'Packaging Karhu' },
-            { images: ['assets/images/graphicdesign/jampack.jpg'], name: 'Packaging Jam' }
-        ];
-
-        const webData = [
-            { images: ['assets/images/graphicdesign/appmath.jpg'], name: 'Math App' },
-            { images: ['assets/images/graphicdesign/webcfsonil.jpg'], name: 'CFS Onil Website' },
-            { images: ['assets/images/graphicdesign/webcarpin.jpg'], name: 'Carpintería Website' },
-            { images: ['assets/images/graphicdesign/webtaller.jpg'], name: 'Taller Auto Website' }
-        ];
-        const signageData = [
-            { images: ['assets/images/graphicdesign/mockups/cascosymasoutlet.jpg', 'assets/images/graphicdesign/rotulo.jpg'], name: 'Large Format Signage' },
-            { images: ['assets/images/graphicdesign/mockups/cafeparis.jpg', 'assets/images/graphicdesign/rotulocafeparis.jpg'], name: 'Light Box Sign' },
-            { images: ['assets/images/graphicdesign/fachadamerlot.jpg'], name: 'Store Facade Vinyl' },
-            { images: ['assets/images/graphicdesign/mockups/goalkeeper.jpg'], name: 'Sport Equipment Sign' },
-            { images: ['assets/images/graphicdesign/mockups/24futsal.jpg'], name: 'Arena Signage' },
-            { images: ['assets/images/graphicdesign/mockups/airforguns.jpg'], name: 'Outdoor Sign' },
-            { images: ['assets/images/graphicdesign/mockups/carniceriamatadero.jpg'], name: 'Signage Carniceria Matadero' }
-        ];
-        const editorialData = [
-            { images: ['assets/images/graphicdesign/posterfest26.jpg'], name: 'Festival Poster' },
-            { images: ['assets/images/graphicdesign/cfsmagazine.jpg'], name: 'Sports Magazine' },
-            { images: ['assets/images/graphicdesign/books.jpg'], name: 'Book Cover Collection' },
-            { images: ['assets/images/graphicdesign/bag.jpg'], name: 'Backpack Design' },
-            { images: ['assets/images/graphicdesign/brandingcreamania.jpg'], name: 'Business Cards' },
-            { images: ['assets/images/graphicdesign/DESBORDAOS1.jpg', 'assets/images/graphicdesign/DESBORDAOS2.jpg'], name: 'Desbordaos Posters' },
-            { images: ['assets/images/graphicdesign/tshirtvalenciabasket.jpg', 'assets/images/graphicdesign/valen2.png', 'assets/images/graphicdesign/valen3.png', 'assets/images/graphicdesign/valen1.png'], name: 'Design sport shirts' },
-            { images: ['assets/images/graphicdesign/textil2.png', 'assets/images/graphicdesign/textil1.jpg'], name: 'Textile Pattern' }
-        ];
-
-        let currentLang = localStorage.getItem('preferredLang') || 'en';
-        let currentModalImages = [];
-        let currentModalIdx = 0;
-
-        function toggleSection(element) {
-            const wrapper = element.parentElement;
-            const isActive = wrapper.classList.contains('active');
-            document.querySelectorAll('.section-wrapper').forEach(sw => sw.classList.remove('active'));
-            if (!isActive) wrapper.classList.add('active');
-        }
-
-        function openSection(id) {
-            document.querySelectorAll('.section-wrapper').forEach(sw => sw.classList.remove('active'));
-            const target = document.getElementById(id);
-            if(target) {
-                target.classList.add('active');
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-
-        function updateContent() {
-            document.querySelectorAll('[data-es]').forEach(el => {
-                const text = el.getAttribute(`data-${currentLang}`);
-                el.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            });
-            document.getElementById('btn-es').className = currentLang === 'es' ? 'active' : '';
-            document.getElementById('btn-en').className = currentLang === 'en' ? 'active' : '';
-        }
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'es' ? 'en' : 'es';
-            localStorage.setItem('preferredLang', currentLang);
-            updateContent();
-        }
-
-        function renderGrid(containerId, data) {
-            const container = document.getElementById(containerId);
-            if(!container) return;
-            
-            container.innerHTML = data.map((item, index) => {
-                const uniqueId = `${containerId}-${index}`;
-                const imgsHtml = item.images.map((img, i) => {
-                    const fileName = img.split('/').pop().split('.')[0];
-                    let webpPath = containerId === 'grid-branding' ? `assets/images/logotipos/${fileName}.webp` : `assets/images/webp/${fileName}.webp`;
-                    return `<img src="${webpPath}" data-original="${img}" class="${i === 0 ? 'active' : ''}" alt="${item.name}" loading="lazy" onerror="this.src='${img}'">`;
-                }).join('');
-                
-                const nav = item.images.length > 1 ? `<button class="nav-btn prev-btn" onclick="prevSlide(event, '${uniqueId}')">&#10094;</button><button class="nav-btn next-btn" onclick="nextSlide(event, '${uniqueId}')">&#10095;</button>` : '';
-                return `<div class="grid-item" id="${uniqueId}" onclick="openModal('${containerId}', ${index})">${nav}<div class="slideshow-container">${imgsHtml}</div><div class="grid-info"><h4>${item.name}</h4></div></div>`;
-            }).join('');
-        }
-
-        function nextSlide(e, id) {
-            e.stopPropagation();
-            const imgs = document.getElementById(id).querySelectorAll('.slideshow-container img');
-            let idx = Array.from(imgs).findIndex(img => img.classList.contains('active'));
-            imgs[idx].classList.remove('active');
-            imgs[(idx + 1) % imgs.length].classList.add('active');
-        }
-
-        function prevSlide(e, id) {
-            e.stopPropagation();
-            const imgs = document.getElementById(id).querySelectorAll('.slideshow-container img');
-            let idx = Array.from(imgs).findIndex(img => img.classList.contains('active'));
-            imgs[idx].classList.remove('active');
-            imgs[(idx - 1 + imgs.length) % imgs.length].classList.add('active');
-        }
-
-        function openModal(type, idx) {
-            const dataMap = { 'grid-mockups': mockupsData, 'grid-packaging': packagingData, 'grid-branding': brandingData, 'grid-web': webData, 'grid-editorial': editorialData, 'grid-signage': signageData };
-            const item = dataMap[type][idx];
-            currentModalImages = item.images;
-            const activeInGrid = document.getElementById(`${type}-${idx}`).querySelector('.active').getAttribute('data-original');
-            currentModalIdx = item.images.indexOf(activeInGrid);
-            if(currentModalIdx === -1) currentModalIdx = 0;
-            updateModalImage();
-            document.getElementById('imageModal').style.display = 'flex';
-            document.querySelector('.modal-nav').style.display = currentModalImages.length > 1 ? 'flex' : 'none';
-            
-            // Tracking apertura modal (imagen HD)
-            if (typeof gtag === 'function') gtag('event', 'engagement_view_image_hd', { 'image_name': currentModalImages[currentModalIdx].split('/').pop() });
-        }
-
-        function updateModalImage() { document.getElementById('modalImg').src = currentModalImages[currentModalIdx]; }
-        function changeModalSlide(step) { currentModalIdx = (currentModalIdx + step + currentModalImages.length) % currentModalImages.length; updateModalImage(); }
-        function closeModal() { document.getElementById('imageModal').style.display = 'none'; }
-
-        window.onload = () => {
-            updateContent();
-            renderGrid('grid-branding', brandingData);
-            renderGrid('grid-mockups', mockupsData);
-            renderGrid('grid-packaging', packagingData);
-            renderGrid('grid-web', webData);
-            renderGrid('grid-editorial', editorialData);
-            renderGrid('grid-signage', signageData);
-            
-            const social = [
-                { i: "assets/icons/linkedin.svg", u: "https://www.linkedin.com/in/esteban-campos-polo-09852771" },
-                { i: "assets/icons/artstation.svg", u: "https://estebancampos1.artstation.com/" },
-                { i: "assets/icons/instagram.svg", u: "https://www.instagram.com/estcampo/" },
-            ];
-            document.getElementById('footer-social').innerHTML = social.map(s => `<a href="${s.u}" target="_blank"><img src="${s.i}"></a>`).join('');
-        };
-
-        document.addEventListener('keydown', e => {
-            if (document.getElementById('imageModal').style.display === 'flex') {
-                if (e.key === "ArrowRight") changeModalSlide(1);
-                if (e.key === "ArrowLeft") changeModalSlide(-1);
-                if (e.key === "Escape") closeModal();
-            }
+    document.addEventListener('click', function(e){
+      const project = e.target.closest('.card-media');
+      if(project){
+        const title = project.closest('.design-card').querySelector('h2');
+        const projectName = title ? title.innerText.trim() : 'unnamed_design_project';
+        gtag('event', 'project_click', {
+          project_name: projectName,
+          project_category: getCategory(project),
+          page_location: window.location.href
         });
+      }
+    }, { passive: true });
 
-        // Función de descarga que utiliza el sistema de tracking centralizado
-        window.forceDownload = function(lang, filename) {
-            const filePath = 'assets/' + filename;
-            
-            // Usar la función de tracking unificada
-            if (typeof window.trackDownload === 'function') {
-                window.trackDownload(lang, filename);
-            }
+    let scrollSent = false;
+    window.addEventListener('scroll', function(){
+      if(scrollSent) return;
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if(docHeight <= 0) return;
+      if((scrollTop / docHeight) >= 0.5){
+        scrollSent = true;
+        gtag('event', 'scroll_50_percent', { page_location: window.location.href });
+      }
+    }, { passive: true });
+  </script>
 
-            const link = document.createElement('a');
-            link.href = filePath;
-            link.setAttribute('download', filename);
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
-    </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --surface-card: #1c1c1c;
+      --text: #f5f5f5;
+      --muted: #9a9a9a;
+      --border: rgba(255, 255, 255, 0.08);
+      --accent: #ffffff;
+      --transition: all 0.6s cubic-bezier(.19,1,.22,1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg); }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.lang-en .lang-es { display: none !important; }
+    body.lang-es .lang-en { display: none !important; }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.015;
+      background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+      z-index: 9999;
+    }
+
+    .main-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 48px;
+      backdrop-filter: blur(10px);
+      background: rgba(10, 10, 10, 0.75);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo-block { display: flex; flex-direction: column; text-decoration: none; }
+    .logo-name { font-size: 0.8rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text); }
+    .logo-role { color: var(--muted); font-size: 0.65rem; letter-spacing: 0.12em; margin-top: 3px; text-transform: uppercase; }
+    nav { display: flex; align-items: center; gap: 28px; }
+    nav a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      transition: opacity 0.3s ease;
+      opacity: 0.6;
+    }
+    nav a:hover, nav a.active { opacity: 1; }
+
+    .lang-switcher { display: inline-flex; gap: 6px; margin-left: 10px; font-size: 0.72rem; font-weight: 900; letter-spacing: 0.1em; color: var(--muted); }
+    .lang-btn { cursor: pointer; transition: color 0.3s ease; }
+    .lang-btn:hover { color: var(--text); }
+
+    .page-hero {
+      padding: 160px 8% 40px 8%;
+      max-width: 1200px;
+    }
+    .page-hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .page-hero p {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 700px;
+      line-height: 1.6;
+    }
+
+    .filter-menu {
+      display: flex;
+      gap: 12px;
+      padding: 0 8% 40px 8%;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    .filter-menu::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .filter-btn:hover, .filter-btn.active {
+      color: var(--text);
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .gallery-container { padding: 0 8% 120px 8%; }
+    .design-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 50px;
+    }
+
+    @media (max-width: 992px) {
+      .design-grid { grid-template-columns: 100%; gap: 40px; }
+      .main-header { padding: 20px 24px; }
+      nav { gap: 16px; }
+    }
+
+    .design-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+    }
+    .design-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .card-media {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background: #000;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .card-media img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.8s cubic-bezier(.19,1,.22,1);
+    }
+    .card-media img.active { opacity: 1; }
+    .design-card:hover .card-media img.active { transform: scale(1.02); }
+
+    .media-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(10, 10, 10, 0.85);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease, background 0.3s ease;
+    }
+    .card-media:hover .media-nav-btn { opacity: 1; }
+    .media-nav-btn:hover { background: var(--text); color: var(--bg); }
+    .media-prev { left: 16px; }
+    .media-next { right: 16px; }
+
+    .card-body {
+      padding: 35px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+      gap: 15px;
+    }
+    .card-body h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+    .card-category {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-align: right;
+      white-space: nowrap;
+    }
+    .card-description {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--muted);
+      font-weight: 300;
+      margin-bottom: 30px;
+      flex-grow: 1;
+    }
+
+    .card-footer-action {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      gap: 15px;
+    }
+    .tech-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+    .design-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.02);
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: #b3b3b3;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 5, 5, 0.98);
+      backdrop-filter: blur(15px);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    .lightbox-content {
+      max-width: 94%;
+      max-height: 85vh;
+      object-fit: contain;
+      border: 1px solid var(--border);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      font-size: 2.5rem;
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    footer {
+      padding: 40px 8%;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body class="lang-en">
+
+  <div class="noise"></div>
+
+  <header class="main-header">
+    <a href="index.html" class="logo-block">
+      <span class="logo-name">Esteban Campos Polo</span>
+      <span class="logo-role lang-en">Sr. Graphic Packaging & Production Designer</span>
+      <span class="logo-role lang-es">Diseñador Sr. de Packaging y Producción Gráfica</span>
+    </a>
+    <nav>
+      <a href="index.html">HOME</a>
+      <a href="graphic-design.html" class="active">GRAPHIC DESIGN</a>
+      <a href="3d-modeling.html">3D</a>
+      <a href="about.html">ABOUT</a>
+      <a href="cv_resume.html">CV / RESUME</a>
+      <a href="contact.html">CONTACT</a>
+      
+      <div class="lang-switcher">
+        <span class="lang-btn" id="btn-en" onclick="setLanguage('en')">EN</span>
+        <span>/</span>
+        <span class="lang-btn" id="btn-es" onclick="setLanguage('es')">ES</span>
+      </div>
+    </nav>
+  </header>
+
+  <section class="page-hero">
+    <h1>
+      <span class="lang-en">Graphic Design &<br>Visual Communication</span>
+      <span class="lang-es">Diseño Gráfico y<br>Comunicación Visual</span>
+    </h1>
+    <p>
+      <span class="lang-en">Strategic branding architectures, functional industrial packaging engineering, and contemporary identity layouts optimized with over 20 years of production expertise.</span>
+      <span class="lang-es">Arquitecturas estratégicas de marca, ingeniería estructural de packaging y sistemas de identidad contemporánea optimizados con más de 20 años de experiencia técnica en producción.</span>
+    </p>
+  </section>
+
+  <nav class="filter-menu">
+    <button class="filter-btn active" onclick="filterCategory('all')">
+      <span class="lang-en">All Projects</span><span class="lang-es">Todos</span>
+    </button>
+    <button class="filter-btn" onclick="filterCategory('branding')">Branding</button>
+    <button class="filter-btn" onclick="filterCategory('mockups')">Mockups</button>
+    <button class="filter-btn" onclick="filterCategory('packaging')">Packaging</button>
+    <button class="filter-btn" onclick="filterCategory('web')">Web / UI</button>
+    <button class="filter-btn" onclick="filterCategory('editorial')">
+      <span class="lang-en">Editorial & Textile</span><span class="lang-es">Editorial y Textil</span>
+    </button>
+    <button class="filter-btn" onclick="filterCategory('signage')">
+      <span class="lang-en">Signage & Format</span><span class="lang-es">Señalética y Gran Formato</span>
+    </button>
+  </nav>
+
+  <main class="gallery-container">
+    <div class="design-grid" id="main-design-grid"></div>
+  </main>
+
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightbox-img" class="lightbox-content" src="" alt="" onclick="event.stopPropagation()">
+  </div>
+
+  <footer>
+    <span>&copy; 2026 Esteban Campos Polo</span>
+    <span class="lang-en">Graphic Production Portfolio</span>
+    <span class="lang-es">Portafolio de Producción Gráfica</span>
+  </footer>
+
+ <script>
+   const PROJECT_DATABASE = [
+      //  BRANDING / LOGOTIPOS
+      { id: "b1", category: "branding", catEn: "Sports Branding", catEs: "Branding Deportivo", title: "Torneo 24 Horas Futsal", images: ["assets/images/logotipos/24futsal.jpg"], descEn: "", descEs: "", badges: ["Papelería", "Uniformes", "Lonas"] },
+
+      { id: "b2", category: "branding", catEn: "Agro Branding", catEs: "Branding Agropecuario", title: "Agri-Cultura Cooperativa", images: ["assets/images/logotipos/agri-cultura.jpg"], descEn: "", descEs: "", badges: ["Logotipo", "Tradición", "Verdes"] },
+
+      { id: "b3", category: "branding", catEn: "Tactical Branding", catEs: "Identidad Táctica", title: "Air for Guns", images: ["assets/images/logotipos/airforguns.jpg"], descEn: "", descEs: "", badges: ["Precisión", "Deportivo", "Isotipo"] },
+
+      { id: "b4", category: "branding", catEn: "Corporate Identity", catEs: "Identidad Corporativa", title: "Café París", images: ["assets/images/logotipos/cafeparis.jpg"], descEn: "", descEs: "", badges: ["Gourmet", "Elegancia", "Premium"] },
+
+      { id: "b5", category: "branding", catEn: "Cosmetic Identity", catEs: "Identidad Cosmética", title: "Camocream", images: ["assets/images/logotipos/camocream.jpg"], descEn: "", descEs: "", badges: ["Bienestar", "Orgánico", "Minimalist"] },
+
+      { id: "b6", category: "branding", catEn: "Specialty Coffee Brand", catEs: "Café de Especialidad", title: "Canephora Coffee", images: ["assets/images/logotipos/canephora.jpg"], descEn: "", descEs: "", badges: ["Artisanal", "Cafetería", "Vector"] },
+
+      { id: "b7", category: "branding", catEn: "Automotive Retail", catEs: "Retail de Automoción", title: "Cascos y Más Outlet", images: ["assets/images/logotipos/cascosymasoutlet.jpg"], descEn: "", descEs: "", badges: ["Comercial", "Accesorios", "Motor"] },
+   
+   { id: "b8", category: "branding", catEn: "Corporate Identity", catEs: "Identidad Corporativa", title: "Creamania", images: ["assets/images/logotipos/creamania.jpg"], descEn: "", descEs: "", badges: ["Creativo", "Innovación", "Abstracto"] },
+   
+   { id: "b9", category: "branding", catEn: "Sports Brand", catEs: "Identidad Deportiva", title: "Goalkeeper Premier", images: ["assets/images/logotipos/goalkeeper.jpg"], descEn: "", descEs: "", badges: ["Serigrafía", "Sublimación", "Textil"] },
+   
+   { id: "b10", category: "branding", catEn: "Artisan Preserves", catEs: "Identidad Artesanal", title: "Mermelaida", images: ["assets/images/logotipos/mermelaida.jpg"], descEn: "", descEs: "", badges: ["Etiquetado", "Tradición", "Vintage"] },
+     
+ { id: "b11", category: "branding", catEn: "Winery Branding", catEs: "Identidad Vitivinícola", title: "Bodegas Merlot", images: ["assets/images/logotipos/merlot.jpg"], descEn: "", descEs: "", badges: ["Bodegas", "Vinos", "Monograma"] },
+    
+  { id: "b12", category: "branding", catEn: "Sustainable Agriculture", catEs: "Logo Sostenible", title: "Pleurotus Organic", images: ["assets/images/logotipos/pleurotus.jpg"], descEn: "", descEs: "", badges: ["Flexografía", "Eco-Box", "Sostenible"] },
+    
+  { id: "b13", category: "branding", catEn: "Technical Vector", catEs: "Identidad Vectorial", title: "Silverfish Textiles", images: ["assets/images/logotipos/silverfish.jpg"], descEn: "", descEs: "", badges: ["Moda", "Estampación", "Isotipo"] },
+
+      //  MOCKUPS & PRESENTACIONES
+
+      { id: "m1", category: "mockups", catEn: "Eco Assets", catEs: "Soportes Ecológicos", title: "Agri-Cultura Stationery Mockup", images: ["assets/images/graphicdesign/mockups/agri-cultura.jpg"], descEn: "", descEs: "", badges: ["Photoshop", "Papelería", "Eco-Paper"] },
+
+      { id: "m2", category: "mockups", catEn: "Tactical Product Preview", catEs: "Simulación de Producto Táctico", title: "Air For Guns Presentation Box", images: ["assets/images/graphicdesign/mockups/airforguns.jpg"], descEn: "", descEs: "", badges: ["Matte Finish", "3D Filter", "Packaging"] },
+     
+ { id: "m3", category: "mockups", catEn: "Gourmet Mockup", catEs: "Simulación Gourmet", title: "Café París Luxury Menu Box", images: ["assets/images/graphicdesign/mockups/cafeparis.jpg"], descEn: "", descEs: "", badges: ["Hot Foil", "Oro Embozado", "Hospitality"] },
+     
+ { id: "m4", category: "mockups", catEn: "Cosmetic Rendering", catEs: "Cosmética Visual", title: "Camocream Jar Assembly", images: ["assets/images/graphicdesign/mockups/camocream.jpg"], descEn: "", descEs: "", badges: ["Color Match", "Vidrio", "Cosmética"] },
+      
+{ id: "m5", category: "mockups", catEn: "Doypack Setup", catEs: "Empaque Flexible Doypack", title: "Canephora Coffee Pouch", images: ["assets/images/graphicdesign/mockups/canephora.jpg"], descEn: "", descEs: "", badges: ["Doypack", "Aluminio", "Café"] },
+      
+{ id: "m6", category: "mockups", catEn: "Retail Signage Mockup", catEs: "Simulación de Rótulos", title: "Cascos y Más Exterior Sign", images: ["assets/images/graphicdesign/mockups/cascosymasoutlet.jpg"], descEn: "", descEs: "", badges: ["Rótulos", "Exterior", "Industrial"] },
+     
+ { id: "m7", category: "mockups", catEn: "Corporate Visual Set", catEs: "Set Corporativo Visual", title: "Creamania Corporate Folders", images: ["assets/images/graphicdesign/mockups/creamania.jpg"], descEn: "", descEs: "", badges: ["Troqueles", "Papelería", "Branding"] },
+      
+{ id: "m8", category: "mockups", catEn: "Sportwear Showcase", catEs: "Indumentaria Deportiva", title: "Goalkeeper Technical Gloves Pack", images: ["assets/images/graphicdesign/mockups/goalkeeper.jpg"], descEn: "", descEs: "", badges: ["Blíster", "Deportes", "Textura"] },
+     
+ { id: "m9", category: "mockups", catEn: "Glass Preserve Render", catEs: "Simulación de Conservas", title: "Mermelaida Jar Collection", images: ["assets/images/graphicdesign/mockups/mermelaida.jpg"], descEn: "", descEs: "", badges: ["Vidrio", "Craft", "Mermeladas"] },
+     
+ { id: "m10", category: "mockups", catEn: "Winery Presentation", catEs: "Presentación Vinícola", title: "Bodegas Merlot Premium Bottle", images: ["assets/images/graphicdesign/mockups/merlot.jpg"], descEn: "", descEs: "", badges: ["Vino", "Refracción", "Verjurado"] },
+     
+ { id: "m11", category: "mockups", catEn: "Flexographic Box Setup", catEs: "Simulación de Caja Flexográfica", title: "Pleurotus Cardboard Fresh Pack", images: ["assets/images/graphicdesign/mockups/pleurotus.jpg"], descEn: "", descEs: "", badges: ["Flexo", "Cartón", "Halftones"] },
+      
+{ id: "m12", category: "mockups", catEn: "Textile Apparel Layout", catEs: "Soportes Textiles Flexibles", title: "Silverfish Technical Backpack", images: ["assets/images/graphicdesign/mockups/silverfish.jpg"], descEn: "", descEs: "", badges: ["Textil", "Sublimación", "Mochila"] },
+    
+  { id: "m13", category: "mockups", catEn: "Storefront Visuals", catEs: "Fachadas Comerciales", title: "Carnicería Matadero External View", images: ["assets/images/graphicdesign/mockups/carniceriamatadero.jpg"], descEn: "", descEs: "", badges: ["Fachada", "Acrílico", "Rótulo"] },
+
+      // 📁 PACKAGING Y ARTE FINAL
+     
+ { id: "p1", category: "packaging", catEn: "Industrial Logistic Case", catEs: "Caja de Distribución Industrial", title: "Cerveza Karhu Multi-pack", images: ["assets/images/graphicdesign/beerpack.jpg"], descEn: "", descEs: "", badges: ["Artes Finales", "Corrugado", "Logística"] },
+      
+{ id: "p2", category: "packaging", catEn: "Publishing Collection", catEs: "Línea de Diseño Editorial", title: "Literary Collection Book Jackets", images: ["assets/images/graphicdesign/books.jpg"], descEn: "", descEs: "", badges: ["Editorial", "Lomos", "Cubiertas"] },
+     
+ { id: "p3", category: "packaging", catEn: "Lithographed Tinplate", catEs: "Hojalata Litografiada", title: "La Campana Vintage Metal Box", images: ["assets/images/graphicdesign/lacampana.jpg"], descEn: "", descEs: "", badges: ["Hojalata", "Litografía", "Restauración"] },
+     
+ { id: "p4", category: "packaging", catEn: "FMCG Labelling Systems", catEs: "Etiquetas de Gran Consumo", title: "Mermelaida Industrial Glass Jars", images: ["assets/images/graphicdesign/jampack.jpg"], descEn: "", descEs: "", badges: ["Wet-Glue", "Precinto", "Seguridad"] },
+    
+  { id: "p5", category: "packaging", catEn: "Liquid Containers", catEs: "Envase de Líquidos", title: "Aceite Premium Oro Agri-Cultura", images: ["assets/images/graphicdesign/oil.jpg"], descEn: "", descEs: "", badges: ["Gourmet", "Aceite", "Etiquetas"] },
+  
+    { id: "p6", category: "packaging", catEn: "Premium Volumetrics", catEs: "Volumetría Premium", title: "Oro Agri-Cultura Luxury Gift Box", images: ["assets/images/graphicdesign/oilpremium.png"], descEn: "", descEs: "", badges: ["Gift Box", "Premium", "Estuches"] },
+    
+  { id: "p7", category: "packaging", catEn: "Cosmetic Tube Layout", catEs: "Líneas de Tubos Cosméticos", title: "Camocream jar ", images: ["assets/images/graphicdesign/cream.jpg"], descEn: "", descEs: "", badges: ["Cosmética", "Flexibles", "Línea"] },
+    
+  { id: "p8", category: "packaging", catEn: "Folding Cartons", catEs: "Cajas Plegadizas", title: "Thamar Cosmetic Line", images: ["assets/images/graphicdesign/packthamar.jpg"], descEn: "", descEs: "", badges: ["Estuches", "Cartonaje", "Minimal"] },
+      
+{ id: "p9", category: "packaging", catEn: "Artisan Preserves Line", catEs: "Gama de Conservas", title: "Mermelaida Multi-flavor Series", images: ["assets/images/graphicdesign/mockupjampack.jpg"], descEn: "", descEs: "", badges: ["Agrupador", "Exhibidor", "Línea"] },
+     
+ { id: "p10", category: "packaging", catEn: "Winery Series Layout", catEs: "Gama de Vinos Completa", title: "Bodegas Merlot Packaging and label", images: ["assets/images/graphicdesign/mockupwine.jpg"], descEn: "", descEs: "", badges: ["Catálogos", "Series", "Comercial"] },
+      
+{ id: "p11", category: "packaging", catEn: "Prepress FMCG Packaging", catEs: "Artes Finales Gran Consumo", title: "Salmon Fresh Wrap Layout", images: ["assets/images/graphicdesign/packsalmon.jpg"], descEn: "", descEs: "", badges: ["Alimentación", "Polímeros", "Preimpresión"] },
+     
+ { id: "p12", category: "packaging", catEn: "Flexible Barrier Pack", catEs: "Empaque de Barrera Flexible", title: "Canephora Coffee packaging", images: ["assets/images/graphicdesign/packcoffe.jpg"], descEn: "", descEs: "", badges: ["Café", "Laminados", "Barreras"] },
+     
+ { id: "p13", category: "packaging", catEn: "FMCG Prepress Systems", catEs: "Sistemas de Preimpresión FMCG", title: "Silverfish Seafood packaging", images: ["assets/images/graphicdesign/salmonpack.jpg"], descEn: "", descEs: "", badges: ["CMYK", "Spot-Inks", "Envases"] },
+     
+ { id: "p14", category: "packaging", catEn: "Winery Label Production", catEs: "Producción de Etiquetas de Vino", title: "Selección Merlot Gold Label", images: ["assets/images/graphicdesign/wine.jpg"], descEn: "", descEs: "", badges: ["Estampación", "Vinos", "Papel"] },
+     
+ { id: "p15", category: "packaging", catEn: "Toy Box Engineering", catEs: "Ingeniería de Cajas de Juguetes", title: "Hero Action Toy Packaging", images: ["assets/images/graphicdesign/heromockup.jpg"], descEn: "", descEs: "", badges: ["Juguetes", "Acetatos", "Troquel"] },
+     
+ { id: "p16", category: "packaging", catEn: "Structural Cardboard Cases", catEs: "Estuches Estructurales de Cartón", title: "Hero Action Figure Series (Boxes)", images: ["assets/images/graphicdesign/heropack1.jpg"], descEn: "", descEs: "", badges: ["Blísteres", "Troqueles", "Fijación"] },
+    
+  { id: "p17", category: "packaging", catEn: "Industrial Layouts", catEs: "Desarrollos Industriales", title: "Hero Box Set (Model B)", images: ["assets/images/graphicdesign/heropack2.jpg"], descEn: "", descEs: "", badges: ["Lito-Laminado", "Gráficas", "Retail"] },
+    
+  { id: "p18", category: "packaging", catEn: "Retail Window Packaging", catEs: "Empaque Comercial con Ventana", title: "Hero Box Set (Model C)", images: ["assets/images/graphicdesign/heropack3.jpg"], descEn: "", descEs: "", badges: ["Expositores", "Cortes", "Juguetes"] },
+     
+ { id: "p19", category: "packaging", catEn: "Full Artwork Blueprint", catEs: "Plano Maestro de Arte Final", title: "Hero Box Set (Model D)", images: ["assets/images/graphicdesign/heropack4.jpg"], descEn: "", descEs: "", badges: ["Planchas", "Registros", "FMCG"] },
+
+      // 📁 DISEÑO WEB / UI
+     
+ { id: "w1", category: "web", catEn: "Mobile Application Layout", catEs: "Interfaz de Aplicación Móvil", title: "Math App UI Framework", images: ["assets/images/graphicdesign/appmath.jpg"], descEn: "", descEs: "", badges: ["UI / UX", "Figma", "Mobile"] },
+    
+  { id: "w2", category: "web", catEn: "Responsive Web Layout", catEs: "Maquetación Web Responsiva", title: "Carpintería Web", images: ["assets/images/graphicdesign/webcarpin.jpg"], descEn: "", descEs: "", badges: ["B2B Portal", "Responsive", "Catálogos"] },
+    
+  { id: "w3", category: "web", catEn: "Digital Asset Engineering", catEs: "Ingeniería de Assets Digitales", title: "CFS Onil Sports Website", images: ["assets/images/graphicdesign/webcfsonil.jpg"], descEn: "", descEs: "", badges: ["Web Design", "Optimizado", "Sports"] },
+     
+ { id: "w4", category: "web", catEn: "Functional Interface Flow", catEs: "Flujos de Interfaz Funcionales", title: "Taller Web", images: ["assets/images/graphicdesign/webtaller.jpg"], descEn: "", descEs: "", badges: ["UX Flow", "Dashboard", "Formularios"] },
+
+      // 📁 EDITORIAL, CARTELERÍA Y TEXTIL
+     
+ { id: "e1", category: "editorial", catEn: "Industrial Offset Poster", catEs: "Cartelería en Offset Industrial", title: "Poster Moros y Cristianos Onil", images: ["assets/images/graphicdesign/posterfest26.jpg"], descEn: "", descEs: "", badges: ["Offset", "Gran Formato", "Preimpresión"] },
+    
+  { id: "e2", category: "editorial", catEn: "Editorial Layout Grid", catEs: "Maquetación de Sistemas Editoriales", title: "CFS Sports Magazine Layouts", images: ["assets/images/graphicdesign/cfsmagazine.jpg"], descEn: "", descEs: "", badges: ["Revistas", "Retículas", "Paginación"] },
+    
+  { id: "e3", category: "editorial", catEn: "Technical Fabric Setup", catEs: "Canales de Tinta Textil", title: "Technical Backpack Textile", images: ["assets/images/graphicdesign/bag.jpg"], descEn: "", descEs: "", badges: ["Serigrafía", "Textil", "Vectores"] },
+     
+ { id: "e4", category: "editorial", catEn: "Spot UV Varnish Mask", catEs: "Máscaras de Barniz UVI Localizado", title: "Creamania Corporate Business Cards Finishing", images: ["assets/images/graphicdesign/brandingcreamania.jpg"], descEn: "", descEs: "", badges: ["Barniz UVI", "Tarjetas", "Máscaras"] },
+     
+ { id: "e5", category: "editorial", catEn: "High-Scale Typography", catEs: "Cartelería Tipográfica de Gran Escala", title: "Desbordaos Posters", images: ["assets/images/graphicdesign/DESBORDAOS1.jpg"], descEn: "", descEs: "", badges: ["Poster", "Tipografía", "Tinta Plana"] },
+    
+  { id: "e6", category: "editorial", catEn: "Vector Plates Layout", catEs: "Trazados Vectoriales de Imprenta", title: "Desbordaos (Poster B)", images: ["assets/images/graphicdesign/DESBORDAOS2.jpg"], descEn: "", descEs: "", badges: ["Vectores", "Planchas", "Carteles"] },
+     
+ { id: "e7", category: "editorial", catEn: "Real-Scale Vector Plotting", catEs: "Trazados Técnicos a Escala Real", title: "Valencia Basket Technical Kit Patterns", images: ["assets/images/graphicdesign/tshirtvalenciabasket.jpg"], descEn: "", descEs: "", badges: ["Patrones", "Sublimación", "Equipaciones"] },
+     
+ { id: "e9", category: "editorial", catEn: "Apparel Digital Composites", catEs: "Composiciones Digitales de Ropa", title: "Valencia Basket Gear (Jersey View B)", images: ["assets/images/graphicdesign/valen2.png"], descEn: "", descEs: "", badges: ["Dorsales", "Textil", "Deportes"] },
+     
+ { id: "e10", category: "editorial", catEn: "Sublimation Mapping", catEs: "Mapeados de Sublimación", title: "Valencia Basket Gear (Jersey View C)", images: ["assets/images/graphicdesign/valen3.png"], descEn: "", descEs: "", badges: ["Costuras", "Sublimación", "Detalle"] },
+    
+  { id: "e11", category: "editorial", catEn: "Rapport Engineering", catEs: "Ingeniería de Patrones Repetitivos", title: "Seamless Textile Repeat Pattern (Rapport A)", images: ["assets/images/graphicdesign/textil1.jpg"], descEn: "", descEs: "", badges: ["Rapport", "Seamless", "Estampados"] },
+     
+ { id: "e12", category: "editorial", catEn: "Seamless Rollers Setup", catEs: "Configuraciones para Rodillos Rotativos", title: "Seamless Textile Repeat Pattern (Rapport B)", images: ["assets/images/graphicdesign/textil2.png"], descEn: "", descEs: "", badges: ["Patrones", "Mosaicos", "Textil"] },
+
+      // 📁 SEÑALÉTICA Y GRAN FORMATO
+     
+ { id: "s1", category: "signage", catEn: "CNC Vector Milling Paths", catEs: "Cortes para Fresadoras CNC", title: "Cascos y Más Corporate Signage Layouts", images: ["assets/images/graphicdesign/rotulo.jpg"], descEn: "", descEs: "", badges: ["CNC Milling", "Planos", "Rótulos"] },
+     
+ { id: "s2", category: "signage", catEn: "Large Format Outdoor Backlit", catEs: "Rótulos Retroiluminados Exteriores", title: "Café París Light Box Signage", images: ["assets/images/graphicdesign/rotulocafeparis.jpg"], descEn: "", descEs: "", badges: ["Backlit", "Exterior", "Cajas de Luz"] },
+     
+ { id: "s3", category: "signage", catEn: "Polymeric Vinyl Cutting", catEs: "Vinilos Poliméricos de Corte", title: "Bodegas Merlot Store Glass Facade", images: ["assets/images/graphicdesign/fachadamerlot.jpg"], descEn: "", descEs: "", badges: ["Vinilo Ácido", "Cristales", "Fachadas"] },
+    
+  { id: "s4", category: "signage", catEn: "Tension Fabric Banner", catEs: "Lonas Tensadas de Gran Formato", title: "Goalkeeper International Exhibition Banner", images: ["assets/images/graphicdesign/mockups/goalkeeper.jpg"], descEn: "", descEs: "", badges: ["Lonas", "Stands", "Eventos"] },
+      
+{ id: "s5", category: "signage", catEn: "Wayfinding Navigation Architecture", catEs: "Sistemas de Señalización Direccional", title: "Torneo 24h Futsal", images: ["assets/images/graphicdesign/mockups/24futsal.jpg"], descEn: "", descEs: "", badges: ["Wayfinding", "Lonas", "Eventos"] },
+   
+   { id: "s6", category: "signage", catEn: "Dimensional Weatherproof Setup", catEs: "Rótulos Corpóreos Industriales", title: "Air For Guns ign", images: ["assets/images/graphicdesign/mockups/airforguns.jpg"], descEn: "", descEs: "", badges: ["Corpóreos", "Anclajes", "Metales"] },
+    
+  { id: "s7", category: "signage", catEn: "Commercial Print Ready Art", catEs: "Fachadas Comerciales Tradicionales", title: "Carnicería Matadero", images: ["assets/images/graphicdesign/mockups/carniceriamatadero.jpg"], descEn: "", descEs: "", badges: ["Metacrilato", "Fachada", "Impresión"] }
+ 
+   ];
+
+
+    let currentLanguageState = localStorage.getItem('preferredLang') || 'en';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setLanguage(currentLanguageState);
+      filterCategory('all');
+    });
+
+    function setLanguage(lang) {
+      currentLanguageState = lang;
+      localStorage.setItem('preferredLang', lang);
+      const body = document.body;
+      const btnEn = document.getElementById('btn-en');
+      const btnEs = document.getElementById('btn-es');
+      
+      if (lang === 'en') {
+        body.classList.remove('lang-es');
+        body.classList.add('lang-en');
+        btnEn.style.color = '#fff';
+        btnEs.style.color = 'var(--muted)';
+        document.documentElement.lang = 'en';
+      } else {
+        body.classList.remove('lang-en');
+        body.classList.add('lang-es');
+        btnEn.style.color = 'var(--muted)';
+        btnEs.style.color = '#fff';
+        document.documentElement.lang = 'es';
+      }
+    }
+
+    function filterCategory(cat) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.getAttribute('onclick').includes(`'${cat}'`)) {
+          btn.classList.add('active');
+        }
+      });
+
+      const grid = document.getElementById('main-design-grid');
+      grid.innerHTML = "";
+
+      const filtered = cat === 'all' ? PROJECT_DATABASE : PROJECT_DATABASE.filter(item => item.category === cat);
+
+      filtered.forEach(project => {
+        const card = document.createElement('div');
+        card.className = 'design-card';
+        card.setAttribute('data-category', project.category);
+        card.setAttribute('id', `card-${project.id}`);
+
+        let imagesHtml = project.images.map((img, index) => {
+          const fileName = img.split('/').pop().split('.')[0];
+          const isLogotipo = project.category === 'branding';
+          const webpPath = isLogotipo ? `assets/images/logotipos/${fileName}.webp` : `assets/images/webp/${fileName}.webp`;
+          return `<img src="${webpPath}" data-original="${img}" class="${index === 0 ? 'active' : ''}" alt="${project.title}" onerror="this.onerror=null; this.src='${img}';">`;
+        }).join('');
+
+        let navHtml = "";
+        if (project.images.length > 1) {
+          navHtml = `
+            <button class="media-nav-btn media-prev" onclick="switchSlide(event, '${project.id}', -1)">&#10094;</button>
+            <button class="media-nav-btn media-next" onclick="switchSlide(event, '${project.id}', 1)">&#10095;</button>
+          `;
+        }
+
+        const badgesHtml = project.badges.map(b => `<span class="design-badge">${b}</span>`).join('');
+
+        card.innerHTML = `
+          <div class="card-media" onclick="triggerLightbox('${project.id}')">
+            ${navHtml}
+            ${imagesHtml}
+          </div>
+          <div class="card-body">
+            <div class="card-header-row">
+              <h2>${project.title}</h2>
+              <span class="card-category"><span class="lang-en">${project.catEn}</span><span class="lang-es">${project.catEs}</span></span>
+            </div>
+            <div class="card-description">
+              <p class="lang-en">${project.descEn}</p>
+              <p class="lang-es">${project.descEs}</p>
+            </div>
+            <div class="card-footer-action">
+              <div class="tech-badges">${badgesHtml}</div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function switchSlide(event, projectId, direction) {
+      event.stopPropagation();
+      const card = document.getElementById(`card-${projectId}`);
+      const imgs = card.querySelectorAll('.card-media img');
+      let activeIdx = Array.from(imgs).findIndex(img => img.classList.contains('active'));
+      
+      imgs[activeIdx].classList.remove('active');
+      let nextIdx = (activeIdx + direction + imgs.length) % imgs.length;
+      imgs[nextIdx].classList.add('active');
+    }
+
+    function triggerLightbox(projectId) {
+      const card = document.getElementById(`card-${projectId}`);
+      const activeImg = card.querySelector('.card-media img.active');
+      const highResSource = activeImg.getAttribute('data-original') || activeImg.src;
+
+      if (highResSource.includes("placehold.co")) return;
+
+      const modal = document.getElementById('lightbox');
+      const modalImg = document.getElementById('lightbox-img');
+      
+      modal.style.display = "flex";
+      modalImg.src = highResSource;
+      modalImg.alt = activeImg.alt + " — High Resolution View";
+
+      if (typeof gtag === 'function') {
+        gtag('event', 'engagement_view_image_hd', { 'image_name': highResSource.split('/').pop() });
+      }
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').style.display = "none";
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === "Escape") closeLightbox();
+    });
+  </script>
 </body>
 </html>

@@ -1,258 +1,363 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photography | Esteban Campos Polo</title>
+    <title>Photography — Esteban Campos Polo</title>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-/* ==========================
-   CONFIG BASE
-========================== */
-gtag('config', 'G-8VMES8F4MN', {
-  anonymize_ip: true,
-  allow_google_signals: false,
-  send_page_view: true
-});
-
-/* ==========================
-   FUNCIÓN UTILIDAD
-========================== */
-function getCategory(element){
-  const section = element.closest('section');
-  return section ? section.id : 'photography_general';
-}
-
-/* ==========================
-   TRACKING UNIFICADO
-========================== */
-document.addEventListener('click', function(e){
-
-  /* ---------- DESCARGAS ---------- */
-  const downloadLink = e.target.closest('a[href$=".pdf"], a[href$=".zip"]');
-  if(downloadLink){
-    const fileName = downloadLink.getAttribute('href').split('/').pop();
-    gtag('event', 'file_download', {
-      file_name: fileName,
-      file_extension: fileName.split('.').pop(),
-      link_url: downloadLink.href,
-      page_location: window.location.href
+    /* ==========================
+       CONFIG BASE
+    ========================== */
+    gtag('config', 'G-8VMES8F4MN', {
+      anonymize_ip: true,
+      allow_google_signals: false,
+      send_page_view: true
     });
-    return;
-  }
 
-  /* ---------- CLICK EN FOTO / PROYECTO ---------- */
-  // Asume que cada foto o grupo está dentro de un contenedor con clase .item
-  const project = e.target.closest('.item');
-  if(project){
-    const title = project.querySelector('h4, h3, img');
-    // Si no hay texto, intenta pillar el 'alt' de la imagen como nombre
-    const projectName = title ? (title.innerText || title.alt || 'unnamed_photo').trim() : 'unknown_photo';
-    
-    gtag('event', 'view_item', {
-      item_name: projectName,
-      item_category: getCategory(project),
-      page_location: window.location.href
-    });
-    return;
-  }
+    /* ==========================
+       FUNCIÓN UTILIDAD
+    ========================== */
+    function getCategory(element){
+      const section = element.closest('section');
+      return section ? section.id : 'photography_general';
+    }
 
-  /* ---------- CLICK REDES SOCIALES / EXTERNOS ---------- */
-  const externalLink = e.target.closest('a[target="_blank"]');
-  if(externalLink){
-    gtag('event', 'external_click', {
-      link_url: externalLink.href,
-      page_location: window.location.href
-    });
-  }
-}, { passive: true });
+    /* ==========================
+       TRACKING UNIFICADO
+    ========================== */
+    document.addEventListener('click', function(e){
 
-/* ==========================
-   SCROLL 50% (Interés en el portfolio)
-========================= */
-let scrollSent = false;
-window.addEventListener('scroll', function(){
-  if(scrollSent) return;
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  if(docHeight <= 0) return;
-  const scrollPercent = scrollTop / docHeight;
-  if(scrollPercent >= 0.5){
-    scrollSent = true;
-    gtag('event', 'scroll_50_percent', {
-      page_location: window.location.href
-    });
-  }
-}, { passive: true });
-</script>
+      /* ---------- DESCARGAS ---------- */
+      const downloadLink = e.target.closest('a[href$=".pdf"], a[href$=".zip"]');
+      if(downloadLink){
+        const fileName = downloadLink.getAttribute('href').split('/').pop();
+        gtag('event', 'file_download', {
+          file_name: fileName,
+          file_extension: fileName.split('.').pop(),
+          link_url: downloadLink.href,
+          page_location: window.location.href
+        });
+        return;
+      }
+
+      /* ---------- CLICK EN FOTO / PROYECTO ---------- */
+      const project = e.target.closest('.item');
+      if(project){
+        const title = project.querySelector('h4, h3, img');
+        const projectName = title ? (title.innerText || title.alt || 'unnamed_photo').trim() : 'unknown_photo';
+        
+        gtag('event', 'view_item', {
+          item_name: projectName,
+          item_category: getCategory(project),
+          page_location: window.location.href
+        });
+        return;
+      }
+
+      /* ---------- CLICK REDES SOCIALES / EXTERNOS ---------- */
+      const externalLink = e.target.closest('a[target="_blank"]');
+      if(externalLink){
+        gtag('event', 'external_click', {
+          link_url: externalLink.href,
+          page_location: window.location.href
+        });
+      }
+    }, { passive: true });
+
+    /* ==========================
+       SCROLL 50% (Interés en el portfolio)
+    ========================= */
+    let scrollSent = false;
+    window.addEventListener('scroll', function(){
+      if(scrollSent) return;
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if(docHeight <= 0) return;
+      const scrollPercent = scrollTop / docHeight;
+      if(scrollPercent >= 0.5){
+        scrollSent = true;
+        gtag('event', 'scroll_50_percent', {
+          page_location: window.location.href
+        });
+      }
+    }, { passive: true });
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg: #ffffff; --text: #1f2937; --accent: #0052FF; --muted: #64748b;
-            --light-bg: #f8fafc; --border: #e2e8f0; --radius: 12px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg: #0a0a0a;
+            --surface: #141414;
+            --surface-card: #1c1c1c;
+            --text: #f5f5f5;
+            --muted: #9a9a9a;
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: #ffffff;
+            --transition: all 0.6s cubic-bezier(.19,1,.22,1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
-
-        header {
-            position: sticky; top: 0; z-index: 1000; background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px); display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 5%; border-bottom: 1px solid var(--border);
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; background: var(--bg); }
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased; 
         }
-        .branding h2 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
-        .branding h3 { font-size: 0.65rem; color: var(--muted); font-weight: 800; text-transform: uppercase; }
-        
-        nav { display: flex; align-items: center; }
-        nav a { 
-            margin-left: 1.2rem; text-decoration: none; color: var(--text); 
-            font-weight: 700; font-size: 0.7rem; text-transform: uppercase; 
-            transition: var(--transition); letter-spacing: 0.5px;
-        }
-        nav a:hover, nav a.active { color: var(--accent); }
 
-        /* Estilo unificado para botones CV */
-        .cv-actions {
-            display: flex; justify-content: center; gap: 15px;
-            padding: 2.5rem 5% 1rem; max-width: 1200px; margin: 0 auto;
+        /* Sistema de Idiomas */
+        body.lang-en .lang-es { display: none !important; }
+        body.lang-es .lang-en { display: none !important; }
+
+        /* Grano sutil premium */
+        .noise {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.015;
+            background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+            z-index: 9999;
+        }
+
+        /* Cabecera unificada Premium */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 48px;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 10, 0.75);
+            border-bottom: 1px solid var(--border);
+        }
+        .logo-block { display: flex; flex-direction: column; text-decoration: none; }
+        .logo-name { font-size: 0.8rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text); }
+        .logo-role { color: var(--muted); font-size: 0.65rem; letter-spacing: 0.12em; margin-top: 3px; text-transform: uppercase; }
+        nav { display: flex; align-items: center; gap: 28px; }
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            font-weight: 700;
+            transition: opacity 0.3s ease;
+            opacity: 0.6;
+        }
+        nav a:hover, nav a.active { opacity: 1; }
+
+        .lang-switcher { display: inline-flex; gap: 6px; margin-left: 10px; font-size: 0.72rem; font-weight: 900; letter-spacing: 0.1em; color: var(--muted); }
+        .lang-btn { cursor: pointer; transition: color 0.3s ease; }
+        .lang-btn:hover { color: var(--text); }
+
+        /* Bloque descargas de CV */
+        .cv-actions-hero { 
+            display: flex; 
+            justify-content: center; 
+            gap: 16px; 
+            padding: 160px 8% 0; 
+            max-width: 1400px;
+            margin: 0 auto;
         }
         .btn-cv {
-            text-decoration: none; padding: 0.8rem 1.5rem; border-radius: var(--radius);
-            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            transition: var(--transition); border: 2px solid var(--text); text-align: center;
-            display: inline-flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 14px 24px;
+            border: 1px solid var(--border);
+            color: var(--text);
+            background: transparent;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
         }
-        .btn-es-cv { background: var(--text); color: #fff; }
-        .btn-en-cv { background: transparent; color: var(--text); }
-        .btn-cv:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--accent); }
-        .btn-en-cv:hover { color: var(--accent); }
+        .btn-cv:hover { 
+            background: var(--text); 
+            color: var(--bg); 
+            border-color: var(--text);
+            transform: translateY(-3px); 
+        }
 
+        /* Slideshow Premium */
         #hero-slideshow {
-            position: relative; width: 100%; height: 500px; 
-            overflow: hidden; background: #000; margin-top: 20px;
+            position: relative; 
+            width: 84%; 
+            max-width: 1400px;
+            height: 480px; 
+            overflow: hidden; 
+            background: #050505; 
+            margin: 40px auto 0;
+            border-radius: 4px;
+            border: 1px solid var(--border);
         }
         .slide {
             position: absolute; inset: 0; opacity: 0;
             transition: opacity 1.5s ease-in-out;
         }
-        .slide.active { opacity: 1; z-index: 10; }
+        .slide.active { opacity: 0.65; z-index: 10; }
         .slide img {
             width: 100%; height: 100%; object-fit: cover;
-            transform: scale(1.1); transition: transform 6s linear;
+            transform: scale(1.08); transition: transform 6s linear;
         }
         .slide.active img { transform: scale(1); }
 
-        .section { padding: 4rem 5%; max-width: 1200px; margin: 0 auto; }
-        .section h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 2.5rem; border-left: 5px solid var(--accent); padding-left: 1.2rem; line-height: 1.2; }
-        .section h3 small { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; font-weight: 500; }
+        /* Contenido de la Sección */
+        .section { padding: 80px 8% 40px; max-width: 1400px; margin: 0 auto; }
+        .section h3 { 
+            font-size: clamp(1.8rem, 4vw, 2.8rem); 
+            font-weight: 900; 
+            letter-spacing: -0.03em;
+            margin-bottom: 48px; 
+            text-transform: uppercase;
+            line-height: 0.95; 
+        }
+        .section h3 small { 
+            font-size: 0.75rem; 
+            color: var(--muted); 
+            text-transform: uppercase; 
+            letter-spacing: 0.2em; 
+            font-weight: 700; 
+            display: block;
+            margin-top: 10px;
+        }
 
+        /* Rejilla de Álbumes */
         .logo-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 32px;
         }
         .logo-grid figure { 
-            border-radius: var(--radius); overflow: hidden; position: relative; 
-            transition: var(--transition); background: var(--light-bg);
+            border-radius: 4px; 
+            overflow: hidden; 
+            position: relative; 
+            transition: var(--transition); 
+            background: var(--surface);
             border: 1px solid var(--border);
         }
-        .logo-grid a { text-decoration: none; color: inherit; }
+        .logo-grid a { text-decoration: none; color: inherit; display: block; }
         .logo-grid img { 
             width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block;
-            filter: grayscale(40%); transition: var(--transition);
+            filter: grayscale(30%) brightness(0.9); transition: var(--transition);
         }
-        .logo-grid figure:hover img { filter: grayscale(0%); transform: scale(1.03); }
+        .logo-grid figure:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .logo-grid figure:hover img { 
+            filter: grayscale(0%) brightness(1); 
+            transform: scale(1.02); 
+        }
         .logo-grid figcaption {
-            padding: 1.2rem; font-weight: 700; font-size: 0.95rem;
-            text-align: center; background: #fff;
+            padding: 24px; 
+            font-weight: 700; 
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-align: center; 
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            color: var(--text);
+            transition: var(--transition);
+        }
+        .logo-grid figure:hover figcaption {
+            color: #ffffff;
+            background: #191919;
         }
 
-        .description-container { padding: 0 5% 5rem; max-width: 850px; margin: 0 auto; }
-        .description { font-size: 1.05rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.8; text-align: center; }
-        .description:last-child { border-top: 1px solid var(--border); pt: 2rem; }
+        /* Descripciones Editoriales */
+        .description-container { padding: 40px 8% 120px; max-width: 900px; margin: 0 auto; }
+        .description { 
+            font-size: 1.05rem; 
+            font-weight: 300;
+            line-height: 1.7;
+            color: var(--muted); 
+            text-align: center; 
+        }
 
-        footer { background: #111827; color: #fff; padding: 4rem 5%; text-align: center; }
-        .footer-social { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2rem; }
-        .footer-social img { width: 22px; filter: invert(1); opacity: 0.6; transition: 0.3s; }
-        .footer-social a:hover img { opacity: 1; transform: translateY(-3px); }
+        /* Footer de la página */
+        footer {
+            padding: 40px 8%;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.72rem;
+            color: var(--muted);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .footer-social { display: flex; gap: 1.5rem; }
+        .footer-social img { width: 20px; filter: invert(1); opacity: 0.4; transition: var(--transition); }
+        .footer-social a:hover img { opacity: 0.9; transform: translateY(-2px); }
 
+        /* Media Queries Responsivas */
+        @media (max-width: 992px) {
+            .cv-actions-hero { padding-top: 130px; }
+            #hero-slideshow { width: 92%; height: 360px; }
+        }
         @media (max-width: 768px) {
-            header { flex-direction: column; gap: 1rem; padding: 1.5rem; }
-            nav { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
-            nav a { margin: 0 0.5rem; font-size: 0.65rem; }
-            .cv-actions { flex-direction: column; padding: 2rem 5% 1rem; }
-            .btn-cv { width: 100%; }
-            #hero-slideshow { height: 350px; }
-            .logo-grid { grid-template-columns: 1fr; }
+            .cv-actions-hero { flex-direction: column; gap: 12px; }
+            .btn-cv { width: 100%; justify-content: center; }
+            #hero-slideshow { height: 280px; margin-top: 24px; }
+            .logo-grid { grid-template-columns: 1fr; gap: 20px; }
+            footer { flex-direction: column; gap: 24px; text-align: center; }
         }
-
-.cv-actions-hero { 
-    display: flex; 
-    justify-content: center; 
-    gap: 15px; 
-    padding: 2rem 5% 0; 
-}
-.btn-cv {
-    cursor: pointer;
-    text-decoration: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.4s ease;
-    border: 2px solid #111827;
-    display: inline-flex;
-    align-items: center;
-    font-family: 'Inter', sans-serif;
-}
-.btn-es-cv { background: #111827; color: #fff; }
-.btn-en-cv { background: transparent; color: #111827; }
-.btn-cv:hover { 
-    transform: translateY(-3px); 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-    border-color: #0052FF; 
-}
-
-@media (max-width: 768px) {
-    .cv-actions-hero { flex-direction: column; width: 100%; }
-    .btn-cv { width: 100%; justify-content: center; }
-}
-
     </style>
 </head>
-<body>
+<body class="lang-en">
 
-    <header>
-        <div class="branding">
-            <h2>Esteban Campos Polo</h2>
-            <h3>Sr. Graphic Packaging and Production Designer</h3>
-        </div>
+    <div class="noise"></div>
+
+    <header class="main-header">
+        <a href="index.html" class="logo-block">
+            <span class="logo-name">Esteban Campos Polo</span>
+            <span class="logo-role lang-en">Character Modeler & Visual Designer</span>
+            <span class="logo-role lang-es">Modelador de Personajes & Diseñador Visual</span>
+        </a>
         <nav>
-            <a href="index.html">Home</a>
-            <a href="graphic-design.html">Design</a>
-            <a href="photography.html" class="active">Photography</a>
-            <a href="3d-modeling.html">3D Art</a>
-            <a href="IA.html">AI</a>
-            <a href="about.html">About</a>
-            <a href="contact.html">Contact</a>
-            <a href="cv_resume.html" data-key="nav-cv">CV/Resume</a>
+            <a href="index.html">HOME</a>
+            <a href="graphic-design.html">GRAPHIC DESIGN</a>
+            <a href="3d-modeling.html">3D</a>
+            <a href="about.html" class="active">ABOUT</a>
+            <a href="cv_resume.html">CV / RESUME</a>
+            <a href="contact.html">CONTACT</a>
+           
+            <div class="lang-switcher">
+                <span class="lang-btn" id="btn-en" onclick="setLanguage('en')" style="color: #fff;">EN</span>
+                <span>/</span>
+                <span class="lang-btn" id="btn-es" onclick="setLanguage('es')">ES</span>
+            </div>
         </nav>
     </header>
 
-<div class="cv-actions-hero">
-    <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv btn-es-cv">Descargar CV (ES)</button>
-    <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv btn-en-cv">Download Resume (EN)</button>
-</div>
+    <div class="cv-actions-hero">
+        <button onclick="forceDownload('es', 'Curriculum.pdf')" class="btn-cv">
+            <span class="lang-en">Download CV (ES)</span>
+            <span class="lang-es">Descargar CV (ES)</span>
+        </button>
+        <button onclick="forceDownload('en', 'Resume.pdf')" class="btn-cv">
+            <span class="lang-en">Download Resume (EN)</span>
+            <span class="lang-es">Descargar Resume (EN)</span>
+        </button>
+    </div>
 
     <div id="hero-slideshow">
         <div class="slide active"><img src="assets/images/fotografia/thumbs/webp/sport.webp" alt="Sport"></div>
@@ -263,21 +368,67 @@ window.addEventListener('scroll', function(){
     </div>
 
     <section class="section" id="photography-categories">
-        <h3>PHOTOGRAPHY<br><small>Cultural & Lifestyle</small></h3>
+        <h3>
+            <span class="lang-en">Photography</span>
+            <span class="lang-es">Fotografía</span>
+            <small class="lang-en">Cultural & Lifestyle</small>
+            <small class="lang-es">Cultura y Estilo de Vida</small>
+        </h3>
+        
         <div class="logo-grid">
-            <figure><a href="sports.html"><img src="assets/images/fotografia/thumbs/webp/sport.webp" alt="Sports"><figcaption>Sports</figcaption></a></figure>
-            <figure><a href="weddings&lifeevents.html"><img src="assets/images/fotografia/thumbs/webp/wed.webp" alt="Weddings"><figcaption>Weddings & Life Events</figcaption></a></figure>
-            <figure><a href="socialreportage.html"><img src="assets/images/fotografia/thumbs/webp/soc.webp" alt="Social"><figcaption>Social Reportage</figcaption></a></figure>
-            <figure><a href="travel&landscape.html"><img src="assets/images/fotografia/thumbs/webp/trav.webp" alt="Travel"><figcaption>Travel & Landscape</figcaption></a></figure>
-            <figure><a href="culturalevents.html"><img src="assets/images/fotografia/thumbs/webp/cult.webp" alt="Culture"><figcaption>Cultural Events</figcaption></a></figure>
+            <figure class="item">
+                <a href="sports.html">
+                    <img src="assets/images/fotografia/thumbs/webp/sport.webp" alt="Sports">
+                    <figcaption>
+                        <span class="lang-en">Sports</span>
+                        <span class="lang-es">Deportes</span>
+                    </figcaption>
+                </a>
+            </figure>
+            <figure class="item">
+                <a href="weddings&lifeevents.html">
+                    <img src="assets/images/fotografia/thumbs/webp/wed.webp" alt="Weddings">
+                    <figcaption>
+                        <span class="lang-en">Weddings & Life Events</span>
+                        <span class="lang-es">Bodas y Eventos</span>
+                    </figcaption>
+                </a>
+            </figure>
+            <figure class="item">
+                <a href="socialreportage.html">
+                    <img src="assets/images/fotografia/thumbs/webp/soc.webp" alt="Social">
+                    <figcaption>
+                        <span class="lang-en">Social Reportage</span>
+                        <span class="lang-es">Reportaje Social</span>
+                    </figcaption>
+                </a>
+            </figure>
+            <figure class="item">
+                <a href="travel&landscape.html">
+                    <img src="assets/images/fotografia/thumbs/webp/trav.webp" alt="Travel">
+                    <figcaption>
+                        <span class="lang-en">Travel & Landscape</span>
+                        <span class="lang-es">Viajes y Paisajes</span>
+                    </figcaption>
+                </a>
+            </figure>
+            <figure class="item">
+                <a href="culturalevents.html">
+                    <img src="assets/images/fotografia/thumbs/webp/cult.webp" alt="Culture">
+                    <figcaption>
+                        <span class="lang-en">Cultural Events</span>
+                        <span class="lang-es">Eventos Culturales</span>
+                    </figcaption>
+                </a>
+            </figure>
         </div>
     </section>
 
     <div class="description-container">
-        <p class="description">
+        <p class="description lang-en">
             In this section, you'll find a carefully curated selection of my photographic work, encompassing diverse styles and themes. Each image tells a story, capturing a moment with care and passion.
         </p>
-        <p class="description">
+        <p class="description lang-es">
             En esta sección, encontrarás una cuidada selección de mis trabajos fotográficos que abarcan diversos estilos y temas. Cada imagen es una historia, un momento plasmado con cuidado y pasión.
         </p>
     </div>
@@ -306,28 +457,49 @@ window.addEventListener('scroll', function(){
         // Seguridad: Prevenir menú contextual en toda la página
         document.addEventListener('contextmenu', e => e.preventDefault());
 
+        // Forzar descarga de archivos
+        window.forceDownload = function(lang, filename) {
+            const filePath = 'assets/' + filename;
 
-window.forceDownload = function(lang, filename) {
-    const filePath = 'assets/' + filename;
+            // Envío de evento a Google Analytics
+            if (typeof gtag === 'function') {
+                gtag('event', 'engagement_cv_download', {
+                    'language': lang,
+                    'filename': filename,
+                    'page_path': window.location.pathname
+                });
+            }
 
-    // 1. Envío de evento a Google Analytics
-    if (typeof gtag === 'function') {
-        gtag('event', 'engagement_cv_download', {
-            'language': lang,
-            'filename': filename,
-            'page_path': window.location.pathname
-        });
-    }
+            // Forzar descarga real
+            const link = document.createElement('a');
+            link.href = filePath;
+            link.setAttribute('download', filename);
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
 
-    // 2. Forzar descarga real
-    const link = document.createElement('a');
-    link.href = filePath;
-    link.setAttribute('download', filename);
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-};
+        // Controlador unificado del idioma
+        function setLanguage(lang) {
+            const body = document.body;
+            const btnEn = document.getElementById('btn-en');
+            const btnEs = document.getElementById('btn-es');
+               
+            if (lang === 'en') {
+                body.classList.remove('lang-es');
+                body.classList.add('lang-en');
+                if(btnEn) btnEn.style.color = '#fff';
+                if(btnEs) btnEs.style.color = 'var(--muted)';
+                document.documentElement.lang = 'en';
+            } else {
+                body.classList.remove('lang-en');
+                body.classList.add('lang-es');
+                if(btnEn) btnEn.style.color = 'var(--muted)';
+                if(btnEs) btnEs.style.color = '#fff';
+                document.documentElement.lang = 'es';
+            }
+        }
     </script>
 </body>
 </html>

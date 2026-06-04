@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Travel & Landscape - Esteban Campos Polo</title>
+  <title>Travel & Landscape — Esteban Campos Polo</title>
 
-<!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VMES8F4MN"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-8VMES8F4MN', {
         anonymize_ip: true,
         send_page_view: true,
@@ -20,67 +18,48 @@
     });
   </script>
 
-
-    <script>
-(function() {
-    // 1. CONFIGURACIÓN Y ESTADO
+  <script>
+  (function() {
     const CONFIG = {
-        idsToObserve: ['#hero', '#proyectos', '#sobre-mi', '#contacto'], // Ajusta estos IDs a tu HTML
+        idsToObserve: ['.gallery-grid', 'main'],
         scrollDepths: [25, 50, 75, 90, 100],
         trackedDepths: [],
         clickCount: 0,
-        clickTimer: null,
-        sessionStartTime: Date.now()
+        clickTimer: null
     };
 
     const sendEvent = (name, params = {}) => {
         if (typeof gtag === 'function') {
             gtag('event', name, {
                 ...params,
-                'net_type': navigator.connection ? navigator.connection.effectiveType : 'unknown',
-                'memory': navigator.deviceMemory || 'unknown',
-                'page_path': window.location.pathname
+                'page_path': window.location.pathname,
+                'section_type': 'travel_landscape_premium'
             });
         }
     };
 
-    // 2. INICIALIZACIÓN AL CARGAR DOM
     document.addEventListener("DOMContentLoaded", function() {
-
-        // --- SECCIÓN: SEGURIDAD Y CLICKS ---
-        
-        // Clic derecho en imágenes e intento de arrastre
         document.addEventListener('contextmenu', (e) => {
-            if (e.target.tagName === 'IMG') {
-                sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() });
-            }
+            if (e.target.tagName === 'IMG') { sendEvent('security_image_right_click', { 'src': e.target.src.split('/').pop() }); }
         });
 
         document.addEventListener('dragstart', (e) => {
-            if (e.target.tagName === 'IMG') {
-                sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() });
-            }
+            if (e.target.tagName === 'IMG') { sendEvent('security_image_drag', { 'src': e.target.src.split('/').pop() }); }
         });
 
-        // Rage Clicks (Detecta frustración: más de 4 clics en 1 seg)
         document.addEventListener('click', (e) => {
             CONFIG.clickCount++;
             clearTimeout(CONFIG.clickTimer);
             CONFIG.clickTimer = setTimeout(() => { CONFIG.clickCount = 0; }, 1000);
-            
             if (CONFIG.clickCount > 4) {
-                sendEvent('ux_rage_click', { 'element': e.target.tagName + (e.target.id ? '#'+e.target.id : '') });
+                sendEvent('ux_rage_click', { 'element': e.target.tagName });
                 CONFIG.clickCount = 0;
             }
         });
 
-        // --- SECCIÓN: NAVEGACIÓN Y CONTENIDO ---
-
-        // Scroll Tracking Granular
         window.addEventListener('scroll', () => {
             let h = document.documentElement, b = document.body;
             let percent = (h.scrollTop || b.scrollTop) / ((h.scrollHeight || b.scrollHeight) - h.clientHeight) * 100;
-            
             CONFIG.scrollDepths.forEach(depth => {
                 if (percent >= depth && !CONFIG.trackedDepths.includes(depth)) {
                     CONFIG.trackedDepths.push(depth);
@@ -88,399 +67,186 @@
                 }
             });
         });
-
-        // Visibilidad Real de Proyectos (Intersection Observer)
-        if ('IntersectionObserver' in window) {
-            let observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            if (entry.isIntersecting) { // Si sigue ahí tras 2 segundos
-                                sendEvent('content_view_confirmed', { 'section_id': entry.target.id });
-                                observer.unobserve(entry.target);
-                            }
-                        }, 2000);
-                    }
-                });
-            }, { threshold: 0.6 });
-
-            CONFIG.idsToObserve.forEach(id => {
-                let el = document.querySelector(id);
-                if (el) observer.observe(el);
-            });
-        }
-
-
-        /
-        document.addEventListener('copy', () => {
-            let text = document.getSelection().toString().substring(0, 50);
-            sendEvent('engagement_text_copy', { 'preview': text + '...' });
-        });
-
-        // Exit Intent (Solo Desktop)
-        document.addEventListener('mouseleave', (e) => {
-            if (e.clientY < 0) sendEvent('behavior_exit_intent');
-        });
-
-        // Hover en proyectos (Interés sin clic)
-        document.querySelectorAll('.card-proyecto, .portfolio-item').forEach(item => {
-            let hTimer;
-            item.addEventListener('mouseenter', () => {
-                hTimer = setTimeout(() => sendEvent('engagement_hover_interest', { 'id': item.id }), 3000);
-            });
-            item.addEventListener('mouseleave', () => clearTimeout(hTimer));
-        });
-
-        // Detección de AdBlock
-        setTimeout(() => {
-            const test = document.createElement('div');
-            test.className = 'adsbox';
-            test.innerHTML = '&nbsp;';
-            document.body.appendChild(test);
-            sendEvent('tech_adblock_status', { 'active': test.offsetHeight === 0 });
-            test.remove();
-        }, 3000);
     });
-
-
-
-    window.onerror = (msg, url, line) => {
-        sendEvent('tech_js_error', { 'msg': msg, 'line': line });
-    };
-
-    window.addEventListener('load', () => {
-        const perf = performance.getEntriesByType("navigation")[0];
-        if (perf) sendEvent('tech_load_time', { 'ms': Math.round(perf.domComplete) });
-    });
-
-})();
-
-    </script>
-
+  })();
+  </script>
 
   <style>
-    /* === Estilo base consistente con el portfolio principal === */
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f2f2f2;
-      color: #000;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      background-color: #0a0a0a; 
+      color: #ffffff; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
-    header {
+    .noise {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Cabecera Premium */
+    .main-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
-      background-color: #fff;
-      border-bottom: 2px solid #ccc;
+      padding: 2rem 3rem;
+      background: transparent;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      z-index: 100;
     }
+    .logo-block { text-decoration: none; color: #fff; display: flex; flex-direction: column; }
+    .logo-name { font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; }
+    .logo-role { font-size: 0.75rem; color: #666; letter-spacing: 0.05em; margin-top: 0.2rem; }
+    
+    nav { display: flex; align-items: center; gap: 2rem; }
+    nav a { text-decoration: none; color: #666; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.3s; }
+    nav a:hover, nav a.active { color: #fff; }
+    
+    .lang-switcher { display: flex; gap: 0.4rem; font-size: 0.75rem; font-weight: 600; color: #333; margin-left: 1rem; }
+    .lang-btn { cursor: pointer; transition: color 0.3s; color: #555; }
+    .lang-btn.active { color: #fff; }
 
-    .branding h2 {
-      margin: 0.2rem 0;
-      font-size: 1.3em;
-    }
+    /* CV Enlaces */
+    .cv-links { display: flex; justify-content: center; gap: 1.5rem; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+    .cv-links a { text-decoration: none; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #666; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.5rem 1.25rem; border-radius: 3px; transition: all 0.3s; }
+    .cv-links a:hover { color: #fff; border-color: #fff; background: rgba(255, 255, 255, 0.03); }
 
-    .branding h3 {
-      margin: 0;
-      font-size: 1em;
-      font-weight: normal;
-    }
+    /* Layout */
+    .section { padding: 4rem 3rem; max-width: 1400px; margin: 0 auto; }
+    .section h1 { font-size: 2.2rem; font-weight: 300; letter-spacing: -0.02em; color: #fff; margin-bottom: 0.75rem; }
+    .section p { font-size: 0.95rem; color: #888; line-height: 1.6; max-width: 600px; margin-bottom: 3rem; }
 
-    nav a {
-      margin-left: 1.5rem;
-      text-decoration: none;
-      color: #000;
-      font-weight: bold;
+    /* Galería Uniforme y Espaciosa */
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; padding: 1rem 0; }
+    .gallery-grid img { 
+      width: 100%; 
+      height: 280px; 
+      object-fit: cover; 
+      border-radius: 4px; 
+      background: #111; 
+      border: 1px solid rgba(255, 255, 255, 0.04); 
+      filter: grayscale(20%) brightness(85%); 
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease, border-color 0.7s ease; 
+      cursor: pointer; 
+      display: block; 
     }
+    .gallery-grid img:hover { filter: grayscale(0%) brightness(100%); transform: scale(1.02) translateY(-4px); border-color: rgba(255, 255, 255, 0.25); }
 
-    /* Sección principal */
-    .section {
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #000;
-      margin-bottom: 0.5rem;
-      text-align: left;
-    }
-
-    .section p {
-      font-size: 1rem;
-      color: #333;
-      margin-bottom: 2rem;
-    }
-
-    /* Footer: iconos sociales discretos para mantener la estética */
-    .footer-social {
-      margin-top: 0.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.6rem;
-      align-items: center;
-    }
-
-    .footer-social a img {
-      width: 22px;
-      height: 22px;
-      display: inline-block;
-      vertical-align: middle;
-      filter: none;
-      opacity: 0.95;
-      transition: opacity 0.2s, transform 0.15s;
-    }
-
-    .footer-social a img:hover {
-      opacity: 1;
-      transform: translateY(-2px);
-    }
-    /* === Galería uniforme === */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 0;
-    }
-
-    .gallery-grid img {
-      width: 100%;
-      height: 180px; /* altura fija uniforme */
-      object-fit: cover; /* recorta sin deformar */
-      border-radius: 12px;
-      background: white;
-      border: 1px solid #ddd;
-      padding: 0.5rem;
-      filter: grayscale(100%) brightness(80%);
-      transition: all 0.3s ease;
-      cursor: pointer;
-      display: block;
-    }
-
-    .gallery-grid img:hover {
-      filter: grayscale(0%) brightness(100%);
-      transform: scale(1.03);
-    }
-
-    /* Navegación a otras secciones */
-    .photo-sections-nav {
-      text-align: center;
-      margin-top: 2.5rem;
-    }
-
-    .photo-sections-nav a {
-      margin: 0 1rem;
-      text-decoration: none;
-      color: #000;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
-
-    .photo-sections-nav a:hover {
-      color: #333;
-    }
+    /* Subnavegación de Sección */
+    .photo-sections-nav { text-align: center; margin-top: 6rem; padding-top: 3rem; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+    .photo-sections-nav a { margin: 0 1.2rem; text-decoration: none; color: #555; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; transition: color 0.3s; }
+    .photo-sections-nav a:hover { color: #fff; }
+    .photo-sections-nav a.current-sub { color: #fff; pointer-events: none; border-bottom: 1px solid #fff; padding-bottom: 3px; }
 
     /* Footer */
-    footer {
-      background-color: #ccc;
-      padding: 1rem;
-      text-align: center;
-      font-size: 0.9em;
-      margin-top: 3rem;
-    }
+    footer { background-color: #050505; padding: 3rem 2rem; text-align: center; font-size: 0.8rem; color: #444; border-top: 1px solid rgba(255, 255, 255, 0.03); margin-top: 6rem; }
+    .footer-social { margin-top: 1.5rem; display: flex; justify-content: center; gap: 1.2rem; }
+    .footer-social a img { width: 18px; height: 18px; filter: invert(0.4); transition: all 0.3s; }
+    .footer-social a img:hover { filter: invert(1); transform: translateY(-2px); }
+    .hits-badge { margin-top: 1.5rem; opacity: 0.3; }
 
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.9);
-      align-items: center;
-      justify-content: center;
-    }
+    /* Lightbox Modal */
+    .modal { display: none; position: fixed; z-index: 10000; inset: 0; background-color: rgba(5, 5, 5, 0.98); backdrop-filter: blur(12px); align-items: center; justify-content: center; }
+    .modal img { max-width: 90%; max-height: 85%; border-radius: 2px; box-shadow: 0 30px 70px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.05); object-fit: contain; }
+    .modal button { position: absolute; color: rgba(255,255,255,0.4); font-size: 1.5rem; background: none; border: none; cursor: pointer; transition: color 0.3s; }
+    .modal button:hover { color: #fff; }
+    .modal .close { top: 30px; right: 40px; font-size: 2rem; }
+    .modal .prev { left: 40px; top: 50%; transform: translateY(-50%); }
+    .modal .next { right: 40px; top: 50%; transform: translateY(-50%); }
 
-    .modal img {
-      max-width: 90%;
-      max-height: 80%;
-      border-radius: 12px;
-    }
-
-    .modal button {
-      position: absolute;
-      color: white;
-      font-size: 2rem;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-
-    .modal .close {
-      top: 20px;
-      right: 30px;
-    }
-
-    .modal .prev {
-      left: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .modal .next {
-      right: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    /* Footer social small icons */
-    .footer-social .social-icons a {
-      margin: 0 10px;
-      display: inline-block;
-      width: 24px;
-      height: 24px;
-    }
-
-    .footer-social .social-icons img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    /* Pequeños ajustes responsivos */
     @media (max-width: 480px) {
-      header { padding: 0.75rem 1rem; }
-      .section { padding: 1rem; }
-      .gallery-grid img { height: 140px; }
+      .gallery-grid img { height: 180px; }
     }
-
-    .cv-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      padding: 1rem;
-      background-color: #e6e6e6;
-    }
-
-    .cv-links a {
-      text-decoration: none;
-      font-weight: bold;
-      background-color: #000;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: background-color 0.3s;
-    }
-
-    .cv-links a:hover {
-      background-color: #333;
-    }
-
   </style>
 </head>
 <body>
 
-  <!-- Header idéntico al resto del portfolio -->
-  <header>
-    <div class="branding">
-      <h2>Esteban Campos Polo</h2>
-      <h3>Graphic Designer & 3D Artist</h3>
-    </div>
+  <div class="noise"></div>
+
+  <header class="main-header">
+    <a href="index.html" class="logo-block">
+      <span class="logo-name">Esteban Campos Polo</span>
+      <span class="logo-role lang-en">Character Modeler & Visual Designer</span>
+      <span class="logo-role lang-es">Modelador de Personajes & Diseñador Visual</span>
+    </a>
     <nav>
       <a href="index.html">Home</a>
       <a href="graphic-design.html">Graphic Design</a>
-      <a href="photography.html">Photography</a>
+      <a href="photography.html" class="active">Photography</a>
       <a href="3d-modeling.html">3D Art</a>
       <a href="IA.html">AI</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
-      <a href="cv_resume.html" class="nav-track" id="nav-cv">CV/Resume</a>
+      <div class="lang-switcher">
+        <span class="lang-btn" id="btn-en" onclick="setLanguage('en')">EN</span>
+        <span>/</span>
+        <span class="lang-btn" id="btn-es" onclick="setLanguage('es')">ES</span>
+      </div>
     </nav>
   </header>
 
-  <!-- CV Links -->
-<div class="cv-links">
-  <a href="assets/Curriculum.pdf" id="download-cv-es" download>Ver o Descargar CV Español</a>
-  <a href="assets/Resume.pdf" id="download-cv-en" download>View or Download CV English</a>
-</div>
+  <div class="cv-links">
+    <a href="assets/Curriculum.pdf" id="download-cv-es" download class="lang-es">Ver o Descargar CV Español</a>
+    <a href="assets/Curriculum.pdf" id="download-cv-es-en" download class="lang-en">View CV Spanish Version</a>
+    <a href="assets/Resume.pdf" id="download-cv-en" download class="lang-en">View or Download CV English</a>
+    <a href="assets/Resume.pdf" id="download-cv-en-es" download class="lang-es">Descargar CV Versión Inglés</a>
+  </div>
 
-  <!-- Main -->
   <main class="section">
-    <h1>Travel & Landscape</h1>
-    <p>Images that transport you—exploring places through light, emotion, and atmosphere.</p>
+    <h1 class="lang-en">Travel & Landscape</h1>
+    <h1 class="lang-es">Viajes & Paisajes</h1>
+    
+    <p class="lang-en">Atmospheric vistas that transport you—exploring geographical textures through pristine volumetric lighting, scale, and environment state.</p>
+    <p class="lang-es">Vistas atmosféricas que transportan: explorando texturas geográficas a través de iluminación volumétrica pura, escala y estado ambiental.</p>
 
-    <!-- Galería -->
     <section class="gallery-grid">
-      <!-- Sustituye las rutas por tus imágenes reales -->
-      <img src="assets/images/fotografia/travel&landscape/webp/trav (1).webp" alt="travel_1" data-hd="assets/images/fotografia/travel&landscape/jpg/trav (1).jpg" onclick="openModal(this)" loading="lazy" />
-      <img src="assets/images/fotografia/travel&landscape/webp/trav (2).webp" alt="travel_2" data-hd="assets/images/fotografia/travel&landscape/jpg/trav (2).jpg" onclick="openModal(this)" loading="lazy" />
-
+      <img src="assets/images/fotografia/travel&landscape/webp/trav (1).webp" alt="Landscape statement 1" data-hd="assets/images/fotografia/travel&landscape/jpg/trav (1).jpg" onclick="openModal(this)" loading="lazy" />
+      <img src="assets/images/fotografia/travel&landscape/webp/trav (2).webp" alt="Landscape statement 2" data-hd="assets/images/fotografia/travel&landscape/jpg/trav (2).jpg" onclick="openModal(this)" loading="lazy" />
     </section>
 
-    <!-- Navegación a otras secciones -->
     <nav class="photo-sections-nav">
+      <a href="socialreportage.html">Social Reportage</a>
       <a href="sports.html">Sports</a>
       <a href="weddings&lifeevents.html">Weddings & Life Events</a>
-      <a href="socialreportage.html">Social Reportage</a>
+      <a href="travel&landscape.html" class="current-sub">Travel & Landscape</a>
       <a href="culturalevents.html">Cultural Events</a>
     </nav>
   </main>
 
- <footer>
-        © 2025 Esteban Campos Polo. Todo el contenido de este sitio es propiedad intelectual del autor. No está permitido copiar, distribuir ni reutilizar los diseños sin autorización expresa.
-<br>
-© 2025 Esteban Campos Polo. All content on this site is the intellectual property of the author. Copying, distributing, or reusing the designs without express permission is prohibited.
-
+  <footer>
+    <p class="lang-en">© 2026 Esteban Campos Polo. All designs and photographic captures are intellectual property of the author.</p>
+    <p class="lang-es">© 2026 Esteban Campos Polo. Todos los diseños y capturas fotográficas son propiedad intelectual del autor.</p>
+    
     <div class="footer-social" aria-label="Redes sociales">
-      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener">
-        <img src="assets/icons/linkedin.svg" alt="LinkedIn">
-      </a>
-      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener">
-        <img src="assets/icons/artstation.svg" alt="ArtStation">
-      </a>
-      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener">
-        <img src="assets/icons/instagram.svg" alt="Instagram">
-      </a>
-      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener">
-        <img src="assets/icons/vimeo.svg" alt="Vimeo">
-      </a>
-      <a href="https://www.behance.net/EstebanDesign3D/projects" target="_blank" rel="noopener">
-        <img src="assets/icons/behance.svg" alt="Behance">
-      </a>
-      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener">
-        <img src="assets/icons/x.svg" alt="X">
-      </a>
+      <a href="https://www.linkedin.com/in/esteban-campos-polo-09852771" target="_blank" rel="noopener"><img src="assets/icons/linkedin.svg" alt="LinkedIn"></a>
+      <a href="https://estebancampos1.artstation.com/" target="_blank" rel="noopener"><img src="assets/icons/artstation.svg" alt="ArtStation"></a>
+      <a href="https://www.instagram.com/estcampo/" target="_blank" rel="noopener"><img src="assets/icons/instagram.svg" alt="Instagram"></a>
+      <a href="https://vimeo.com/827034828" target="_blank" rel="noopener"><img src="assets/icons/vimeo.svg" alt="Vimeo"></a>
+      <a href="https://x.com/EstebanCampos3D" target="_blank" rel="noopener"><img src="assets/icons/x.svg" alt="X"></a>
     </div>
 
-<a href="https://hits.sh/estebancamposarts.github.io/travel&landscape.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/travel&landscape.html.svg"/></a></a>
+    <div class="hits-badge">
+      <a href="https://hits.sh/estebancamposarts.github.io/travel&landscape.html/"><img alt="Hits" src="https://hits.sh/estebancamposarts.github.io/travel&landscape.html.svg"/></a>
+    </div>
   </footer>
 
-  <!-- Modal -->
   <div class="modal" id="slideshowModal">
     <button class="close" onclick="closeModal()">×</button>
     <button class="prev" onclick="prevImage()">❮</button>
-    <img id="modalImage" src="" alt="Foto en alta calidad" />
+    <img id="modalImage" src="" alt="Alta Calidad" />
     <button class="next" onclick="nextImage()">❯</button>
   </div>
-
-  <!-- (Opcional) Particles JS - descomenta si lo usas -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script> -->
 
   <script>
     const modal = document.getElementById("slideshowModal");
     const modalImage = document.getElementById("modalImage");
-
-    function getImages() {
-      return Array.from(document.querySelectorAll(".gallery-grid img"));
-    }
-
+    function getImages() { return Array.from(document.querySelectorAll(".gallery-grid img")); }
     let currentIndex = 0;
 
     function openModal(imgElement) {
@@ -490,31 +256,11 @@
       modal.style.display = "flex";
     }
 
-    function closeModal() {
-      modal.style.display = "none";
-      modalImage.src = "";
-    }
+    function closeModal() { modal.style.display = "none"; modalImage.src = ""; }
+    function nextImage() { const images = getImages(); if (images.length === 0) return; currentIndex = (currentIndex + 1) % images.length; modalImage.src = images[currentIndex].dataset.hd || images[currentIndex].src; }
+    function prevImage() { const images = getImages(); if (images.length === 0) return; currentIndex = (currentIndex - 1 + images.length) % images.length; modalImage.src = images[currentIndex].dataset.hd || images[currentIndex].src; }
 
-    function nextImage() {
-      const images = getImages();
-      if (images.length === 0) return;
-      currentIndex = (currentIndex + 1) % images.length;
-      modalImage.src = images[currentIndex].dataset.hd || images[currentIndex].src;
-    }
-
-    function prevImage() {
-      const images = getImages();
-      if (images.length === 0) return;
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      modalImage.src = images[currentIndex].dataset.hd || images[currentIndex].src;
-    }
-
-    // Cerrar al clicar fuera de la imagen
-    modal.addEventListener("click", function(e) {
-      if (e.target === modal) closeModal();
-    });
-
-    // Navegación por teclado
+    modal.addEventListener("click", function(e) { if (e.target === modal) closeModal(); });
     document.addEventListener("keydown", function(e) {
       if (modal.style.display === "flex") {
         if (e.key === "ArrowRight") nextImage();
@@ -522,10 +268,27 @@
         if (e.key === "Escape") closeModal();
       }
     });
+
+    function setLanguage(lang) {
+        localStorage.setItem('selectedLanguage', lang);
+        document.documentElement.setAttribute('lang', lang);
+        document.querySelectorAll('.lang-es').forEach(el => el.style.display = (lang === 'es') ? 'block' : 'none');
+        document.querySelectorAll('.lang-en').forEach(el => el.style.display = (lang === 'en') ? 'block' : 'none');
+        const btnEs = document.getElementById('btn-es');
+        const btnEn = document.getElementById('btn-en');
+        if (btnEs && btnEn) {
+            if (lang === 'es') { btnEs.classList.add('active'); btnEn.classList.remove('active'); }
+            else { btnEn.classList.add('active'); btnEs.classList.remove('active'); }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+        setLanguage(savedLang);
+    });
+
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('dragstart', e => e.preventDefault());
   </script>
 </body>
-<script>
-  document.addEventListener('contextmenu', event => event.preventDefault());
-  document.addEventListener('dragstart', event => event.preventDefault());
-</script>
 </html>
