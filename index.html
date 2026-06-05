@@ -1,352 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Esteban Campos Polo — Portfolio</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Esteban Campos Polo - Graphic Design, Packaging, 3D Visuals and Character Art">
+<title>Esteban Campos Polo | Portfolio</title>
 
-  <style>
-    /* Estilos estructurales críticos para garantizar que la pantalla dividida funcione de forma independiente e inmediata */
-    :root {
-      --bg-dark: #0a0a0a;
-      --bg-card-left: #121315;
-      --bg-card-right: #161412;
-      --text-light: #f5f5f5;
-      --accent-left: #70757a;
-      --accent-right: #d49a6a;
-    }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    body, html {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-light);
-    }
+<style>
+:root{
+--bg:#0b0b0c;
+--text:#f4f4f4;
+--muted:#b5b5b5;
+--line:rgba(255,255,255,.08);
+--left:#1b1d20;
+--right:#34291f;
+--container:1600px;
+}
 
-    /* Sistema nativo de control de idiomas por clases CSS */
-    body.lang-en .lang-es { display: none !important; }
-    body.lang-es .lang-en { display: none !important; }
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+font-family:Inter,sans-serif;
+background:var(--bg);
+color:var(--text);
+overflow-x:hidden;
+}
 
-    /* Cabecera flotante minimalista */
-    .split-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 30px 50px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 10;
-      box-sizing: border-box;
-      background: linear-gradient(to bottom, rgba(10,10,10,0.8), rgba(10,10,10,0));
-      backdrop-filter: blur(5px);
-    }
+body.lang-en .lang-es{display:none!important;}
+body.lang-es .lang-en{display:none!important;}
 
-    .split-header .logo-group {
-      display: flex;
-      flex-direction: column;
-    }
+.header{
+position:fixed;
+top:0;
+left:0;
+right:0;
+z-index:1000;
+backdrop-filter:blur(16px);
+background:rgba(10,10,10,.65);
+border-bottom:1px solid rgba(255,255,255,.04);
+}
 
-    .split-header .logo-title {
-      font-size: 0.95rem;
-      font-weight: 900;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-    }
+.header-inner{
+max-width:var(--container);
+margin:auto;
+padding:18px 32px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:20px;
+}
 
-    .split-header .logo-sub {
-      font-size: 0.7rem;
-      color: #888;
-      letter-spacing: 0.1em;
-      margin-top: 4px;
-    }
+.brand h1{
+font-size:.95rem;
+letter-spacing:.18em;
+text-transform:uppercase;
+}
 
-    .split-header nav {
-      display: flex;
-      align-items: center;
-      gap: 30px;
-    }
+.brand p{
+font-size:.72rem;
+color:#9c9c9c;
+margin-top:4px;
+}
 
-    .split-header nav a {
-      color: var(--text-light);
-      text-decoration: none;
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      opacity: 0.6;
-      transition: opacity 0.3s ease;
-    }
+.nav{
+display:flex;
+align-items:center;
+gap:22px;
+flex-wrap:wrap;
+}
 
-    .split-header nav a:hover, .split-header nav a.active {
-      opacity: 1;
-    }
+.nav a{
+text-decoration:none;
+color:#fff;
+font-size:.72rem;
+font-weight:600;
+letter-spacing:.14em;
+opacity:.72;
+transition:.3s;
+}
 
-    /* Selector de idiomas EN / ES */
-    .lang-switcher {
-      display: inline-flex;
-      gap: 6px;
-      margin-left: 15px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-    }
+.nav a:hover{opacity:1;}
 
-    .lang-btn {
-      cursor: pointer;
-      transition: opacity 0.3s ease;
-    }
-    
-    .lang-btn:hover {
-      opacity: 1 !important;
-    }
+.lang-switcher{
+display:flex;
+gap:10px;
+font-size:.75rem;
+font-weight:700;
+cursor:pointer;
+}
 
-    /* Contenedor principal de pantalla dividida */
-    .split-container {
-      display: flex;
-      width: 100%;
-      height: 100vh;
-      position: relative;
-    }
+.hero{
+min-height:100svh;
+display:grid;
+grid-template-columns:1fr 1fr;
+}
 
-    /* Bloques individuales con fusión de fondo */
-    .split-side {
-      flex: 1;
-      height: 100%;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 10% 6%;
-      box-sizing: border-box;
-      transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
-      text-decoration: none;
-      color: var(--text-light);
-      overflow: hidden;
-      
-      /* Propiedades de fondo para fusión global */
-      background-position: center;
-      background-size: cover;
-      background-repeat: no-repeat;
-      
-      /* Modo de mezcla para fusionar la imagen con el color degradado */
-      background-blend-mode: overlay;
-    }
+.panel{
+position:relative;
+display:flex;
+align-items:center;
+padding:clamp(100px,12vw,180px) clamp(24px,6vw,100px);
+text-decoration:none;
+color:white;
+overflow:hidden;
+isolation:isolate;
+transition:.6s ease;
+}
 
-    /* LADO IZQUIERDO: Diseño Gráfico y Producto (Gris de imprenta técnico profundo) */
-    .side-left {
-      background-image:
-        linear-gradient(135deg, rgba(25, 27, 30, 0.8), rgba(45, 49, 55, 0.8)), 
-        url('assets/images/graphicdesign/mockups/canephora.jpg'); 
-      
-      border-right: 1px solid rgba(255, 255, 255, 0.03);
-    }
+.panel::before{
+content:"";
+position:absolute;
+inset:0;
+background-size:cover;
+background-position:center;
+transition:transform 1s ease;
+z-index:-2;
+}
 
-    /* LADO DERECHO: Arte 3D y Escultura (Marrón arcilla/orco texturizado premium) */
-    .side-right {
-      /* ¡SINTAXIS CORREGIDA COMPLETAMENTE AQUÍ! Sin espacios, sin atributo src extraño */
-      background-image:
-        linear-gradient(135deg, rgba(40, 35, 30, 0.8), rgba(65, 58, 50, 0.8)), 
-        url('assets/images/3dmodeling/golem/golem.jpg');
-    }
+.panel::after{
+content:"";
+position:absolute;
+inset:0;
+z-index:-1;
+}
 
-    /* Efectos de interacción (Hover inteligente estilo Adham Dannaway) */
-    .split-container:hover .split-side {
-      flex: 0.8;
-      filter: grayscale(40%) brightness(0.5);
-    }
+.left::before{
+background-image:url('assets/images/graphicdesign/mockups/canephora.jpg');
+}
 
-    .split-container .split-side:hover {
-      flex: 1.2;
-      filter: grayscale(0%) brightness(1);
-    }
+.left::after{
+background:linear-gradient(135deg,rgba(20,22,25,.92),rgba(44,49,56,.82));
+}
 
-    /* Contenido interno de los bloques */
-    .side-content {
-      position: relative;
-      z-index: 2;
-      max-width: 500px;
-      pointer-events: none; 
-    }
+.right::before{
+background-image:url('assets/images/3dmodeling/golem/golem.jpg');
+}
 
-    .side-num {
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      opacity: 0.3;
-      margin-bottom: 20px;
-      display: block;
-    }
+.right::after{
+background:linear-gradient(135deg,rgba(45,36,29,.92),rgba(88,67,52,.82));
+}
 
-    .split-side h2 {
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      font-weight: 900;
-      line-height: 1.05;
-      letter-spacing: -0.04em;
-      margin: 0 0 20px 0;
-      text-transform: uppercase;
-    }
+.hero:hover .panel{
+filter:grayscale(.4) brightness(.7);
+}
 
-    .split-side p {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: #aaa;
-      margin-bottom: 35px;
-      font-weight: 300;
-    }
+.hero:hover .panel:hover{
+filter:none;
+}
 
-    /* Botón de acción integrado */
-    .action-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 15px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      border-bottom: 2px solid rgba(255,255,255,0.1);
-      padding-bottom: 6px;
-      transition: border-color 0.3s ease, transform 0.3s ease;
-    }
+.panel:hover::before{
+transform:scale(1.08);
+}
 
-    .split-side:hover .action-link {
-      border-color: var(--text-light);
-      transform: translateX(5px);
-    }
+.content{
+max-width:620px;
+}
 
-    /* Capa sutil de viñeteado para dar profundidad cinematográfica */
-    .vignette {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.7) 100%);
-      pointer-events: none;
-      z-index: 1;
-    }
+.kicker{
+display:block;
+margin-bottom:24px;
+font-size:.78rem;
+letter-spacing:.25em;
+opacity:.45;
+font-weight:700;
+}
 
-    /* Responsividad absoluta para dispositivos móviles */
-    @media (max-width: 900px) {
-      .split-container {
-        flex-direction: column;
-      }
-      .split-container:hover .split-side,
-      .split-container .split-side:hover {
-        flex: 1;
-        filter: none;
-      }
-      .split-side {
-        padding: 25% 8% 10% 8%;
-      }
-      .split-header {
-        padding: 20px;
-      }
-      .split-header nav {
-        gap: 15px;
-      }
-      .split-header nav a {
-        font-size: 0.65rem;
-      }
-    }
-  </style>
+h2{
+font-size:clamp(2.4rem,5vw,5rem);
+line-height:.95;
+font-weight:900;
+text-transform:uppercase;
+margin-bottom:24px;
+}
+
+.desc{
+font-size:1rem;
+line-height:1.8;
+color:#d0d0d0;
+max-width:560px;
+margin-bottom:40px;
+}
+
+.cta{
+display:inline-flex;
+align-items:center;
+gap:12px;
+font-weight:700;
+letter-spacing:.16em;
+font-size:.75rem;
+text-transform:uppercase;
+padding-bottom:8px;
+border-bottom:2px solid rgba(255,255,255,.2);
+}
+
+.panel:hover .cta{
+border-color:#fff;
+}
+
+@media (max-width:1200px){
+.header-inner{padding:16px 24px;}
+.nav{gap:14px;}
+}
+
+@media (max-width:900px){
+.hero{
+grid-template-columns:1fr;
+}
+
+.header{
+position:relative;
+}
+
+.header-inner{
+flex-direction:column;
+text-align:center;
+}
+
+.panel{
+min-height:50svh;
+padding:70px 24px;
+}
+
+.hero:hover .panel{
+filter:none;
+}
+}
+
+@media (max-width:640px){
+.nav{
+justify-content:center;
+}
+
+.nav a{
+font-size:.65rem;
+}
+
+h2{
+font-size:clamp(2rem,10vw,3rem);
+}
+
+.desc{
+font-size:.95rem;
+line-height:1.75;
+}
+
+.panel{
+min-height:55svh;
+padding:60px 20px;
+}
+}
+</style>
 </head>
-<body class="lang-en"> <header class="split-header">
-    <div class="logo-group">
-      <span class="logo-title">Esteban Campos Polo</span>
-      <span class="logo-sub lang-en">Visual Production Studio</span>
-      <span class="logo-sub lang-es">Estudio de Producción Visual</span>
-    </div>
-    <nav>
-      <a href="index.html" class="active">
-        <span class="lang-en">HOME</span>
-        <span class="lang-es">INICIO</span>
-      </a>
-      <a href="graphic-design.html">GRAPHIC DESIGN</a>
-      <a href="3d-modeling.html">3D</a>
-      <a href="about.html">ABOUT</a>
-      <a href="cv_resume.html" class="nav-link">CV / RESUME</a>
-      <a href="contact.html">CONTACT</a>
-      
-      <div class="lang-switcher">
-        <span class="lang-btn" id="btn-en" onclick="setLanguage('en')" style="opacity: 1;">EN</span>
-        <span style="opacity: 0.3;">/</span>
-        <span class="lang-btn" id="btn-es" onclick="setLanguage('es')" style="opacity: 0.4;">ES</span>
-      </div>
-    </nav>
-  </header>
+<body class="lang-en">
 
-  <main class="split-container">
-    
-    <a href="graphic-design.html" class="split-side side-left">
-      <div class="vignette"></div>
-      <div class="side-content">
-        <span class="side-num">01 / PRODUCTION LAB</span>
-        <h2>
-          <span class="lang-en">Graphic Design &<br>Product Packaging</span>
-          <span class="lang-es">Diseño Gráfico y<br>Packaging de Producto</span>
-        </h2>
-        <p>
-          <span class="lang-en">Over 15 years leading technical pre-printing workflows, brand architecture, and structural product development. Graphic design driven by absolute industrial feasibility.</span>
-          <span class="lang-es">Más de 15 años liderando flujos de preimpresión técnica, arquitectura de marca y desarrollo estructural de producto. El diseño gráfico concebido desde la viabilidad industrial absoluta.</span>
-        </p>
-        <div class="action-link">
-          <span class="lang-en">View Graphic Projects &rarr;</span>
-          <span class="lang-es">Ver Proyectos Gráficos &rarr;</span>
-        </div>
-      </div>
-    </a>
+<header class="header">
+<div class="header-inner">
 
-    <a href="3d-modeling.html" class="split-side side-right">
-      <div class="vignette"></div>
-      <div class="side-content">
-        <span class="side-num">02 / DIGITAL PIPELINE</span>
-        <h2>
-          <span class="lang-en">3D Visuals &<br>Character Art</span>
-          <span class="lang-es">Visualización 3D y<br>Character Art</span>
-        </h2>
-        <p>
-          <span class="lang-en">Advanced digital sculpting, clean retopology, and rigorous PBR lookdev/lighting pipelines for commercial environments, advertising assets, and optimized anatomical models.</span>
-          <span class="lang-es">Escultura digital avanzada, retopología limpia y flujos estrictos de lookdev e iluminación PBR para entornos comerciales, activos publicitarios y modelos anatómicos optimizados.</span>
-        </p>
-        <div class="action-link">
-          <span class="lang-en">View 3D Gallery &rarr;</span>
-          <span class="lang-es">Ver Galería 3D &rarr;</span>
-        </div>
-      </div>
-    </a>
+<div class="brand">
+<h1>ESTEBAN CAMPOS POLO</h1>
+<p class="lang-en">Visual Production Studio</p>
+<p class="lang-es">Estudio de Producción Visual</p>
+</div>
 
-  </main>
+<nav class="nav">
+<a href="index.html">HOME</a>
+<a href="graphic-design.html">GRAPHIC DESIGN</a>
+<a href="3d-modeling.html">3D</a>
+<a href="about.html">ABOUT</a>
+<a href="cv_resume.html">CV / RESUME</a>
+<a href="contact.html">CONTACT</a>
 
-  <script>
-    function setLanguage(lang) {
-      const body = document.body;
-      const btnEn = document.getElementById('btn-en');
-      const btnEs = document.getElementById('btn-es');
-      
-      if (lang === 'en') {
-        body.classList.remove('lang-es');
-        body.classList.add('lang-en');
-        btnEn.style.opacity = '1';
-        btnEs.style.opacity = '0.4';
-        document.documentElement.lang = 'en';
-      } else {
-        body.classList.remove('lang-en');
-        body.classList.add('lang-es');
-        btnEn.style.opacity = '0.4';
-        btnEs.style.opacity = '1';
-        document.documentElement.lang = 'es';
-      }
-    }
-  </script>
+<div class="lang-switcher">
+<span onclick="setLanguage('en')" id="btn-en">EN</span>
+<span>/</span>
+<span onclick="setLanguage('es')" id="btn-es" style="opacity:.5">ES</span>
+</div>
+</nav>
+
+</div>
+</header>
+
+<main class="hero">
+
+<a href="graphic-design.html" class="panel left">
+<div class="content">
+<span class="kicker">01 / PRODUCTION LAB</span>
+
+<h2>
+<span class="lang-en">Graphic Design & Product Packaging</span>
+<span class="lang-es">Diseño Gráfico y Packaging</span>
+</h2>
+
+<p class="desc">
+<span class="lang-en">
+Over 15 years of experience in packaging, branding, technical prepress and industrial production workflows.
+</span>
+<span class="lang-es">
+Más de 15 años de experiencia en packaging, branding, preimpresión técnica y procesos industriales de producción.
+</span>
+</p>
+
+<div class="cta">
+<span class="lang-en">View Projects →</span>
+<span class="lang-es">Ver Proyectos →</span>
+</div>
+</div>
+</a>
+
+<a href="3d-modeling.html" class="panel right">
+<div class="content">
+<span class="kicker">02 / DIGITAL PIPELINE</span>
+
+<h2>
+<span class="lang-en">3D Visuals & Character Art</span>
+<span class="lang-es">Visualización 3D y Character Art</span>
+</h2>
+
+<p class="desc">
+<span class="lang-en">
+Advanced digital sculpting, retopology, PBR lookdev and commercial visualization for products, characters and advertising assets.
+</span>
+<span class="lang-es">
+Escultura digital avanzada, retopología, lookdev PBR y visualización comercial para producto, personajes y publicidad.
+</span>
+</p>
+
+<div class="cta">
+<span class="lang-en">View Gallery →</span>
+<span class="lang-es">Ver Galería →</span>
+</div>
+</div>
+</a>
+
+</main>
+
+<script>
+function setLanguage(lang){
+const body=document.body;
+const en=document.getElementById('btn-en');
+const es=document.getElementById('btn-es');
+
+body.classList.remove('lang-en','lang-es');
+body.classList.add('lang-'+lang);
+
+if(lang==='en'){
+en.style.opacity='1';
+es.style.opacity='.5';
+document.documentElement.lang='en';
+}else{
+en.style.opacity='.5';
+es.style.opacity='1';
+document.documentElement.lang='es';
+}
+}
+</script>
+
 </body>
 </html>
